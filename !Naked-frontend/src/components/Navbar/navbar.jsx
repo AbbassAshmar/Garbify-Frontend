@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 import NavbarSearch from "./navbar-search"
 import Logo from "../Logo"
 import SideNavbar from "./side-navbar"
-import { men,women,kids,sales,new_arrivals } from "./navbar-filters"
+import {Categories } from "./navbar-filters"
 
 // padding 2rem
 // navbar z-index : 100
@@ -58,7 +58,7 @@ gap:40px;
 }
 `
 
-const Icon = styled(Link)`
+const Icon = styled.i`
 color:black;
 text-decoration: none;
 font-size:22px;
@@ -120,7 +120,7 @@ export default function Navbar({setSideNavbarOpened}){
     const [y,setY] = useState(0)
     const {scrollY} = useScroll()
     const [position , setPosition] = useState("static")
-    const [showCategoryList,setShowCategoryList] = useState({display:false, value:[]})
+    const [showCategoryList,setShowCategoryList] = useState({display:false, value:[],topParent:null})
     const [showNavbarSearch, setShowNavbarSearch] = useState(false)
     const [showSideNavbar, setShowSideNavbar] = useState(false)
 
@@ -166,36 +166,29 @@ export default function Navbar({setSideNavbarOpened}){
         <NavContainer >
             <NavPosition position={position} >
             <NavWrapper >
-                    <Logo />
-                    <CategoriesContainer onMouseLeave={()=>{setShowCategoryList((prevState)=>({...prevState,display:false})) }} >
-                        <Category selected={showCategoryList.display && showCategoryList.value==new_arrivals?true:false} 
-                            onMouseEnter={()=>{setShowCategoryList({display:true, value:new_arrivals})}}
-                        >New Arrivals</Category>
-
-                        <Category  selected={showCategoryList.display && showCategoryList.value==men?true:false}
-                            onMouseEnter={()=>{setShowCategoryList({display:true, value:men})}}
-                        >Men</Category>
-
-                        <Category  selected={showCategoryList.display && showCategoryList.value==women?true:false}
-                            onMouseEnter={()=>{setShowCategoryList({display:true, value:women})}}
-                        >Women</Category>
-
-                        <Category selected={showCategoryList.display && showCategoryList.value==kids?true:false}
-                            onMouseEnter={()=>{setShowCategoryList({display:true, value:kids})}}
-                        >Kids</Category>
-
-                        <Category selected={showCategoryList.display && showCategoryList.value==sales?true:false}
-                            onMouseEnter={()=>{setShowCategoryList({display:true, value:sales})}}
-                        >Sales</Category>
-
-                        <CategoryList 
-                            show={showCategoryList.display} 
-                            categories={showCategoryList.value} 
-                            setShowCategoryList={setShowCategoryList}
-                        />
-                    </CategoriesContainer>
-                <IconsContainer>
+                <Logo />
+                <CategoriesContainer onMouseLeave={()=>{setShowCategoryList((prevState)=>({...prevState,display:false})) }} >
+                    {
+                        Categories.map((category)=>{
+                            return (
+                                <Category 
+                                    key = {category.name}
+                                    selected={showCategoryList.display && showCategoryList.value==category.children?true:false}
+                                    onMouseEnter={()=>{setShowCategoryList({display:true, value:category.children,topParent:category.name})}}
+                                >{category.name}
+                                </Category>
+                            )
+                        })
+                    }
                     
+                    <CategoryList 
+                        topParent = {showCategoryList.topParent}
+                        show={showCategoryList.display} 
+                        categories={showCategoryList.value} 
+                        setShowCategoryList={setShowCategoryList}
+                    />
+                </CategoriesContainer>
+                <IconsContainer>
                     <Icon onClick={handleSearchIconClick}><i  className="fa-solid fa-magnifying-glass"/></Icon>
                     <UserIcon><i className="fa-regular fa-user"/></UserIcon>
                     <Icon><i className="fa-solid fa-cart-shopping"/></Icon>

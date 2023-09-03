@@ -1,5 +1,7 @@
 import styled from "styled-components"
 import {Link} from "react-router-dom"
+import { useEffect } from "react"
+
 // z-index : 200
 export const Parent = styled.div`
 height:100vh;
@@ -17,6 +19,9 @@ export const Background = styled.div`
 backdrop-filter: blur(10px) ;
 height:100%;
 width:100%;
+opacity:${({opacity})=>opacity};
+transition:opacity .2s .2s;
+
 `
 
 const ListContainer = styled.div`
@@ -61,51 +66,74 @@ text-decoration:none;
 color:black;
 opacity:.67;
 `
+// return url for titles 
+const getTitlesUrl = (parent,name)=>{
+    name = name.replaceAll(" ","-")
+    if (parent == "sales" || parent=="new arrivals"){
+        return '/products/'+name+`?${parent.split(" ")[0]}=true`
+    }
+    return (`/products/`+parent.replaceAll(" ","-")+"/"+name)
+}
+
+// return url for options 
+export const getOptionsUrl = (parents ,name)=>{
+    parents = parents.map((parent)=> parent.replaceAll(" ","-"))
+    name = name.replaceAll(" ","-")
+    if (parents[0]== 'sales' || parents[0]=="new-arrivals"){
+        let queryString = parents.shift()
+        return'/products/'+parents.join("/")+"/"+name+`?${queryString}=true`
+    }
+    return '/products/'+parents.join("/")+"/"+name
+}
+    //converts {name,children[{name,children[...]}]} to [{name , parents[]} , {name,parents[]} ...]
+export function arrayNameParentsForm(obj, arr){
+    let result = [{name:obj["name"] , parents:arr}];
+    if (obj['children']) {
+        for (let i= 0 ; i < obj['children'].length ; i++ ){
+            result = [...result, ...arrayNameParentsForm(obj['children'][i],[...arr,obj['name']])]            }
+    }
+    return result;
+}
 
 export default function CategoryList(props){
 
-    // collect all the options of each first title in an array and display the array under the title in the navbar
-    function OptionsToArray(object){
-        let arr= []
-        OptionRender(object, arr)
-        return arr
-    }
-
-    function OptionRender(object,arr){
-        let title = object.title
-        arr.push(title)
-        let options =object.options
-        if (!options || options.length == 0) {
-            return null
-        }
-        for (let i = 0 ; i< options.length; i++){
-            OptionRender(options[i],arr)
-        }
-
-    }
     return (
         <Parent display={props.show}>
             <ListContainer>
                 <ListContent>
                     {props.categories.map((category)=>{
-                        let options = OptionsToArray(category)
-                        options.shift()
+                        let optionsArr = arrayNameParentsForm(category,[props.topParent])
+                        optionsArr.shift()
                         return (
-                            <CategoryColumn key={category.title}>
-                                <Title to="#">{category.title}</Title>
+                            <>
+                            {
+                            optionsArr&&optionsArr.length>0?
+                            <CategoryColumn key={category.name}>
+                                <Title to={getTitlesUrl(props.topParent, category.name)}>
+                                    {category.name}
+                                </Title>
                                 <ElementsContainer>
                                     {
-                                        options.map((option) =>{
-                                            return (<Element key={option} to="#">{option}</Element>)
+                                        optionsArr.map((option) =>{
+                                            return (
+                                                <Element 
+                                                    key={option.name} 
+                                                    to={getOptionsUrl(option.parents,option.name)}
+                                                >{option.name}
+                                                </Element>
+                                            )
                                         })
                                     }
                                 </ElementsContainer>
                             </CategoryColumn>
+                            :null
+                            }
+                            </>
                         )
                     })}
                 </ListContent>
             </ListContainer>
-            <Background onMouseEnter={()=>{props.setShowCategoryList((prevState)=>({...prevState,display:false}))}} />
+            <Background opacity={props.show?'1':'0'} onMouseEnter={()=>{props.setShowCategoryList((prevState)=>({...prevState,display:false}))}} />
         </Parent>
     )
 }

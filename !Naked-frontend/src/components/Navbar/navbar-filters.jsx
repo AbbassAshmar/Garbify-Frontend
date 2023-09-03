@@ -1,112 +1,121 @@
 
-export const men =[ 
+export const Categories = [
+
+    // [{men , parents[] }, {clothes , parents:[men]} ]
     {
-        title:"new",
-        options:[
+        "name": "men",
+        "children": [
             {
-                title :"Fuckboy", 
-                options:[{title:"shoes"}, {title:"cum"}]
+                "name": "clothes",
+                "children": []
             },
             {
-                title:"fuck"
+                "name": "shoe",
+                "children": [
+                    {
+                        "name": "suit shoe",
+                        "children": []
+                    },
+                    {
+                        "name": "running",
+                        "children": [
+                            {
+                                "name": "pitch",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "women",
+        "children": [
+            {
+                "name": "shoes",
+                "children": [
+                    {
+                        "name": "running",
+                        "children": []
+                    }
+                ]
             },
             {
-                title:'dress'
+                "name": "clothes",
+                "children": [
+                    {
+                        "name": "pitch",
+                        "children": []
+                    },
+                    {
+                        "name": "dresses",
+                        "children": []
+                    }
+                ]
             }
         ]
     },
     {
-        title:"Dresses",
-        options:[{title:"formal"}, {title:"casual"}]      
-    },
-
-    {
-        title:"fuck",
-        options:[{
-            title:"fuck"
-        },
-        {
-            title:'dress'
-        }]
-    }
-]
- 
-export const women =[ 
-    {
-        title:"new",
-        options:[
+        "name": "sales",
+        "children": [
             {
-                title :"showPrime", 
-                options:[{title:"fuckprime"}, {title:"shows"}]
-            }
-        ]
-    },
-    {
-        title:"Dresses",
-        options:[{title:"fuckprime"}, {title:"shows"}]      
-    },
-
-    {
-        title:"Bras",
-        options:[{title:"big"}, {title:"small"}]      
-    },
-
-    {
-        title:"fuck",
-        options:[]
-    }
-]
-  
-export const kids = [
-     {
-          title:"Girls",
-          options:[{title : "shoes"}, {title : "dresses"},{title : "suits"},{title : "shirts"},{title : "shirts"}]
-      },
-      {
-        title:"Boys",
-        options:[{title : "shoes",options:[{title:"casual"}, {title:"sport"}]},{title : "suits"},{title : "shirts"},{title : "shirts"}]
-      },
-      
-  ]
-    
-
-  
-
-export const sales =[ 
-    {
-        title:"new",
-        options:[
+                "name": "men",
+                "children": 
+                    [
+                        {
+                            "name": "clothes"
+                        },
+                        {
+                            "name": "shoe"
+                        }
+                    ]
+                
+            },
             {
-                title :"Fuckboy", 
-                options:[{title:"shoes"}, {title:"cum"}]
+                "name": "women",
+                "children": 
+                    [
+                        {
+                            "name": "shoes"
+                        },
+                        {
+                            "name": "clothes"
+                        }
+                    ]
+                
             }
         ]
     },
     {
-        title:"Dresses",
-        options:[{title:"formal"}, {title:"casual"}]      
-    },
-
-    {
-        title:"fuck",
-        options:[]
-    }
-]
-
-export const new_arrivals =[ 
-    {
-        title:"new",
-        options:[ 
-            {title:"shoes"}, {title:"cum"}
+        "name": "new arrivals",
+        "children": [
+            {
+                "name": "men",
+                "children": 
+                    [
+                        {
+                            "name": "clothes"
+                        },
+                        {
+                            "name": "shoe"
+                        }
+                    ]
+                
+            },
+            {
+                "name": "women",
+                "children": 
+                    [
+                        {
+                            "name": "shoes"
+                        },
+                        {
+                            "name": "clothes"
+                        }
+                    ]
+                
+            }
         ]
-    },
-    {
-        title:"Dresses",
-        options:[{title:"Fuck"}, {title:"SHit"}]      
-    },
-
-    {
-        title:"fuck",
-        options:[]
     }
-]
+]             

@@ -1,3 +1,5 @@
+import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
 
 const Container = styled.div`
@@ -14,7 +16,7 @@ font-size:24px;
 text-align:center;
 font-weight:bold;
 `
-const InputContainer = styled.div`
+const InputContainer = styled.form`
 display:flex;
 width:100%;
 display:flex;
@@ -51,6 +53,13 @@ transition:opacity .3s;
 }
 `
 export default function FormSection(){
+    const [formData, setFormData] =useState("")
+    const Navigate= useNavigate()
+    function handleFormSubmit(e){
+        e.preventDefault();
+        console.log("here")
+        Navigate("/register", {state:formData})
+    }
     return (
         <Container>
             <Text>
@@ -58,10 +67,13 @@ export default function FormSection(){
                 offers and stay up to
                 date
             </Text>
-            <InputContainer>
+            <InputContainer onSubmit={handleFormSubmit}>
                 <Input 
-                type="email" 
-                placeholder="Your Email"/>
+                    value = {formData}
+                    type="email" 
+                    placeholder="Your Email"
+                    onChange={(e)=>{setFormData(e.currentTarget.value)}}
+                />
                 <Submit>Sign Up</Submit>
             </InputContainer>
         

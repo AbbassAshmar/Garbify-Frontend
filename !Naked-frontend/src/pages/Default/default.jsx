@@ -5,7 +5,7 @@ import styled from "styled-components"
 import { useState } from "react";
 const Container = styled.div`
 height:${({fix})=>fix?"100vh":"auto"};
-overflow:${({fix})=>fix?"hidden":"auto"};
+overflow:${({fix})=>fix?"hidden":null};
 `
 export default function Default(){
     const [sideNavbarOpened, setSideNavbarOpened] = useState(false)

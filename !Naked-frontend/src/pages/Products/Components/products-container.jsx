@@ -1,0 +1,196 @@
+import styled from "styled-components"
+import ProductCard from "../../../components/ProductCard/product-card"
+import Hoody2 from "../../../assets/Hoody2.jpg"
+import Pagination from "../../../components/Pagination/pagination"
+import { useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
+
+const Container = styled.div`
+flex:4;
+display:flex;
+flex-direction:column;
+gap:min(5vh,1.5rem);
+`
+const TagsContainer= styled.div`
+display:flex;
+gap:2%;
+`
+const Tag = styled.button`
+background:none;
+height:50px;
+min-width:100px;
+padding:5px;
+color:white;
+border-radius:7px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+&:hover{
+    border:1px solid #00C2FF ;
+    background:rgba(189, 189, 189,.1);
+}
+`
+const TagText = styled.p`
+overflow:hidden;
+text-overflow:ellipsis;
+height:1.1em;
+color:black;
+`
+const Products = styled.div`
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+justify-content:space-between;
+grid-gap:20px;
+@media screen and (max-width:1000px){
+    grid-template-columns:repeat(2,1fr);
+
+}
+`
+
+
+
+// api/products 
+// all products 
+
+// api/products?category[]=shoes 
+// all shoes 
+
+// api/products?category[]=shoes&category[]=running 
+// all running shoes 
+
+// api/products?category[]=shoes&category[]=running&size=32&color=red
+// all running shoes where size = 32 and color=red category + filter 
+
+// api/products?category[]=shoes&category[]=running&size=32&color=red&anything=anything
+// all running shoes where size = 32 and color=red category + filter ignoring anything 
+
+// products model , category model , shoes model, shirts model , suits model ,
+
+let pp = [
+    {
+        name:"Brooks sport shoes",
+        price:150,
+        colors:["white"],
+        thumbnail:Hoody2,
+        quantity:400,
+        type:"men shoes",
+        sale:{
+            price_after_sale:100,
+            percentage:50,
+        }
+    },
+    {
+        name:"Brooks sport shoes",
+        price:150,
+        colors:["white"],
+        thumbnail:Hoody2,
+        quantity:400,
+        type:"men shoes",
+        sale:{
+            price_after_sale:100,
+            percentage:50,
+        }
+    },
+    {
+        name:"Brooks sport shoes",
+        price:150,
+        colors:["white"],
+        thumbnail:Hoody2,
+        quantity:400,
+        type:"men shoes",
+        
+    },
+    {
+        name:"Brooks sport shoes",
+        price:240,
+        colors:["white"],
+        thumbnail:Hoody2,
+        quantity:400,
+        type:"men shoes",
+        sale:{
+            price_after_sale:200,
+            percentage:20,
+        }
+    }
+]
+export default function ProductsContainer(props){
+    const [TotalPagesCount,setTotalPagesCount] = useState(1)
+    const [products , setProducts ] = useState(pp);
+    const location = useLocation()
+
+    async function requestProductsFiltered(queryString){
+        const request = await fetch("http://127.0.0.1:8000/api/products"+queryString)
+        const response = await request.json();
+        if (request.status == 200){
+            setTotalPagesCount(response["totalCount"])
+            // setProducts(response["products"])
+        }
+    }
+    
+    useEffect(()=>{
+
+    },[location])
+
+    // generates a url that only changes the ?page query param (without changing other param)  
+    function getLink(pageNumber){
+        let url = "/products"
+        for (let param in props.urlParameters){
+            url = url +"/"+props.urlParameters[param]
+        }
+        url  = url + "?page="+pageNumber
+        let searchParametersObj = props.searchParameters()
+        for (let key in  searchParametersObj){
+            if (key != "page"){
+                url = url + "&" +key +"="+searchParametersObj[key]
+            }
+        }
+        return url
+    }
+
+
+    return (
+        <Container>
+            <TagsContainer>
+                {
+                    Object.keys(props.searchParameters()).map((tag)=>{
+                        if (tag=="price"){
+                            let prices = props.searchParameters()[tag].split('-');
+                            return (
+                                <Tag onClick={()=>{props.deleteTag(tag)}}>
+                                    <TagText>
+                                        {prices[0]}$  -  {prices[1]}$ x
+                                    </TagText>
+                                </Tag>
+                            )
+                        }
+                        if (tag=="color" || tag=="size")
+                            return (
+                                <Tag onClick={()=>{props.deleteTag(tag)}}>
+                                    <TagText>{props.searchParameters()[tag]} x</TagText>
+                                </Tag>
+                            )
+                    })
+                }
+            </TagsContainer>
+            <Products>
+                {products.map((product) =>{
+                    return (
+                        <ProductCard 
+                            pk ={product.pk}
+                            name={product.name} 
+                            price={product.price} 
+                            quantity={product.quantity}
+                            colors={product.colors}
+                            type={product.type}
+                            thumbnail={product.thumbnail}
+                            sale={product.sale}
+                        />
+                    )
+                })}
+            </Products>
+            <Pagination getLink={getLink} CurrentPage={props.CurrentPage} TotalPagesCount={40} />
+        </Container>
+    )
+}

@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { useState } from "react"
-import { kids, men, new_arrivals, women, sales } from "./navbar-filters"
+import {Categories } from "./navbar-filters"
 import SideTitlesList from "./side-titles-list"
 import { OptionAnimation } from "./side-titles-list"
 import { motion } from "framer-motion"
@@ -93,7 +93,27 @@ return (
                 </CancelIcon>
 
                 <OptionsContainer>
+
                     {
+                        !showDetails.show &&
+                        Categories.map((category)=>{
+                            
+                            return(
+                                <Option 
+                                    key={category.name}
+                                    as = {motion.div}
+                                    variants={OptionAnimation}
+                                    initial="start"
+                                    animate="animate"
+                                    onClick={()=>handleOptionClick(category.children,category.name)} 
+                                >
+                                    <Text>{category.name}</Text> 
+                                    <Icon><i className="fa-regular fa-greater-than"/></Icon>
+                                </Option>
+                            )
+                        })
+                    }
+                    {/* {
                     !showDetails.show &&
                     <Option 
                         as = {motion.div}
@@ -157,7 +177,7 @@ return (
                         <Text>Sales</Text> 
                         <Icon><i className="fa-regular fa-greater-than"/></Icon>
                     </Option>
-                    }   
+                    }    */}
                 </OptionsContainer>
             </Content>
         </SideNav>

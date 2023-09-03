@@ -3,6 +3,7 @@ import { OptionsContainer,Option ,Text,Icon} from "./side-navbar"
 import { useEffect,useState } from "react"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
+import { getOptionsUrl, arrayNameParentsForm} from "./category-list"
 
 const Container =styled.div`
 display:${({display})=> display};
@@ -68,11 +69,15 @@ export default function SideTitlesList(props){
             setOptionsList([])
         }
         else{
-        setHistoryStack([props.details,...historyStack])
-        setOptionsList(props.details)
+        
+        setHistoryStack([arrObjParentsForm(props.details,[props.category]),...historyStack])
+        setOptionsList(arrObjParentsForm(props.details,[props.category]))
+
         }
     
     },[props])
+
+    
 
     function handleBackButtonClick(){
         let latest = historyStack
@@ -86,11 +91,24 @@ export default function SideTitlesList(props){
     }
 
     function handleOptionClick(detail){
-        setHistoryStack([detail.options,...historyStack])
-        setOptionsList(detail.options) 
+        setHistoryStack([detail.children,...historyStack])
+        setOptionsList(detail.children) 
+    }
+
+    // [{name:abc, children:[{name:def, children}]} ,{},{}] -> [{name:abc ,parents:.., children:[{name,parents}]},{},{}]
+    function arrObjParentsForm(arrObj,category){
+        let new_arr = []
+        for (let i =0 ; i < arrObj.length;i++ ){
+            let result =[]
+            for (let j = 0; j<arrObj[i]['children'].length; j++){
+                result =[ ...result,  ...arrayNameParentsForm(arrObj[i]['children'][j], [...category,arrObj[i]['name']]) ]
+            }
+            new_arr =  [...new_arr, {"name":arrObj[i]['name'],'parents':category, "children" : result} ]
+        }
+        return new_arr
     }
     
-
+ 
     return (
         <Container  display={props.show ? "block": "none"}> 
             <BackButton onClick={handleBackButtonClick}>
@@ -102,7 +120,7 @@ export default function SideTitlesList(props){
                     optionsList ?
                         optionsList.map((detail)=>{
                             return (
-                                detail.options && detail.options.length > 0 ?
+                                detail.children && detail.children.length > 0 ?
                                     <Option 
                                         as = {motion.div}
                                         variants={OptionAnimation}
@@ -111,7 +129,7 @@ export default function SideTitlesList(props){
                                         key={Key1()} 
                                         onClick={()=>handleOptionClick(detail)}
                                     >
-                                        <Text>{detail.title}</Text> 
+                                        <Text>{detail.name}</Text> 
                                         <Icon><i className="fa-regular fa-greater-than"/></Icon>
                                     </Option>
                                 :   
@@ -122,8 +140,9 @@ export default function SideTitlesList(props){
                                     animate="animate"
                                     key={Key2()}
                                     >
-                                        <Link to="#" style={{color:"black", textDecoration:"none"}}>
-                                            <Text>{detail.title}</Text> 
+                                        {/* detail.parents?"/products/"+detail.parents.join("/")+"/"+detail.name:"#" */}
+                                        <Link to={getOptionsUrl(detail.parents, detail.name)} style={{color:"black", textDecoration:"none"}}>
+                                            <Text>{detail.name}</Text> 
                                         </Link>
                                     </Option>
                             )

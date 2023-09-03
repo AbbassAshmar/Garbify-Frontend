@@ -1,16 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import {Link} from "react-router-dom"
-const Container = styled.div`
+import {Link, useLocation} from "react-router-dom"
+export const Container = styled.div`
 width:100%;
 display:flex;
 align-items:center;
 justify-content:center;
 padding:1rem;
-
 `
 
-const Content = styled.div`
+export const Content = styled.div`
 width:min(550px, 100%);
 display:flex;
 flex-direction:column;
@@ -19,10 +18,10 @@ margin-top:2rem;
 
 `
 
-const Text = styled.div`
+export const Text = styled.div`
 text-align:left;
 `
-const Title =styled.h2`
+export const Title =styled.h2`
 font-size:2rem;
 font-weight:600;
 margin: 0 0 1rem 0;
@@ -34,17 +33,17 @@ font-weight:500;
 
 `
 
-const Form = styled.form`
+export const Form = styled.form`
 display:flex;
 flex-direction:column;
 gap:2.8rem;
 width:100%;
 `
-const InputWrapper = styled.div`
+export const InputWrapper = styled.div`
 width:100%;
 position:relative;
 `
-const Input = styled.input`
+export const Input = styled.input`
 width:100%;
 border-radius:10px;
 height:min(10vh, 60px);
@@ -53,7 +52,7 @@ outline:none;
 padding:1rem;
 font-size:1.1em;
 `
-const Label =styled.label`
+export const Label =styled.label`
 position:absolute;
 
 top:${({position})=>position?'-17%':"30%"};
@@ -72,7 +71,7 @@ transition:all .3s;
         font-size:.9em;
     }
 `
-const ErrorMsg = styled.p`
+export const ErrorMsg = styled.p`
 margin:0;
 color:red;
 transform:translateY(40%);
@@ -80,7 +79,7 @@ font-weight:600;
 font-size:.8em;
 position:absolute;
 `
-const Submit = styled.button`
+export const Submit = styled.button`
 height:min(10vh, 60px);
 width:100%;
 border-radius:10px;
@@ -95,9 +94,8 @@ transition:background .3s;
         background:#02abed;
     }
 `
-const SignInText  = styled.div`
-`
-const SignIn = styled(Link)`
+
+export const SignIn = styled(Link)`
 margin-left:.4rem;
 text-decoration:none;
 color:#00C2FF;
@@ -107,35 +105,39 @@ transition:all .3s;
     color:#02abed;
 }
 `
-const I = styled.i`
+export const I = styled.i`
 font-size:.7em;
 `
 export default function Registration(){
+    const location =useLocation()
+    const {state} = location
+
     const [formData, setFormData] = useState({
-        email:"",
+        email:state?state:"",
         username:"",
         password:"",
         confirm_password:"",
     })
     const [errorMsg, setErrorMsg] = useState({})
+    
+   
 
     async function requestRegister (formData){
-        console.log(formData)
         const request = await fetch("http://127.0.0.1:8000/api/register",{
             method:"POST",
             body:formData,
             headers:{
                 "Content-Type":"application/json",
+                "accept":"application/json"
             }
         })
-        console.log(request)
         const response = await request.json();
-        console.log(response)
         if (request.status == 200){
-            
+            setErrorMsg({})
         }
-        if (request.status == 400){
-            setErrorMsg(response)
+        if (request.status == 422){
+            console.log(response.errors)
+            setErrorMsg(response.errors)
         }
     }
     function handleFormSubmit(e){
@@ -158,61 +160,60 @@ export default function Registration(){
                         <Input 
                             type="email" 
                             value={formData.email} 
-                            color={errorMsg && errorMsg.error == "email"?"red":"balck"} 
+                            color={errorMsg && errorMsg.email?"red":"black"} 
                             onChange={(e)=>setFormData({...formData,email:e.target.value})}
                         />
                         <Label 
                             position={formData.email}
-                            color={errorMsg && errorMsg.error == "email"?"red":"grey"} 
+                            color={errorMsg && errorMsg.email?"red":"grey"} 
                         >Email</Label>
-                        {errorMsg && errorMsg.error == "email" ?<ErrorMsg>{errorMsg.msg}</ErrorMsg>:null}
-
+                        <ErrorMsg>{errorMsg.email}</ErrorMsg>
                     </InputWrapper>
                     <InputWrapper>
                         <Input 
                             type="text" 
                             value={formData.username} 
-                            color={errorMsg && errorMsg.error == "username"?"red":"black"} 
+                            color={errorMsg && errorMsg.username?"red":"black"} 
                             onChange={(e)=>setFormData({...formData,username:e.target.value})}
                         />
                         <Label 
-                            color={errorMsg && errorMsg.error == "username"?"red":"grey"} 
+                            color={errorMsg && errorMsg.username?"red":"grey"} 
                             position={formData.username}
-                        >Usename</Label>
-                        {errorMsg && errorMsg.error == "username" ?<ErrorMsg>{errorMsg.msg}</ErrorMsg>:null}
+                        >Username</Label>
+                        <ErrorMsg>{errorMsg.username}</ErrorMsg>
                     </InputWrapper>
                     <InputWrapper>
                         <Input 
                             type="password"
                             value={formData.password} 
-                            color={errorMsg && (errorMsg.error == "password"||errorMsg.error == "passwordConfirm")?"red":"black"} 
+                            color={errorMsg && errorMsg.password ?"red":"black"} 
                             onChange={(e)=>setFormData({...formData,password:e.target.value})}
                         />
                         <Label 
                             position={formData.password}
-                            color={errorMsg && (errorMsg.error == "password"||errorMsg.error == "passwordConfirm")?"red":"gey"} 
-                        >Passowrd</Label>
-                        {errorMsg && errorMsg.error == "password" ?<ErrorMsg>{errorMsg.msg}</ErrorMsg>:null}
+                            color={errorMsg && errorMsg.password?"red":"grey"} 
+                        >Password</Label>
+                        <ErrorMsg>{errorMsg.password}</ErrorMsg>
                     </InputWrapper>
                     <InputWrapper>
                         <Input 
                             type="password" 
                             value={formData.confirm_password} 
-                            color={errorMsg && (errorMsg.error == "confirm_password"||errorMsg.error == "passwordConfirm")?"red":"black"} 
+                            color={errorMsg && errorMsg.confirm_password?"red":"black"} 
                             onChange={(e)=>setFormData({...formData,confirm_password:e.target.value})}
                         />
                         <Label 
                             position={formData.confirm_password}
-                            color={errorMsg && (errorMsg.error == "confirm_password"||errorMsg.error == "passwordConfirm")?"red":"grey"} 
+                            color={errorMsg && errorMsg.confirm_password?"red":"grey"} 
                         >Confirm Password</Label>
-                        {errorMsg && (errorMsg.error == "confirm_password" || errorMsg.error == "passwordConfirm" ) ?<ErrorMsg>{errorMsg.msg}</ErrorMsg>:null}
+                        <ErrorMsg>{errorMsg.confirm_password}</ErrorMsg>
                     </InputWrapper>
-                    <SignInText>
+                    <div>
                         Already have an account?   
                         <SignIn to="#">
                             Sign in <I className="fa-solid fa-greater-than"/>
                         </SignIn>
-                    </SignInText>
+                    </div>
                     <Submit type="submit">Submit</Submit>
                 </Form>
             </Content>
