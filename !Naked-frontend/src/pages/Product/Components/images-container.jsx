@@ -1,7 +1,6 @@
 import { styled } from "styled-components"
 
 const Container = styled.div`
-background:grey;
 flex:6;
 display:grid;
 grid-template-columns: repeat(2,50%);
@@ -10,11 +9,12 @@ gap:10px;
 
 `
 const ImageContainer = styled.div`
-
+width:100%;
 `
 const Image= styled.img`
 width:100%;
-height:100%;
+// height:77vh;
+aspect-ratio:1/1.27;
 // object-fit:cover;
 `
 export default function ImagesContainer({imagesList,ImagesColor}){

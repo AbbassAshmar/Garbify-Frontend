@@ -2,6 +2,8 @@ import styled from "styled-components"
 import {Link} from "react-router-dom"
 
 const Container = styled.div`
+// min-width:max(300px ,35%);
+min-width:${({min_width})=>{return (min_width?min_width:"auto")}};
 overflow:hidden;
 // border:1px solid rgba(189, 189, 189,.3);
 box-shadow: 1px 1px 10px rgba(189, 189, 189,1);
@@ -68,7 +70,7 @@ font-size:1em;
 font-weight:400;
 `
 
-export default function ProductCard({thumbnail, price, name,quantity,type,sale,colors,pk}){
+export default function ProductCard({thumbnail, price, name,quantity,type,sale,colors,pk,min_width}){
     const getPrice = ()=>{
         if (sale){
             return(
@@ -88,7 +90,7 @@ export default function ProductCard({thumbnail, price, name,quantity,type,sale,c
         return `${price} $`
     }
     return(
-        <Container>
+        <Container min_width={min_width}>
             <LinkContainer to={`/product/${name.replaceAll(" ",'-')}/${pk}`}>
             <Image src={thumbnail}/>
             <Details>

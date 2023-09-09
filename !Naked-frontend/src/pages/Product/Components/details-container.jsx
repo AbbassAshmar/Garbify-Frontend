@@ -3,10 +3,9 @@ import star from "../../../assets/star.png"
 import half_star from "../../../assets/half_star.png"
 import empty_star from "../../../assets/empty_star.png"
 import { Link } from "react-router-dom"
+import { useRef, useState } from "react"
 const Container = styled.div`
 flex:3.5;
-height:100vh;
-background:yellow;
 margin-left:2rem;
 position:sticky;
 top:60px;
@@ -20,7 +19,6 @@ margin:0 0 .5rem 0;
 width:fit-content;
 padding: .3em .8em;
 font-size:.8em;
-background : red;
 color:white;
 font-weight:600;
 `
@@ -71,7 +69,7 @@ font-size:1.8em;
 `
 const OldPrice = styled.p`
 margin:0;
-font-size:1.4em;
+font-size:1.2em;
 font-weight:600;
 color:black;
 opacity:.7;
@@ -81,7 +79,7 @@ const SalePercent = styled.p`
 margin:0;
 font-weight:600;
 color:green;
-font-size:1.4em;
+font-size:1.2em;
 
 
 
@@ -89,17 +87,25 @@ font-size:1.4em;
 const Price = styled.p`
 margin:0;
 font-weight:600;
-font-size:1.4em;
+font-size:1.2em;
 
 `
 
 const ColorsContainer = styled.div`
 width:100%;
-background:blue;
+margin:0 0 2rem 0;
+`
+const ColorsTitle = styled.div`
+width:100%;
+font-size:1.2em;
+font-weight:600;
+margin: 0 0 .5em 0;
+`
+const Colors= styled.div`
+width:100%;
 display:flex;
 gap:1.3rem;
 margin:0 0 2rem 0;
-
 `
 const ColorImage = styled.img`
 border:${({border})=>border};
@@ -108,20 +114,14 @@ height:auto;
 overflow:hidden;
 cursor:pointer;
 border-radius:2px;
-
-
 `
 const SizesContainer = styled.div`
 margin: 0 0 2rem 0 ;
 `
-const SizesTitles = styled.div`
+const SizesTitles = styled(ColorsTitle)`
 display:flex;
-width:100%;
 justify-content:space-between;
 align-items:flex-end;
-font-size:1.4em;
-font-weight:600;
-margin: 0 0 .5em 0;
 `
 const SizeGuideLink = styled(Link)`
 color:black;
@@ -156,7 +156,7 @@ width : 100%;
 height:8.4vh;
 background:black;
 color:white;
-font-size:1.4em;
+font-size:1.2em;
 font-weight:600;
 border:none;
 outline:none;
@@ -186,38 +186,89 @@ const ReturnsBadge =styled(ShippingBadge)`
 
 `
 const OverViewContainer = styled.div`
-
+margin:0 0 2rem 0;
 `
 const OverViewTitle = styled.h2`
-font-size:1em;
+font-size:1.2em;
 font-weight:600;
-
+margin: 0 0 .8em 0 ;
 `
 const OverView = styled.p`
 margin:0;
+white-space: pre-line;
+font-size:1.2em;
+font-weight:600;
 `
 const Star = styled.img`
 width:15px;
 `
 
-export default function DetailsContainer({ quantity,product,setImagesColor,ImagesColor,setSizePicked, sizePicked}){
+const SizeGuideContainer =styled.div`
 
+`
+const SizeGuideTitle = styled.div`
+display:flex;
+align-items:flex-end;
+gap:5px;
+font-size:1em;
+font-weight:600;
+margin: 0 0 .5em 0;
+cursor:pointer;
+
+`
+const TableWrapper = styled.div`
+max-height:${({maxHeight})=>maxHeight};
+height:auto;
+overflow:hidden;
+transition:max-height .3s;
+`
+const SizeGuideTable = styled.table`
+border-collapse:collapse;
+
+`
+const TableHead = styled.th`
+border:1.4px solid rgba(0,194,255,1);
+font-weight:600;
+background:rgba(0,194,255,.3);
+padding : .4rem 0;
+`
+const TableRow = styled.tr`
+
+`
+const TableData  = styled.td`
+font-weight:600;
+border:1.4px solid rgba(0,194,255,1);
+padding:.4rem 3rem;
+
+
+`
+
+// converts rating (int) to array ([star,star,half,empty,empty])
+export function ratingToStars(rating){
+    let result = [];
+    let i =0 ;
+    for (; i < parseInt(rating);  i++ ){
+        result.push("star")
+    }
+   
+    if (((rating*10) % 10 ) != 0 ){
+        result.push("half")
+        i++;
+    }
+    for (; i <5 ; i++){
+        result.push('empty')
+    }
+    return result;
+}
+
+export default function DetailsContainer({ quantity,product,setImagesColor,ImagesColor,setSizePicked, sizePicked}){
+    const [showTable, setShowTable] = useState(false)
+    const sizeTableRef  = useRef(null)
     // from 3.5 to [star, star,star, half, empty, empty]
-    function ratingToStars(rating){
-        let result = [];
-        let i =0 ;
-        for (; i < parseInt(rating);  i++ ){
-            result.push("star")
-        }
-       
-        if (((rating*10) % 10 ) != 0 ){
-            result.push("half")
-            i++;
-        }
-        for (; i <5 ; i++){
-            result.push('empty')
-        }
-        return result;
+    
+    function handleSizeGuideClick(ref){
+        setShowTable(true)
+        ref.current.scrollIntoView({ behavior: 'smooth'})
     }
     
     return (
@@ -263,6 +314,10 @@ export default function DetailsContainer({ quantity,product,setImagesColor,Image
                 }
             </PriceContainer>
             <ColorsContainer>
+                <ColorsTitle>   
+                    colors :  <span style={{fontSize:".7em",opacity:".7",fontWeight:"600",color:`${ImagesColor}`}}>{ImagesColor&&ImagesColor}</span>
+                </ColorsTitle>
+                <Colors>
                 {
                     product.colors.map((color)=>{
                         return(<ColorImage 
@@ -274,13 +329,15 @@ export default function DetailsContainer({ quantity,product,setImagesColor,Image
                         )
                     })
                 }
+                </Colors>
+                
             </ColorsContainer>
             <SizesContainer>
                 <SizesTitles>
                     <p styled={{margin:"0"}}>
                         sizes : <span style={{fontSize:".7em",opacity:".7"}}>{sizePicked&&sizePicked}</span>
                     </p>
-                    <SizeGuideLink>size guide</SizeGuideLink>
+                    <SizeGuideLink  onClick={(e)=>{return handleSizeGuideClick(sizeTableRef)}}>size guide</SizeGuideLink>
                 </SizesTitles>
                 <Sizes>
                     {product.sizes.map((size)=>{
@@ -325,6 +382,35 @@ export default function DetailsContainer({ quantity,product,setImagesColor,Image
                     {product.description}
                 </OverView>
             </OverViewContainer>
+            <SizeGuideContainer ref={sizeTableRef}>
+                <SizeGuideTitle  onClick={()=>{setShowTable(!showTable)}}>
+                    <p style={{margin:"0"}}>Size guide </p>
+                    <i style={{transition:"transform .3s",margin:"0",transform:`rotateX(${showTable?'180deg':"0"})`}} className="fa-solid fa-angle-down"></i>
+                </SizeGuideTitle>
+                <TableWrapper maxHeight={showTable?"100vh":"0px"}>
+                <SizeGuideTable>
+                    
+                    {product.sizes_table.units.map((unit)=>{
+                        return (
+                            <TableHead key={unit}>
+                                {unit}
+                            </TableHead>
+                        )
+                    })}
+                    
+                    {product.sizes_table.sizes.map((size)=>{
+                        return (
+                            <TableRow key={size}>
+                                {size.map((s)=>{
+                                    return <TableData key={s}>{s}</TableData>
+                                })}
+                            </TableRow>
+                        )
+                    })}
+                    
+                </SizeGuideTable>
+                </TableWrapper>
+            </SizeGuideContainer>
         </Container>
     )
 }

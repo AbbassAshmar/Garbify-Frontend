@@ -68,7 +68,43 @@ grid-gap:20px;
 
 // products model , category model , shoes model, shirts model , suits model ,
 
-let pp = [
+export let pp = [
+    {
+        name:"Brooks sport shoes",
+        price:150,
+        colors:["white"],
+        thumbnail:Hoody2,
+        quantity:400,
+        type:"men shoes",
+        sale:{
+            price_after_sale:100,
+            percentage:50,
+        }
+    },
+    {
+        name:"Brooks sport shoes",
+        price:150,
+        colors:["white"],
+        thumbnail:Hoody2,
+        quantity:400,
+        type:"men shoes",
+        sale:{
+            price_after_sale:100,
+            percentage:50,
+        }
+    },
+    {
+        name:"Brooks sport shoes",
+        price:150,
+        colors:["white"],
+        thumbnail:Hoody2,
+        quantity:400,
+        type:"men shoes",
+        sale:{
+            price_after_sale:100,
+            percentage:50,
+        }
+    },
     {
         name:"Brooks sport shoes",
         price:150,
