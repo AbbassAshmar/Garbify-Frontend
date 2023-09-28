@@ -1,4 +1,6 @@
+import { useRef } from "react"
 import { styled } from "styled-components"
+import { ArrowIcon, SlideButton } from "../../../components/ProductsSlider/products-slider"
 
 const Container = styled.div`
 flex:6;
@@ -6,20 +8,56 @@ display:grid;
 grid-template-columns: repeat(2,50%);
 overflow:hidden;
 gap:10px;
+@media screen and (max-width:600px){
+    display:flex;
+    overflow-X:auto;
+    width: 100%;
+}
+scroll-behavior: smooth;
 
 `
 const ImageContainer = styled.div`
 width:100%;
+
+@media screen and (max-width:600px){
+    min-width:100%;
+    border-radius:10px;
+    position:relative;
+    overflow:hidden;
+}
 `
 const Image= styled.img`
 width:100%;
-// height:77vh;
-aspect-ratio:1/1.27;
-// object-fit:cover;
+// aspect-ratio:1/1.27;
+@media screen and (max-width:600px){
+    height:100%;
+    width:100%;
+}
+
+`
+const SlideButtonCustom = styled(SlideButton)`
+z-index:200;
+opacity:.7;
+@media screen and (min-width:600px){
+    display:none;
+}
+&:hover{
+    background:white;
+}
 `
 export default function ImagesContainer({imagesList,ImagesColor}){
+    const sliderRef = useRef(null)
+    function handleLeftButtonClick(leftOffset){
+        sliderRef.current.scrollLeft += leftOffset
+    }
     return (
-        <Container>
+        <Container ref={sliderRef}>
+            <SlideButtonCustom onClick={()=>handleLeftButtonClick(-300)} style={{left:"6%"}}>
+                <ArrowIcon className="fa-solid fa-arrow-left"/>
+            </SlideButtonCustom>
+            <SlideButtonCustom onClick={()=>handleLeftButtonClick(300)}  style={{right:"6%"}}>
+                <ArrowIcon className="fa-solid fa-arrow-right"/>
+            </SlideButtonCustom>
             {
                 ImagesColor&&imagesList[ImagesColor].map((image)=>{
                     return(

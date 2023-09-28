@@ -7,7 +7,10 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 width:50%;
-margin: 4rem auto;
+margin: min(4rem ,10%) auto;
+@media screen and (max-width:600px){
+    width:100%;
+}
 `
 
 const Page =styled(Link)`

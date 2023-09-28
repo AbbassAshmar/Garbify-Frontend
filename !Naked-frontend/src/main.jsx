@@ -7,9 +7,9 @@ import { RouterProvider } from 'react-router-dom'
 import UserState from './Contexts/user-state.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <UserState>
       <RouterProvider router={router}/>
     </UserState>
-  // </React.StrictMode> 
+  </React.StrictMode> 
 )

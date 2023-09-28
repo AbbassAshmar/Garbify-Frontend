@@ -3,14 +3,15 @@ import styled from "styled-components"
 import FilterContainer from "./Components/filter-container"
 import ProductsContainer from "./Components/products-container"
 import PathTitle from "./Components/path-title"
-import SortBy from "./Components/sort-by"
+import SortByButton from "../../components/SortByButton/sort-by-button"
 import ShowFilter from "./Components/show-filter"
 import { useEffect, useState } from "react"
 const Container = styled.div`
+max-width:1500px;
 
 `
 const Content = styled.div`
-padding:2rem;
+padding: min(2rem ,5%);
 
 display:flex;
 flex-direction:column;
@@ -65,12 +66,19 @@ export default function Products(){
         setUrlSearchParams(urlSearchParams)
     }
     
-
     // update currentPageNumber according to page query string
     useEffect(()=>{
         setCurrentPage(urlSearchParamsObj()["page"]?urlSearchParamsObj()["page"]:1)
     },[urlSearchParamsObj])
 
+    // sql orderBy translated to be readable
+    const OrderBytoSortBy={
+        "name-ASC":"From A-Z",
+        "created_at-DESC":"Newest-Oldest",
+        "created_at-ASC":"Oldest-Newest",
+        "price-DESC":"Price: High-Low",
+        "price-ASC":"Price: Low-High",
+    }
 
     return(
         <Container>
@@ -78,7 +86,7 @@ export default function Products(){
                 <Head>
                     <PathTitle title={urlParametersList.join(" ")} number={4345} />
                     <Options>
-                        <SortBy urlSearchParams={urlSearchParams} setUrlSearchParams={setUrlSearchParams}/>
+                        <SortByButton optionsObj={OrderBytoSortBy}/>
                         <ShowFilter show={showFilter} setShow={setShowFilter}/>
                     </Options>
                 </Head>

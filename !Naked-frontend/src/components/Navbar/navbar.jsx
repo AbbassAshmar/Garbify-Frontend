@@ -8,7 +8,8 @@ import Logo from "../Logo"
 import SideNavbar from "./side-navbar"
 import {Categories } from "./navbar-filters"
 
-// padding 2rem
+// padding: 0 min(2rem ,5%);
+
 // navbar z-index : 100
 
 
@@ -31,7 +32,7 @@ width:100%;
 height:10vh;
 max-height:60px;
 position:relative;
-padding:0 2rem 0 2rem;
+padding: 0 min(2rem ,5%);
 display:flex;
 align-items:center;
 justify-content:space-between;

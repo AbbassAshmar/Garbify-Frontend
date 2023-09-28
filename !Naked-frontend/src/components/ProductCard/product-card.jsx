@@ -2,11 +2,10 @@ import styled from "styled-components"
 import {Link} from "react-router-dom"
 
 const Container = styled.div`
-// min-width:max(300px ,35%);
 min-width:${({min_width})=>{return (min_width?min_width:"auto")}};
 overflow:hidden;
-// border:1px solid rgba(189, 189, 189,.3);
 box-shadow: 1px 1px 10px rgba(189, 189, 189,1);
+
 `
 const LinkContainer = styled(Link)`
 width:100%;
@@ -31,16 +30,27 @@ margin-bottom:.4rem;
 `
 const Name =styled.h2`
 margin:0;
-font-size:1.4em;
+font-size:1.3rem;
 font-weight:600;
 
+@media screen and (max-width:800px){
+    font-size:1rem;
+}
 `
 const Category = styled.p`
 margin:0;
 color: grey;
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
 `
 const ColorCount = styled.div`
 color:grey;
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
 `
 const Price = styled.p`
 margin:0;
@@ -55,6 +65,11 @@ align-items:flex-end;
 const NewPrice =styled.p`
 margin:0;
 font-weight:600;
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
+
 `
 const OldPrice =styled.p`
 margin:0;
@@ -62,12 +77,20 @@ color:grey;
 opacity:.6;
 font-weight:400;
 text-decoration:line-through;
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
+
 `
 const SalePercentage =styled.p`
 margin:0;
 color:green;
-font-size:1em;
+font-size:1rem;
 font-weight:400;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
 `
 
 export default function ProductCard({thumbnail, price, name,quantity,type,sale,colors,pk,min_width}){

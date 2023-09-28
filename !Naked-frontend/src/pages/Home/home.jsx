@@ -1,5 +1,4 @@
-import { useContext } from "react"
-import { StateContext } from "../../Contexts/user-state"
+
 import styled from "styled-components"
 import Model from "../../assets/ModelBg.jpg"
 import ModelCropped from "../../assets/ModelCropped.jpg"
@@ -38,7 +37,7 @@ height:auto;
 
 const ContentContainer =styled.div`
 display:flex;
-padding:0 2rem;
+padding: 0 min(2rem ,5%);
 align-items:center;
 justify-content:space-between;
 width:100%;
@@ -129,8 +128,6 @@ border:none;
 
 export default function Home(){
 
-    const state = useContext(StateContext)
-    console.log(state)
     return (
         <Container>
             <Section1> 

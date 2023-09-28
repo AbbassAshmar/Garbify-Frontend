@@ -13,7 +13,7 @@ flex-direction:column;
 align-items:center;
 
 gap:min(17vh, 7rem);
-padding:0 2rem;
+padding: 0 min(2rem ,5%);
 `
 
 const Section2Title = styled.div`

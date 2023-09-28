@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import Review from "./review"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { ratingToStars } from "./details-container"
 
 import star from "../../../assets/star.png"
@@ -8,31 +8,41 @@ import half_star from "../../../assets/half_star.png"
 import empty_star from "../../../assets/empty_star.png"
 import hoody from "../../../assets/Hoody.jpg"
 import hoody2 from "../../../assets/Hoody2.jpg"
+import { userStateContext } from "../../../Contexts/user-state"
 
 const Container = styled.div`
-background:green;
+margin: 0 0 2rem 0;
 `
 const Header = styled.div`
-margin: 0 0 4rem 0;
+padding: 0 0 4rem 0;
+border-bottom:2px solid black;
 `
 const Title = styled.h2`
-font-size:1.8rem;
 margin: 0 0 4rem 0;
+
+font-size:1.3rem;
+@media screen and (max-width:800px){
+    font-size:1.1rem;
+}
 
 `
 const StarsContainer = styled.div`
 display:flex;
 gap:8px;
 align-items:flex-start;
-font-size:1.8rem;
 margin:auto;
 justify-content:center;
 
+
 `
 const Rating = styled.div`
-font-size:1.2em;
 font-weight:600;
 margin:0;
+
+font-size:1.8rem;
+@media screen and (max-width:800px){
+    font-size:1.6rem;
+}
 `
 const Stars = styled.div`
 display:flex;
@@ -40,25 +50,62 @@ display:flex;
 `
 const Star = styled.img`
 width:40px;
+@media screen and (max-width:800px){
+    width:30px;
+}
 `
 const Reviews = styled.div`
 display:flex;
 flex-direction : column;
 
 `
-export default function ReviewsSection(){
+export default function ReviewsSection({product_id}){
+    const userState = useContext(userStateContext)
     const [reviews, setReviews] = useState(rvs)
     const [reviewsDetails, setReviewsDetails] = useState({average_ratings:5 , reviews_count:0})
-    async function requestReviews(){
-        const request = await fetch("http://127.0.0.1:8000/api/products/"+id+"/reviews");
+    const [likedReviews, setLikedReviews] = useState([4,5])
+
+    async function requestReviews(product_id){
+        const request = await fetch("http://127.0.0.1:8000/api/products/"+product_id+"/reviews");
         const response = await request.json(); 
         if ( request.status == 200){
             setReviews(response.data.reviews)
-            setReviewsDetails({average_ratings:response.data.average_ratings,reviews_count:response.data.reviews_count})
+            setReviewsDetails({average_ratings:response.average_ratings,reviews_count:response.total_count})
         }
     }
+
+    async function requestClientLikedReviews(product_id,user_token){
+        const request = await fetch("http://127.0.0.1:8000/api/products/"+product_id+"/user/reviews/liked",{
+            type:"GET",
+            headers:{
+                "Authorization":"Bearer "+user_token 
+            }
+        });
+        const response = await request.json(); 
+        if ( request.status == 200){
+            setLikedReviews(response.data.liked_reviews)
+        }
+    }
+
+    function checkIfLiked(review_id,likedReviews){
+        function searchForId(s,e){
+            let middle = (s+e)/ 2
+            if (s>e){
+                return false;
+            }
+            if (likedReviews[middle] === review_id){
+                return true;
+            }
+            if (likedReviews[middle] > review_id){
+                return searchForId(s, middle-1);
+            }
+            return searchForId(middle +1 , e);
+        }
+        return searchForId(0, likedReviews.length)
+    }
     useEffect(()=>{
-        // requestReviews()
+        // requestClientLikedReviews(product_id,userState.token)
+        // requestReviews(product_id)
     },[])
     return (
         <Container>
@@ -79,9 +126,11 @@ export default function ReviewsSection(){
                 {reviews && reviews.map((review)=>{
                     return(
                         <Review 
+                            liked={checkIfLiked(review.id,likedReviews)}
+                            id = {review.id}
                             username={review.username}
                             height={review.user_height}
-                            width={review.user_width}
+                            weight={review.user_weight}
                             rating={review.rating}
                             title={review.title}
                             text={review.text}
@@ -98,9 +147,13 @@ export default function ReviewsSection(){
         </Container>
     )
 }
+const likedrvs = [
+    4,5
+]
 
 const rvs = [
     {
+        id:5,
         username:"Sam s",
         rating:3.5,
         color:"red",
@@ -115,12 +168,13 @@ const rvs = [
             hoody2,
             hoody2
         ],
-        user_height:190,
-        user_weight:38,
+        user_height:'190cm',
+        user_weight:'38kg',
         helpful_count:29,
         created_at:"2033-09-09"
     },
     {
+        id:4,
         username:"Sam s",
         rating:3.5,
         color:"red",
@@ -135,10 +189,13 @@ const rvs = [
             hoody2
         ],
    
-        helpful_count:29,
-        created_at:"2033-09-09"
+        helpful_count:40,
+        created_at:"2033-09-09",
+        user_height:'190cm',
+        user_weight:'38kg',
     },
     {
+        id:2,
         username:"Sam s",
         rating:3.5,
         color:"red",
@@ -147,9 +204,9 @@ const rvs = [
         text:` the quality is bad and cheap ,clothes do not fit  ,
                customer service sucks (one of them cursed me),
                and they hire black people , 0 out of 10 (for hiring black people)`,
-        user_height:190,
-        user_weight:38,
-        helpful_count:29,
+        user_height:'190cm',
+        user_weight:'38kg',
+        helpful_count:0,
         created_at:"2033-09-09"
     }
 ]

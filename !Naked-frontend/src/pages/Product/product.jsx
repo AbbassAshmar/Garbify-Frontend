@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ImagesContainer from "./Components/images-container";
 import DetailsContainer from "./Components/details-container";
+import ProductsSlider from "../../components/ProductsSlider/products-slider";
+
+
 import jordan4_1 from "../../assets/jordan4redfront.jpg"
 import jordan4_2 from "../../assets/jordan4redfront2.jpg"
 import jordan4_3 from "../../assets/jordan4redside2.jpg"
@@ -18,7 +21,6 @@ import jordan4_10 from "../../assets/jordan4blueside2.jpg"
 import jordan4_11 from "../../assets/jordan4blueside.jpg"
 import jordan4_12 from "../../assets/jordan4bluefront.jpg"
 import jordan4_13 from "../../assets/jordan4blueback.jpg"
-import ProductsSlider from "./Components/products-slider";
 
 
 import { pp } from "../Products/Components/products-container";
@@ -26,14 +28,21 @@ import ReviewsSection from "./Components/reviews-section";
 
 const Container = styled.div`
 width:100%;
-padding:2rem;
+padding: min(2rem ,5%);
 display:flex;
 flex-direction:column;
 gap:4rem;
+max-width:1500px;
+margin:auto;
 `
 const AboveTheFolds = styled.div`
 display:flex;
 align-items:flex-start;
+
+@media screen and (max-width:600px){
+    flex-direction:column;
+    gap:2rem;
+}
 `
 
 export default function Product(){
@@ -48,8 +57,9 @@ export default function Product(){
         const request = await fetch("http://127.0.0.1:8000/api/products/"+id);
         const response = await request.json(); 
         if ( request.status == 200){
-            // setImagesColor(response.product.colors[0])
-            // setQuantity(response.product.quantity)
+            setProduct(response.data.product)
+            setImagesColor(response.data.colors[0])
+            setQuantity(response.data.quantity)
         }
     }
 
@@ -57,7 +67,7 @@ export default function Product(){
         const request = await fetch("http://127.0.0.1:8000/api/products/"+id+"/similar");
         const response = await request.json(); 
         if ( request.status == 200){
-            // setSimilarProducts(response.products)
+            setSimilarProducts(response.products)
         }
     }
 
@@ -79,10 +89,11 @@ export default function Product(){
                 product={product}/>
             </AboveTheFolds>
             <ProductsSlider title={"You may also like : "} products={similarProducts}/>
-            <ReviewsSection />
+            <ReviewsSection product_id={id}/>
         </Container>
     )
 }
+
 const rr  = {
     reviews:  [
         {

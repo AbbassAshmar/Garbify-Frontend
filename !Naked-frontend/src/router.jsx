@@ -5,22 +5,38 @@ import Registration from "./pages/Registration/registration"
 import Login from "./pages/Login/login"
 import Products from "./pages/Products/products"
 import Product from "./pages/Product/product"
+import Cart from "./pages/Cart/cart"
+import Orders from './pages/Orders/orders'
+import Review from "./pages/Review/review"
 export const router = createBrowserRouter([
     {
         path:'/' ,
         element:<Default />,
         children:[   
             {
-            path:'/',
-            element:<Home />
+                path:'/',
+                element:<Home />
             },
-            {path:'/products/*',
-            element:<Products />
+            {
+                path:'/products/*',
+                element:<Products />
             },
             {
                 path:'/product/:name/:id',
                 element:<Product />
             },
+            {
+                path:'/orders',
+                element:<Orders />
+            },
+            {
+                path:'/cart',
+                element:<Cart />
+            },
+            {
+                path:"/review/:product_id",
+                element:<Review />
+            }
         ],
     },
     {
@@ -36,7 +52,8 @@ export const router = createBrowserRouter([
     {
         path:"*",
         element : <div>Not Found</div>
-    }
+    },
+    
     
 
 ])
