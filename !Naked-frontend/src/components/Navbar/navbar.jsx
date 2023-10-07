@@ -51,22 +51,21 @@ position:${({position})=>position};
 `
 
 const IconsContainer = styled.div`
-
 display:flex;
-gap:40px;
+gap:30px;
 @media screen and (max-width:1000px){
     gap:20px;
 }
 `
 
 const Icon = styled.i`
+cursor:pointer;
 color:black;
 text-decoration: none;
-font-size:22px;
+font-size:1rem;
 @media screen and (max-width:1000px){
-    font-size:20px;
+    font-size:.8rem;
 }
-
 `
 
 const BarsIcon =styled(Icon)`
@@ -81,7 +80,6 @@ const UserIcon =styled(Icon)`
     display:none;
 }
 `
-
 const CategoriesContainer = styled.div`
 height:100%;
 display:flex;
@@ -89,9 +87,8 @@ justify-content:space-between;
 align-items:end;
 overflow:hidden;
 `
+
 const Category = styled.div`
-font-size:19px;
-font-weight:100;
 opacity:${({selected})=> (selected?"1":".6") };
 height:85%;
 cursor:pointer;
@@ -113,6 +110,12 @@ align-items:center;
 
 @media screen and (max-width:1000px){
     display:none;
+}
+
+font-weight:600;
+font-size:1rem;
+@media screen and (max-width:1000px){
+    font-size:.8rem;
 }
 `
 
@@ -181,7 +184,6 @@ export default function Navbar({setSideNavbarOpened}){
                             )
                         })
                     }
-                    
                     <CategoryList 
                         topParent = {showCategoryList.topParent}
                         show={showCategoryList.display} 
@@ -192,6 +194,7 @@ export default function Navbar({setSideNavbarOpened}){
                 <IconsContainer>
                     <Icon onClick={handleSearchIconClick}><i  className="fa-solid fa-magnifying-glass"/></Icon>
                     <UserIcon><i className="fa-regular fa-user"/></UserIcon>
+                    <Icon><i class="fa-regular fa-heart"/></Icon>
                     <Icon><i className="fa-solid fa-cart-shopping"/></Icon>
                     <BarsIcon onClick={handleBarsIconClick}><i class="fa-solid fa-bars"></i></BarsIcon>
                 </IconsContainer>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import {Link, useLocation} from "react-router-dom"
+
 export const Container = styled.div`
 width:100%;
 display:flex;
@@ -22,14 +23,23 @@ export const Text = styled.div`
 text-align:left;
 `
 export const Title =styled.h2`
-font-size:2rem;
 font-weight:600;
 margin: 0 0 1rem 0;
+
+font-size:1.3rem;
+@media screen and (max-width:800px){
+    font-size:1.1rem;
+}
 `
 const Parg =styled.p`
 margin:0;
-font-size:1.2rem;
-font-weight:500;
+font-weight:600;
+opacity:.7;
+
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
 
 `
 
@@ -50,34 +60,40 @@ height:min(10vh, 60px);
 border:1px solid ${({color})=>color};
 outline:none;
 padding:1rem;
-font-size:1.1em;
-`
+
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}`
 export const Label =styled.label`
 position:absolute;
-
 top:${({position})=>position?'-17%':"30%"};
 left:${({position})=>position?'2%':"4%"};
-font-size:${({position})=>position?'.9em':"1.2em"};
-
+font-size:${({position})=>position?'.8em':"1rem"};
 opacity:1;
 z-index:3;
-font-weight:600;
 color:${({color})=>color};
 background:white;
 transition:all .3s;
-    ${Input}:focus + &{
-        top:-17%;
-        left:2%;
-        font-size:.9em;
-    }
+${Input}:focus + &{
+    top:-17%;
+    left:2%;
+    font-size:.8rem;
+}
+font-weight:600;
+
 `
 export const ErrorMsg = styled.p`
 margin:0;
 color:red;
 transform:translateY(40%);
 font-weight:600;
-font-size:.8em;
 position:absolute;
+
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
 `
 export const Submit = styled.button`
 height:min(10vh, 60px);
@@ -86,13 +102,19 @@ border-radius:10px;
 border:none;
 outline:none;
 background:#00C2FF;
-font-weight:600;
-font-size:1.2rem;
 cursor:pointer;
 transition:background .3s;
-    &:hover{
-        background:#02abed;
-    }
+&:hover{
+    background:#02abed;
+}
+font-weight:600;
+
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
+
+
 `
 
 export const SignIn = styled(Link)`
@@ -208,9 +230,9 @@ export default function Registration(){
                         >Confirm Password</Label>
                         <ErrorMsg>{errorMsg.confirm_password}</ErrorMsg>
                     </InputWrapper>
-                    <div>
+                    <div style={{fontWeight:"600"}}>
                         Already have an account?   
-                        <SignIn to="#">
+                        <SignIn to="/login">
                             Sign in <I className="fa-solid fa-greater-than"/>
                         </SignIn>
                     </div>

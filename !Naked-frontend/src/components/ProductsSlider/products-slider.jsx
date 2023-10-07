@@ -3,14 +3,17 @@ import ProductCard from "../ProductCard/product-card"
 import { useEffect, useRef } from "react"
 
 const Container = styled.div`
+display:flex;
+flex-direction:column;
+gap:min(5vh,30px);
+
 `
 const Title = styled.h2`
 font-size:1.3em; 
-font-weight:800;
-margin:0 0 2% 0 ;
+font-weight:600;
 
 @media screen and (max-width:800px){
-    font-size:.8rem;
+    font-size:1.1rem;
 }
 
 `
@@ -18,12 +21,11 @@ const SliderContainer = styled.div`
 position:relative;
 `
 const Slider = styled.div`
-padding:1rem 0;
 display:flex;
+padding: 0 0 1rem 0;
 gap:1rem;
 overflow-x: scroll;
 scroll-behavior: smooth;
-
 `
 export const SlideButton = styled.button`
 background:white;

@@ -3,14 +3,21 @@ import FeaturedBox from "./featured-box"
 import hoody from "../../../assets/Hoody.jpg"
 import hoody2 from "../../../assets/Hoody2.jpg"
 import { SectionContent } from "./category-section"
+
 export const SectionContainer = styled.div`
 margin: min(17vh, 6rem) 0 0 0;
 width:100%;
-
 `
 
 export const Title = styled.h2`
-font-size: clamp(2rem,4.5vw ,4rem);
+font-size:clamp(.8rem,4vw,1.7rem);
+font-weight:800;
+
+// text-align:center;
+// font-size:1.3rem;
+// @media screen and (max-width:800px){
+//     font-size:1.3rem;
+// }
 `
 
 const Boxes = styled.div`

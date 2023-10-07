@@ -21,7 +21,6 @@ overflow:hidden;
 `
 const BackButton =styled.button`
 display:flex;
-font-size:1rem;
 background:none;
 outline:none;
 align-items:center;
@@ -29,6 +28,11 @@ gap:8px ;
 font-weight:600;
 border:none;
 margin:2rem 0 2rem 0;
+
+font-size:1rem;
+@media screen and (max-width:1000px){
+    font-size:.8rem;
+}
 `
 
 export const OptionAnimation  = {

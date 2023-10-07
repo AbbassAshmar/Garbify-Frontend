@@ -46,6 +46,7 @@ export default function Login(){
                 <Title>
                     Sign In 
                 </Title>
+                <p style={{fontWeight:"600",opacity:".7"}}>Be the first to receive our latest offers !</p>
             </Text>
             <Form onSubmit={handleFormSubmit}>
                 <InputWrapper>
@@ -74,9 +75,9 @@ export default function Login(){
                     >Password</Label>
                     <ErrorMsg>{errorMsg.password}</ErrorMsg>
                 </InputWrapper>
-                <div>
+                <div style={{fontWeight:"600"}}>
                     Don't have an account?   
-                    <SignIn to="#">
+                    <SignIn to="/register">
                         Create One <I className="fa-solid fa-greater-than"/>
                     </SignIn>
                 </div>

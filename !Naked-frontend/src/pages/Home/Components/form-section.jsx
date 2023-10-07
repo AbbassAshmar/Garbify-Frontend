@@ -12,9 +12,10 @@ justify-content:center;
 padding:0 1rem;
 `
 const Text = styled.div`
-font-size:24px;
+font-size:clamp(.8rem,4vw,1.7rem);
+font-weight:800;
+
 text-align:center;
-font-weight:bold;
 `
 const InputContainer = styled.form`
 display:flex;
@@ -49,8 +50,8 @@ transition:opacity .3s;
 @media screen and (max-width:340px){
     font-size:.8em;
     padding:0 0;
-
 }
+
 `
 export default function FormSection(){
     const [formData, setFormData] =useState("")

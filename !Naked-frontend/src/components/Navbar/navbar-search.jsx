@@ -46,10 +46,14 @@ height:6vh;
 `
 const SearchIcon = styled.i`
 z-index:2;
-font-size:18px;
 position:absolute;
 top:25%;
 left:3%;
+
+font-size:1rem;
+@media screen and (max-width:1000px){
+    font-size:.8rem;
+}
 `
 const SearchInput = styled.input`
 width:100%;
@@ -58,15 +62,23 @@ border-radius:30px;
 position:absolute;
 z-index:1;
 padding:0 4% 0 8%;
-font-size:16px;
 background:#E4E4E4;
 border:none;
+
+font-size:1rem;
+@media screen and (max-width:1000px){
+    font-size:.8rem;
+}
 `
 const CancelButton = styled.button`
-font-size:18px;
 border:none;
 background:none;
 cursor:pointer;
+
+font-size:1rem;
+@media screen and (max-width:1000px){
+    font-size:.8rem;
+}
 `
 export default function NavbarSearch({show,setShow}){
     return (

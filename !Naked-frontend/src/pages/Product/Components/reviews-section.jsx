@@ -9,6 +9,8 @@ import empty_star from "../../../assets/empty_star.png"
 import hoody from "../../../assets/Hoody.jpg"
 import hoody2 from "../../../assets/Hoody2.jpg"
 import { userStateContext } from "../../../Contexts/user-state"
+import Pagination from "../../../components/Pagination/pagination"
+import { useSearchParams } from "react-router-dom"
 
 const Container = styled.div`
 margin: 0 0 2rem 0;
@@ -61,9 +63,19 @@ flex-direction : column;
 `
 export default function ReviewsSection({product_id}){
     const userState = useContext(userStateContext)
-    const [reviews, setReviews] = useState(rvs)
-    const [reviewsDetails, setReviewsDetails] = useState({average_ratings:5 , reviews_count:0})
-    const [likedReviews, setLikedReviews] = useState([4,5])
+    const [reviews, setReviews] = useState(rvs);
+    const [reviewsDetails, setReviewsDetails] = useState({average_ratings:5 , reviews_count:0});
+    const [likedReviews, setLikedReviews] = useState([4,5]);
+    const [CurrentPage,setCurrentPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
+    // update currentPage according to page query string
+    useEffect(()=>{
+        let page_number = parseInt(searchParams.get("page"));
+        if (!page_number){
+            page_number = 1;
+        }
+        setCurrentPage(page_number);
+    },[searchParams])
 
     async function requestReviews(product_id){
         const request = await fetch("http://127.0.0.1:8000/api/products/"+product_id+"/reviews");
@@ -144,6 +156,7 @@ export default function ReviewsSection({product_id}){
                 })}
                 
             </Reviews>
+            <Pagination CurrentPage={CurrentPage} TotalPagesCount={30}/>
         </Container>
     )
 }

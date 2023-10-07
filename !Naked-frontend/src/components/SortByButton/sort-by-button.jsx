@@ -20,7 +20,6 @@ cursor:pointer;
 }
 display:flex;
 align-items:center;
-padding:.3rem;
 
 font-size:1rem;
 @media screen and (max-width:800px){
@@ -97,6 +96,7 @@ export default function SortByButton(props){
     }
     function handleOptionClick(value){
         urlSearchParams.set("sort-by",value)
+        urlSearchParams.set("page", 1)
         setUrlSearchParams(urlSearchParams)
     }
     

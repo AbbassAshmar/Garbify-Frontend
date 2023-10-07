@@ -47,10 +47,14 @@ background:white;
 
 
 const Title = styled(Link)`
-font-size:20px;
 font-weight:600;
 color:black;
 text-decoration:none;
+
+font-size:1.3rem;
+@media screen and (max-width:1000px){
+    font-size:1.1rem;
+}
 `
 const ElementsContainer = styled.div`
 display:flex;
@@ -60,11 +64,15 @@ gap:2vh;
 `
 
 const Element = styled(Link)`;
-font-size:18px;
 font-weight:600;
 text-decoration:none;
 color:black;
 opacity:.67;
+
+font-size:1rem;
+@media screen and (max-width:1000px){
+    font-size:.8rem;
+}
 `
 // return url for titles 
 const getTitlesUrl = (parent,name)=>{

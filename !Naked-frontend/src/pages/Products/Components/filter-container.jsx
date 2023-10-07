@@ -50,47 +50,59 @@ const Filters= [
 ]
 const Container = styled.div`
 flex:${({flex})=>flex};
-overflow:hidden;
 display:flex;
 margin-right:${({margin})=>margin};
 transition:flex .3s;
+overflow:clip;
+`
+const ContentContainer =styled.div`
+overflow-y:scroll;
+position:sticky;
+top:10vh;
+height:90vh;
 `
 const Content = styled.div`
-
+text-wrap:nowrap;
 `
 
 const FilterBy = styled.p`
-font-size:1.1em;
 margin:0;
-margin-bottom:2rem;
+margin-bottom:1.3rem;
 font-weight:600;
+
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
 
 `
 const Wrapper =styled.div`
-height:100vh;
 width:100%;
 display:flex;
 flex-direction:column;
-gap:.5rem;
 font-size:1rem;
 `
-const FilterBox =styled.p`
+const FilterBox =styled.div`
 margin:0;
 border-bottom:1px solid rgba(189, 189, 189,.7);
 margin-bottom:1.3rem;
-padding-bottom:1.3em;
+padding-bottom:1.3rem;
 `
 const Title = styled.button`
 width:100%;
 cursor:pointer;
 border:none;
-font-weight:600;
 display:flex;
 align-items:center;
-font-size:1em;
 padding-bottom:1.1em;
 justify-content:space-between;
 background:white;
+font-weight:600;
+
+font-size:1rem;
+@media screen and (max-width:800px){
+    font-size:.8rem;
+}
 `
 const AngleIcon = styled.i`
 transform:rotateX(${({angle})=>angle});
@@ -116,6 +128,11 @@ opacity:.7;
 &:hover{
     opacity:1;
 }
+
+font-size:.9rem;
+@media screen and (max-width:800px){
+    font-size:.7rem;
+}
 `
 const Option = styled(CategoryLink)`
 
@@ -135,30 +152,36 @@ const InputContainer = styled.div`
 position:relative;
 flex:2;
 border:1px solid rgba(189, 189, 189,.7);
+height:min(40px,6vh);
 `
 const EditedInput = styled(Input)`
-height:min(1rem , 1vh);
 outline:none;
 border-radius:2px;
-font-size:.9em;
-`
-
-const EditedLabel = styled(Label)`
-top:${({position})=>position?'-25%':"20%"};
-font-size:${({position})=>position?'.8em':"1em"};
-
-${Input}:focus + &{
-    top:-25%;
-    left:2%;
-    font-size:.8em;
+height:100%;
+font-size:.9rem;
+@media screen and (max-width:800px){
+    font-size:.7rem;
 }
 `
 
-
+const EditedLabel = styled(Label)`
+top:${({position})=>position?'-25%':"25%"};
+font-size:${({position})=>position?'.7rem':".8rem"};
+${Input}:focus + &{
+    top:-25%;
+    left:2%;
+    font-size:.7rem;
+}
+`
 const FormSubmit = styled(Submit)`
 flex:1;
 height:auto;
 border-radius:2px;
+
+font-size:.9rem;
+@media screen and (max-width:800px){
+    font-size:.7rem;
+}
 
 `
 export default function FilterContainer({show,category}){
@@ -170,11 +193,11 @@ export default function FilterContainer({show,category}){
 
     function handleFormSubmit(e){
         e.preventDefault();
+    
         if (!priceForm['min'] || !priceForm['max']){
             setPriceForm({...priceForm,'error':"both inputs required"})
             param.delete("price")
             setParam(param)
-            
         }
         else if (priceForm['min'] > priceForm['max']){
             setPriceForm({...priceForm,'error':'min can not be bigger than max'})
@@ -193,11 +216,13 @@ export default function FilterContainer({show,category}){
         }
         else {
             setPriceForm({...priceForm,'error':''})
+            param.set("page", 1);
             param.set('price' , priceForm['min'] + "-" + priceForm['max'])
             setParam(param)
         }
         
     }
+
     async function requestCategoryChildren(){
         const request = await fetch(`http://127.0.0.1:8000/api/categories/${category}/children`)
         const response = await request.json();
@@ -217,6 +242,7 @@ export default function FilterContainer({show,category}){
     }
 
     function handleOptionClick(filter,option){
+        param.set('page',1)
         if( filter.name == "price") {
             param.set(filter.name.toLowerCase(),filter.options[option])
         }else{
@@ -226,15 +252,18 @@ export default function FilterContainer({show,category}){
     }
     
     function SwitchFunction(filter){
-        
         if (filter.name== "price"){
             return (
                 <>
                 {
                     Object.keys(filter.options).map((option)=>{
                         return(
-                            <Option onClick={(e)=>{handleOptionClick(filter,option)}}
-                            >{option}</Option>
+                            <Option 
+                                key={option}
+                                onClick={(e)=>{handleOptionClick(filter,option)}}
+                            >
+                                {option}
+                            </Option>
                         )
                     })
                 }
@@ -260,7 +289,12 @@ export default function FilterContainer({show,category}){
                 {
                     filter.options.map((option)=>{
                         return(
-                            <CategoryLink to={`${location.pathname}/${option.replace(" ",'-')}`}>{option}</CategoryLink>
+                            <CategoryLink
+                                key={option} 
+                                to={`${location.pathname}/${option.replace(" ",'-')}`}
+                            >
+                                {option}
+                            </CategoryLink>
                         )
                     })
                 }
@@ -275,13 +309,18 @@ export default function FilterContainer({show,category}){
                         <>
                         {
                         filter.name=='color' ?
-                        <OptionColor 
-                        color={option}
-                        onClick={(e)=>{ e.preventDefault(); return handleOptionClick(filter,option)}}>
+                        <OptionColor
+                            key={option}
+                            color={option}
+                            onClick={(e)=>{ e.preventDefault(); return handleOptionClick(filter,option)}}
+                        >
                             {option}
                         </OptionColor>
                         :
-                        <Option onClick={(e)=>{return handleOptionClick(filter,option)}}>
+                        <Option 
+                            key={option}
+                            onClick={(e)=>{return handleOptionClick(filter,option)}}
+                        >
                             {option}
                         </Option>
                         }
@@ -304,6 +343,7 @@ export default function FilterContainer({show,category}){
 
     return ( 
         <Container margin={show?"2rem":"0"} flex={show?"1":"0"}>
+            <ContentContainer>
             <Content>
                 <FilterBy>Filter by</FilterBy>
                 <Wrapper>
@@ -326,6 +366,7 @@ export default function FilterContainer({show,category}){
                     }
                 </Wrapper>
             </Content>
+            </ContentContainer>
         </Container>
     )
 }

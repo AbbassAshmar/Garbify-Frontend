@@ -194,7 +194,6 @@ cursor:pointer;
 export default function OrderCard(props){
     return(
         <Container>
-
             <Header>
                 <DetailsContainer>
                     <OrderSummary>

@@ -40,7 +40,10 @@ position:relative;
 `
 
 const CancelIcon =styled.div`
-font-size:1.5rem;
+font-size:1.3rem;
+@media screen and (max-width:1000px){
+    font-size:1.1rem;
+}
 `
 export const OptionsContainer =styled.div`
 display:flex;
@@ -58,13 +61,21 @@ text-decoration:none;
 `
 export const Text = styled.p`
 margin:0;
-font-size:1.5rem;
 font-weight:600;
+
+font-size:1.3rem;
+@media screen and (max-width:1000px){
+    font-size:1.1rem;
+}
 `
 export const Icon = styled.div`
 display:flex;
-font-size:1.5rem;
 font-weight:100;
+
+font-size:1.3rem;
+@media screen and (max-width:1000px){
+    font-size:1.1rem;
+}
 `
 export default function SideNavbar(props){
     const [showDetails, setShowDetails]  = useState({show:false, details:[],category:""})

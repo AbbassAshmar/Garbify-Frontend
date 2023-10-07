@@ -1,9 +1,9 @@
 import styled from "styled-components"
 import ProductCard from "../../../components/ProductCard/product-card"
-import Hoody2 from "../../../assets/Hoody2.jpg"
 import Pagination from "../../../components/Pagination/pagination"
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useParams, useSearchParams } from "react-router-dom"
+import { PRODUCTS } from "../../../components/products-data"
 
 const Container = styled.div`
 flex:4;
@@ -37,7 +37,7 @@ text-overflow:ellipsis;
 height:1.1em;
 color:black;
 `
-const Products = styled.div`
+export const Products = styled.div`
 
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -45,7 +45,6 @@ justify-content:space-between;
 grid-gap:20px;
 @media screen and (max-width:1000px){
     grid-template-columns:repeat(2,1fr);
-
 }
 `
 
@@ -68,93 +67,34 @@ grid-gap:20px;
 
 // products model , category model , shoes model, shirts model , suits model ,
 
-export let pp = [
-    {
-        name:"Brooks sport shoes",
-        price:150,
-        colors:["white"],
-        thumbnail:Hoody2,
-        quantity:400,
-        type:"men shoes",
-        sale:{
-            price_after_sale:100,
-            percentage:50,
-        }
-    },
-    {
-        name:"Brooks sport shoes",
-        price:150,
-        colors:["white"],
-        thumbnail:Hoody2,
-        quantity:400,
-        type:"men shoes",
-        sale:{
-            price_after_sale:100,
-            percentage:50,
-        }
-    },
-    {
-        name:"Brooks sport shoes",
-        price:150,
-        colors:["white"],
-        thumbnail:Hoody2,
-        quantity:400,
-        type:"men shoes",
-        sale:{
-            price_after_sale:100,
-            percentage:50,
-        }
-    },
-    {
-        name:"Brooks sport shoes",
-        price:150,
-        colors:["white"],
-        thumbnail:Hoody2,
-        quantity:400,
-        type:"men shoes",
-        sale:{
-            price_after_sale:100,
-            percentage:50,
-        }
-    },
-    {
-        name:"Brooks sport shoes",
-        price:150,
-        colors:["white"],
-        thumbnail:Hoody2,
-        quantity:400,
-        type:"men shoes",
-        sale:{
-            price_after_sale:100,
-            percentage:50,
-        }
-    },
-    {
-        name:"Brooks sport shoes",
-        price:150,
-        colors:["white"],
-        thumbnail:Hoody2,
-        quantity:400,
-        type:"men shoes",
-        
-    },
-    {
-        name:"Brooks sport shoes",
-        price:240,
-        colors:["white"],
-        thumbnail:Hoody2,
-        quantity:400,
-        type:"men shoes",
-        sale:{
-            price_after_sale:200,
-            percentage:20,
-        }
-    }
-]
+
+// generates a url that only changes the ?page query param (without changing other param)  
+// export function getLink(url,pageNumber, urlParameters, searchParameters){
+//     // add urlParameters to url      
+//     for (let param in urlParameters){
+//         url = url +"/"+urlParameters[param]
+//     }
+
+//     // add the page query string
+//     url  = url + "?page="+pageNumber
+
+//     // add other query strings
+//     let searchParametersObj = searchParameters()
+//     for (let key in  searchParametersObj){
+//         if (key != "page"){
+//             url = url + "&" +key +"="+searchParametersObj[key]
+//         }
+//     }
+//     return url
+// }
+
+
 export default function ProductsContainer(props){
     const [TotalPagesCount,setTotalPagesCount] = useState(1)
-    const [products , setProducts ] = useState(pp);
+    const [products , setProducts ] = useState(PRODUCTS);
     const location = useLocation()
+
+    const [searchParams , setSearchParams ] = useSearchParams();
 
     async function requestProductsFiltered(queryString){
         const request = await fetch("http://127.0.0.1:8000/api/products"+queryString)
@@ -164,26 +104,9 @@ export default function ProductsContainer(props){
             // setProducts(response["products"])
         }
     }
+
     
-    useEffect(()=>{
 
-    },[location])
-
-    // generates a url that only changes the ?page query param (without changing other param)  
-    function getLink(pageNumber){
-        let url = "/products"
-        for (let param in props.urlParameters){
-            url = url +"/"+props.urlParameters[param]
-        }
-        url  = url + "?page="+pageNumber
-        let searchParametersObj = props.searchParameters()
-        for (let key in  searchParametersObj){
-            if (key != "page"){
-                url = url + "&" +key +"="+searchParametersObj[key]
-            }
-        }
-        return url
-    }
 
 
     return (
@@ -213,7 +136,8 @@ export default function ProductsContainer(props){
             <Products>
                 {products.map((product) =>{
                     return (
-                        <ProductCard 
+                        <ProductCard
+                            key={product.pk}
                             pk ={product.pk}
                             name={product.name} 
                             price={product.price} 
@@ -226,7 +150,7 @@ export default function ProductsContainer(props){
                     )
                 })}
             </Products>
-            <Pagination getLink={getLink} CurrentPage={props.CurrentPage} TotalPagesCount={40} />
+            <Pagination CurrentPage={props.CurrentPage} TotalPagesCount={40} />
         </Container>
     )
 }

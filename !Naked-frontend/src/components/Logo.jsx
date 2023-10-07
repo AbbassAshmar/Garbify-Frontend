@@ -6,6 +6,7 @@ width:120px;
 cursor:pointer;
 margin:0;
 `
+
 export default function Logo({style}){
     return (
         <Logoo src={logo} style={style}/>

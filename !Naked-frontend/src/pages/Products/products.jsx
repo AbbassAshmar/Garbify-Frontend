@@ -6,9 +6,9 @@ import PathTitle from "./Components/path-title"
 import SortByButton from "../../components/SortByButton/sort-by-button"
 import ShowFilter from "./Components/show-filter"
 import { useEffect, useState } from "react"
+
 const Container = styled.div`
 max-width:1500px;
-
 `
 const Content = styled.div`
 padding: min(2rem ,5%);
@@ -30,6 +30,7 @@ display:flex;
 const Options = styled.div`
 display:flex;
 gap:2rem;
+align-items:flex-end;
 `
 export default function Products(){
     const [showFilter, setShowFilter] = useState(false)
@@ -39,12 +40,21 @@ export default function Products(){
     const urlParametersList = useParams()['*'].split('/')
 
     // products/?q=abc&g=def
-    const [urlSearchParams,setUrlSearchParams] = useSearchParams()
+    const [searchParams,setSearchParams] = useSearchParams()
 
+    // update currentPage according to page query string
+    useEffect(()=>{
+        let page_number = parseInt(searchParams.get("page"));
+        if (!page_number){
+            page_number = 1;
+        }
+        setCurrentPage(page_number);
+    },[searchParams])
+    
     // create an object of query strings 
-    const urlSearchParamsObj = ()=>{
+    const searchParamsObj = ()=>{
         const tempObj= {};
-        for  (let [key,value] of urlSearchParams.entries()){
+        for  (let [key,value] of searchParams.entries()){
             tempObj[key] = value
         }
         return tempObj
@@ -52,24 +62,21 @@ export default function Products(){
     
     // create a string using url params and query strings (added to the endpoint request)
     function createQueryString(){
-        let searchParams = (urlParametersList.length>0)?"?categories[]="+urlParametersList.join('&categories[]='): ""
+        let searchParamsString = (urlParametersList.length>0)?"?categories[]="+urlParametersList.join('&categories[]='): ""
         const tempObj= {};
-        for  (let [key,value] of urlSearchParams.entries()){
-            searchParams = searchParams + "&"+key+"="+ value
+        for  (let [key,value] of searchParams.entries()){
+            searchParamsString = searchParamsString + "&"+key+"="+ value
         }        
-        return searchParams
+        return searchParamsString
     }
 
     //remove a tag from filter tags
     function handleTagRemove(key){
-        urlSearchParams.delete(key)
-        setUrlSearchParams(urlSearchParams)
+        searchParams.delete(key)
+        setSearchParams(searchParams)
     }
     
-    // update currentPageNumber according to page query string
-    useEffect(()=>{
-        setCurrentPage(urlSearchParamsObj()["page"]?urlSearchParamsObj()["page"]:1)
-    },[urlSearchParamsObj])
+    
 
     // sql orderBy translated to be readable
     const OrderBytoSortBy={
@@ -92,7 +99,13 @@ export default function Products(){
                 </Head>
                 <Main>
                     <FilterContainer show={showFilter}/>
-                    <ProductsContainer deleteTag={handleTagRemove} createQueryString={createQueryString} urlParameters={urlParametersList} CurrentPage={parseInt(CurrentPage)} searchParameters={urlSearchParamsObj}/>
+                    <ProductsContainer 
+                        deleteTag={handleTagRemove} 
+                        createQueryString={createQueryString} 
+                        urlParameters={urlParametersList} 
+                        CurrentPage={parseInt(CurrentPage)} 
+                        searchParameters={searchParamsObj}
+                    />
                 </Main>
             </Content>
         </Container>

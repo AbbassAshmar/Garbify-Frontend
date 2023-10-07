@@ -5,28 +5,31 @@ const Container = styled.div`
 min-width:${({min_width})=>{return (min_width?min_width:"auto")}};
 overflow:hidden;
 box-shadow: 1px 1px 10px rgba(189, 189, 189,1);
-
+height:auto;
+border-radius:6px;
 `
 const LinkContainer = styled(Link)`
-width:100%;
+// width:100%;
 display:flex;
 flex-direction:column;
-gap:.4rem;
 text-decoration:none;
 color:black;
-
+height:100%;
 `
 const Image  = styled.img`
+flex:4;
 width:100%;
 margin:0;
+// aspect-ratio:1/1.25;
+
 `
 const Details = styled.div`
 margin:0;
 display:flex;
 flex-direction:column;
 gap:.3rem;
-padding-left:.4rem;
-margin-bottom:.4rem;
+width:100%;
+padding:.5rem;
 `
 const Name =styled.h2`
 margin:0;

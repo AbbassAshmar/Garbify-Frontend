@@ -21,15 +21,18 @@ background-repeat : no-repeat;
 display:flex;
 flex-direction:column;
 width:100%;
-height:82vh;
-max-height:520px; 
+height:83vh;
+// max-height:640px; 
 
-@media screen and (max-width:700px){
-    background-position:top right;
-}
-@media screen and (max-width:655px){
+@media screen and (max-width:800px){
 background : white;
+background-position:top right;
 height:auto;
+max-height:none; 
+}
+
+@media screen and (min-width:800px) and (min-height:1000px){
+    max-height: 45vh;
 }
 
 
@@ -43,7 +46,7 @@ justify-content:space-between;
 width:100%;
 height:100%;
 
-@media screen and (max-width:655px){
+@media screen and (max-width:800px){
     flex-direction:column;
 }
 
@@ -52,7 +55,7 @@ const BackgroundContainer = styled.img`
 display:none;
 width:120%;
 
-@media screen and (max-width:655px){
+@media screen and (max-width:800px){
 display:block;
 }
 `
@@ -63,7 +66,7 @@ flex-direction:column;
 gap:40px;
 margin-bottom:3rem;
 width:100%;
-@media screen and (max-width:655px){
+@media screen and (max-width:800px){
     text-align:center;
     margin-top:1rem;
     gap:30px;
@@ -72,41 +75,42 @@ width:100%;
 `
 
 const MainText =styled.h2`
-font-size:4rem;
+// font-size:3rem;
 font-weight:600;
-
-@media screen and (max-width:900px){
-    font-size:3rem;
-    
-}
-@media screen and (max-width:785px){
-    font-size:2.5rem;
-    font-weight:900;
-}
-@media screen and (max-width:380px){
-    font-size:2rem;
-}
-@media screen and (max-width:320px){
-    font-size:1.8rem;
-}
-@media screen and (max-width:290px){
-    font-size:1.5rem;
-}
+font-size:clamp(1.5rem,6vw,3rem);
+// @media screen and (max-width:900px){
+//     font-size:2.8rem;
+// }
+// @media screen and (max-width:785px){
+//     font-size:2.6rem;
+// }
+// @media screen and (max-width:580px){
+//     font-size:2.4rem;
+// }
+// @media screen and (max-width:400px){
+//     font-size:2.2rem;
+// }
+// @media screen and (max-width:350px){
+//     font-size:2rem;
+// }
 `
 const SecondaryText =styled.p`
-font-size:1.3rem;
+font-size:clamp(.8rem,4vw,1.7rem);
 font-weight:600;
-opacity:.8;
+opacity:.7;
 
-@media screen and (max-width:900px){
-    font-size:1.2rem;
-}
-@media screen and (max-width:785px){
-    font-size:.8rem;
-}
-@media screen and (max-width:300px){
-    font-size:.7rem;
-}
+// @media screen and (max-width:900px){
+//     font-size:1.3rem;
+// }
+// @media screen and (max-width:785px){
+//     font-size:1.1rem;
+// }
+// @media screen and (max-width:320px){
+//     font-size:.9rem;
+// }
+// @media screen and (max-width:290px){
+//     font-size:.7rem;
+// }
 
 `
 const ShopNowBtn  = styled.button`
@@ -115,13 +119,17 @@ width:12%;
 min-width:130px;
 height:6vh;
 max-height:30px;
-font-size:16px;
 color:white;
 outline:none;
 border:none;
 
-@media screen and (max-width:655px){
+
+font-size:1rem;
+font-weight:600;
+@media screen and (max-width:800px){
+    font-size:.8rem;
     width:100%;
+
 }
 `
 

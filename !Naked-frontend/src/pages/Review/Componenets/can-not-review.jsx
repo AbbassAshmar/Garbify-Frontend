@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import ProductsSlider from '../../../components/ProductsSlider/products-slider';
-import { pp } from '../../Products/Components/products-container';
+import { PRODUCTS } from '../../../components/products-data';
 const Container = styled.div`
 display:flex;
 flex-direction:column;
@@ -25,7 +25,7 @@ export default function CanNotReview(){
             <ProductsToReview>
                 
             </ProductsToReview>
-            <ProductsSlider title={"Products You May Like : "} products={pp}/>
+            <ProductsSlider title={"Products You May Like : "} products={PRODUCTS}/>
         </Container>
     )
 }

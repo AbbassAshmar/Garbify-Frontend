@@ -23,7 +23,7 @@ import jordan4_12 from "../../assets/jordan4bluefront.jpg"
 import jordan4_13 from "../../assets/jordan4blueback.jpg"
 
 
-import { pp } from "../Products/Components/products-container";
+import { PRODUCTS } from "../../components/products-data";
 import ReviewsSection from "./Components/reviews-section";
 
 const Container = styled.div`
@@ -47,7 +47,7 @@ align-items:flex-start;
 
 export default function Product(){
     const [product,setProduct] = useState(pd);
-    const [similarProducts, setSimilarProducts] = useState(pp);
+    const [similarProducts, setSimilarProducts] = useState(PRODUCTS);
     const [ImagesColor, setImagesColor] = useState('red')
     const [sizePicked, setSizePicked] = useState(null)
     const [quantiy, setQuantity] = useState(400)

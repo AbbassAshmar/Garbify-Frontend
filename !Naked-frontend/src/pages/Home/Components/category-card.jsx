@@ -9,11 +9,9 @@ aspect-ratio: 1/1.6;
 &:hover .background-photo{
     transform:scale(1.1);
 }
-@media screen and (max-width:550px){
+@media screen and (max-width:600px){
     aspect-ratio: 1/1.6;
-    width:100%;s
-
-
+    width:100%;
 }
     
 
@@ -48,19 +46,14 @@ opacity:.8;
 margin-bottom:4rem;
 border:none;
 cursor:pointer;
-font-weight:bold;
-font-size:1.2rem;
+font-weight:600;
+font-size:1rem;
 
-@media screen and (max-width:600px){
-    font-weight:600;
-    font-size:1rem;
-    margin-bottom:2rem;
-
-}
-@media screen and (max-width:500px){
-    font-weight:600;
+@media screen and (max-width:800px){
     font-size:.8rem;
+    margin-bottom:2rem;
 }
+
 
 `
 export default function CatgegoryCard(props){

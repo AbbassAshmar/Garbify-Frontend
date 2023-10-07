@@ -17,9 +17,12 @@ padding: 0 min(2rem ,5%);
 `
 
 const Section2Title = styled.div`
-font-size:20px;
-font-weight:bold;
+font-weight:800;
 text-align:center;
+font-size:clamp(.8rem,4vw,1.7rem);
+// @media screen and (max-width:800px){
+//     font-size:1.3rem;
+// }
 `
 
 const CategoryCardsContainer = styled.div`
@@ -28,11 +31,8 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 gap:25px;
-@media screen and (max-width:700px){
-    gap:2px;
-}
 
-@media screen and (max-width:550px){
+@media screen and (max-width:600px){
     flex-direction:column;
     gap:10px;
 }

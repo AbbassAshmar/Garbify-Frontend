@@ -1,4 +1,4 @@
-import {Outlet, createBrowserRouter} from "react-router-dom"
+import {createBrowserRouter} from "react-router-dom"
 import Default from "./pages/Default/default"
 import Home from "./pages/Home/home"
 import Registration from "./pages/Registration/registration"
@@ -8,6 +8,9 @@ import Product from "./pages/Product/product"
 import Cart from "./pages/Cart/cart"
 import Orders from './pages/Orders/orders'
 import Review from "./pages/Review/review"
+import Favorites from "./pages/Favorites/favorites"
+import OthersFavorites from "./pages/OthersFavorites/others-favorites"
+
 export const router = createBrowserRouter([
     {
         path:'/' ,
@@ -36,6 +39,14 @@ export const router = createBrowserRouter([
             {
                 path:"/review/:product_id",
                 element:<Review />
+            },
+            {
+                path:'/favorites',
+                element:<Favorites />
+            },
+            {
+                path:'/favorites/all',
+                element:<OthersFavorites />
             }
         ],
     },
