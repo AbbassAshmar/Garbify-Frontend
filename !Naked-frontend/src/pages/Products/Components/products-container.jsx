@@ -90,18 +90,29 @@ grid-gap:20px;
 
 
 export default function ProductsContainer(props){
-    const [TotalPagesCount,setTotalPagesCount] = useState(1)
+    const [TotalPagesCount,setTotalPagesCount] = useState(40)
     const [products , setProducts ] = useState(PRODUCTS);
-    const location = useLocation()
+    const [CurrentPage, setCurrentPage] = useState(1)
 
     const [searchParams , setSearchParams ] = useSearchParams();
+
+    // update currentPage according to page query string
+    useEffect(()=>{
+        let page_number = parseInt(searchParams.get("page"));
+        if (!page_number){
+            page_number = 1;
+        }
+        setCurrentPage(page_number);
+    },[searchParams])
+    
 
     async function requestProductsFiltered(queryString){
         const request = await fetch("http://127.0.0.1:8000/api/products"+queryString)
         const response = await request.json();
         if (request.status == 200){
-            setTotalPagesCount(response["totalCount"])
-            // setProducts(response["products"])
+            setTotalPagesCount(response["total_count"])
+            setCurrentPage(response['count'])
+            setProducts(response["products"])
         }
     }
 
@@ -150,7 +161,7 @@ export default function ProductsContainer(props){
                     )
                 })}
             </Products>
-            <Pagination CurrentPage={props.CurrentPage} TotalPagesCount={40} />
+            <Pagination CurrentPage={parseInt(CurrentPage)} TotalPagesCount={TotalPagesCount} />
         </Container>
     )
 }

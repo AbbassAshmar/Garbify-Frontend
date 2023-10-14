@@ -15,10 +15,14 @@ height:auto;
 overflow:hidden;
 `
 const ImageContainer= styled.div`
-
 height:min(20vw ,370px);
+
 @media screen and (max-width:1000px){
     height:30vw;
+}
+
+@media screen and (max-width:450px){
+    height:40vw;
 }
 `
 
@@ -26,10 +30,14 @@ const Image = styled.img`
 position:relative;
 width:100%;
 height:min(25vw ,450px);
+object-fit:cover;
 top:0;
 
 @media screen and (max-width:1000px){
     height:35vw;
+}
+@media screen and (max-width:450px){
+    height:auto;
 }
 `
 const Content =styled.div`

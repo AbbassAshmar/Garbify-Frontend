@@ -9,19 +9,20 @@ height:auto;
 border-radius:6px;
 `
 const LinkContainer = styled(Link)`
-// width:100%;
 display:flex;
 flex-direction:column;
 text-decoration:none;
 color:black;
 height:100%;
 `
-const Image  = styled.img`
+const ImageContainer = styled.div`
 flex:4;
-width:100%;
+`
+const Image  = styled.img`
+object-fit: cover; 
+width: 100%;
+height: 100%;
 margin:0;
-// aspect-ratio:1/1.25;
-
 `
 const Details = styled.div`
 margin:0;
@@ -44,6 +45,7 @@ const Category = styled.p`
 margin:0;
 color: grey;
 font-size:1rem;
+font-weight:600;
 @media screen and (max-width:800px){
     font-size:.8rem;
 }
@@ -51,6 +53,7 @@ font-size:1rem;
 const ColorCount = styled.div`
 color:grey;
 font-size:1rem;
+font-weight:600;
 @media screen and (max-width:800px){
     font-size:.8rem;
 }
@@ -78,7 +81,7 @@ const OldPrice =styled.p`
 margin:0;
 color:grey;
 opacity:.6;
-font-weight:400;
+font-weight:600;
 text-decoration:line-through;
 font-size:1rem;
 @media screen and (max-width:800px){
@@ -90,7 +93,7 @@ const SalePercentage =styled.p`
 margin:0;
 color:green;
 font-size:1rem;
-font-weight:400;
+font-weight:600;
 @media screen and (max-width:800px){
     font-size:.8rem;
 }
@@ -118,7 +121,9 @@ export default function ProductCard({thumbnail, price, name,quantity,type,sale,c
     return(
         <Container min_width={min_width}>
             <LinkContainer to={`/product/${name.replaceAll(" ",'-')}/${pk}`}>
-            <Image src={thumbnail}/>
+            <ImageContainer>
+                <Image src={thumbnail}/>
+            </ImageContainer>
             <Details>
                 <Name>
                     {name}

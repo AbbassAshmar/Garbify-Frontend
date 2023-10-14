@@ -21,10 +21,8 @@ cursor:pointer;
 display:flex;
 align-items:center;
 
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-size:clamp(.6rem,2vw,.9rem);
+
 `
 const Icon =styled.i`
 transform:rotateX(${({rotate})=>rotate});
@@ -41,7 +39,7 @@ max-height:${({height})=>height};
 height:auto;
 width:min(190%,200px);
 border-radius: 0  0 10px 10px;
-
+z-index:100;
 overflow:hidden;
 transition:all .3s;
 
@@ -51,10 +49,7 @@ padding:1rem .8rem;
 display:flex;
 flex-direction:column;
 gap:6px;
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-size:clamp(.6rem,2vw,.9rem);
 `
 const Option = styled.div`
 font-weight:600;

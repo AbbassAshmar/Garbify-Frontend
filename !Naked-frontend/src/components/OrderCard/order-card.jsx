@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import {Link} from "react-router-dom"
 
+// Main title :clamp(.9rem,3vw,1.5rem);
 
 // main title (shipping state) : 1.3rem --> 1.1rem (800px)
 // name - text in header: 1rem -->.8rem (800px)

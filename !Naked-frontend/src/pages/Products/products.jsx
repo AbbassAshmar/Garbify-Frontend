@@ -34,7 +34,6 @@ align-items:flex-end;
 `
 export default function Products(){
     const [showFilter, setShowFilter] = useState(false)
-    const [CurrentPage, setCurrentPage] = useState(1)
 
     // products/men/shoes/running
     const urlParametersList = useParams()['*'].split('/')
@@ -42,15 +41,6 @@ export default function Products(){
     // products/?q=abc&g=def
     const [searchParams,setSearchParams] = useSearchParams()
 
-    // update currentPage according to page query string
-    useEffect(()=>{
-        let page_number = parseInt(searchParams.get("page"));
-        if (!page_number){
-            page_number = 1;
-        }
-        setCurrentPage(page_number);
-    },[searchParams])
-    
     // create an object of query strings 
     const searchParamsObj = ()=>{
         const tempObj= {};
@@ -103,7 +93,6 @@ export default function Products(){
                         deleteTag={handleTagRemove} 
                         createQueryString={createQueryString} 
                         urlParameters={urlParametersList} 
-                        CurrentPage={parseInt(CurrentPage)} 
                         searchParameters={searchParamsObj}
                     />
                 </Main>

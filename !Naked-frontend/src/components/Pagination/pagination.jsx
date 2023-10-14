@@ -1,17 +1,15 @@
 import styled from "styled-components"
-import {Link, useSearchParams} from "react-router-dom"
-import { useEffect, useState } from "react"
+import {useSearchParams} from "react-router-dom"
 
 
 const Container =styled.div`
 display:flex;
-justify-content:space-between;
+justify-content:center;
 align-items:center;
-width:50%;
-margin: min(4rem ,10%) auto;
-@media screen and (max-width:600px){
-    width:100%;
-}
+width:100%;
+margin: auto;
+gap:min(3%,30px);
+
 `
 
 const Page =styled.p`
@@ -28,9 +26,9 @@ transition:background .3s;
     background:rgba(189, 189, 189,.1);
 }
 
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
+@media screen and (max-width:1000px){
+    padding:max(1.3% ,.2rem) max(3%,.7rem);
 }
 `
 
@@ -50,10 +48,10 @@ export default function Pagination({CurrentPage,TotalPagesCount}){
             </Page>
             <p style={{display:`${CurrentPage<=3?"none":"block"}`}}>...</p>
 
-
+{/* 
             <Page  style={{display:`${CurrentPage<=2?"none":"block"}`}} onClick={()=>handleLinkClick(CurrentPage-2)}>
                 {CurrentPage-2}
-            </Page>
+            </Page> */}
 
             <Page  style={{display:`${CurrentPage<=1?"none":"block"}`}} onClick={()=>handleLinkClick(CurrentPage-1)}>
                 {CurrentPage-1}
@@ -67,9 +65,9 @@ export default function Pagination({CurrentPage,TotalPagesCount}){
                 {CurrentPage+1}
             </Page>
 
-            <Page style={{display:`${CurrentPage+1 >= TotalPagesCount?"none":"block"}`}} onClick={()=>handleLinkClick(CurrentPage+2)}>
+            {/* <Page style={{display:`${CurrentPage+1 >= TotalPagesCount?"none":"block"}`}} onClick={()=>handleLinkClick(CurrentPage+2)}>
                 {CurrentPage+2}
-            </Page>
+            </Page> */}
 
             <p  style={{display:`${CurrentPage+2>=TotalPagesCount?"none":"block"}`}} >...</p>
 

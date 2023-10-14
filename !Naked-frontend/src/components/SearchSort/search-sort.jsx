@@ -1,13 +1,11 @@
 import styled from "styled-components";
 import SortByButton from "../SortByButton/sort-by-button";
+
+
 const Container = styled.div`
 
 `
 
-const Title = styled.div`
-font-size:1.3rem;
-font-weight:600;
-`
 const SearchSortContainer = styled.div`
 width:100%;
 display:flex;
@@ -16,7 +14,7 @@ align-items:center;
 @media screen and (max-width:600px){
     flex-direction:column;
     align-items:start;
-    gap:min(5vh,30px);
+    gap:10px;
 }
 `
 const SearchBarContainer =styled.form`
@@ -45,10 +43,7 @@ border-radius:2px;
     outline:1px solid #00C2FF;
 }
 
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-size:clamp(.6rem , 2vw ,.9rem);
 `
 const SORT_BUTTON_STYLE = {
     background:'white',
@@ -61,12 +56,9 @@ const SORT_BUTTON_STYLE = {
 }
 
 
-export default function InteractiveHeader({title,placeholder,sortOptions,setSearchInputValue,searchInputValue,handleSearchFormSubmit}){
+export default function InteractiveHeader({placeholder,sortOptions,setSearchInputValue,searchInputValue,handleSearchFormSubmit}){
     return(
         <>
-            <Title>
-                {title}
-            </Title>
             <SearchSortContainer>
                 <SearchBarContainer onSubmit={handleSearchFormSubmit}>
                     <SearchBar 

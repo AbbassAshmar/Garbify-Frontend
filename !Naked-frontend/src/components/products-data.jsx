@@ -1,6 +1,25 @@
 import Hoody2 from "../assets/Hoody2.jpg"
 import Hoody from "../assets/Hoody.jpg"
 
+// Main title :clamp(1.2rem,3vw,1.5rem);
+
+// Smaller title : clamp(1rem, 2.6vw, 1.3rem);
+
+// smaller : clamp(.8rem , 2.3vw ,1.1rem);
+
+// smaller :clamp(.6rem,2vw,.9rem);
+
+
+
+
+
+
+
+// main title (shipping state) : 1.3rem --> 1.1rem (800px)
+// name - text in header: 1rem -->.8rem (800px)
+// buttons and subtext : .9rem -->.7rem (800px)
+
+
 export const FAV_LISTS =[
     {
         id:3,

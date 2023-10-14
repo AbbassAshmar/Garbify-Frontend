@@ -1,15 +1,14 @@
 import styled from "styled-components";
-import InteractiveHeader from "../../components/InteractiveHeader/interactive-header";
 import { useContext, useEffect, useState } from "react";
 import { userStateContext } from "../../Contexts/user-state";
-import {useLocation, useSearchParams} from "react-router-dom";
-import {Header, NoOrdersContainer, NoOrdersTitle, constructUrl,Content} from "../Orders/orders";
+import {useSearchParams} from "react-router-dom";
+import {Header, NoOrdersContainer, NoOrdersTitle, constructUrl,Content, Title} from "../Orders/orders";
 import ProductCard from "../../components/ProductCard/product-card";
 import { PRODUCTS } from "../../components/products-data";
 import { Products } from "../Products/Components/products-container";
 import Pagination from "../../components/Pagination/pagination";
 import ProductsSlider from "../../components/ProductsSlider/products-slider";
-
+import SearchSort from "../../components/SearchSort/search-sort"
 const Container = styled.div`
 width:100%;
 `
@@ -76,8 +75,10 @@ export default function Favorites(){
         <Container>
             <Content>
                 <Header>
-                    <InteractiveHeader 
-                        title={"Your Favorites"} 
+                    <Title>
+                        Your Favorites
+                    </Title>
+                    <SearchSort 
                         placeholder={"search your favorites"} 
                         sortOptions={OrderBytoSortBy} 
                         handleSearchFormSubmit={handleSearchFormSubmit}
@@ -85,7 +86,6 @@ export default function Favorites(){
                         searchInputValue={searchInputValue}
                     />
                 </Header>
-                
                 
                 {
                 favorites && favorites.length > 0 ?

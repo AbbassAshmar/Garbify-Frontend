@@ -5,8 +5,7 @@ import { useEffect, useRef } from "react"
 const Container = styled.div`
 display:flex;
 flex-direction:column;
-gap:min(5vh,30px);
-
+gap:min(7vh,40px);
 `
 const Title = styled.h2`
 font-size:1.3em; 

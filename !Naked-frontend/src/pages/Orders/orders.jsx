@@ -7,7 +7,7 @@ import hoody2 from "../../assets/hoody2.jpg"
 import { useSearchParams } from 'react-router-dom';
 import ProductsSlider from '../../components/ProductsSlider/products-slider';
 import { PRODUCTS } from "../../components/products-data";
-import InteractiveHeader from '../../components/InteractiveHeader/interactive-header';
+import SearchSort from '../../components/SearchSort/search-sort';
 import Pagination from '../../components/Pagination/pagination';
 //max-width: 1500px;
 const Container = styled.div`
@@ -21,7 +21,7 @@ max-width:1500px;
 padding:min(2rem ,5%) 0;
 margin:auto;
 display:flex;
-gap:min(5vh,30px);
+gap:min(7vh,40px);
 flex-direction:column;
 font-size:1.1rem;
 font-weight:400;
@@ -35,7 +35,11 @@ export const Header = styled.div`
 width:100%;
 display:flex;
 flex-direction:column;
-gap:min(5vh,30px);
+gap:min(7vh,40px);
+`
+export const Title = styled.div`
+font-weight:600;
+font-size:clamp(1.2rem,3vw,1.5rem);
 `
 
 const PagesContainer = styled.div`
@@ -182,7 +186,10 @@ export default function Orders(){
         <Container>
             <Content>
                 <Header>
-                    <InteractiveHeader 
+                    <Title>
+                        My Orders
+                    </Title>
+                    <SearchSort 
                         title={"Your Orders"} 
                         placeholder={"search your orders"} 
                         sortOptions={OrderBytoSortBy} 
