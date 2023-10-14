@@ -92,6 +92,14 @@ opacity:.7;
 }
 `
 
+const OrderBytoSortBy={
+    "name-ASC":"From A-Z",
+    "created_at-DESC":"Newest-Oldest",
+    "created_at-ASC":"Oldest-Newest",
+    "total_cost-DESC":"Price: High-Low",
+    "total_cost-ASC":"Price: Low-High",
+}
+
 // add current search params to the end of a url
 export function constructUrl(url, searchParams,addition=null){
     if (addition){
@@ -108,78 +116,49 @@ export function constructUrl(url, searchParams,addition=null){
     return url;
 }
 
+async function requestOrders(url,token){
+    const request = await fetch(url,{
+        method:"GET",
+        headers:{
+            "Authorization":"Bearer " + token,
+        }
+    });
+    const response = await request.json(); 
+    if ( request.status == 200){
+        return response;
+    }
+    return [];
+}
 
 export default function Orders(){
     const [page,setPage] = useState("orders")
     const [orders, setOrders] = useState(os);
     const {token} = useContext(userStateContext);
     const [searchParams, setSearchParams] = useSearchParams()
-    const [searchInputValue , setSearchInputValue]  = useState('')
-    const [CurrentPage,setCurrentPage] = useState(1);
+    const [TotalPagesCount, setTotalPagesCount] = useState(40)
 
     useEffect(()=>{
-        if (page== "canceled"){
-           setOrders(requestOrders(page,constructUrl(page),token))
-        }
-        else {
-            setOrders(requestOrders(null,constructUrl(page),token))
-        }
+        //request orders 
+
+    }, [searchParams])
+    
+    useEffect(()=>{
+        let url = constructUrl("http://127.0.0.1:8000/api/orders",searchParams,page=="orders"?"":"/"+page)
+        setOrders(requestOrders(url,token))
     },[page])
-
-    // update CurrentPage according to page query string
-    useEffect(()=>{
-        let page_number = parseInt(searchParams.get("page"));
-        if (!page_number){
-            page_number = 1;
-        }
-        setCurrentPage(page_number);
-    },[searchParams])
 
     function handlePageTitleClick(page){
         setPage(page);
     }
 
-    
-    async function requestOrders(url,token){
-        const request = await fetch(url,{
-            method:"GET",
-            headers:{
-                "Authorization":"Bearer " + token,
-            }
-        });
-        const response = await request.json(); 
-        if ( request.status == 200){
-            return response.orders;
-        }
-        return [];
-    }
-
     function handleSearchFormSubmit(e){
         e.preventDefault();
-        setSearchParams({'q':searchInputValue});
+        let data = new FormData(e.target)
+        setSearchParams({'q':data.get("q")});
 
         // request search result 
-        if (page== "canceled"){
-           setOrders(requestOrders(constructUrl("http://127.0.0.1:8000/api/orders",page,"/canceled"),token))
-        }else{
-            setOrders(requestOrders(constructUrl("http://127.0.0.1:8000/api/orders",page),token))
-        }
-    }
-   
-    // search on input value change, if url initiated with string params, they are replaced with 'q'
-    // if 'q' is already in the url, and other params are added later, 'q' is preserved 
-    // apply sorting, pagination ... to search results by not removing q when applied 
-    // useEffect(()=>{
-    //     if (searchInputValue != "")
-    //     setSearchParams({'q':searchInputValue});
-    // }, [searchInputValue])
-
-    const OrderBytoSortBy={
-        "name-ASC":"From A-Z",
-        "created_at-DESC":"Newest-Oldest",
-        "created_at-ASC":"Oldest-Newest",
-        "total_cost-DESC":"Price: High-Low",
-        "total_cost-ASC":"Price: Low-High",
+        let url = constructUrl("http://127.0.0.1:8000/api/orders",searchParams,page=="orders"?"":"/"+page)
+        setOrders(requestOrders(url,token))
     }
 
     return (
@@ -190,12 +169,9 @@ export default function Orders(){
                         My Orders
                     </Title>
                     <SearchSort 
-                        title={"Your Orders"} 
                         placeholder={"search your orders"} 
                         sortOptions={OrderBytoSortBy} 
                         handleSearchFormSubmit={handleSearchFormSubmit}
-                        setSearchInputValue={setSearchInputValue}
-                        searchInputValue={searchInputValue}
                     />
                     <PagesContainer>
                         <PageTitle onClick={()=>handlePageTitleClick("orders")} color={page ==="orders" ?" #00C2FF":"black"}>orders</PageTitle>
@@ -212,9 +188,8 @@ export default function Orders(){
                             })
                         }
                     </OrderCardsContainer>
-                    <Pagination CurrentPage={CurrentPage} TotalPagesCount={30} />
+                    <Pagination TotalPagesCount={TotalPagesCount} />
                     </>
-                    
                     :
                     <>
                     {

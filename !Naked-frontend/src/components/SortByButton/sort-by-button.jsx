@@ -66,14 +66,6 @@ export default function SortByButton(props){
     const list =useRef(null)
     const button = useRef(null)
     
-    const OrderBytoSortBy={
-        "name-ASC":"From A-Z",
-        "created_at-DESC":"Newest-Oldest",
-        "created_at-ASC":"Oldest-Newest",
-        "price-DESC":"Price: High-Low",
-        "price-ASC":"Price: Low-High",
-    }
-    
     useEffect(() => {
         function handleClickOutside(event) {
             if (list.current && !list.current.contains(event.target) && !button.current.contains(event.target)) {
@@ -89,6 +81,7 @@ export default function SortByButton(props){
     function handleSortButtonClick(){
         setShowList(!showList)
     }
+
     function handleOptionClick(value){
         urlSearchParams.set("sort-by",value)
         urlSearchParams.set("page", 1)
@@ -99,8 +92,9 @@ export default function SortByButton(props){
         <Container style={props.style}>
             <Button ref={button} onClick={handleSortButtonClick}>
                 {
-                    urlSearchParams.get("sort-by")&&OrderBytoSortBy[urlSearchParams.get("sort-by")]?
-                    `Sort By : ${OrderBytoSortBy[urlSearchParams.get("sort-by")]}`
+                    // update button text if an options is clicked to " sort by : options clicked "
+                    urlSearchParams.get("sort-by")&&props.sortOptions[urlSearchParams.get("sort-by")]?
+                    `Sort By : ${props.sortOptions[urlSearchParams.get("sort-by")]}`
                     :"Sort By"
                 }
                 <Icon rotate={showList?"180deg":"0"} className="fa-solid fa-angle-down"></Icon>
@@ -109,8 +103,8 @@ export default function SortByButton(props){
             <SortList ref={list} height={showList?"100vh":"0px"}>
                 <Options>
                     {
-                        Object.keys(props.optionsObj).map((key)=>{
-                            return  <Option onClick={(e)=>handleOptionClick(key)}>{props.optionsObj[key]}</Option>
+                        Object.keys(props.sortOptions).map((key)=>{
+                            return  <Option onClick={(e)=>handleOptionClick(key)}>{props.sortOptions[key]}</Option>
                         })
                     }
                 </Options>

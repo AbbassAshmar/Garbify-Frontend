@@ -56,20 +56,19 @@ const SORT_BUTTON_STYLE = {
 }
 
 
-export default function InteractiveHeader({placeholder,sortOptions,setSearchInputValue,searchInputValue,handleSearchFormSubmit}){
+export default function SearchSort({placeholder,sortOptions,setSearchInputValue,searchInputValue,handleSearchFormSubmit}){
     return(
         <>
             <SearchSortContainer>
                 <SearchBarContainer onSubmit={handleSearchFormSubmit}>
                     <SearchBar 
+                        name="q"
                         type="text" 
-                        value={searchInputValue} 
                         placeholder={placeholder} 
-                        onChange={(e)=>setSearchInputValue(e.target.value)}
                     />
                     <i style={{position:'absolute', left:"2%",top:"25%"}} className="fa-solid fa-magnifying-glass"/>
                 </SearchBarContainer>
-                <SortByButton style={SORT_BUTTON_STYLE} optionsObj={sortOptions} />
+                <SortByButton style={SORT_BUTTON_STYLE} sortOptions={sortOptions} />
             </SearchSortContainer>
         </>
     )

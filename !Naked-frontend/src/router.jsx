@@ -9,7 +9,8 @@ import Cart from "./pages/Cart/cart"
 import Orders from './pages/Orders/orders'
 import Review from "./pages/Review/review"
 import Favorites from "./pages/Favorites/favorites"
-import OthersFavorites from "./pages/OthersFavorites/others-favorites"
+import OtherUsersFavoritesLists from "./pages/OtherUsersFavoritesLists/other-users-favorites-lists"
+import OtherUsersFavorites from "./pages/OtherUsersFavorites/other-users-favorites"
 
 export const router = createBrowserRouter([
     {
@@ -45,8 +46,12 @@ export const router = createBrowserRouter([
                 element:<Favorites />
             },
             {
-                path:'/favorites/all',
-                element:<OthersFavorites />
+                path:'/favorites-lists',
+                element:<OtherUsersFavoritesLists />
+            },
+            {
+                path:"/favorites-lists/:id",
+                element:<OtherUsersFavorites />
             }
         ],
     },

@@ -8,6 +8,7 @@ import  FavoriteListCard  from "../../components/FavoriteListCard/favorite-list-
 import Pagination from "../../components/Pagination/pagination";
 import { useSearchParams } from "react-router-dom";
 import ProductsSlider from "../../components/ProductsSlider/products-slider";
+
 const Container = styled.div`
 
 `
@@ -30,11 +31,12 @@ const OrderBytoSortBy={
     "total_cost-ASC":"Price: Low-High",
 }
 
-function handleSearchFormSubmit (){
-
+function handleSearchFormSubmit (e){
+    e.preventDefault();
+    setSearchParams({q:e.target.value})
 }
 
-export default function OthersFavorites(){
+export default function OtherUsersFavoritesLists(){
     const [searchInputValue, setSearchInputValue]=useState("")
     const [favoritesLists, setFavoritesLists]  = useState(FAV_LISTS)
     const [favoritesListsCount, setFavoritesListsCount] = useState(210)
