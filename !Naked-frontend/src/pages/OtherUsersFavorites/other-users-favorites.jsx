@@ -1,8 +1,8 @@
 import styled from "styled-components"
-import { Content, Header, Title } from "../Orders/orders"
-import { useState } from "react"
+import { Content, Header, Title,constructUrl } from "../Orders/orders"
+import { useState, useEffect } from "react"
 import SearchSort from "../../components/SearchSort/search-sort"
-
+import { useLocation, useParams, useSearchParams } from "react-router-dom"
 const Container = styled.div`
 
 `
@@ -14,32 +14,51 @@ const OrderBytoSortBy={
     "total_cost-ASC":"Price: Low-High",
 }
 
+export async function requestData(url){
+    const request = await fetch(url);
+    const response = await request.json();
+    if (request.status == 200)
+        return response
+    return []
+}
+
 export default function OtherUsersFavorites(){
     const [favoritesList, setFavoritesList] = useState({})
     const [favorites, setFavorites] = useState([])
+    const [favoritesCount , setFavoritesCount] = useState(0)
+    const [TotalPagesCount,setTotalPagesCount] = useState(0)
+    const [searchParams, setSearchParams] = useSearchParams();
+    const {favorites_list_id} = useParams();
 
-    // update CurrentPage according to page query string
+    // request favorites of other user
     useEffect(()=>{
-        let page_number = parseInt(searchParams.get("page"));
-        if (!page_number){
-            page_number = 1;
+        // request data whenever search params change 
+        let endpoint_url = "http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id+"/favorites"
+        let url = constructUrl(endpoint_url,searchParams);
+        let data = requestData(url)
+        if (data){
+            setFavorites(data['favorites']);
+            setFavoritesCount(data['total_count']);
         }
-        setCurrentPage(page_number);
     },[searchParams])
+
+    // request favorites list info of other user
+    useEffect(()=>{
+        let url ="http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id
+        let data = requestData(url)
+        if (data) {
+            setFavoritesList(data['favorites_lists'])
+        }
+    },[])
 
     function handleSearchFormSubmit(e){
         e.preventDefault();
-        let data = new FormData(e.target)
+        let data = new FormData(e.target);
         setSearchParams({'q':data.get("q")});
-
-        // request search result 
-        let url = constructUrl("http://127.0.0.1:8000/api/orders",searchParams,page=="orders"?"":"/"+page)
-        setOrders(requestOrders(url,token))
     }
 
-    // request favorites 
 
-    // request favorites list info
+
 
     return (
         <Container>

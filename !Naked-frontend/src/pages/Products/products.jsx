@@ -6,6 +6,7 @@ import PathTitle from "./Components/path-title"
 import SortByButton from "../../components/SortByButton/sort-by-button"
 import ShowFilter from "./Components/show-filter"
 import { useEffect, useState } from "react"
+import { constructUrl } from "../Orders/orders"
 
 const Container = styled.div`
 max-width:1500px;
@@ -40,26 +41,7 @@ export default function Products(){
 
     // products/?q=abc&g=def
     const [searchParams,setSearchParams] = useSearchParams()
-
-    // create an object of query strings 
-    const searchParamsObj = ()=>{
-        const tempObj= {};
-        for  (let [key,value] of searchParams.entries()){
-            tempObj[key] = value
-        }
-        return tempObj
-    }
     
-    // create a string using url params and query strings (added to the endpoint request)
-    function createQueryString(){
-        let searchParamsString = (urlParametersList.length>0)?"?categories[]="+urlParametersList.join('&categories[]='): ""
-        const tempObj= {};
-        for  (let [key,value] of searchParams.entries()){
-            searchParamsString = searchParamsString + "&"+key+"="+ value
-        }        
-        return searchParamsString
-    }
-
     //remove a tag from filter tags
     function handleTagRemove(key){
         searchParams.delete(key)
@@ -93,7 +75,6 @@ export default function Products(){
                         deleteTag={handleTagRemove} 
                         createQueryString={createQueryString} 
                         urlParameters={urlParametersList} 
-                        searchParameters={searchParamsObj}
                     />
                 </Main>
             </Content>

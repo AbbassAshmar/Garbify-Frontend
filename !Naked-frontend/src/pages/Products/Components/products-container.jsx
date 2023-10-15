@@ -4,6 +4,7 @@ import Pagination from "../../../components/Pagination/pagination"
 import { useEffect, useState } from "react"
 import { useLocation, useParams, useSearchParams } from "react-router-dom"
 import { PRODUCTS } from "../../../components/products-data"
+import { requestData } from "../../OtherUsersFavorites/other-users-favorites"
 
 const Container = styled.div`
 flex:4;
@@ -68,65 +69,41 @@ grid-gap:20px;
 // products model , category model , shoes model, shirts model , suits model ,
 
 
-// generates a url that only changes the ?page query param (without changing other param)  
-// export function getLink(url,pageNumber, urlParameters, searchParameters){
-//     // add urlParameters to url      
-//     for (let param in urlParameters){
-//         url = url +"/"+urlParameters[param]
-//     }
-
-//     // add the page query string
-//     url  = url + "?page="+pageNumber
-
-//     // add other query strings
-//     let searchParametersObj = searchParameters()
-//     for (let key in  searchParametersObj){
-//         if (key != "page"){
-//             url = url + "&" +key +"="+searchParametersObj[key]
-//         }
-//     }
-//     return url
-// }
-
-
 export default function ProductsContainer(props){
     const [TotalPagesCount,setTotalPagesCount] = useState(40)
     const [products , setProducts ] = useState(PRODUCTS);
-    const [CurrentPage, setCurrentPage] = useState(1)
-
     const [searchParams , setSearchParams ] = useSearchParams();
 
-    // update currentPage according to page query string
     useEffect(()=>{
-        let page_number = parseInt(searchParams.get("page"));
-        if (!page_number){
-            page_number = 1;
-        }
-        setCurrentPage(page_number);
-    },[searchParams])
-    
+        let endpoint_url = "http://127.0.0.1:8000/api/products"
+        endpoint_url+=(urlParametersList.length>0)?"?categories[]="+urlParametersList.join('&categories[]='):""
+        let url = constructUrl(endpoint_url,searchParams);
+        let data = requestData(url)
 
-    async function requestProductsFiltered(queryString){
-        const request = await fetch("http://127.0.0.1:8000/api/products"+queryString)
-        const response = await request.json();
-        if (request.status == 200){
-            setTotalPagesCount(response["total_count"])
-            setCurrentPage(response['count'])
-            setProducts(response["products"])
+        if (data){
+            setProducts(data.products);
+            setTotalPagesCount();
         }
+    },[])
+
+    // create an object of query strings 
+    const searchParamsObj = ()=>{
+        const tempObj= {};
+        for  (let [key,value] of searchParams.entries()){
+            tempObj[key] = value
+        }
+        return tempObj
     }
 
     
-
-
 
     return (
         <Container>
             <TagsContainer>
                 {
-                    Object.keys(props.searchParameters()).map((tag)=>{
+                    Object.keys(searchParamsObj()).map((tag)=>{
                         if (tag=="price"){
-                            let prices = props.searchParameters()[tag].split('-');
+                            let prices = searchParamsObj()[tag].split('-');
                             return (
                                 <Tag onClick={()=>{props.deleteTag(tag)}}>
                                     <TagText>
@@ -138,7 +115,7 @@ export default function ProductsContainer(props){
                         if (tag=="color" || tag=="size")
                             return (
                                 <Tag onClick={()=>{props.deleteTag(tag)}}>
-                                    <TagText>{props.searchParameters()[tag]} x</TagText>
+                                    <TagText>{searchParamsObj()[tag]} x</TagText>
                                 </Tag>
                             )
                     })
@@ -161,7 +138,7 @@ export default function ProductsContainer(props){
                     )
                 })}
             </Products>
-            <Pagination CurrentPage={parseInt(CurrentPage)} TotalPagesCount={TotalPagesCount} />
+            <Pagination TotalPagesCount={TotalPagesCount} />
         </Container>
     )
 }

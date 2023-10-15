@@ -101,10 +101,11 @@ const OrderBytoSortBy={
 }
 
 // add current search params to the end of a url
-export function constructUrl(url, searchParams,addition=null){
+export function constructUrl(url, searchParams, addition=null){
     if (addition){
         url += addition;
     }
+   
     let searchParamsString= "?"
     if (searchParams){
         for (let [key, value] of searchParams.entries()){
@@ -138,15 +139,11 @@ export default function Orders(){
     const [TotalPagesCount, setTotalPagesCount] = useState(40)
 
     useEffect(()=>{
-        //request orders 
-
-    }, [searchParams])
-    
-    useEffect(()=>{
+        // request data whenever searchParams change  
         let url = constructUrl("http://127.0.0.1:8000/api/orders",searchParams,page=="orders"?"":"/"+page)
         setOrders(requestOrders(url,token))
-    },[page])
-
+    }, [searchParams,page])
+    
     function handlePageTitleClick(page){
         setPage(page);
     }
@@ -155,10 +152,6 @@ export default function Orders(){
         e.preventDefault();
         let data = new FormData(e.target)
         setSearchParams({'q':data.get("q")});
-
-        // request search result 
-        let url = constructUrl("http://127.0.0.1:8000/api/orders",searchParams,page=="orders"?"":"/"+page)
-        setOrders(requestOrders(url,token))
     }
 
     return (

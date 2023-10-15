@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
                 element:<OtherUsersFavoritesLists />
             },
             {
-                path:"/favorites-lists/:id",
+                path:"/favorites-lists/:favorites_list_id",
                 element:<OtherUsersFavorites />
             }
         ],

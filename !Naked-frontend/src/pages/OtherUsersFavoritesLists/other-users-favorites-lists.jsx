@@ -31,28 +31,40 @@ const OrderBytoSortBy={
     "total_cost-ASC":"Price: Low-High",
 }
 
-function handleSearchFormSubmit (e){
-    e.preventDefault();
-    setSearchParams({q:e.target.value})
+
+
+
+async function requestData(url){
+    const request = await fetch(url);
+    const response = await request.json();
+    if (request.status == 200)
+        return response
+    return []
 }
 
 export default function OtherUsersFavoritesLists(){
-    const [searchInputValue, setSearchInputValue]=useState("")
     const [favoritesLists, setFavoritesLists]  = useState(FAV_LISTS)
     const [favoritesListsCount, setFavoritesListsCount] = useState(210)
     const [TotalPagesCount,setTotalPagesCount] = useState(40)
-    const [CurrentPage, setCurrentPage] = useState(1)
-
     const [searchParams , setSearchParams ] = useSearchParams();
 
-    // update currentPage according to page query string
+    // request favorites lists of other users
     useEffect(()=>{
-        let page_number = parseInt(searchParams.get("page"));
-        if (!page_number){
-            page_number = 1;
+        // request data whenever search params change 
+        let endpoint_url = "http://127.0.0.1:8000/api/favorites_lists"
+        let url = constructUrl(endpoint_url,searchParams);
+        let data = requestData(url)
+        if (data){
+            setFavorites(data['favorites']);
+            setFavoritesCount(data['total_count']);
         }
-        setCurrentPage(page_number);
     },[searchParams])
+
+    function handleSearchFormSubmit(e){
+        e.preventDefault();
+        let data = new FormData(e.target);
+        setSearchParams({'q':data.get("q")});
+    }
 
     return(
         <Container>
@@ -66,8 +78,6 @@ export default function OtherUsersFavoritesLists(){
                         placeholder={"search your favorites"} 
                         sortOptions={OrderBytoSortBy} 
                         handleSearchFormSubmit={handleSearchFormSubmit}
-                        setSearchInputValue={setSearchInputValue}
-                        searchInputValue={searchInputValue}
                     />
                 </Header>
                 <div style={{display:"flex", flexDirection:"column", gap:"min(7vh,40px)"}}>
