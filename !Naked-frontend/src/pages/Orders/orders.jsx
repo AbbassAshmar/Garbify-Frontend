@@ -2,13 +2,14 @@ import styled from 'styled-components';
 import OrderCard from '../../components/OrderCard/order-card';
 import { useState ,useContext, useEffect} from 'react';
 import { userStateContext } from '../../Contexts/user-state';
-import hoody from '../../assets/hoody.jpg'
-import hoody2 from "../../assets/hoody2.jpg"
 import { useSearchParams } from 'react-router-dom';
 import ProductsSlider from '../../components/ProductsSlider/products-slider';
 import { PRODUCTS } from "../../components/products-data";
 import SearchSort from '../../components/SearchSort/search-sort';
 import Pagination from '../../components/Pagination/pagination';
+import { requestData } from '../OtherUsersFavorites/other-users-favorites';
+import { ORDERS } from '../../components/products-data';
+
 //max-width: 1500px;
 const Container = styled.div`
 width:100%;
@@ -117,31 +118,24 @@ export function constructUrl(url, searchParams, addition=null){
     return url;
 }
 
-async function requestOrders(url,token){
-    const request = await fetch(url,{
-        method:"GET",
-        headers:{
-            "Authorization":"Bearer " + token,
-        }
-    });
-    const response = await request.json(); 
-    if ( request.status == 200){
-        return response;
-    }
-    return [];
-}
 
 export default function Orders(){
     const [page,setPage] = useState("orders")
-    const [orders, setOrders] = useState(os);
+    const [orders, setOrders] = useState(ORDERS);
     const {token} = useContext(userStateContext);
     const [searchParams, setSearchParams] = useSearchParams()
     const [TotalPagesCount, setTotalPagesCount] = useState(40)
 
+    // request data whenever searchParams change  
     useEffect(()=>{
-        // request data whenever searchParams change  
-        let url = constructUrl("http://127.0.0.1:8000/api/orders",searchParams,page=="orders"?"":"/"+page)
-        setOrders(requestOrders(url,token))
+        let init = {
+            headers:{
+                "Authorization":"Bearer " + token,
+            }
+        }
+        let endpoint_url = "http://127.0.0.1:8000/api/orders";
+        let url = constructUrl(endpoint_url,searchParams,page=="orders"?"":"/"+page)
+        setOrders(requestData(url,init))
     }, [searchParams,page])
     
     function handlePageTitleClick(page){
@@ -249,52 +243,3 @@ export default function Orders(){
 // $table->text("phone_number");
 // $table->text("recipient_name");
 
-const os = [
-    {
-        id : 1,
-        created_at:"2023-10-10", 
-        status:'paid',
-        total_cost:1000, 
-        canceled_at:null,
-        shipping_state : "shipping in 4 days",
-        recipiant_name:"abbass ashmar",
-
-        products:[
-            {
-                id:1,
-                thumbnail:hoody,
-                name:'shoes ultra shit',
-                ordered_quantity:2,
-                return_cancellation_info:"return available till 2/2/2022" // calculated
-            },
-            {
-                id:1,
-                thumbnail:hoody2,
-                name:'some shoe made by utilizing child labor and it sucks ultra shit',
-                ordered_quantity:2,
-                return_cancellation_info:"return available till 2/2/2022" // calculated
-            }
-        ]
-    },
-    {
-        id : 1,
-        created_at:"2023/10/10", 
-        status:'delivered',
-        total_cost:1000, 
-        canceled_at:null,
-        shipping_state : "Delivered since 9/11/2001",
-        recipiant_name:"mahmood lsoory",
-
-        products:[
-            {
-                id:1,
-                thumbnail:hoody,
-                name:'shoes ultra shit fake name goes wild i hate black people',
-                ordered_quantity:2,
-                return_cancellation_info:"return available till 9/4/2022" // calculated
-            },
-            
-        ]
-    },
-    
-]

@@ -1,6 +1,21 @@
 import Hoody2 from "../assets/Hoody2.jpg"
 import Hoody from "../assets/Hoody.jpg"
 
+import jordan4_1 from "../assets/jordan4redfront.jpg"
+import jordan4_2 from "../assets/jordan4redfront2.jpg"
+import jordan4_3 from "../assets/jordan4redside2.jpg"
+import jordan4_4 from "../assets/jordan4sidered.jpg"
+import jordan4_5 from "../assets/jordan4redback.jpg"
+
+import jordan4_6 from "../assets/jordan4greenfront.jpg"
+import jordan4_7 from "../assets/jordan4greenfront2.jpg"
+import jordan4_8 from "../assets/jordan4greenside2.jpg"
+import jordan4_9 from "../assets/jordan4greenback.jpg"
+import jordan4_10 from "../assets/jordan4blueside2.jpg"
+import jordan4_11 from "../assets/jordan4blueside.jpg"
+import jordan4_12 from "../assets/jordan4bluefront.jpg"
+import jordan4_13 from "../assets/jordan4blueback.jpg"
+
 // Main title :clamp(1.2rem,3vw,1.5rem);
 
 // Smaller title : clamp(1rem, 2.6vw, 1.3rem);
@@ -8,12 +23,6 @@ import Hoody from "../assets/Hoody.jpg"
 // smaller : clamp(.8rem , 2.3vw ,1.1rem);
 
 // smaller :clamp(.6rem,2vw,.9rem);
-
-
-
-
-
-
 
 // main title (shipping state) : 1.3rem --> 1.1rem (800px)
 // name - text in header: 1rem -->.8rem (800px)
@@ -118,6 +127,7 @@ export const FAV_LISTS =[
         }
     }
 ]
+
 export const PRODUCTS = [
     {
         name:"Brooks sport shoes",
@@ -200,4 +210,232 @@ export const PRODUCTS = [
             percentage:20,
         }
     }
+]
+
+export const REVIEWS = [
+    {
+        id:5,
+        username:"Sam s",
+        rating:3.5,
+        color:"red",
+        size:"xl",
+        title:"amazing fit from hard working slaves",
+        text:` the quality is bad and cheap ,clothes do not fit  ,
+               customer service sucks (one of them cursed me),
+               and they hire black people , 0 out of 10 (for hiring black people)`,
+        images:[
+            Hoody,
+            Hoody,
+            Hoody2,
+            Hoody2
+        ],
+        user_height:'190cm',
+        user_weight:'38kg',
+        helpful_count:29,
+        created_at:"2033-09-09"
+    },
+    {
+        id:4,
+        username:"Sam s",
+        rating:3.5,
+        color:"red",
+        size:"xl",
+        title:"amazing fit from hard working slaves",
+        text:` the quality is bad and cheap ,clothes do not fit  ,
+               customer service sucks (one of them cursed me),
+               and they hire black people , 0 out of 10 (for hiring black people)`,
+        images:[
+            Hoody,
+            Hoody,
+            Hoody2
+        ],
+   
+        helpful_count:40,
+        created_at:"2033-09-09",
+        user_height:'190cm',
+        user_weight:'38kg',
+    },
+    {
+        id:2,
+        username:"Sam s",
+        rating:3.5,
+        color:"red",
+        size:"xl",
+        title:"amazing fit from hard working slaves",
+        text:` the quality is bad and cheap ,clothes do not fit  ,
+               customer service sucks (one of them cursed me),
+               and they hire black people , 0 out of 10 (for hiring black people)`,
+        user_height:'190cm',
+        user_weight:'38kg',
+        helpful_count:0,
+        created_at:"2033-09-09"
+    }
+]
+export const PRODUCT  = {
+    pk :1,
+    name:'nike jordan 4',
+    quantity:444,
+    reviews_summary : {
+        average_ratings : 4.5,
+        reviews_count : 203,
+    },
+    price:304,
+    type:"men's shoes",
+    colors:['red', 'blue', 'green'],
+    sizes:['W 5 / M 6.5', 'W 6 / M 8.5', 'W 10.5 / M 9','W 12.5 / M 14', 'W 17.5 / M 19'],
+    sizes_table: {
+        units : ['Women/Men', 'inches','millimters'],
+        sizes :[
+            ['W 5 / M 6.5','4.3','143'],
+            ['W 6 / M 8.5','3.3','324'],
+        ]
+    },
+    added_at: "2022-03-18T11:40:22.519222Z",
+    description:
+                `gold glasses made with water lava and fabric shit by black slaves and kids beaten just before death.
+                . right material used 
+                . right slaves chosen
+                . ensured the kids were starved
+                . donald trump for presidency`,
+    category : "casual",
+    sale : {
+        price_after_sale:200,
+        percentage:32,
+        starts_at:"2022-05-18T11:40:22.519222Z",
+        ends_at:"2024-05-18T11:40:22.519222Z",
+    },
+    images:{
+        red : [
+            {
+                image_details: "front image",
+                color:"red",
+                size:"xl",
+                url: jordan4_1,
+            },
+            {
+                image_details: "front 2  image",
+                color:"red",
+                size:"xl",
+                url: jordan4_2,
+            },
+            {
+                image_details: "side image",
+                color:"red",
+                size:"xl",
+                url: jordan4_3,
+            },
+            {
+                image_details: "side 2 image",
+                color:"red",
+                size:"xl",
+                url: jordan4_4,
+            },
+            {
+                image_details: "back image",
+                color:"red",
+                size:"xl",
+                url: jordan4_5,
+            }
+        ],
+        blue : [
+            {
+                image_details: "front image",
+                color:"blue",
+                size:"xl",
+                url: jordan4_10,
+            },
+            {
+                image_details: "front 2  image",
+                color:"blue",
+                size:"xl",
+                url: jordan4_11,
+            },
+            {
+                image_details: "side image",
+                color:"blue",
+                size:"xl",
+                url: jordan4_12,
+            },
+            {
+                image_details: "side 2 image",
+                color:"blue",
+                size:"xl",
+                url: jordan4_13,
+            },
+        ],
+        green : [
+            {
+                image_details: "front image",
+                color:"green",
+                size:"xl",
+                url: jordan4_6,
+            },
+            {
+                image_details: "front 2  image",
+                color:"green",
+                size:"xl",
+                url: jordan4_7,
+            },
+            {
+                image_details: "side image",
+                color:"green",
+                size:"xl",
+                url: jordan4_8,
+            },
+            {
+                image_details: "side 2 image",
+                color:"green",
+                size:"xl",
+                url: jordan4_9,
+            },
+        ]
+    }
+}
+
+export const ORDERS = [
+    {
+        id : 1,
+        created_at:"2023-10-10", 
+        status:'paid',
+        total_cost:1000, 
+        canceled_at:null,
+        shipping_state : "shipping in 4 days",
+        recipiant_name:"abbass ashmar",
+        products:[
+            {
+                id:1,
+                thumbnail:Hoody,
+                name:'shoes ultra shit',
+                ordered_quantity:2,
+                return_cancellation_info:"return available till 2/2/2022" // calculated
+            },
+            {
+                id:1,
+                thumbnail:Hoody2,
+                name:'some shoe made by utilizing child labor and it sucks ultra shit',
+                ordered_quantity:2,
+                return_cancellation_info:"return available till 2/2/2022" // calculated
+            }
+        ]
+    },
+    {
+        id : 1,
+        created_at:"2023/10/10", 
+        status:'delivered',
+        total_cost:1000, 
+        canceled_at:null,
+        shipping_state : "Delivered since 9/11/2001",
+        recipiant_name:"mahmood lsoory",
+        products:[
+            {
+                id:1,
+                thumbnail:Hoody,
+                name:'shoes ultra shit fake name goes wild i hate black people',
+                ordered_quantity:2,
+                return_cancellation_info:"return available till 9/4/2022" // calculated
+            },
+            
+        ]
+    },
+    
 ]

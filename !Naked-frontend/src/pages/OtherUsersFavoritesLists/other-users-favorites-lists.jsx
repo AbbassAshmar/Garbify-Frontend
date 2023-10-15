@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState,useEffect } from "react";
-import { Content ,Header, Title} from "../Orders/orders";
+import { Content ,Header, Title, constructUrl } from "../Orders/orders";
 import { Products } from "../Products/Components/products-container";
 import { FAV_LISTS, PRODUCTS } from "../../components/products-data";
 import SearchSort from "../../components/SearchSort/search-sort"
@@ -31,15 +31,12 @@ const OrderBytoSortBy={
     "total_cost-ASC":"Price: Low-High",
 }
 
-
-
-
-async function requestData(url){
-    const request = await fetch(url);
+async function requestData(url,init){
+    const request = await fetch(url,init);
     const response = await request.json();
     if (request.status == 200)
         return response
-    return []
+    return {}
 }
 
 export default function OtherUsersFavoritesLists(){
@@ -55,8 +52,8 @@ export default function OtherUsersFavoritesLists(){
         let url = constructUrl(endpoint_url,searchParams);
         let data = requestData(url)
         if (data){
-            setFavorites(data['favorites']);
-            setFavoritesCount(data['total_count']);
+            setFavoritesLists(data['favorites_lists']);
+            setFavoritesListsCount(data['total_count']);
         }
     },[searchParams])
 
@@ -81,7 +78,7 @@ export default function OtherUsersFavoritesLists(){
                     />
                 </Header>
                 <div style={{display:"flex", flexDirection:"column", gap:"min(7vh,40px)"}}>
-                    <Pagination TotalPagesCount={TotalPagesCount} CurrentPage={CurrentPage}/>
+                    <Pagination TotalPagesCount={TotalPagesCount}/>
                     <FavoritesListsContainer>
                         {
                             favoritesLists && 
@@ -100,7 +97,7 @@ export default function OtherUsersFavoritesLists(){
                             })
                         }
                     </FavoritesListsContainer>
-                    <Pagination TotalPagesCount={TotalPagesCount} CurrentPage={CurrentPage}/>
+                    <Pagination TotalPagesCount={TotalPagesCount}/>
                 </div>
                 <ProductsSlider products={PRODUCTS} title={"From People's Favorites"}/>
             </Content>

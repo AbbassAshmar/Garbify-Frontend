@@ -11,6 +11,8 @@ import hoody2 from "../../../assets/Hoody2.jpg"
 import { userStateContext } from "../../../Contexts/user-state"
 import Pagination from "../../../components/Pagination/pagination"
 import { useSearchParams } from "react-router-dom"
+import { REVIEWS } from "../../../components/products-data"
+import { requestData } from "../../OtherUsersFavorites/other-users-favorites"
 
 const Container = styled.div`
 margin: 0 0 2rem 0;
@@ -59,45 +61,35 @@ width:40px;
 const Reviews = styled.div`
 display:flex;
 flex-direction : column;
-
 `
+
 export default function ReviewsSection({product_id}){
     const userState = useContext(userStateContext)
-    const [reviews, setReviews] = useState(rvs);
+    const [reviews, setReviews] = useState(REVIEWS);
     const [reviewsDetails, setReviewsDetails] = useState({average_ratings:5 , reviews_count:0});
     const [likedReviews, setLikedReviews] = useState([4,5]);
-    const [CurrentPage,setCurrentPage] = useState(1);
-    const [searchParams, setSearchParams] = useSearchParams();
-    // update currentPage according to page query string
+
     useEffect(()=>{
-        let page_number = parseInt(searchParams.get("page"));
-        if (!page_number){
-            page_number = 1;
-        }
-        setCurrentPage(page_number);
-    },[searchParams])
-
-    async function requestReviews(product_id){
-        const request = await fetch("http://127.0.0.1:8000/api/products/"+product_id+"/reviews");
-        const response = await request.json(); 
-        if ( request.status == 200){
-            setReviews(response.data.reviews)
-            setReviewsDetails({average_ratings:response.average_ratings,reviews_count:response.total_count})
-        }
-    }
-
-    async function requestClientLikedReviews(product_id,user_token){
-        const request = await fetch("http://127.0.0.1:8000/api/products/"+product_id+"/user/reviews/liked",{
-            type:"GET",
+        let init = {
             headers:{
                 "Authorization":"Bearer "+user_token 
             }
-        });
-        const response = await request.json(); 
-        if ( request.status == 200){
-            setLikedReviews(response.data.liked_reviews)
         }
-    }
+
+        const REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/reviews"
+        const LIKED_REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/user/reviews/liked"
+    
+        let reviews = requestData(REVIEWS_URL);
+        let likedReviews = requestData(LIKED_REVIEWS_URL,init)
+
+        if (reviews){
+            setReviews(reviews['reviews'])
+            setReviewsDetails({average_ratings:reviews['average_ratings'],reviews_count:reviews['total_count']})
+        }
+        if (likedReviews){
+            setLikedReviews(likedReviews['liked_reviews'])
+        }
+    },[])
 
     function checkIfLiked(review_id,likedReviews){
         function searchForId(s,e){
@@ -115,10 +107,7 @@ export default function ReviewsSection({product_id}){
         }
         return searchForId(0, likedReviews.length)
     }
-    useEffect(()=>{
-        // requestClientLikedReviews(product_id,userState.token)
-        // requestReviews(product_id)
-    },[])
+    
     return (
         <Container>
             <Header>
@@ -160,66 +149,3 @@ export default function ReviewsSection({product_id}){
         </Container>
     )
 }
-const likedrvs = [
-    4,5
-]
-
-const rvs = [
-    {
-        id:5,
-        username:"Sam s",
-        rating:3.5,
-        color:"red",
-        size:"xl",
-        title:"amazing fit from hard working slaves",
-        text:` the quality is bad and cheap ,clothes do not fit  ,
-               customer service sucks (one of them cursed me),
-               and they hire black people , 0 out of 10 (for hiring black people)`,
-        images:[
-            hoody,
-            hoody,
-            hoody2,
-            hoody2
-        ],
-        user_height:'190cm',
-        user_weight:'38kg',
-        helpful_count:29,
-        created_at:"2033-09-09"
-    },
-    {
-        id:4,
-        username:"Sam s",
-        rating:3.5,
-        color:"red",
-        size:"xl",
-        title:"amazing fit from hard working slaves",
-        text:` the quality is bad and cheap ,clothes do not fit  ,
-               customer service sucks (one of them cursed me),
-               and they hire black people , 0 out of 10 (for hiring black people)`,
-        images:[
-            hoody,
-            hoody,
-            hoody2
-        ],
-   
-        helpful_count:40,
-        created_at:"2033-09-09",
-        user_height:'190cm',
-        user_weight:'38kg',
-    },
-    {
-        id:2,
-        username:"Sam s",
-        rating:3.5,
-        color:"red",
-        size:"xl",
-        title:"amazing fit from hard working slaves",
-        text:` the quality is bad and cheap ,clothes do not fit  ,
-               customer service sucks (one of them cursed me),
-               and they hire black people , 0 out of 10 (for hiring black people)`,
-        user_height:'190cm',
-        user_weight:'38kg',
-        helpful_count:0,
-        created_at:"2033-09-09"
-    }
-]
