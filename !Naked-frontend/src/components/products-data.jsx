@@ -36,91 +36,91 @@ export const FAV_LISTS =[
         views_count:234,
         likes_count:390,
         thumbnail:Hoody,
-        user_id:{
+        user:{
             id:1,
             profile_picture:Hoody2,
             name:"josh",
         }
     },
     {
-        id:3,
+        id:321,
         name:'Joshs Favourites For this Summer',
         views_count:234,
         likes_count:390,
         thumbnail:Hoody2,
-        user_id:{
+        user:{
             id:1,
             profile_picture:Hoody,
             name:"josh",
         }
     },
     {
-        id:3,
+        id:43,
         name:'Joshs Favourites For this Summer',
         views_count:234,
         likes_count:390,
         thumbnail:Hoody2,
-        user_id:{
+        user:{
             id:1,
             profile_picture:Hoody2,
             name:"josh",
         }
     },
     {
-        id:3,
+        id:13,
         name:'Joshs Favourites For this Summer',
         views_count:234,
         likes_count:390,
         thumbnail:Hoody2,
-        user_id:{
+        user:{
             id:1,
             profile_picture:Hoody2,
             name:"josh",
         }
     },
     {
-        id:3,
+        id:23,
         name:'Joshs Favourites For this Summer',
         views_count:234,
         likes_count:390,
         thumbnail:Hoody2,
-        user_id:{
+        user:{
             id:1,
             profile_picture:Hoody2,
             name:"josh",
         }
     },
     {
-        id:3,
+        id:32,
         name:'Joshs Favourites For this Summer',
         views_count:234,
         likes_count:390,
         thumbnail:Hoody2,
-        user_id:{
+        user:{
             id:1,
             profile_picture:Hoody2,
             name:"josh",
         }
     },
     {
-        id:3,
+        id:30,
         name:'Joshs Favourites For this Summer',
         views_count:234,
         likes_count:390,
         thumbnail:Hoody2,
-        user_id:{
+        user:{
             id:1,
             profile_picture:Hoody2,
             name:"josh",
         }
     },  
     {
-        id:3,
+        id:10,
         name:'Joshs Favourites For this Summer',
         views_count:234,
         likes_count:390,
         thumbnail:Hoody2,
-        user_id:{
+        user:{
             id:1,
             profile_picture:Hoody2,
             name:"josh",
