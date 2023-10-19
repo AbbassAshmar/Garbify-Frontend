@@ -182,7 +182,7 @@ width:max(20%, 100px);
 background:red;
 `
 const ArchiveOrderButton = styled(CancelOrderButton)`
-background:#8db600;
+background:rgb(0, 255, 0);
 `
 const OrderDetailsLink = styled(Link)`
 font-size:.9rem;

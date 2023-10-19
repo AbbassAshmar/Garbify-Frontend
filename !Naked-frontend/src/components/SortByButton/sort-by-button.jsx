@@ -13,22 +13,20 @@ const Button = styled.button`
 background:none;
 outline:none;
 border:none;
-font-weight:600;
 cursor:pointer;
+display:flex;
+align-items:flex-end;
+font-weight:600;
+font-size:clamp(.6rem,2vw,.9rem);
+
 &:hover{
     opacity:.7;
 }
-display:flex;
-align-items:center;
-
-font-size:clamp(.6rem,2vw,.9rem);
-
 `
 const Icon =styled.i`
 transform:rotateX(${({rotate})=>rotate});
 margin-left:.4rem;
 transition:transform .3s;
-
 `
 const SortList =styled.div`
 position:absolute;
@@ -38,7 +36,7 @@ left:0;
 max-height:${({height})=>height};
 height:auto;
 width:min(190%,200px);
-border-radius: 0  0 10px 10px;
+border-radius: 0 0 10px 10px;
 z-index:100;
 overflow:hidden;
 transition:all .3s;
@@ -70,14 +68,12 @@ export default function SortByButton(props){
         function handleClickOutside(event) {
             if (list.current && !list.current.contains(event.target) && !button.current.contains(event.target)) {
                 setShowList(false)
+                document.removeEventListener("mousedown", handleClickOutside);
             }
-            document.removeEventListener("mousedown", handleClickOutside);
         }
         if (showList) document.addEventListener("mousedown", handleClickOutside);
-      
     }, [showList]);
   
-
     function handleSortButtonClick(){
         setShowList(!showList)
     }
@@ -99,7 +95,6 @@ export default function SortByButton(props){
                 }
                 <Icon rotate={showList?"180deg":"0"} className="fa-solid fa-angle-down"></Icon>
             </Button>
-            
             <SortList ref={list} height={showList?"100vh":"0px"}>
                 <Options>
                     {

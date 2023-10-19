@@ -35,23 +35,23 @@ export default function Product(){
     const [quantiy, setQuantity] = useState(400)
     const {id , name} = useParams()
 
-    useEffect(()=>{
-        const PRODUCT_URL = "http://127.0.0.1:8000/api/products/"+id
-        const SIMILAR_PRODUCTS_URL = "http://127.0.0.1:8000/api/products/"+id+"/similar"
+    // useEffect(()=>{
+    //     const PRODUCT_URL = "http://127.0.0.1:8000/api/products/"+id
+    //     const SIMILAR_PRODUCTS_URL = "http://127.0.0.1:8000/api/products/"+id+"/similar"
 
-        const retrieveProduct = requestData(PRODUCT_URL)
-        const retrieveSimilarProducts = requestData(SIMILAR_PRODUCTS_URL)
+    //     const retrieveProduct = requestData(PRODUCT_URL)
+    //     const retrieveSimilarProducts = requestData(SIMILAR_PRODUCTS_URL)
 
-        if (retrieveProduct) {
-            setProduct(retrieveProduct['product'])
-            setImagesColor(Object.keys(retrieveProduct['product']['colors'])[0])
-            setQuantity(retrieveProduct['product']['quantity'])
-        }
+    //     if (retrieveProduct) {
+    //         setProduct(retrieveProduct['product'])
+    //         setImagesColor(Object.keys(retrieveProduct['product']['colors'])[0])
+    //         setQuantity(retrieveProduct['product']['quantity'])
+    //     }
 
-        if (retrieveSimilarProducts){
-            setSimilarProducts(retrieveSimilarProducts['products'])
-        }
-    } , [id])
+    //     if (retrieveSimilarProducts){
+    //         setSimilarProducts(retrieveSimilarProducts['products'])
+    //     }
+    // } , [id])
     
     return (
         <Container>

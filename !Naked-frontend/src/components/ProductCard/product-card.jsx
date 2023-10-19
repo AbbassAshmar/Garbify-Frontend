@@ -28,54 +28,41 @@ const Details = styled.div`
 margin:0;
 display:flex;
 flex-direction:column;
-gap:.3rem;
+gap:.5rem;
 width:100%;
 padding:.5rem;
 `
 const Name =styled.h2`
 margin:0;
-font-size:1.3rem;
 font-weight:600;
-
-@media screen and (max-width:800px){
-    font-size:1rem;
-}
+font-size:clamp(.9rem, 2.6vw, 1.3rem);
 `
 const Category = styled.p`
 margin:0;
 color: grey;
-font-size:1rem;
 font-weight:600;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 const ColorCount = styled.div`
 color:grey;
-font-size:1rem;
 font-weight:600;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 const Price = styled.p`
 margin:0;
 font-weight:600;
-
 `
 const PriceContainer =styled.div`
 display:flex;
-gap:3%;
+gap:.5rem;
 align-items:flex-end;
+flex-wrap:wrap;
+width:100%;
 `
 const NewPrice =styled.p`
 margin:0;
 font-weight:600;
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
-
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 const OldPrice =styled.p`
 margin:0;
@@ -83,20 +70,13 @@ color:grey;
 opacity:.6;
 font-weight:600;
 text-decoration:line-through;
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
-
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 const SalePercentage =styled.p`
 margin:0;
 color:green;
 font-size:1rem;
-font-weight:600;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 
 export default function ProductCard({thumbnail, price, name,quantity,type,sale,colors,pk,min_width}){
@@ -104,12 +84,10 @@ export default function ProductCard({thumbnail, price, name,quantity,type,sale,c
         if (sale){
             return(
                 <PriceContainer>
-                    <NewPrice>
-                        {sale.price_after_sale}$
-                    </NewPrice>
-                    <OldPrice>
-                        {price}$
-                    </OldPrice>
+                    <div style={{display:"flex", gap:".5rem"}}>
+                        <NewPrice>{sale.price_after_sale}$</NewPrice>
+                        <OldPrice>{price}$</OldPrice>
+                    </div>
                     <SalePercentage>
                         {sale.percentage} % Off
                     </SalePercentage>

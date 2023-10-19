@@ -69,27 +69,27 @@ export default function ReviewsSection({product_id}){
     const [reviewsDetails, setReviewsDetails] = useState({average_ratings:5 , reviews_count:0});
     const [likedReviews, setLikedReviews] = useState([4,5]);
 
-    useEffect(()=>{
-        let init = {
-            headers:{
-                "Authorization":"Bearer "+user_token 
-            }
-        }
+    // useEffect(()=>{
+    //     let init = {
+    //         headers:{
+    //             "Authorization":"Bearer "+user_token 
+    //         }
+    //     }
 
-        const REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/reviews"
-        const LIKED_REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/user/reviews/liked"
+    //     const REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/reviews"
+    //     const LIKED_REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/user/reviews/liked"
     
-        let reviews = requestData(REVIEWS_URL);
-        let likedReviews = requestData(LIKED_REVIEWS_URL,init)
+    //     let reviews = requestData(REVIEWS_URL);
+    //     let likedReviews = requestData(LIKED_REVIEWS_URL,init)
 
-        if (reviews){
-            setReviews(reviews['reviews'])
-            setReviewsDetails({average_ratings:reviews['average_ratings'],reviews_count:reviews['total_count']})
-        }
-        if (likedReviews){
-            setLikedReviews(likedReviews['liked_reviews'])
-        }
-    },[])
+    //     if (reviews){
+    //         setReviews(reviews['reviews'])
+    //         setReviewsDetails({average_ratings:reviews['average_ratings'],reviews_count:reviews['total_count']})
+    //     }
+    //     if (likedReviews){
+    //         setLikedReviews(likedReviews['liked_reviews'])
+    //     }
+    // },[])
 
     function checkIfLiked(review_id,likedReviews){
         function searchForId(s,e){
@@ -145,7 +145,7 @@ export default function ReviewsSection({product_id}){
                 })}
                 
             </Reviews>
-            <Pagination CurrentPage={CurrentPage} TotalPagesCount={30}/>
+            <Pagination TotalPagesCount={30}/>
         </Container>
     )
 }

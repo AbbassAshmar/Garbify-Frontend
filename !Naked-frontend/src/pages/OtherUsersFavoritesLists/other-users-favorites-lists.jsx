@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import { useState,useEffect } from "react";
 import { Content ,Header, Title, constructUrl } from "../Orders/orders";
-import { Products } from "../Products/Components/products-container";
 import { FAV_LISTS, PRODUCTS } from "../../components/products-data";
 import SearchSort from "../../components/SearchSort/search-sort"
 import  FavoriteListCard  from "../../components/FavoriteListCard/favorite-list-card";
 import Pagination from "../../components/Pagination/pagination";
 import { useSearchParams } from "react-router-dom";
 import ProductsSlider from "../../components/ProductsSlider/products-slider";
-
+import { requestData } from "../OtherUsersFavorites/other-users-favorites";
+import { Products } from "../../components/StyledComponents/styled-components";
 const Container = styled.div`
 
 `
@@ -34,14 +34,6 @@ const OrderBytoSortBy={
     "created_at-ASC":"Oldest-Newest",
     "total_cost-DESC":"Price: High-Low",
     "total_cost-ASC":"Price: Low-High",
-}
-
-async function requestData(url,init){
-    const request = await fetch(url,init);
-    const response = await request.json();
-    if (request.status == 200)
-        return response
-    return {}
 }
 
 export default function OtherUsersFavoritesLists(){

@@ -5,6 +5,8 @@ import { useEffect, useState } from "react"
 import { useLocation, useParams, useSearchParams } from "react-router-dom"
 import { PRODUCTS } from "../../../components/products-data"
 import { requestData } from "../../OtherUsersFavorites/other-users-favorites"
+import { Products } from "../../../components/StyledComponents/styled-components"
+import { constructUrl } from "../../Orders/orders"
 
 const Container = styled.div`
 flex:4;
@@ -38,16 +40,7 @@ text-overflow:ellipsis;
 height:1.1em;
 color:black;
 `
-export const Products = styled.div`
 
-display:grid;
-grid-template-columns:repeat(3,1fr);
-justify-content:space-between;
-grid-gap:20px;
-@media screen and (max-width:1000px){
-    grid-template-columns:repeat(2,1fr);
-}
-`
 
 
 
@@ -73,19 +66,27 @@ export default function ProductsContainer(props){
     const [TotalPagesCount,setTotalPagesCount] = useState(40)
     const [products , setProducts ] = useState(PRODUCTS);
     const [searchParams , setSearchParams ] = useSearchParams();
+    const urlParametersList = useParams()['*'].split('/')
 
-    useEffect(()=>{
-        let endpoint_url = "http://127.0.0.1:8000/api/products"
-        endpoint_url+=(urlParametersList.length>0)?"?categories[]="+urlParametersList.join('&categories[]='):""
-        let url = constructUrl(endpoint_url,searchParams);
-        let data = requestData(url)
+    // useEffect(()=>{
 
-        if (data){
-            setProducts(data.products);
-            setTotalPagesCount();
-        }
-    },[])
+    //     let endpoint_url = "http://127.0.0.1:8000/api/products"
+    //     endpoint_url+=(urlParametersList.length>0)?"?categories[]="+urlParametersList.join('&categories[]='):""
+    //     let url = constructUrl(endpoint_url,searchParams);
+    //     let data = requestData(url)
 
+    //     if (data){
+    //         setProducts(data.products);
+    //         setTotalPagesCount();
+    //     }
+    // },[])
+
+    //remove a tag from filter tags
+    function handleTagRemove(key){
+        searchParams.delete(key)
+        setSearchParams(searchParams)
+    }
+    
     // create an object of query strings 
     const searchParamsObj = ()=>{
         const tempObj= {};
@@ -95,8 +96,6 @@ export default function ProductsContainer(props){
         return tempObj
     }
 
-    
-
     return (
         <Container>
             <TagsContainer>
@@ -105,7 +104,7 @@ export default function ProductsContainer(props){
                         if (tag=="price"){
                             let prices = searchParamsObj()[tag].split('-');
                             return (
-                                <Tag onClick={()=>{props.deleteTag(tag)}}>
+                                <Tag onClick={()=>{handleTagRemove(tag)}}>
                                     <TagText>
                                         {prices[0]}$  -  {prices[1]}$ x
                                     </TagText>
@@ -114,7 +113,7 @@ export default function ProductsContainer(props){
                         }
                         if (tag=="color" || tag=="size")
                             return (
-                                <Tag onClick={()=>{props.deleteTag(tag)}}>
+                                <Tag onClick={()=>{handleTagRemove(tag)}}>
                                     <TagText>{searchParamsObj()[tag]} x</TagText>
                                 </Tag>
                             )
@@ -122,7 +121,7 @@ export default function ProductsContainer(props){
                 }
             </TagsContainer>
             <Products>
-                {products.map((product) =>{
+                {products && products.map((product) =>{
                     return (
                         <ProductCard
                             key={product.pk}

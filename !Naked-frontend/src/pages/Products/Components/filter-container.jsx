@@ -2,52 +2,8 @@ import { useEffect, useState } from "react"
 import { Link, useLocation, useSearchParams } from "react-router-dom"
 import styled from "styled-components"
 import { Input,Label,Submit } from "../../Registration/registration"
+import { FILTERS } from "../../../components/products-data"
 
-
-const Filters= [
-    {
-        name : "Categories",
-        type: "list",
-        options:[
-            "running Shoes",
-            "High Heals",
-            "Formal Shoes",
-            "loafers"
-        ]
-    },
-
-    {
-        name : "color",
-        type:"list",
-        options:[
-            "red",
-            "black",
-            "blue"
-        ]
-    },
-    {
-        name: "price",
-        type:"list",
-        options:{
-            "under 235$" : "0-235",
-            "235$ to 270$":"235-270",
-            "270$ to 305$":"270-305",
-            "over 305$":"305"
-        }
-    },
-    {
-        name:"size",
-        type:"list",
-        options:[
-            'xlarge',
-            'large',
-            'small',
-            'medium',
-            'xxlarge'
-        ]
-    }
-
-]
 const Container = styled.div`
 flex:${({flex})=>flex};
 display:flex;
@@ -70,10 +26,7 @@ margin:0;
 margin-bottom:1.3rem;
 font-weight:600;
 
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 
 `
 const Wrapper =styled.div`
@@ -99,10 +52,8 @@ justify-content:space-between;
 background:white;
 font-weight:600;
 
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-weight:600;
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 const AngleIcon = styled.i`
 transform:rotateX(${({angle})=>angle});
@@ -122,17 +73,14 @@ gap:.9rem;
 const CategoryLink = styled(Link)`
 color:black;
 text-decoration:none;
-font-weight:600;
 width:fit-content;
 opacity:.7;
 &:hover{
     opacity:1;
 }
 
-font-size:.9rem;
-@media screen and (max-width:800px){
-    font-size:.7rem;
-}
+font-weight:600;
+font-size:clamp(.6rem,2vw,.9rem);
 `
 const Option = styled(CategoryLink)`
 
@@ -158,10 +106,8 @@ const EditedInput = styled(Input)`
 outline:none;
 border-radius:2px;
 height:100%;
-font-size:.9rem;
-@media screen and (max-width:800px){
-    font-size:.7rem;
-}
+font-weight:600;
+font-size:clamp(.6rem,2vw,.9rem);
 `
 
 const EditedLabel = styled(Label)`
@@ -177,16 +123,13 @@ const FormSubmit = styled(Submit)`
 flex:1;
 height:auto;
 border-radius:2px;
-
-font-size:.9rem;
-@media screen and (max-width:800px){
-    font-size:.7rem;
-}
-
+font-weight:600;
+font-size:clamp(.6rem,2vw,.9rem);
 `
 export default function FilterContainer({show,category}){
     const [categories, setCategories] = useState([])
     const [showOptions, setShowOptions] = useState([])
+    const [Filters, setFilters] = useState(FILTERS)
     const [param,setParam]= useSearchParams()
     const location = useLocation()
     const [priceForm, setPriceForm] =useState({})

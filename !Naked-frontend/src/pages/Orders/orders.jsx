@@ -40,7 +40,7 @@ gap:min(7vh,40px);
 `
 export const Title = styled.div`
 font-weight:600;
-font-size:clamp(1.2rem,3vw,1.5rem);
+font-size:clamp(1.1rem,3vw,1.5rem);
 `
 
 const PagesContainer = styled.div`

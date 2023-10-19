@@ -16,9 +16,9 @@ import jordan4_11 from "../assets/jordan4blueside.jpg"
 import jordan4_12 from "../assets/jordan4bluefront.jpg"
 import jordan4_13 from "../assets/jordan4blueback.jpg"
 
-// Main title :clamp(1.2rem,3vw,1.5rem);
+// Main title :clamp(1.1rem,3vw,1.5rem);
 
-// Smaller title : clamp(1rem, 2.6vw, 1.3rem);
+// Smaller title : clamp(.9rem, 2.6vw, 1.3rem);
 
 // smaller : clamp(.8rem , 2.3vw ,1.1rem);
 
@@ -28,7 +28,50 @@ import jordan4_13 from "../assets/jordan4blueback.jpg"
 // name - text in header: 1rem -->.8rem (800px)
 // buttons and subtext : .9rem -->.7rem (800px)
 
+export const FILTERS =[
+    {
+        name : "Categories",
+        type: "list",
+        options:[
+            "running Shoes",
+            "High Heals",
+            "Formal Shoes",
+            "loafers"
+        ]
+    },
 
+    {
+        name : "color",
+        type:"list",
+        options:[
+            "red",
+            "black",
+            "blue"
+        ]
+    },
+    {
+        name: "price",
+        type:"list",
+        options:{
+            "under 235$" : "0-235",
+            "235$ to 270$":"235-270",
+            "270$ to 305$":"270-305",
+            "over 305$":"305"
+        }
+    },
+    {
+        name:"size",
+        type:"list",
+        options:[
+            'xlarge',
+            'large',
+            'small',
+            'medium',
+            'xxlarge'
+        ]
+    }
+
+]
 export const FAV_LISTS =[
     {
         id:3,

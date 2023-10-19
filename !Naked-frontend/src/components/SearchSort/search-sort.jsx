@@ -50,7 +50,7 @@ const SORT_BUTTON_STYLE = {
     height:'100%',
     display:'flex',
     fontSize:'16px',
-    padding:'.3rem 3%',
+    padding:'.3rem 1.7rem',
     borderRadius:'2px',
     boxShadow:'1px 1px 10px rgba(189, 189, 189,1)',
 }

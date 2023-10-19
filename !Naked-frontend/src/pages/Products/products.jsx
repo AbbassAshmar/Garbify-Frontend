@@ -42,11 +42,7 @@ export default function Products(){
     // products/?q=abc&g=def
     const [searchParams,setSearchParams] = useSearchParams()
     
-    //remove a tag from filter tags
-    function handleTagRemove(key){
-        searchParams.delete(key)
-        setSearchParams(searchParams)
-    }
+    
     
     
 
@@ -65,17 +61,13 @@ export default function Products(){
                 <Head>
                     <PathTitle title={urlParametersList.join(" ")} number={4345} />
                     <Options>
-                        <SortByButton optionsObj={OrderBytoSortBy}/>
+                        <SortByButton sortOptions={OrderBytoSortBy}/>
                         <ShowFilter show={showFilter} setShow={setShowFilter}/>
                     </Options>
                 </Head>
                 <Main>
                     <FilterContainer show={showFilter}/>
-                    <ProductsContainer 
-                        deleteTag={handleTagRemove} 
-                        createQueryString={createQueryString} 
-                        urlParameters={urlParametersList} 
-                    />
+                    <ProductsContainer/>
                 </Main>
             </Content>
         </Container>

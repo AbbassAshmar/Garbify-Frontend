@@ -9,20 +9,11 @@ cursor:pointer;
 &:hover{
     opacity:.7;
 }
-
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-size:clamp(.6rem,2vw,.9rem);
 `
 const Icon = styled.i`
 margin-left:.7rem;
-
-
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+font-size:clamp(.6rem,2vw,.9rem);
 `
 
 export default function ShowFilter(props){
