@@ -1,3 +1,4 @@
+import { useState } from "react"
 import styled from "styled-components"
 
 const InteractionsContianer = styled.div`
@@ -5,6 +6,7 @@ display:flex;
 gap:15px;
 
 `
+
 const Likes = styled.button`
 display:flex;
 align-items:center;
@@ -16,18 +18,27 @@ background:none;
 border:none;
 cursor:pointer
 `
+
 const Views = styled(Likes)`
 
 `
-export default function LikesViews({disabled,views,likes}){
+
+
+
+export default function LikesViews({disabled,views,likes, liked, handleLikeButtonClick}){
+    
     return (
         <InteractionsContianer>
             <Views disabled={disabled}>
                 <i className="fa-regular fa-eye"/>
                 <p>{views}</p>
             </Views>
-            <Likes  disabled={disabled}>
-                <i className="fa-solid fa-thumbs-up"/>
+            <Likes disabled={disabled} onClick={handleLikeButtonClick}>
+                {
+                    liked ? 
+                    <i className="fa-solid fa-thumbs-up"/>:
+                    <i className="fa-regular fa-thumbs-up"/>
+                }
                 <p>{likes}</p>
             </Likes>
         </InteractionsContianer>

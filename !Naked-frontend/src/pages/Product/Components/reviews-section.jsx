@@ -77,7 +77,7 @@ export default function ReviewsSection({product_id}){
     //     }
 
     //     const REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/reviews"
-    //     const LIKED_REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/user/reviews/liked"
+    //     const LIKED_REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/users/user/reviews/liked"
     
     //     let reviews = requestData(REVIEWS_URL);
     //     let likedReviews = requestData(LIKED_REVIEWS_URL,init)

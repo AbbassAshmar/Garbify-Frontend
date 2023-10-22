@@ -24,6 +24,7 @@ export default function Review(){
     useEffect(()=>{
         // checkIfReviewed(product_id);
     },[])
+    
     return (
         <Container>
             {

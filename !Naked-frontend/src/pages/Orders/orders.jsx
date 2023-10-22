@@ -9,6 +9,7 @@ import SearchSort from '../../components/SearchSort/search-sort';
 import Pagination from '../../components/Pagination/pagination';
 import { requestData } from '../OtherUsersFavorites/other-users-favorites';
 import { ORDERS } from '../../components/products-data';
+import { Header,Content } from '../../components/StyledComponents/styled-components';
 
 //max-width: 1500px;
 const Container = styled.div`
@@ -16,28 +17,7 @@ width:100%;
 // box-shadow: 1px 1px 10px rgba(189, 189, 189,1);
 `
 
-export const Content = styled.div`
-width:85%;
-max-width:1500px;
-padding:min(2rem ,5%) 0;
-margin:auto;
-display:flex;
-gap:min(7vh,40px);
-flex-direction:column;
-font-size:1.1rem;
-font-weight:400;
 
-@media screen and (max-width:800px){
-    width:100%;
-    padding:min(2rem ,5%);
-}
-`
-export const Header = styled.div`
-width:100%;
-display:flex;
-flex-direction:column;
-gap:min(7vh,40px);
-`
 export const Title = styled.div`
 font-weight:600;
 font-size:clamp(1.1rem,3vw,1.5rem);
@@ -63,6 +43,7 @@ transition:all .3s;
 &:hover{
     opacity:.6;
 }
+
 font-size:1rem;
 @media screen and (max-width:800px){
     font-size:.8rem;
@@ -76,23 +57,32 @@ gap:2rem;
 export const NoOrdersContainer = styled.div`
 display:flex;
 flex-direction:column;
-gap:min(10vh,90px);
+gap:min(7vh,40px);
+
+font-size:1rem;
 @media screen and (max-width:800px){
     font-size:1.1rem;
-    gap:min(5vh,30px);
 }
 `
 export const NoOrdersTitle =styled.p`
 font-weight:600;
-margin-top:min(7vh,60px);
-font-size:1.3rem;
 opacity:.7;
+
+font-size:1.3rem;
 @media screen and (max-width:800px){
     font-size:1.1rem;
-    margin-top:0;
 }
 `
-
+const Custom_Content = styled(Content)`
+@media screen and (max-width: 600px){
+    padding:min(2rem ,5%);
+}
+`
+const Custom_Header = styled(Header)`
+@media screen and (max-width: 600px){
+    padding:0;
+}
+`
 const OrderBytoSortBy={
     "name-ASC":"From A-Z",
     "created_at-DESC":"Newest-Oldest",
@@ -127,16 +117,16 @@ export default function Orders(){
     const [TotalPagesCount, setTotalPagesCount] = useState(40)
 
     // request data whenever searchParams change  
-    useEffect(()=>{
-        let init = {
-            headers:{
-                "Authorization":"Bearer " + token,
-            }
-        }
-        let endpoint_url = "http://127.0.0.1:8000/api/orders";
-        let url = constructUrl(endpoint_url,searchParams,page=="orders"?"":"/"+page)
-        setOrders(requestData(url,init))
-    }, [searchParams,page])
+    // useEffect(()=>{
+    //     let init = {
+    //         headers:{
+    //             "Authorization":"Bearer " + token,
+    //         }
+    //     }
+    //     let endpoint_url = "http://127.0.0.1:8000/api/orders";
+    //     let url = constructUrl(endpoint_url,searchParams,page=="orders"?"":"/"+page)
+    //     setOrders(requestData(url,init))
+    // }, [searchParams,page])
     
     function handlePageTitleClick(page){
         setPage(page);
@@ -150,8 +140,8 @@ export default function Orders(){
 
     return (
         <Container>
-            <Content>
-                <Header>
+            <Custom_Content>
+                <Custom_Header>
                     <Title>
                         My Orders
                     </Title>
@@ -164,45 +154,45 @@ export default function Orders(){
                         <PageTitle onClick={()=>handlePageTitleClick("orders")} color={page ==="orders" ?" #00C2FF":"black"}>orders</PageTitle>
                         <PageTitle onClick={()=>handlePageTitleClick("canceled")} color={page ==="canceled" ?" #00C2FF":"black"}>canceled orders</PageTitle>
                     </PagesContainer>
-                </Header>
+                </Custom_Header>
                 { 
                     orders && orders.length > 0 ?
                     <>
-                    <OrderCardsContainer>
-                        {   
-                            orders.map((order)=>{
-                                return <OrderCard key={order.id} order={order} />
-                            })
-                        }
-                    </OrderCardsContainer>
-                    <Pagination TotalPagesCount={TotalPagesCount} />
+                        <OrderCardsContainer>
+                            {   
+                                orders.map((order)=>{
+                                    return <OrderCard key={order.id} order={order} />
+                                })
+                            }
+                        </OrderCardsContainer>
+                        <Pagination TotalPagesCount={TotalPagesCount} />
                     </>
                     :
                     <>
-                    {
-                        page === "canceled" &&
+                        {
+                            page === "canceled" &&
 
-                        <NoOrdersContainer>
-                            <NoOrdersTitle>
-                                You haven't canceled any order yet !<br/>
-                                keep it clean 
-                            </NoOrdersTitle>
-                            <ProductsSlider  title={"You may like to order : "} products={PRODUCTS}/>
-                        </NoOrdersContainer> 
-                    }
-                    {
-                        page === "orders" &&
-                        <NoOrdersContainer>
-                            <NoOrdersTitle>
-                                You haven't ordered anything yet !
-                            </NoOrdersTitle>
-                            <ProductsSlider  title={"You may like to order : "} products={PRODUCTS}/>
-                        </NoOrdersContainer>
-                    
-                    }
+                            <NoOrdersContainer>
+                                <NoOrdersTitle>
+                                    You haven't canceled any order yet !<br/>
+                                    keep it clean 
+                                </NoOrdersTitle>
+                                <ProductsSlider  title={"You may like to order : "} products={PRODUCTS}/>
+                            </NoOrdersContainer> 
+                        }
+                        {
+                            page === "orders" &&
+                            <NoOrdersContainer>
+                                <NoOrdersTitle>
+                                    You haven't ordered anything yet !
+                                </NoOrdersTitle>
+                                <ProductsSlider  title={"You may like to order : "} products={PRODUCTS}/>
+                            </NoOrdersContainer>
+                        
+                        }
                     </>
                 }
-            </Content>
+            </Custom_Content>
         </Container>
     )
 }

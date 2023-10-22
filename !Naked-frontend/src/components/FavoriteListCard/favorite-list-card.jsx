@@ -22,7 +22,7 @@ height:min(20vw ,370px);
 }
 
 @media screen and (max-width:450px){
-    height:40vw;
+    height:50vw;
 }
 `
 
@@ -133,7 +133,6 @@ const LikesCount =styled.p`
 
 `
 export default function FavoriteListCard(props){
-    const [isLiked , setIsLiked ] = useState(false)
     return (
         <Container>
             <ImageContainer>
@@ -141,20 +140,20 @@ export default function FavoriteListCard(props){
             </ImageContainer>
             <Content>
                 <UserContent>
-                    <Profile src={props.user_profile_picture} />
+                    <Profile src={props.user_profile_picture}/>
                     <Username>{props.user_name}</Username>
                 </UserContent>
                 <InformationPanel>
                     <ListName>{props.list_name}</ListName>
                     <ViewsLikesContainer>
                         <Views>
-                            <ViewsIcon  className="fa-regular fa-eye" />
+                            <ViewsIcon  className="fa-regular fa-eye"/>
                             <ViewsCount>{props.views_count}</ViewsCount>
                         </Views>
                         <Likes>
                             <LikeButton>
                                 {
-                                    isLiked ? 
+                                    props.liked ? 
                                     <LikesIcon className="fa-solid fa-thumbs-up"/>:
                                     <LikesIcon className="fa-regular fa-thumbs-up"/>
                                 }

@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { userStateContext } from "../../Contexts/user-state";
 import {useSearchParams} from "react-router-dom";
-import {Header, NoOrdersContainer, NoOrdersTitle, constructUrl,Content, Title} from "../Orders/orders";
+import { NoOrdersContainer, NoOrdersTitle, constructUrl, Title} from "../Orders/orders";
 import ProductCard from "../../components/ProductCard/product-card";
 import { PRODUCTS } from "../../components/products-data";
-import { Products } from "../../components/StyledComponents/styled-components";
+import { Header,Products ,Content} from "../../components/StyledComponents/styled-components";
 import Pagination from "../../components/Pagination/pagination";
 import ProductsSlider from "../../components/ProductsSlider/products-slider";
 import SearchSort from "../../components/SearchSort/search-sort"
@@ -22,7 +22,9 @@ width:100%;
 `
 
 const NoFavoritesContainer = styled(NoOrdersContainer)`
-
+@media screen and (max-width:600px){
+    padding:min(2rem ,5%) min(2rem ,5%) 0 min(2rem ,5%);
+ }
 `
 const NoFavoritesTitls = styled(NoOrdersTitle)`
 
@@ -56,6 +58,7 @@ const OrderBytoSortBy={
 export default function Favorites(){
     const [favorites,setFavorites] = useState([]);
     const [favoritesList, setFavoritesLIst] = useState(FAV_LISTS[0])
+    const [TotalPagesCount, setTotalPagesCount] = useState(30)
 
     const [title, setTitle] = useState(false);
     const [titleText, setTitleText] = useState("Your Favorites")
@@ -211,7 +214,7 @@ export default function Favorites(){
                 {
                 favorites && favorites.length > 0 ?
                     <>
-                    <Pagination TotalPagesCount={30}/>
+                    <Pagination TotalPagesCount={TotalPagesCount}/>
                     <FavoriteProductsContainer>
                         {
                             favorites.map((favorite)=>{
@@ -231,7 +234,7 @@ export default function Favorites(){
                             })
                         }
                     </FavoriteProductsContainer>
-                    <Pagination TotalPagesCount={30}/>
+                    <Pagination TotalPagesCount={TotalPagesCount}/>
                     </>
                     :
                     <>

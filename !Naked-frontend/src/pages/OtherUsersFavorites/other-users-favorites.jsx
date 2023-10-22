@@ -1,12 +1,12 @@
 import styled from "styled-components"
-import { Content, Header, Title,constructUrl } from "../Orders/orders"
+import { Title,constructUrl } from "../Orders/orders"
 import { useState, useEffect, useRef } from "react"
 import SearchSort from "../../components/SearchSort/search-sort"
 import { useLocation, useParams, useSearchParams } from "react-router-dom"
 import ProductCard from "../../components/ProductCard/product-card"
 import Pagination from "../../components/Pagination/pagination"
-import { PRODUCTS } from "../../components/products-data"
-import { Products } from "../../components/StyledComponents/styled-components"
+import { FAV_LISTS, PRODUCTS } from "../../components/products-data"
+import { Header,Products ,Content} from "../../components/StyledComponents/styled-components"
 import LikesViews from "../../components/LikesViews/likes-views"
 const Container = styled.div`
 
@@ -108,14 +108,15 @@ export async function requestData(url,init={}){
 }
 
 export default function OtherUsersFavorites(){
-    const [favoritesList, setFavoritesList] = useState({})
+    const [favoritesList, setFavoritesList] = useState(FAV_LISTS[0])
     const [favorites, setFavorites] = useState(PRODUCTS)
 
-    const [favoritesCount , setFavoritesCount] = useState(0)
-    const [TotalPagesCount,setTotalPagesCount] = useState(0)
+    const [favoritesCount , setFavoritesCount] = useState(123)
+    const [TotalPagesCount,setTotalPagesCount] = useState(23)
 
-    const [interactions , setInteractions] = useState({views:0 , likes:0})
-    
+    const [interactions , setInteractions] = useState({views:123 , likes:232})
+    const [isLiked, setIsLiked] = useState(false);
+
     const [showActionsDropDown,setShowActionsDropDown] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams();
     const {favorites_list_id} = useParams();
@@ -145,15 +146,16 @@ export default function OtherUsersFavorites(){
 
     // // request favorites list info of other user, and view 
     // useEffect(()=>{
-    //     let url ="http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id
-    //     let data = requestData(url)
-    //     if (data) {
+    //     let favorites_list_url ="http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id
+    //     let check_if_liked_url = "http://127.0.0.1:8000/api/users/user/favorites_lists/"+favorites_list_id
+                                                        
+    //     let favorites_list = requestData(favorites_list_url)
+    //     if (favorites_list) {
     //         setFavoritesList(data['data'])
+    //         setInteractions({views:data['data']['views_count'], likes:data['data']['likes_count']})
     //     }
-    // 
     //     handleView()
     // },[])
-
 
     function handleView(){
         let view_url = "http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id+"/view"
@@ -161,14 +163,12 @@ export default function OtherUsersFavorites(){
         setInteractions({...interactions,views:views})
     }
 
-    function handleLikesButtonClick(e){
+    function handleLikeButtonClick(e){
         let like_url = "http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id+"/like"
-        let likes = requestData(like_url)['data']['likes_count']
-        setInteractions({...interactions,likes:likes})
-    }
-
-    function handleEllipsesIconClick(e){
-        setShowActionsDropDown(!showActionsDropDown)
+        let likes = requestData(like_url)
+        setInteractions({...interactions,likes:likes['data']['likes_count']})
+        let is_liked =likes['data']['action'] == "liked" ? true : false;
+        setIsLiked(is_liked)
     }
 
     function handleSearchFormSubmit(e){
@@ -177,13 +177,17 @@ export default function OtherUsersFavorites(){
         setSearchParams({'q':data.get("q")});
     }
 
+    function handleEllipsesIconClick(e){
+        setShowActionsDropDown(!showActionsDropDown)
+    }
+
     return (
         <Container>
             <Content>
                 <Header>
                     <DetailsContainer>
                         <TitleActionsContainer>                    
-                            <Title>User's Favorites List (303)</Title>
+                            <Title>{favoritesList['name']} ({favoritesCount})</Title>
                             <ActionsDropDownContainer>
                                 <i style={{cursor:"pointer"}} class="fa-solid fa-ellipsis-vertical" onClick={handleEllipsesIconClick}/> 
                                 <DropDown ref={DropDownRef} show={showActionsDropDown?"20vh":"0"}>
@@ -194,9 +198,9 @@ export default function OtherUsersFavorites(){
                             </ActionsDropDownContainer>
                         </TitleActionsContainer>
                         <UsernameDate>
-                            by Username | Modified at 22-08-2023
+                            by {favoritesList['user']['name']} | Modified at {favoritesList["updated_at"]}
                         </UsernameDate>
-                        <LikesViews views={interactions['views']} likes={interactions['likes']}/>
+                        <LikesViews handleLikeButtonClick={handleLikeButtonClick} liked={isLiked} views={interactions['views']} likes={interactions['likes']}/>
                     </DetailsContainer>
                     <SearchSort 
                         placeholder={"search your orders"} 
@@ -205,7 +209,7 @@ export default function OtherUsersFavorites(){
                     />
                 </Header>
                 <div style={{display:"flex", flexDirection:"column", gap:"min(7vh,40px)"}}>
-                    <Pagination TotalPagesCount={30}/>
+                    <Pagination TotalPagesCount={TotalPagesCount}/>
                     <FavoritesProductsContainer>
                         {
                             favorites.map((favorite)=>{
@@ -225,7 +229,7 @@ export default function OtherUsersFavorites(){
                             })
                         }
                     </FavoritesProductsContainer>
-                    <Pagination TotalPagesCount={30}/> 
+                    <Pagination TotalPagesCount={TotalPagesCount}/> 
                 </div>
             </Content>
         </Container>

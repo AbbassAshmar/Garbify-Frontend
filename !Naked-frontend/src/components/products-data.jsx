@@ -76,6 +76,7 @@ export const FAV_LISTS =[
     {
         id:3,
         name:'Joshs Favourites For this Summer',
+        updated_at:"22-09-2022",
         views_count:234,
         likes_count:390,
         thumbnail:Hoody,

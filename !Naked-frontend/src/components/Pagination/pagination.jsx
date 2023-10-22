@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import {useSearchParams} from "react-router-dom"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const Container =styled.div`
@@ -36,7 +36,14 @@ font-size:clamp(.8rem , 2.3vw ,1.1rem);
 // const CurrentPage = 30;
 export default function Pagination({TotalPagesCount}){
     const [searchParams ,setSearchParams] = useSearchParams();
-    const [CurrentPage , setCurrentPage ] =useState(searchParams.get("page")?searchParams.get("page"):1)
+    const [CurrentPage , setCurrentPage ] =useState(searchParams.get("page")?parseInt(searchParams.get("page")):1)
+
+    useEffect(()=>{
+        let page = parseInt(searchParams.get('page'))
+        if (  page && CurrentPage != page){
+            setCurrentPage(page)
+        }
+    },[searchParams])
 
     function handleLinkClick(pageNumber){
         setCurrentPage(pageNumber)
@@ -56,7 +63,7 @@ export default function Pagination({TotalPagesCount}){
                 {CurrentPage-2}
             </Page> */}
 
-            <Page  style={{display:`${CurrentPage<=1?"none":"block"}`}} onClick={()=>handleLinkClick(CurrentPage-1)}>
+            <Page  style={{display:`${CurrentPage<=1 || CurrentPage > TotalPagesCount ?"none":"block"}`}} onClick={()=>handleLinkClick(CurrentPage-1)}>
                 {CurrentPage-1}
             </Page>
 
