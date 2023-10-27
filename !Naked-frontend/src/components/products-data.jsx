@@ -174,6 +174,7 @@ export const FAV_LISTS =[
 
 export const PRODUCTS = [
     {
+        id:3,
         name:"Brooks sport shoes",
         price:150,
         colors:["white"],
@@ -186,6 +187,7 @@ export const PRODUCTS = [
         }
     },
     {
+        id:4,
         name:"Brooks sport shoes",
         price:150,
         colors:["white"],
@@ -198,6 +200,7 @@ export const PRODUCTS = [
         }
     },
     {
+        id:6,
         name:"Brooks sport shoes",
         price:150,
         colors:["white"],
@@ -210,6 +213,7 @@ export const PRODUCTS = [
         }
     },
     {
+        id:23,
         name:"Brooks sport shoes",
         price:150,
         colors:["white"],
@@ -222,6 +226,7 @@ export const PRODUCTS = [
         }
     },
     {
+        id:32,
         name:"Brooks sport shoes",
         price:150,
         colors:["white"],
@@ -233,7 +238,8 @@ export const PRODUCTS = [
             percentage:50,
         }
     },
-    {
+    {   
+        id:435,
         name:"Brooks sport shoes",
         price:150,
         colors:["white"],
@@ -243,6 +249,7 @@ export const PRODUCTS = [
         
     },
     {
+        id:43,
         name:"Brooks sport shoes",
         price:240,
         colors:["white"],

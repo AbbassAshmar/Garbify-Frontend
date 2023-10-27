@@ -220,8 +220,8 @@ export default function Favorites(){
                             favorites.map((favorite)=>{
                                 return (
                                     <ProductCard
-                                        key={favorite.pk}
-                                        pk ={favorite.pk}
+                                        key={favorite.id}
+                                        id ={favorite.id}
                                         name={favorite.name} 
                                         price={favorite.price} 
                                         quantity={favorite.quantity}

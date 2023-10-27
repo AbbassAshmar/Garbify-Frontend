@@ -21,7 +21,6 @@ height:100%;
 width:100%;
 opacity:${({opacity})=>opacity};
 transition:opacity .2s .2s;
-
 `
 
 const ListContainer = styled.div`
@@ -93,7 +92,8 @@ export const getOptionsUrl = (parents ,name)=>{
     }
     return '/products/'+parents.join("/")+"/"+name
 }
-    //converts {name,children[{name,children[...]}]} to [{name , parents[]} , {name,parents[]} ...]
+
+//converts {name,children[{name,children[...]}]} to [{name , parents[]} , {name,parents[]} ...]
 export function arrayNameParentsForm(obj, arr){
     let result = [{name:obj["name"] , parents:arr}];
     if (obj['children']) {

@@ -7,6 +7,7 @@ overflow:hidden;
 box-shadow: 1px 1px 10px rgba(189, 189, 189,1);
 height:auto;
 border-radius:6px;
+min-height:200px;
 `
 const LinkContainer = styled(Link)`
 display:flex;
@@ -35,18 +36,18 @@ padding:.5rem;
 const Name =styled.h2`
 margin:0;
 font-weight:600;
-font-size:clamp(.9rem, 2.6vw, 1.3rem);
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 const Category = styled.p`
 margin:0;
 color: grey;
 font-weight:600;
-font-size:clamp(.8rem , 2.3vw ,1.1rem);
+font-size:clamp(.6rem,2vw,.9rem);
 `
 const ColorCount = styled.div`
 color:grey;
 font-weight:600;
-font-size:clamp(.8rem , 2.3vw ,1.1rem);
+font-size:clamp(.6rem,2vw,.9rem);
 `
 const Price = styled.p`
 margin:0;
@@ -62,7 +63,7 @@ width:100%;
 const NewPrice =styled.p`
 margin:0;
 font-weight:600;
-font-size:clamp(.8rem , 2.3vw ,1.1rem);
+font-size:clamp(.6rem,2vw,.9rem);
 `
 const OldPrice =styled.p`
 margin:0;
@@ -70,13 +71,13 @@ color:grey;
 opacity:.6;
 font-weight:600;
 text-decoration:line-through;
-font-size:clamp(.8rem , 2.3vw ,1.1rem);
+font-size:clamp(.6rem,2vw,.9rem);
 `
 const SalePercentage =styled.p`
 margin:0;
 color:green;
 font-size:1rem;
-font-size:clamp(.8rem , 2.3vw ,1.1rem);
+font-size:clamp(.6rem,2vw,.9rem);
 `
 
 export default function ProductCard({thumbnail, price, name,quantity,type,sale,colors,pk,min_width}){
@@ -103,15 +104,14 @@ export default function ProductCard({thumbnail, price, name,quantity,type,sale,c
                 <Image src={thumbnail}/>
             </ImageContainer>
             <Details>
-                <Name>
-                    {name}
-                </Name>
-                <Category>
-                    {type}
-                </Category>
-                <ColorCount>
+                <Name>{name}</Name>
+                <Category>{type}</Category>
+                {
+                    colors && 
+                    <ColorCount>
                     {colors.length} {colors.length==1 ? "Color" : "Colors"}
-                </ColorCount>
+                    </ColorCount>
+                }   
                 <Price>
                     {getPrice()}
                 </Price>

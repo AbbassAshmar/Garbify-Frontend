@@ -2,21 +2,32 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../../components/Navbar/navbar";
 import Footer from "../../components/Footer/footer";
 import styled from "styled-components"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const Container = styled.div`
-height:${({fix})=>fix?"100vh":"auto"};
-overflow:${({fix})=>fix?"hidden":null};
+height:${({lock})=>lock.side_nav?"100vh":"auto"};
+overflow:${({lock})=>lock.side_nav?"hidden":null};
+
+@media screen and (max-width:800px){
+    height:${({lock})=>lock.nav_search||lock.side_nav?"100vh":"auto"};
+    overflow:${({lock})=>lock.nav_search||lock.side_nav?"hidden":null};
+}
 `
 export default function Default(){
-    const [sideNavbarOpened, setSideNavbarOpened] = useState(false)
+    const [lockContainerScroll, setLockContainerScroll] = useState({side_nav:false, nav_search:false})
+
+    useEffect(()=>{
+        console.log(lockContainerScroll)
+    },[lockContainerScroll])
     return (
         <>
-        <Container fix={sideNavbarOpened}>
-
-            <Navbar setSideNavbarOpened={setSideNavbarOpened}/>
+        <Container 
+            lock = {lockContainerScroll}
+        >
+            <Navbar 
+                lockContainerScroll={setLockContainerScroll}
+            />
                 <Outlet />
             <Footer />
-
         </Container>
 
         </>

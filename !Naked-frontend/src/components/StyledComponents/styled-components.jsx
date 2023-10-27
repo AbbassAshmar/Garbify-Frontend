@@ -5,9 +5,11 @@ display:grid;
 grid-template-columns:repeat(3,1fr);
 justify-content:space-between;
 grid-gap:20px;
+
 @media screen and (max-width:1000px){
     grid-template-columns:repeat(2,1fr);
 }
+
 @media screen and (max-width:800px){
     grid-gap: 10px
 }

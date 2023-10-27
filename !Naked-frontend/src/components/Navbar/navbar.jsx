@@ -120,7 +120,7 @@ font-size:1rem;
 `
 
 
-export default function Navbar({setSideNavbarOpened}){
+export default function Navbar({lockContainerScroll}){
     const [y,setY] = useState(0)
     const {scrollY} = useScroll()
     const [position , setPosition] = useState("static")
@@ -130,8 +130,12 @@ export default function Navbar({setSideNavbarOpened}){
 
     // limit the height of the container in Default component according to side navbar 
     useEffect(()=>{
-        setSideNavbarOpened(showSideNavbar)
+        lockContainerScroll((prev_state)=>({...prev_state, side_nav:showSideNavbar}) )
     },[showSideNavbar])
+
+    useEffect(()=>{
+        lockContainerScroll((prev_state)=>({...prev_state, nav_search:showNavbarSearch}) )
+    },[showNavbarSearch])
 
     function handleSearchIconClick(){
         setShowNavbarSearch(true)
@@ -140,7 +144,6 @@ export default function Navbar({setSideNavbarOpened}){
     function handleBarsIconClick(){
         setShowSideNavbar(!showSideNavbar)
     }
-
 
     // make the navbar fixed when scrolling below 25px 
     // EventListener for motion values

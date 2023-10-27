@@ -10,6 +10,7 @@ export default function Review(){
     const {product_id} = useParams();
     const [isReviewed ,setIsReviewed] = useState(false);
     
+    
     async function checkIfReviewed(product_id){
         const request = await fetch("http://127.0.0.1:8000/api/products/"+product_id+"/users/user/reviews");
         const response = await request.json(); 
