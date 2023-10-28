@@ -1,6 +1,6 @@
 import { useParams, useSearchParams } from "react-router-dom"
 import styled from "styled-components"
-import FilterContainer from "./Components/filter-container"
+import FilterContainer from "./Components/FilterComponent/filter"
 import ProductsContainer from "./Components/products-container"
 import PathTitle from "./Components/path-title"
 import SortByButton from "../../components/SortByButton/sort-by-button"
@@ -12,15 +12,6 @@ const Container = styled.div`
 max-width:1500px;
 margin:auto;
 `
-
-
-// const Content = styled.div`
-// padding: min(2rem ,5%);
-
-// display:flex;
-// flex-direction:column;
-// gap:min(5vh ,1.5rem);
-// `
 const Head = styled.div`
 display:flex;
 width:100%;
@@ -39,6 +30,7 @@ display:flex;
 gap:2rem;
 align-items:flex-end;
 `
+
 export default function Products(){
     const [showFilter, setShowFilter] = useState(false)
 

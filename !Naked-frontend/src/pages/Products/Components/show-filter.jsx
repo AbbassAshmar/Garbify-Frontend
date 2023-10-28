@@ -2,15 +2,17 @@ import { useState } from "react"
 import styled from "styled-components"
 
 const Button = styled.button`
-font-weight:600;
 background:none;
 border:none;
 cursor:pointer;
 &:hover{
     opacity:.7;
 }
+
+font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
+
 const Icon = styled.i`
 margin-left:.7rem;
 font-size:clamp(.6rem,2vw,.9rem);
