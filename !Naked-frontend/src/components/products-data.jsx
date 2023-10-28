@@ -173,32 +173,32 @@ export const FAV_LISTS =[
 ]
 
 export const PRODUCTS = [
-    {
-        id:3,
-        name:"Brooks sport shoes",
-        price:150,
-        colors:["white"],
-        thumbnail:Hoody,
-        quantity:400,
-        type:"men shoes",
-        sale:{
-            price_after_sale:100,
-            percentage:50,
-        }
-    },
-    {
-        id:4,
-        name:"Brooks sport shoes",
-        price:150,
-        colors:["white"],
-        thumbnail:Hoody2,
-        quantity:400,
-        type:"men shoes",
-        sale:{
-            price_after_sale:100,
-            percentage:50,
-        }
-    },
+    // {
+    //     id:3,
+    //     name:"Brooks sport shoes",
+    //     price:150,
+    //     colors:["white"],
+    //     thumbnail:Hoody,
+    //     quantity:400,
+    //     type:"men shoes",
+    //     sale:{
+    //         price_after_sale:100,
+    //         percentage:50,
+    //     }
+    // },
+    // {
+    //     id:4,
+    //     name:"Brooks sport shoes",
+    //     price:150,
+    //     colors:["white"],
+    //     thumbnail:Hoody2,
+    //     quantity:400,
+    //     type:"men shoes",
+    //     sale:{
+    //         price_after_sale:100,
+    //         percentage:50,
+    //     }
+    // },
     {
         id:6,
         name:"Brooks sport shoes",

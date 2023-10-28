@@ -21,8 +21,6 @@ transition:height .3s;
 `
 const ContentContainer = styled.div`
 width:100%;
-// min-height:60vh;
-
 background:white;
 display:flex;
 justify-content:center;
@@ -39,6 +37,12 @@ padding: 0 min(2rem ,5%);
 display:flex;
 flex-direction:column;
 gap: min(2rem,3.5vh) ;
+@media screen and (max-width:800px){
+    margin: min(2rem,3.5vh) 0 0 0 ;
+}
+@media screen and (max-width:600px){
+   padding:10px;
+}
 `
 const SearchSection = styled.div`
 display:flex;
@@ -57,6 +61,10 @@ const SuggestionsContainer = styled.div`
 max-height:70vh;
 overflow:auto;
 overflow-x: hidden;
+@media screen and (max-width:800px){
+    height:100vh;
+    max-height:none;
+}
 `
 const Suggestions = styled.div`
 width:100%;
@@ -65,6 +73,11 @@ grid-gap:30px;
 padding:10px;
 grid-template-columns:repeat(auto-fill, minmax(190px, 1fr) );
 overflow-x: hidden;
+@media screen and (max-width:600px){
+    grid-template-columns:repeat(2, 1fr);
+    grid-gap:5px;
+    padding:0;
+}
 `
 
 const SearchInputContainer = styled.div`
@@ -93,7 +106,7 @@ font-size:clamp(.6rem,2vw,.9rem);
 `
 const SearchInput = styled.input`
 width:100%;
-// height:min(6vh,40px);
+
 height:100%;
 border-radius:30px;
 position:absolute;
@@ -128,8 +141,8 @@ export default function NavbarSearch({show,setShow}){
     },[])
 
     function getPopularProducts(){
-        let endpoint_url = "http://127.0.0.1:8000/api/products";
-        let url = endpoint_url + "?limit=5&sort_by=price-DESC"
+        let endpoint_url = "http://127.0.0.1:8000/api/products/popular";
+        let url = endpoint_url + "?limit=5"
         let products = requestData(url);
         setPopularSuggestions(products['data']);
     }
@@ -180,6 +193,7 @@ export default function NavbarSearch({show,setShow}){
                                 suggestions.map((product)=>{
                                     return (
                                         <ProductCard
+                                            // min_width={"max(220px ,32%)"}
                                             key={product.id}
                                             id ={product.id}
                                             name={product.name} 

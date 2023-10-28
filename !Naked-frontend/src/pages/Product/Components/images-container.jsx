@@ -28,11 +28,12 @@ width:100%;
 `
 const Image= styled.img`
 width:100%;
-// aspect-ratio:1/1.27;
+object-fit:cover;
+height:100%;
 @media screen and (max-width:600px){
-    height:100%;
-    width:100%;
+    height:90vh;
 }
+
 
 `
 const SlideButtonCustom = styled(SlideButton)`

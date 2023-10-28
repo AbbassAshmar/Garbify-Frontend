@@ -18,6 +18,7 @@ height:100%;
 `
 const ImageContainer = styled.div`
 flex:4;
+aspect-ratio:1/1.04
 `
 const Image  = styled.img`
 object-fit: cover; 

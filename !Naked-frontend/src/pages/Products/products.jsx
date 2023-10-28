@@ -10,6 +10,7 @@ import { constructUrl } from "../Orders/orders"
 import { Content } from "../../components/StyledComponents/styled-components"
 const Container = styled.div`
 max-width:1500px;
+margin:auto;
 `
 
 
@@ -46,7 +47,6 @@ export default function Products(){
 
     // products/?q=abc&g=def
     const [searchParams,setSearchParams] = useSearchParams()
-    
     
     
     
