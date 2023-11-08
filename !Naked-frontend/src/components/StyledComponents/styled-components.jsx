@@ -16,9 +16,9 @@ grid-gap:20px;
 `
 
 export const Content = styled.div`
-width:85%;
+width:100%;
 max-width:1500px;
-padding:min(2rem ,5%) 0;
+padding:min(2rem ,5%);
 margin:auto;
 display:flex;
 gap:min(7vh,40px);

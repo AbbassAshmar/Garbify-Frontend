@@ -181,6 +181,26 @@ export default function Review(props){
             setIsLiked(response.data.liked)
         }
     }
+
+    function requestDelete(){
+        const init = {
+            method:"DELETE",
+            headers:{
+                "Authorization" :"Bearer " + token
+            }
+        }
+        const request = fetch("http://127.0.0.1:8000/api/reviews/"+props.id,init)
+        return request
+    }
+    
+    function handleDeleteButtonClick(e){
+        e.preventDefault();
+        const request = requestDelete();
+        if (requestDelete.status == 200){
+            // remove the review from the state
+            props.setReviews(reviews=>reviews.filter((review) => review.id != props.id))
+        }
+    }
     
     return (
         <Container>

@@ -1,17 +1,11 @@
 import { useLocation,Link } from "react-router-dom";
 import styled from "styled-components";
+import { Option } from "./price-filter";
 
 const CategoryLink = styled(Link)`
 color:black;
 text-decoration:none;
 width:fit-content;
-opacity:.7;
-&:hover{
-    opacity:1;
-}
-
-font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
 `
 
 export default function CategoryFilter({filter}){
@@ -26,7 +20,9 @@ export default function CategoryFilter({filter}){
                         key={option} 
                         to={`${location.pathname}/${option.replace(" ",'-')}`}
                     >
-                        {option}
+                        <Option>
+                            {option}
+                        </Option>
                     </CategoryLink>
                 )
             })

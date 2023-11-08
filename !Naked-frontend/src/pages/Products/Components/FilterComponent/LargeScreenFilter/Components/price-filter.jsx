@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Input,Label,Submit } from "../../../../Registration/registration";
+import { Input,Label,Submit } from "../../../../../Registration/registration";
 
 const Form = styled.form`
 display:flex;
@@ -38,7 +38,17 @@ border-radius:2px;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
-
+export const Option =styled.div`
+font-size:clamp(.6rem,2vw,.9rem);
+font-weight:600;
+opacity:.7;
+&:hover{
+    opacity:1;
+}
+@media screen and (max-width:800px){
+    font-size:clamp(.8rem , 2.3vw ,1.1rem);
+}
+`
 export default function PriceFilter({filter,handleOptionClick}){
     const [priceForm, setPriceForm] =useState({})
 
@@ -74,8 +84,9 @@ export default function PriceFilter({filter,handleOptionClick}){
     }
 
     function handleInputChange(e,option){
+        console.log(e)
         let obj ={...priceForm};
-        obj[option] = parseInt(e.currentTarget.value);
+        obj[option] = parseInt(e.target.value);
         setPriceForm(obj);
     }
     return (
@@ -96,7 +107,7 @@ export default function PriceFilter({filter,handleOptionClick}){
                 <InputContainer>
                     <EditedInput 
                         style={{border:`${priceForm['error']?'1px solid red':"none"}`}} 
-                        onChange={handleInputChange(e,"max")} 
+                        onChange={(e)=>handleInputChange(e,"max")} 
                         type="number"/>
                     <EditedLabel 
                         style={{color:`${priceForm['error']?'red':'black'}`}} 
@@ -105,7 +116,7 @@ export default function PriceFilter({filter,handleOptionClick}){
                 <InputContainer>
                     <EditedInput 
                         style={{border:`${priceForm['error']?'1px solid red':'none'}`}} 
-                        onChange={handleInputChange(e,"max")} 
+                        onChange={(e)=>handleInputChange(e,"max")} 
                         type="number"/>
                     <EditedLabel 
                         style={{color:`${priceForm['error']?'red':'black'}`}} 
@@ -113,7 +124,7 @@ export default function PriceFilter({filter,handleOptionClick}){
                 </InputContainer>
                 <SubmitButton>Go</SubmitButton>
             </Form>
-            <div style={{color:'red',fontWeight:"600",fontSize:".8em"}}>{priceForm['error']}</div>
+            <div style={{fontSize:'clamp(.8rem , 2.3vw ,1.1rem)',color:"red",fontWeight:"600"}}>{priceForm['error']}</div>
         </>
     )
 }

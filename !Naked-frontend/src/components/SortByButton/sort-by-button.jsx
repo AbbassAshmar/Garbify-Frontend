@@ -4,10 +4,13 @@ import styled from "styled-components"
 
 const Container = styled.div`
 position:relative;
-font-size:1rem;
+font-weight:600;
+font-size:clamp(.6rem,2vw,.9rem);
 @media screen and (max-width:800px){
     font-size:.8rem;
+    display:${({removeUnder800px})=> removeUnder800px?'none':'block'};
 }
+
 `
 const Button = styled.button`   
 background:none;
@@ -16,8 +19,8 @@ border:none;
 cursor:pointer;
 display:flex;
 align-items:flex-end;
-font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
+font-weight:inherit;
+font-size:inherit;
 
 &:hover{
     opacity:.7;
@@ -27,6 +30,8 @@ const Icon =styled.i`
 transform:rotateX(${({rotate})=>rotate});
 margin-left:.4rem;
 transition:transform .3s;
+font-weight:inherit;
+font-size:inherit;
 `
 const SortList =styled.div`
 position:absolute;
@@ -85,7 +90,7 @@ export default function SortByButton(props){
     }
     
     return (
-        <Container style={props.style}>
+        <Container style={props.style} removeUnder800px={props.removeUnder800px}>
             <Button ref={button} onClick={handleSortButtonClick}>
                 {
                     // update button text if an options is clicked to " sort by : options clicked "

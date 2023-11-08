@@ -22,7 +22,6 @@ width:300px;
 @media screen and (max-width:365px){
     width:90%;
 }
-
 `
 
 const Background =styled.div`

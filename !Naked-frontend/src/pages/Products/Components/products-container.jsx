@@ -42,8 +42,6 @@ color:black;
 `
 
 
-
-
 // api/products 
 // all products 
 

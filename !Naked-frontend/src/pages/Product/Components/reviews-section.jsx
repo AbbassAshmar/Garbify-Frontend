@@ -67,7 +67,6 @@ export default function ReviewsSection({product_id}){
     const userState = useContext(userStateContext)
     const [reviews, setReviews] = useState(REVIEWS);
     const [reviewsDetails, setReviewsDetails] = useState({average_ratings:5 , reviews_count:0});
-    const [likedReviews, setLikedReviews] = useState([4,5]);
 
     // useEffect(()=>{
     //     let init = {
@@ -90,23 +89,6 @@ export default function ReviewsSection({product_id}){
     //         setLikedReviews(likedReviews['liked_reviews'])
     //     }
     // },[])
-
-    function checkIfLiked(review_id,likedReviews){
-        function searchForId(s,e){
-            let middle = (s+e)/ 2
-            if (s>e){
-                return false;
-            }
-            if (likedReviews[middle] === review_id){
-                return true;
-            }
-            if (likedReviews[middle] > review_id){
-                return searchForId(s, middle-1);
-            }
-            return searchForId(middle +1 , e);
-        }
-        return searchForId(0, likedReviews.length)
-    }
     
     return (
         <Container>
@@ -127,7 +109,8 @@ export default function ReviewsSection({product_id}){
                 {reviews && reviews.map((review)=>{
                     return(
                         <Review 
-                            liked={checkIfLiked(review.id,likedReviews)}
+                            setReviews ={setReviews}
+                            liked={review.is_liked_by_current_user}
                             id = {review.id}
                             username={review.username}
                             height={review.user_height}
@@ -142,8 +125,7 @@ export default function ReviewsSection({product_id}){
                             helpful_count={review.helpful_count}
                         />
                     )
-                })}
-                
+                })}  
             </Reviews>
             <Pagination TotalPagesCount={30}/>
         </Container>

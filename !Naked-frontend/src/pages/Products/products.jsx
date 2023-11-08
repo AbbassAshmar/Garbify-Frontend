@@ -8,6 +8,7 @@ import ShowFilter from "./Components/show-filter"
 import { useEffect, useState } from "react"
 import { constructUrl } from "../Orders/orders"
 import { Content } from "../../components/StyledComponents/styled-components"
+
 const Container = styled.div`
 max-width:1500px;
 margin:auto;
@@ -24,6 +25,9 @@ align-items:center;
 `
 const Main = styled.div`
 display:flex;
+@media screen and (max-width:800px){
+    flex-direction:column;
+}
 `
 const Options = styled.div`
 display:flex;
@@ -39,8 +43,6 @@ export default function Products(){
 
     // products/?q=abc&g=def
     const [searchParams,setSearchParams] = useSearchParams()
-    
-    
     
 
     // sql orderBy translated to be readable
@@ -58,12 +60,12 @@ export default function Products(){
                 <Head>
                     <PathTitle title={urlParametersList.join(" ")} number={4345} />
                     <Options>
-                        <SortByButton sortOptions={OrderBytoSortBy}/>
+                        <SortByButton sortOptions={OrderBytoSortBy} removeUnder800px={true}/>
                         <ShowFilter show={showFilter} setShow={setShowFilter}/>
                     </Options>
                 </Head>
                 <Main>
-                    <FilterContainer show={showFilter}/>
+                    <FilterContainer setShow={setShowFilter} show={showFilter}/>
                     <ProductsContainer/>
                 </Main>
             </Content>
