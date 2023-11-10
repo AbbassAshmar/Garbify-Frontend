@@ -39,17 +39,16 @@ font-weight:600;
 padding:.3rem;
 padding-left: min(2.3rem,11%);
 border-radius:2px;
+font-size:clamp(.6rem,2vw,.9rem);
+
 &:focus{
     outline:1px solid #00C2FF;
 }
-
-font-size:clamp(.6rem , 2vw ,.9rem);
 `
 const SORT_BUTTON_STYLE = {
     background:'white',
     height:'100%',
     display:'flex',
-    fontSize:'16px',
     padding:'.3rem 1.7rem',
     borderRadius:'2px',
     boxShadow:'1px 1px 10px rgba(189, 189, 189,1)',

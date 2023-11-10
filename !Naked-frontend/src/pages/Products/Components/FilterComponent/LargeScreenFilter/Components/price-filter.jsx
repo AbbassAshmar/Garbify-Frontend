@@ -1,6 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Input,Label,Submit } from "../../../../../Registration/registration";
+import { useSearchParams } from "react-router-dom";
+import { checkSelectedOption } from "./list-filter";
 
 const Form = styled.form`
 display:flex;
@@ -39,19 +41,23 @@ font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 export const Option =styled.div`
-font-size:clamp(.6rem,2vw,.9rem);
+cursor:pointer;
+opacity:${({selected})=>selected?"1":'.7'};
 font-weight:600;
-opacity:.7;
-&:hover{
-    opacity:1;
-}
+font-size:clamp(.6rem,2vw,.9rem);
+
 @media screen and (max-width:800px){
     font-size:clamp(.8rem , 2.3vw ,1.1rem);
+}
+@media screen and (min-width:800px){
+    &:hover{
+        opacity:1;
+    }
 }
 `
 export default function PriceFilter({filter,handleOptionClick}){
     const [priceForm, setPriceForm] =useState({})
-
+    const [searchParams,setSearchParams] = useSearchParams();
     function handleFormSubmit(e){
         e.preventDefault();
         if (!priceForm['min'] || !priceForm['max']){
@@ -80,21 +86,22 @@ export default function PriceFilter({filter,handleOptionClick}){
             param.set('price' , priceForm['min'] + "-" + priceForm['max'])
             setParam(param)
         }
-        
     }
 
     function handleInputChange(e,option){
-        console.log(e)
         let obj ={...priceForm};
         obj[option] = parseInt(e.target.value);
         setPriceForm(obj);
     }
+
+
     return (
         <>
             {
                 Object.keys(filter.options).map((option)=>{
                     return(
                         <Option 
+                            selected={checkSelectedOption(filter,option,searchParams)}
                             key={option}
                             onClick={(e)=>{handleOptionClick(filter,option)}}
                         >

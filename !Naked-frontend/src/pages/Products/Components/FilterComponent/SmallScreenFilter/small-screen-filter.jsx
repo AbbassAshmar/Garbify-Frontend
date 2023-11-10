@@ -8,6 +8,7 @@ import PriceFilter from "../LargeScreenFilter/Components/price-filter"
 import ColorFilter from "../LargeScreenFilter/Components/color-filter"
 import CategoryFilter from "../LargeScreenFilter/Components/category-filter"
 import ListFilter from "../LargeScreenFilter/Components/list-filter"
+import { handleTagRemove } from "../../products-container"
 
 const Container = styled.div`
 display:none;
@@ -29,7 +30,7 @@ width:60%;
 padding:1rem;
 display:flex;
 flex-direction:column;
-gap:2rem;
+gap:3rem;
 @media screen and (max-width:500px){
     width:100%;
 }
@@ -72,7 +73,7 @@ const Content = styled.div`
 width:100%;
 display:flex;
 flex-direction:column;
-gap:2rem;
+gap:3rem;
 overflow-y:auto;
 `
 const Filters = styled.div`
@@ -113,6 +114,17 @@ transition:max-height .3s;
 gap:.9rem;
 `
 
+const ClearAllButton = styled.button`
+width:100%;
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
+background:white;
+padding:.5rem;
+border-radius:2px;
+outline:none;
+border:1px solid black;
+font-weight:600;
+`
+
 const OrderBytoSortBy={
     "name-ASC":"From A-Z",
     "created_at-DESC":"Newest-Oldest",
@@ -124,32 +136,54 @@ const OrderBytoSortBy={
 
 const SORT_BUTTON_STYLE = {
     background:'white',
-    display:'flex',
-    fontSize:"clamp(.9rem, 2.6vw, 1.3rem)",
-    padding:'.3rem 1.7rem .3rem .3rem',
+    fontSize:"clamp(.8rem , 2.3vw ,1.1rem)",
+    padding:'.4rem 1.7rem .4rem .3rem',
     borderRadius:'2px',
-    // border:"2px solid black"
-    boxShadow:'inset 0px 0px 1px 1px   rgba(189, 189, 189,1)',
+    border:"1px solid black",
+    // boxShadow:'inset 0px 0px 1px 1px   rgba(189, 189, 189,1)',
 }
 
 export default function SmallScreenFitler({show,setShow}){
     const [filters,setFilters] = useState(FILTERS)
     const [categories, setCategories] = useState([])
     const [showOptions, setShowOptions] = useState([])
-    const [param,setParam]= useSearchParams()
+    const [searchParams,setSearchParams]= useSearchParams()
 
     function handleSideFilterClose(){
         setShow(!show)
     }
 
-    function handleOptionClick(filter,option){
-        param.set('page',1)
-        if(filter.name == "price") {
-            param.set(filter.name.toLowerCase(),filter.options[option])
-        }else{
-            param.set(filter.name.toLowerCase(),option)
+    function removeAllFilters(searchParams){
+        if (!(searchParams.size == 1 && searchParams.get("page"))){
+            setSearchParams({});
         }
-        setParam(param)
+    }
+
+    function getFiltersCount(searchParams,filters){
+        let total_count = 0;
+        filters.forEach(filter => {
+            if (searchParams.get(filter.name)){
+                total_count+=1
+            }
+        });
+        return total_count;
+    }
+
+    function handleOptionClick(filter,option){
+        searchParams.set('page',1)
+        let filterName = filter.name.toLowerCase()
+
+        if (filterName == "price"){
+            option = filter.options[option]
+        }
+     
+        if (searchParams.get(filterName) && searchParams.get(filterName) == option){
+            handleTagRemove(searchParams,setSearchParams,filterName)
+            return null;
+        }
+       
+        searchParams.set(filterName,option)
+        setSearchParams(searchParams)
     }
     
     function SwitchFunction(filter){
@@ -204,6 +238,9 @@ export default function SmallScreenFitler({show,setShow}){
                         }
                     </Filters>
                 </Content>
+                <ClearAllButton disabled={getFiltersCount(searchParams,filters)?false:true} onClick={(e)=>removeAllFilters(searchParams)}>
+                    Clear all ({getFiltersCount(searchParams,filters)})
+                </ClearAllButton>
             </SideFilter>
             <Background onClick={handleSideFilterClose}/>
        </Container>

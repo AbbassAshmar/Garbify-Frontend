@@ -60,6 +60,13 @@ color:black;
 // products model , category model , shoes model, shirts model , suits model ,
 
 
+//remove a tag from filter tags
+export function handleTagRemove(searchParams,setSearchParams,key){
+    console.log(searchParams.get("color"));
+    searchParams.delete(key)
+    setSearchParams(searchParams)
+}
+
 export default function ProductsContainer(props){
     const [TotalPagesCount,setTotalPagesCount] = useState(40)
     const [products , setProducts ] = useState(PRODUCTS);
@@ -79,11 +86,7 @@ export default function ProductsContainer(props){
     //     }
     // },[])
 
-    //remove a tag from filter tags
-    function handleTagRemove(key){
-        searchParams.delete(key)
-        setSearchParams(searchParams)
-    }
+    
     
     // create an object of query strings 
     const searchParamsObj = ()=>{
@@ -102,19 +105,20 @@ export default function ProductsContainer(props){
                         if (tag=="price"){
                             let prices = searchParamsObj()[tag].split('-');
                             return (
-                                <Tag onClick={()=>{handleTagRemove(tag)}}>
+                                <Tag onClick={()=>{handleTagRemove(searchParams,setSearchParams,tag)}}>
                                     <TagText>
                                         {prices[0]}$  -  {prices[1]}$ x
                                     </TagText>
                                 </Tag>
                             )
                         }
-                        if (tag=="color" || tag=="size")
+                        if (tag=="color" || tag=="size"){
                             return (
-                                <Tag onClick={()=>{handleTagRemove(tag)}}>
+                                <Tag onClick={()=>{handleTagRemove(searchParams,setSearchParams,tag)}}>
                                     <TagText>{searchParamsObj()[tag]} x</TagText>
                                 </Tag>
                             )
+                        }
                     })
                 }
             </TagsContainer>

@@ -6,9 +6,9 @@ const Container = styled.div`
 position:relative;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
+justify-content:center;
 @media screen and (max-width:800px){
-    font-size:.8rem;
-    display:${({removeUnder800px})=> removeUnder800px?'none':'block'};
+    display:${({removeUnder800px})=> removeUnder800px?'none':'flex'};
 }
 
 `
@@ -21,7 +21,7 @@ display:flex;
 align-items:flex-end;
 font-weight:inherit;
 font-size:inherit;
-
+// font-size:.4rem;
 &:hover{
     opacity:.7;
 }
