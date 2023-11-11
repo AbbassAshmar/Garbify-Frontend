@@ -103,7 +103,7 @@ export default function PriceFilter({filter,handleOptionClick}){
                         <Option 
                             selected={checkSelectedOption(filter,option,searchParams)}
                             key={option}
-                            onClick={(e)=>{handleOptionClick(filter,option)}}
+                            onClick={(e)=>{handleOptionClick(filter,option,searchParams,setSearchParams)}}
                         >
                             {option}
                         </Option>

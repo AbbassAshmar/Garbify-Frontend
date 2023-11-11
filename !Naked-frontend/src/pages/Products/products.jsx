@@ -5,8 +5,7 @@ import ProductsContainer from "./Components/products-container"
 import PathTitle from "./Components/path-title"
 import SortByButton from "../../components/SortByButton/sort-by-button"
 import ShowFilter from "./Components/show-filter"
-import { useEffect, useState } from "react"
-import { constructUrl } from "../Orders/orders"
+import {useState } from "react"
 import { Content } from "../../components/StyledComponents/styled-components"
 
 const Container = styled.div`

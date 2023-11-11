@@ -85,9 +85,7 @@ export default function ProductsContainer(props){
     //         setTotalPagesCount();
     //     }
     // },[])
-
-    
-    
+ 
     // create an object of query strings 
     const searchParamsObj = ()=>{
         const tempObj= {};

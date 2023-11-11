@@ -34,7 +34,7 @@ export default function ColorFilter({filter ,handleOptionClick}){
 
     function handleColorOptionClick(e, filter, option){
         e.preventDefault(); 
-        return handleOptionClick(filter,option);
+        return handleOptionClick(filter,option,searchParams,setSearchParams);
     }
 
     return (

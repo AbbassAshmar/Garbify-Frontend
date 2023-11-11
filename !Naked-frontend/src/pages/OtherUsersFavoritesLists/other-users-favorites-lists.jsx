@@ -9,6 +9,7 @@ import { useSearchParams } from "react-router-dom";
 import ProductsSlider from "../../components/ProductsSlider/products-slider";
 import { requestData } from "../OtherUsersFavorites/other-users-favorites";
 import { Content , Products ,Header} from "../../components/StyledComponents/styled-components";
+import { useFetchData } from "../../hooks/use-fetch-data";
 const Container = styled.div`
 
 `
@@ -38,44 +39,39 @@ const OrderBytoSortBy={
 
 
 export default function OtherUsersFavoritesLists(){
-    const [sliderProducts, setSliderProducts] = useState(PRODUCTS)
-    const [favoritesLists, setFavoritesLists]  = useState(FAV_LISTS)
-    const [favoritesListsCount, setFavoritesListsCount] = useState(210)
-    const [TotalPagesCount,setTotalPagesCount] = useState(40)
     const [searchParams , setSearchParams ] = useSearchParams();
 
-    // // request favorites lists of other users
-    // useEffect(()=>{
-    //     // request data whenever search params change 
-    //     let favorites_lists_url = constructUrl("http://127.0.0.1:8000/api/favorites_lists",searchParams)
+    // request favorites lists of other users
+    let favorites_lists_url = constructUrl("http://127.0.0.1:8000/api/favorites_lists",searchParams)
+    let {
+        data:favoritesListsData,
+        error:errorFavoritesLists,
+        loading:loadingFavoritesLists 
+    } = useFetchData(favorites_lists_url,{},[searchParams]);
 
-    //     let favorites_lists = requestData(favorites_lists_url);
+    let [favoritesListsCount, TotalPagesCount,favoritesLists] = [0 , 0 , null];
 
-    //     if (favorites_lists){
-    //         setFavoritesLists(data['data']);
-    //         setFavoritesListsCount(data['metadata']['total_count']);
-    //     }
+    if (favoritesListsData){
+        favoritesListsCount = favoritesListsData['metadata']['total_count'];
+        TotalPagesCount = favoritesListsData['metadata']['pages_count']
+        favoritesLists = favoritesListsData['data'];
+    }
 
+    //default for dev
+    favoritesLists = FAV_LISTS;
+    TotalPagesCount = 9;
+    favoritesListsCount=23;
     
-    // },[searchParams])
+    // request slider products of other users
+    let favorites_url = "http://127.0.0.1:8000/api/favorites?limit=10";
+    let {data:favorites,error:errorFavorites,loading:loadingFavorites} = useFetchData(favorites_url);
+    let sliderProducts = null ;
+    if (favorites){
+        sliderProducts = favorites['data']
+    }
 
-    // // request products for slider 
-    // useEffect(()=>{
-    //     let favorites_url = "http://127.0.0.1:8000/api/favorites?limit=10";
-    //     let liked_favorites_lists_url = "http://127.0.0.1:8000/api/users/user/favorites_lists/liked";
-
-    //     let liked_favorites_lists = requestData(liked_favorites_lists_url)
-    //     let favorites = requestData(favorites_url);
-
-    //     if (favorites){
-    //         setSliderProducts(data['data'])
-    //     }
-
-    //     if (liked_favorites_lists){
-    //          setLikedFavoritesLists(liked_favorites_lists)
-    //     }
-    // },[])
-
+    //default for dev
+    sliderProducts = PRODUCTS;
 
     function handleSearchFormSubmit(e){
         e.preventDefault();

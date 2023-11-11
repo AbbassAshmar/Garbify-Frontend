@@ -9,6 +9,7 @@ import ColorFilter from "../LargeScreenFilter/Components/color-filter"
 import CategoryFilter from "../LargeScreenFilter/Components/category-filter"
 import ListFilter from "../LargeScreenFilter/Components/list-filter"
 import { handleTagRemove } from "../../products-container"
+import { handleOptionClick, handleTitleClick, switchFunction } from "../filter"
 
 const Container = styled.div`
 display:none;
@@ -143,7 +144,7 @@ const SORT_BUTTON_STYLE = {
     // boxShadow:'inset 0px 0px 1px 1px   rgba(189, 189, 189,1)',
 }
 
-export default function SmallScreenFitler({show,setShow}){
+export default function SmallScreenFitler({show,setShow,filtersData}){
     const [filters,setFilters] = useState(FILTERS)
     const [categories, setCategories] = useState([])
     const [showOptions, setShowOptions] = useState([])
@@ -168,47 +169,7 @@ export default function SmallScreenFitler({show,setShow}){
         });
         return total_count;
     }
-
-    function handleOptionClick(filter,option){
-        searchParams.set('page',1)
-        let filterName = filter.name.toLowerCase()
-
-        if (filterName == "price"){
-            option = filter.options[option]
-        }
-     
-        if (searchParams.get(filterName) && searchParams.get(filterName) == option){
-            handleTagRemove(searchParams,setSearchParams,filterName)
-            return null;
-        }
-       
-        searchParams.set(filterName,option)
-        setSearchParams(searchParams)
-    }
     
-    function SwitchFunction(filter){
-        if (filter.name== "price"){
-            return <PriceFilter filter={filter} handleOptionClick={handleOptionClick} /> 
-        }
-        else if (filter.name=="Categories"){
-            return <CategoryFilter filter={filter} />
-        }
-        else if (filter.name == "color"){
-            return <ColorFilter filter={filter} handleOptionClick={handleOptionClick} />
-        }
-        else if (filter.type == 'list'){
-            return <ListFilter filter={filter} handleOptionClick={handleOptionClick} />
-        }
-    }
-
-    const handleTitleClick =(filter)=>{
-        if (showOptions[filter.name]){
-            setShowOptions({...showOptions,[filter.name]:false})
-        }else{
-            setShowOptions({...showOptions,[filter.name]:true})
-        }
-    }
-
     return (
        <Container show={show}>
             <SideFilter>
@@ -223,13 +184,13 @@ export default function SmallScreenFitler({show,setShow}){
                             filters.map((filter)=>{
                                 return (
                                     <FilterBox key={filter.name}>
-                                        <Title onClick={(e)=>{handleTitleClick(filter)}}>
+                                        <Title onClick={(e)=>{handleTitleClick(filter,showOptions,setShowOptions)}}>
                                             <span>{filter.name}</span> 
                                             <AngleIcon angle={showOptions[filter.name]?"180deg":"0"} className="fa-solid fa-angle-down"/>
                                         </Title>
                                         <Options height={showOptions[filter.name] ? "50vh":"0"}>
                                         {     
-                                            SwitchFunction(filter)
+                                            switchFunction(filter)
                                         }
                                         </Options> 
                                     </FilterBox>

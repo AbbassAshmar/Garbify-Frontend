@@ -10,6 +10,7 @@ import Pagination from '../../components/Pagination/pagination';
 import { requestData } from '../OtherUsersFavorites/other-users-favorites';
 import { ORDERS } from '../../components/products-data';
 import { Header,Content } from '../../components/StyledComponents/styled-components';
+import { useFetchData } from '../../hooks/use-fetch-data';
 
 //max-width: 1500px;
 const Container = styled.div`
@@ -92,12 +93,21 @@ const OrderBytoSortBy={
 }
 
 // add current search params to the end of a url
-export function constructUrl(url, searchParams, addition=null){
+export function constructUrl(url, searchParams, urlParams=null, addition=null){
+
     if (addition){
         url += addition;
     }
    
     let searchParamsString= "?"
+
+    if (urlParams){
+        let urlParamsList=  urlParams['*'].split('/')
+        if (urlParamsList.length > 0){
+            url+= "categories[]="+urlParamsList.join('&categories[]=')
+        }
+    }
+
     if (searchParams){
         for (let [key, value] of searchParams.entries()){
             searchParamsString  = searchParamsString  +key +"=" +value +"&"
@@ -111,11 +121,16 @@ export function constructUrl(url, searchParams, addition=null){
 
 export default function Orders(){
     const [page,setPage] = useState("orders")
-    const [orders, setOrders] = useState(ORDERS);
     const {token} = useContext(userStateContext);
     const [searchParams, setSearchParams] = useSearchParams()
     const [TotalPagesCount, setTotalPagesCount] = useState(40)
 
+    let init = { headers:{"Authorization":"Bearer " + token} }
+    let endpoint_url = "http://127.0.0.1:8000/api/orders";
+    let url = constructUrl(endpoint_url,searchParams,null,page=="orders"?"":"/"+page)
+    const {data, error, loading } = useFetchData(url , init, [searchParams,page]);
+    data = ORDERS;
+    
     // request data whenever searchParams change  
     // useEffect(()=>{
     //     let init = {
@@ -124,10 +139,14 @@ export default function Orders(){
     //         }
     //     }
     //     let endpoint_url = "http://127.0.0.1:8000/api/orders";
-    //     let url = constructUrl(endpoint_url,searchParams,page=="orders"?"":"/"+page)
+    //     let url = constructUrl(endpoint_url,searchParams,null,page=="orders"?"":"/"+page)
     //     setOrders(requestData(url,init))
     // }, [searchParams,page])
-    
+
+    if (loading){
+        return <p>loading...</p>
+    }
+
     function handlePageTitleClick(page){
         setPage(page);
     }
@@ -156,11 +175,11 @@ export default function Orders(){
                     </PagesContainer>
                 </Custom_Header>
                 { 
-                    orders && orders.length > 0 ?
+                    data && data.length > 0 ?
                     <>
                         <OrderCardsContainer>
                             {   
-                                orders.map((order)=>{
+                                data.map((order)=>{
                                     return <OrderCard key={order.id} order={order} />
                                 })
                             }

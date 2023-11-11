@@ -33,10 +33,22 @@ export const FILTERS =[
         name : "Categories",
         type: "list",
         options:[
-            "running Shoes",
-            "High Heals",
-            "Formal Shoes",
-            "loafers"
+            {
+                id:4,
+                name:"running Shoes",
+            },
+            {
+                id:5,
+                name:"High Heals"
+            },
+            {
+                id:6,
+                name:"Formal Shoes",
+            },
+            {
+                id:7,
+                name:"loafers"
+            }
         ]
     },
 

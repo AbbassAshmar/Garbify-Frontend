@@ -16,8 +16,6 @@ export function checkSelectedOption(filter,option,searchParams){
 export default function ListFilter({filter,handleOptionClick}){
     const [searchParams , setSearchParams] = useSearchParams();
 
-    
-
     return (
         <>
             {
@@ -26,7 +24,7 @@ export default function ListFilter({filter,handleOptionClick}){
                     <Option 
                         selected={checkSelectedOption(filter,option,searchParams)}
                         key={option}
-                        onClick={(e)=>{handleOptionClick(filter,option)}}
+                        onClick={(e)=>{handleOptionClick(filter,option,searchParams,setSearchParams)}}
                     >
                         {option}
                     </Option>

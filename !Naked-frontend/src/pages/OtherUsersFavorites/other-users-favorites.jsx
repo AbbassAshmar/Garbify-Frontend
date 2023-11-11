@@ -108,19 +108,46 @@ export async function requestData(url,init={}){
 }
 
 export default function OtherUsersFavorites(){
-    const [favoritesList, setFavoritesList] = useState(FAV_LISTS[0])
-    const [favorites, setFavorites] = useState(PRODUCTS)
-
-    const [favoritesCount , setFavoritesCount] = useState(123)
-    const [TotalPagesCount,setTotalPagesCount] = useState(23)
-
-    const [interactions , setInteractions] = useState({views:123 , likes:232})
     const [isLiked, setIsLiked] = useState(false);
 
     const [showActionsDropDown,setShowActionsDropDown] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams();
     const {favorites_list_id} = useParams();
     const DropDownRef = useRef(null)
+
+    // request favorites of other user
+    let favorites_url = constructUrl("http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id+"/favorites",searchParams)
+    let {
+        data:favoritesData,
+        error:errorFavorites,
+        loading:loadingFavrotes, 
+    } = useFetchData(favorites_url,{},[searchParams]);
+
+    let [favoritesCount, TotalPagesCount,favorites] = [0 , 0 , null];
+
+    if (favoritesData){
+        favoritesCount = favoritesData['metadata']['total_count'];
+        TotalPagesCount = favoritesData['metadata']['pages_count']
+        favorites = favoritesData['data'];
+    }
+
+    //default for dev
+    favorites = FAV_LISTS;
+    TotalPagesCount = 9;
+    favoritesCount=23;
+    
+
+    // request favorites list info of other user, and view 
+    let favorites_list_url = "http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id;
+    let {data:favoritesListData,error:errorFavoritesList,loading:loadingFavoritesList} = useFetchData(favorites_list_url);
+    
+    let [favoritesList,interactions] = [null,{}] ;
+    if (favoritesListData){
+        favoritesList = favoritesListData['data']
+        interactions = {views:favoritesList['views_count'], likes:favoritesList['likes_count']}
+    }
+    //default for dev
+    favoritesList = FAV_LISTS[0];
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -132,30 +159,9 @@ export default function OtherUsersFavorites(){
         if (showActionsDropDown) document.addEventListener("mousedown", handleClickOutside);
     }, [showActionsDropDown]);
 
-    // // request favorites of other user
-    // useEffect(()=>{
-    //     // request data whenever search params change 
-    //     let endpoint_url = "http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id+"/favorites"
-    //     let url = constructUrl(endpoint_url,searchParams);
-    //     let data = requestData(url)
-    //     if (data){
-    //         setFavorites(data['data']);
-    //         setFavoritesCount(data['metadata']['total_count']);
-    //     }
-    // },[searchParams])
-
-    // // request favorites list info of other user, and view 
-    // useEffect(()=>{
-    //     let favorites_list_url ="http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id
-    //     let check_if_liked_url = "http://127.0.0.1:8000/api/users/user/favorites_lists/"+favorites_list_id
-                                                        
-    //     let favorites_list = requestData(favorites_list_url)
-    //     if (favorites_list) {
-    //         setFavoritesList(data['data'])
-    //         setInteractions({views:data['data']['views_count'], likes:data['data']['likes_count']})
-    //     }
-    //     handleView()
-    // },[])
+    useEffect(()=>{
+        handleView();
+    },[])
 
     function handleView(){
         let view_url = "http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id+"/view"
