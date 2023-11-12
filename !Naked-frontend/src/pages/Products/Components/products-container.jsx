@@ -12,11 +12,12 @@ const Container = styled.div`
 flex:4;
 display:flex;
 flex-direction:column;
-gap:min(5vh,1.5rem);
 `
 const TagsContainer= styled.div`
 display:flex;
 gap:2%;
+margin: 0 0 13px 0;
+
 `
 const Tag = styled.button`
 background:none;
@@ -120,6 +121,7 @@ export default function ProductsContainer(props){
                     })
                 }
             </TagsContainer>
+            <div style={{display:'flex', flexDirection:'column',gap:'min(7vh,40px)'}}>
             <Products>
                 {products && products.map((product) =>{
                     return (
@@ -138,6 +140,7 @@ export default function ProductsContainer(props){
                 })}
             </Products>
             <Pagination TotalPagesCount={TotalPagesCount} />
+            </div>
         </Container>
     )
 }

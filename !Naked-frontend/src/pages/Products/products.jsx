@@ -17,10 +17,15 @@ display:flex;
 width:100%;
 justify-content:space-between;
 align-items:center;
+@media screen and (max-width:800px){
+    position:sticky;
+    top:0;
+    height:5vh;
+    z-index:200;
+    background:white;
+}
+padding: 0 min(2rem ,4%);
 
-@media screen and (max-width:600px){
-    padding:min(2rem ,5%) min(2rem ,5%) 0 min(2rem ,5%);
- }
 `
 const Main = styled.div`
 display:flex;
@@ -55,19 +60,21 @@ export default function Products(){
 
     return(
         <Container>
+            <div style={{display:'flex',flexDirection:"column",padding:"min(2rem ,4%) 0"}}>
+            <Head>
+                <PathTitle title={urlParametersList.join(" ")} number={4345} />
+                <Options>
+                    <SortByButton sortOptions={OrderBytoSortBy} removeUnder800px={true}/>
+                    <ShowFilter show={showFilter} setShow={setShowFilter}/>
+                </Options>
+            </Head>
             <Content>
-                <Head>
-                    <PathTitle title={urlParametersList.join(" ")} number={4345} />
-                    <Options>
-                        <SortByButton sortOptions={OrderBytoSortBy} removeUnder800px={true}/>
-                        <ShowFilter show={showFilter} setShow={setShowFilter}/>
-                    </Options>
-                </Head>
                 <Main>
                     <FilterContainer setShow={setShowFilter} show={showFilter}/>
                     <ProductsContainer/>
                 </Main>
             </Content>
+            </div>
         </Container>
     )
 }

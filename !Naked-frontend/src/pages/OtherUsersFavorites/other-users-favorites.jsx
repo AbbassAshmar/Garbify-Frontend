@@ -8,6 +8,7 @@ import Pagination from "../../components/Pagination/pagination"
 import { FAV_LISTS, PRODUCTS } from "../../components/products-data"
 import { Header,Products ,Content} from "../../components/StyledComponents/styled-components"
 import LikesViews from "../../components/LikesViews/likes-views"
+import { useFetchData } from "../../hooks/use-fetch-data"
 const Container = styled.div`
 
 `
@@ -109,7 +110,7 @@ export async function requestData(url,init={}){
 
 export default function OtherUsersFavorites(){
     const [isLiked, setIsLiked] = useState(false);
-
+    const [interactions , setInteractions] = useState({likes:0, views:0})
     const [showActionsDropDown,setShowActionsDropDown] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams();
     const {favorites_list_id} = useParams();
@@ -121,6 +122,7 @@ export default function OtherUsersFavorites(){
         data:favoritesData,
         error:errorFavorites,
         loading:loadingFavrotes, 
+        handleState:fetchData
     } = useFetchData(favorites_url,{},[searchParams]);
 
     let [favoritesCount, TotalPagesCount,favorites] = [0 , 0 , null];
@@ -141,13 +143,15 @@ export default function OtherUsersFavorites(){
     let favorites_list_url = "http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id;
     let {data:favoritesListData,error:errorFavoritesList,loading:loadingFavoritesList} = useFetchData(favorites_list_url);
     
-    let [favoritesList,interactions] = [null,{}] ;
+    let favoritesList = null ;
     if (favoritesListData){
         favoritesList = favoritesListData['data']
-        interactions = {views:favoritesList['views_count'], likes:favoritesList['likes_count']}
+        setInteractions({views:favoritesList['views_count'], likes:favoritesList['likes_count']})
     }
     //default for dev
     favoritesList = FAV_LISTS[0];
+    // setInteractions({views:favoritesList['views_count'], likes:favoritesList['likes_count']})
+
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -159,9 +163,9 @@ export default function OtherUsersFavorites(){
         if (showActionsDropDown) document.addEventListener("mousedown", handleClickOutside);
     }, [showActionsDropDown]);
 
-    useEffect(()=>{
-        handleView();
-    },[])
+    // useEffect(()=>{
+    //     handleView();
+    // },[])
 
     function handleView(){
         let view_url = "http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id+"/view"
@@ -171,7 +175,7 @@ export default function OtherUsersFavorites(){
 
     function handleLikeButtonClick(e){
         let like_url = "http://127.0.0.1:8000/api/favorites_lists/"+favorites_list_id+"/like"
-        let likes = requestData(like_url)
+        let likes = fetchData(like_url)
         setInteractions({...interactions,likes:likes['data']['likes_count']})
         let is_liked =likes['data']['action'] == "liked" ? true : false;
         setIsLiked(is_liked)

@@ -16,17 +16,22 @@ export function useFetchData(url,init={},dependency_array=[]){
             ...init
         }
         
-        const request = await fetch(url,defaultInit);
-        const response = await request.json();
-        if (!request.ok)
-            return response
+        try{
+            const request = await fetch(url,defaultInit);
+            if (!request.ok){
+                throw new Error(`request failed with status code ${request.status}`) ;
+            }
 
-        throw new Error(`request failed with status code ${request.status}`) ;
+            const response = await request.json();
+            return response
+        }catch(error){
+            throw new Error("connection to server failed")
+        }
     }
 
-    function handleState(requestData,url,init={},setData, setError, setLoading){
+    async function handleState(url,init={}){
         try{
-            let data = requestData(url, init);
+            let data =  await requestData(url, init);
             setData(data)
         }catch(error){
             setData(null)
@@ -37,8 +42,8 @@ export function useFetchData(url,init={},dependency_array=[]){
     }
 
     useEffect(()=>{
-        handleState(requestData, url , init , setData, setError, setLoading)
+        handleState(url , init)
     },dependency_array)
 
-    return {data, error, loading}
+    return {data, error, loading,handleState}
 }

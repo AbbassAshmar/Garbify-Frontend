@@ -74,7 +74,6 @@ box-shadow: 0 0 4px rgba(0, 0, 0,.3);
 background:white;
 padding:15px;
 display:flex;
-margin:auto;
 gap:20px;
 
 @media screen and (max-width:600px){

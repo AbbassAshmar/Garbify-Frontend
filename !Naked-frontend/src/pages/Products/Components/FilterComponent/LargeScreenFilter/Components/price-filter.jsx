@@ -41,6 +41,7 @@ font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 export const Option =styled.div`
+white-space: nowrap;
 cursor:pointer;
 opacity:${({selected})=>selected?"1":'.7'};
 font-weight:600;

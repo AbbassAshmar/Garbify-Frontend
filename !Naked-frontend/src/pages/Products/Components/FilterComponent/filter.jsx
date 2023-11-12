@@ -8,7 +8,8 @@ import ColorFilter from "./LargeScreenFilter/Components/color-filter"
 import { handleTagRemove } from "../products-container"
 import { useFetchData } from "../../../../hooks/use-fetch-data"
 import { constructUrl } from "../../../Orders/orders"
-import { useParams, useSearchParams } from "react-router-dom"
+import { useLocation, useParams, useSearchParams } from "react-router-dom"
+import { useEffect } from "react"
 
 export function handleOptionClick(filter,option,searchParams,setSearchParams){
     searchParams.set('page',1)
@@ -51,13 +52,11 @@ export function handleTitleClick(filter,showOptions,setShowOptions){
 }
 
 export default function FilterContainer({show ,setShow}){
-    // const {data, error , loading } = useFetchData(`http://127.0.0.1:8000/api/categories/${category}/children`)
-    const [searchParams,setSearchParams] = useSearchParams();
-    const {urlParams}= useParams();
+    const urlParams= useParams();
+    const location = useLocation();
 
     let url = constructUrl(`http://127.0.0.1:8000/api/filter`,null,urlParams)
-    const {data, error , loading } = useFetchData(url)
-
+    const {data, error , loading } = useFetchData(url,{}, [location.pathname]) //fetch data on url parameters change
 
     return (
         <>

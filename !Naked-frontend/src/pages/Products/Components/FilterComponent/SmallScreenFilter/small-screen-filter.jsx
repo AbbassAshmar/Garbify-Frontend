@@ -117,6 +117,7 @@ gap:.9rem;
 
 const ClearAllButton = styled.button`
 width:100%;
+white-space: nowrap;
 font-size:clamp(.8rem , 2.3vw ,1.1rem);
 background:white;
 padding:.5rem;
@@ -146,7 +147,6 @@ const SORT_BUTTON_STYLE = {
 
 export default function SmallScreenFitler({show,setShow,filtersData}){
     const [filters,setFilters] = useState(FILTERS)
-    const [categories, setCategories] = useState([])
     const [showOptions, setShowOptions] = useState([])
     const [searchParams,setSearchParams]= useSearchParams()
 

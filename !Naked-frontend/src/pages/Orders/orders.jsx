@@ -94,27 +94,28 @@ const OrderBytoSortBy={
 
 // add current search params to the end of a url
 export function constructUrl(url, searchParams, urlParams=null, addition=null){
-
     if (addition){
         url += addition;
     }
    
-    let searchParamsString= "?"
+    let addedQueryStrings= "?"
 
-    if (urlParams){
+    // add urlParams '/parm1/param2' as ?categories[]= 
+    if (urlParams && urlParams['*']){
         let urlParamsList=  urlParams['*'].split('/')
         if (urlParamsList.length > 0){
-            url+= "categories[]="+urlParamsList.join('&categories[]=')
+            addedQueryStrings+= "categories[]="+urlParamsList.join('&categories[]=')
         }
     }
 
+    // add searchParams '?color=...' as they are
     if (searchParams){
         for (let [key, value] of searchParams.entries()){
-            searchParamsString  = searchParamsString  +key +"=" +value +"&"
+            addedQueryStrings  = addedQueryStrings  +key +"=" +value +"&"
         }
     }
-    searchParamsString = searchParamsString.slice(0,-1)
-    url +=  (searchParamsString ==="?" ? "":searchParamsString)
+    addedQueryStrings = addedQueryStrings.slice(0,-1)
+    url +=  (addedQueryStrings ==="?" ? "":addedQueryStrings)
     return url;
 }
 
@@ -128,20 +129,9 @@ export default function Orders(){
     let init = { headers:{"Authorization":"Bearer " + token} }
     let endpoint_url = "http://127.0.0.1:8000/api/orders";
     let url = constructUrl(endpoint_url,searchParams,null,page=="orders"?"":"/"+page)
-    const {data, error, loading } = useFetchData(url , init, [searchParams,page]);
+    let {data, error, loading } = useFetchData(url , init, [searchParams,page]);
     data = ORDERS;
     
-    // request data whenever searchParams change  
-    // useEffect(()=>{
-    //     let init = {
-    //         headers:{
-    //             "Authorization":"Bearer " + token,
-    //         }
-    //     }
-    //     let endpoint_url = "http://127.0.0.1:8000/api/orders";
-    //     let url = constructUrl(endpoint_url,searchParams,null,page=="orders"?"":"/"+page)
-    //     setOrders(requestData(url,init))
-    // }, [searchParams,page])
 
     if (loading){
         return <p>loading...</p>

@@ -18,21 +18,19 @@ grid-gap:20px;
 export const Content = styled.div`
 width:100%;
 max-width:1500px;
-padding:min(2rem ,5%);
+padding: min(2rem ,4%);
 margin:auto;
 display:flex;
-gap:min(7vh,40px);
+gap: min(7vh,40px);
 flex-direction:column;
 font-size:1.1rem;
 font-weight:400;
 
 @media screen and (max-width:800px){
     width:100%;
-    padding:min(2rem ,5%);
+    // padding:min(2rem ,4%);
 }
-@media screen and (max-width: 600px){
-    padding:0;
-}
+
 `
 
 

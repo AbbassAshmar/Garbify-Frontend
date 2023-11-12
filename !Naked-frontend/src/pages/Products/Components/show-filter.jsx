@@ -3,18 +3,27 @@ import styled from "styled-components"
 
 const Button = styled.button`
 background:none;
-border:none;
 cursor:pointer;
+border:none;
+line-height:1;
+font-weight:600;
+font-size:clamp(.6rem,2vw,.9rem);
+display:flex;
+align-items:center;
+justify-content:center;
+gap:5px;
 &:hover{
     opacity:.7;
 }
-
-font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
+@media screen and (max-width:800px){
+    border:1px solid black;
+    padding: .15rem .6rem 0.08rem .6rem;    height:100%;
+    width:100%;
+    border-radius:10px;
+}
 `
 
 const Icon = styled.i`
-margin-left:.7rem;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 
@@ -26,7 +35,13 @@ export default function ShowFilter(props){
     return (
         <div>
             <Button onClick={handleButtonClick}>
-                {props.show? "Close Filter" : "Show Filter" }
+                <p style={{margin:'0'}}>
+                    {window.innerWidth >800 ?
+                        (props.show? "Close Filter" : "Show Filter" ):
+                        'filters'
+                    }
+                </p>
+
                 <Icon className="fa-solid fa-filter"></Icon>
             </Button>
         </div>
