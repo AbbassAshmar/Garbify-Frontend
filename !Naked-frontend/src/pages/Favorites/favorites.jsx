@@ -17,7 +17,11 @@ import { useFetchData } from "../../hooks/use-fetch-data";
 const Container = styled.div`
 width:100%;
 `
-
+const TopInfoContainer = styled.div`
+display:grid;
+grid-template-columns:repeat(2,1fr);
+grid-gap:10px;
+`
 const FavoriteProductsContainer = styled(Products)`
 width:100%;
 `
@@ -27,9 +31,10 @@ const NoFavoritesContainer = styled(NoOrdersContainer)`
     padding:min(2rem ,5%) min(2rem ,5%) 0 min(2rem ,5%);
  }
 `
-const NoFavoritesTitls = styled(NoOrdersTitle)`
 
+const NoFavoritesTitls = styled(NoOrdersTitle)`
 `
+
 const TitleForm = styled.form`
 // min-width:170px;
 // min-width:${({min_width})=>min_width};
@@ -38,19 +43,49 @@ const TitleForm = styled.form`
 const TitleInput = styled.input`
 font-weight:600;
 min-width:20px;
-font-size:clamp(1.1rem,3vw,1.5rem);
+font-size:clamp(.9rem,3vw,1.5rem);
 border:none;
 background:green;
 outline:none;
-
 `
+
 //used to adjust the width of the TitleInput 
 const HiddenSpan = styled.span`
-font-size:clamp(1.1rem,3vw,1.5rem);
+font-size:clamp(.9rem,3vw,1.5rem);
 font-weight:600;
 position:absolute;
 top:140px;
 background:grey;
+visibility:hidden;
+z-index:-200;
+`
+
+const DisplayedForOthers = styled.p`
+text-wrap:nowrap;
+font-weight:600;
+font-size:clamp(.6rem , 2vw ,.9rem);
+opacity:.7;
+@media screen and (max-width:600px){
+    display:none;
+}
+`
+const TitleWrapper = styled.span`
+display:flex;
+width:100%;
+justify-content:space-between;
+align-items:center;
+grid-column:1/2;
+@media screen and (max-width:380px){
+    grid-column:1/3;
+}
+`
+const PublicPrivateWrapper = styled.span`
+grid-column:2/3;
+grid-row:1;
+justify-self: end;
+@media screen and (max-width:380px){
+    grid-row:2;
+}
 `
 
 const OrderBytoSortBy={
@@ -61,14 +96,7 @@ const OrderBytoSortBy={
     "total_cost-ASC":"Price: Low-High",
 }
 
-
 export default function Favorites(){
-    const [useTitleInput, setUseTitleInput] = useState(false);
-    const [titleText, setTitleText] = useState("Your Favorites")
-
-    const [titleInputWidth,setTitleInputWidth]  = useState(170)
-    const spanRef = useRef(null)
-
     const {token} = useContext(userStateContext);
     const [searchParams,setSearchParams] = useSearchParams();
 
@@ -81,6 +109,22 @@ export default function Favorites(){
         }
     }
 
+    // request favorites list info 
+    let favorites_list_url= "http://127.0.0.1:8000/api/users/user/favorites_list";
+    let {data:favoritesListData, error:favoritesListError, loading:favoritesListLoading,setData} = useFetchData(favorites_list_url,request_init)
+    let favoritesList = []
+    if (favoritesListData){
+        favoritesList = favoritesList['data']
+    }
+    favoritesList = FAV_LISTS[0]
+
+    const [useTitleInput, setUseTitleInput] = useState(false);
+    const [titleText, setTitleText] = useState(favoritesList.name)
+
+    const [titleInputWidth,setTitleInputWidth]  = useState(170)
+    const spanRef = useRef(null)
+    const editIconRef= useRef(null)
+
     // request favorites 
 
     let favorites_url = constructUrl("http://127.0.0.1:8000/api/users/user/favorites",searchParams)
@@ -92,16 +136,6 @@ export default function Favorites(){
         favorites = favoritesData['data'];
     }
     favorites = PRODUCTS
-
-    // request favorites list info 
-
-    let favorites_list_url= "http://127.0.0.1:8000/api/users/user/favorites_list";
-    let {data:favoritesListData, error:favoritesListError, loading:favoritesListLoading,setData} = useFetchData(favorites_list_url,request_init)
-    let favoritesList = []
-    if (favoritesListData){
-        favoritesList = favoritesList['data']
-    }
-    favoritesList = FAV_LISTS[0]
 
     // request products for slider 
     let all_favorites_url = "http://127.0.0.1:8000/api/favorites?limit=10";
@@ -119,53 +153,55 @@ export default function Favorites(){
         setSearchParams({'q':data.get("q")});
     }
 
-    
-
     function handleTitleTextChange(e){
         setTitleText(e.target.value)
     }
 
-    function handleTitleFormSubmit(e){
-        e.preventDefault();
-        //request title edit 
-        if (!favoritesList){
-            return null
-        }
-        
+    async function handleRequestNameUpdate(){
         let patch_request_init = {
             method : "PATCH",
+            body: {
+                'name' : titleText
+            },
             ...request_init
         } 
-        let update_favorites_list_url =  "http://127.0.0.1:8000/api/favorites_list/"+id;
+        let update_favorites_list_url =  "http://127.0.0.1:8000/api/favorites_list/"+favoritesList.id;
 
         try {
-            update_request = sendRequest(update_favorites_list_url, patch_request_init)
+            update_request = await sendRequest(update_favorites_list_url, patch_request_init)
             if (update_request && update_request.name){
                 setData({...favoritesListData ,name:update_request.name})
+                setTitleText(favoritesList.name)
             }
         }catch(error){
-            setUseTitleInput(false)
             setTitleText(favoritesList.name) // display the old name
         }
     }
 
+    function handleTitleFormSubmit(e){
+        e.preventDefault();
+        if (!favoritesList){
+            setUseTitleInput(false)
+            return null
+        }
+        handleRequestNameUpdate()
+        setUseTitleInput(false)
+    }
+
     function handleEditIconClick(e){
         if (useTitleInput){
-            //request name change 
-        }
-
-        setUseTitleInput(!useTitleInput)
-    }   
-    function handleTitleInputBlur(e){
-        // if press on edit icon , call handleEditIcon
-        if (false){
-
-        }else { 
-            // request name change 
+            handleRequestNameUpdate()
             setUseTitleInput(false)
-
+        }else{
+            setUseTitleInput(true)
         }
+    }   
 
+    function handleTitleInputBlur(e){
+        if (!(e.relatedTarget === editIconRef.current)){
+            handleRequestNameUpdate()
+            setUseTitleInput(false)
+        }
     }
 
     useEffect(()=>{
@@ -177,12 +213,12 @@ export default function Favorites(){
         <Container>
             <Content>
                 <Header>
-                    <div style={{display:"flex",flexDirection:"column", gap:"10px"}}>
-                        <div style={{display:"flex", justifyContent:"space-between",alignItems:"center",width:'100%'}}>
-                            <div style={{display:"flex", gap:"20px",alignItems:"center"}}>
+                    <TopInfoContainer>
+                        <TitleWrapper>
+                            <div style={{display:"flex", gap:'10px',alignItems:'center'}}>
                                 {
                                     !useTitleInput?
-                                    <Title style={{minWidth:"20px",width:'auto'}}>{titleText}</Title>
+                                    <Title style={{width:'auto'}}>{titleText}</Title>
                                     :
                                     <TitleForm onSubmit={handleTitleFormSubmit}>
                                         <TitleInput 
@@ -192,20 +228,26 @@ export default function Favorites(){
                                             type="text" 
                                             value={titleText} 
                                             onChange={handleTitleTextChange}
-                                            maxLength="20"
+                                            maxLength="30"
                                         />
                                     </TitleForm>
                                 }
                                 <HiddenSpan ref={spanRef}>{titleText}</HiddenSpan>
-                                <div style={{display:"flex", gap:"10px",alignItems:"flex-end",}}>
-                                    <i onClick={handleEditIconClick} style={{cursor:"pointer"}} className="fa-regular fa-pen-to-square"/>
-                                    <p style={{fontWeight:"600", fontSize:"clamp(.6rem , 2vw ,.9rem)",opacity:'.7'}}>displayed for others</p>
+                                <div style={{display:"flex", gap:"5px",alignItems:"flex-end",}}>
+                                    <i 
+                                        tabIndex="0"
+                                        onClick={handleEditIconClick} 
+                                        ref={editIconRef} 
+                                        style={{cursor:"pointer"}} 
+                                        className="fa-regular fa-pen-to-square"
+                                    />
+                                    <DisplayedForOthers>displayed for others</DisplayedForOthers>
                                 </div>
                             </div>
-                            <PublicPrivateButton />
-                        </div>
-                        <LikesViews disabled={true} views={favoritesList["views_count"]} likes={favoritesList["likes_count"]}/>
-                    </div>
+                        </TitleWrapper>
+                        <PublicPrivateWrapper><PublicPrivateButton/></PublicPrivateWrapper>
+                        <span style={{gridRow:'2',alignSelf: 'end'}}><LikesViews disabled={true} views={favoritesList["views_count"]} likes={favoritesList["likes_count"]}/></span>
+                    </TopInfoContainer>
                     <SearchSort 
                         placeholder={"search your favorites"} 
                         sortOptions={OrderBytoSortBy} 

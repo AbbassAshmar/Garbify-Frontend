@@ -40,6 +40,6 @@ display:flex;
 flex-direction:column;
 gap:min(7vh,40px);
 @media screen and (max-width:600px){
-   padding:min(2rem ,5%) min(2rem ,5%) 0 min(2rem ,5%);
+//    padding:min(2rem ,5%) min(2rem ,5%) 0 min(2rem ,5%);
 }
 `
