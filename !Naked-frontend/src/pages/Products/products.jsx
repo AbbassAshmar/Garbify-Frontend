@@ -51,11 +51,11 @@ export default function Products(){
 
     // sql orderBy translated to be readable
     const OrderBytoSortBy={
-        "name-ASC":"From A-Z",
-        "created_at-DESC":"Newest-Oldest",
-        "created_at-ASC":"Oldest-Newest",
-        "price-DESC":"Price: High-Low",
-        "price-ASC":"Price: Low-High",
+        "name+ASC":"From A-Z",
+        "created_at+DESC":"Newest-Oldest",
+        "created_at+ASC":"Oldest-Newest",
+        "price+DESC":"Price: High-Low",
+        "price+ASC":"Price: Low-High",
     }
 
     return(

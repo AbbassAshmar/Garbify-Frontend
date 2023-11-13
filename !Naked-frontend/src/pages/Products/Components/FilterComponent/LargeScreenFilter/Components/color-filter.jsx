@@ -4,10 +4,26 @@ import { useSearchParams } from "react-router-dom";
 import { checkSelectedOption } from "./list-filter";
 
 const Container  = styled.div`
-display:flex;
 width:100%;
-flex-wrap:wrap;
+display: grid;
 gap:20px;
+grid-template-columns: repeat(3,23px);
+
+@media screen and (max-width:800px){
+    grid-template-columns: repeat(6,23px);
+}
+
+@media screen and (min-width:1000px){
+    grid-template-columns: repeat(4,23px);
+}
+@media screen and (min-width:1100px){
+    grid-template-columns: repeat(5,23px);
+}
+@media screen and (min-width:1300px){
+    grid-template-columns: repeat(6,23px);
+}
+
+
 `
 const ColorOption = styled.div`
 cursor:pointer;
@@ -29,7 +45,7 @@ color:white;
 }
 `
 
-export default function ColorFilter({filter ,handleOptionClick}){
+export default function ColorFilter({filter ,handleOptionClick,show}){
     const [searchParams,setSearchParams] = useSearchParams()
 
     function handleColorOptionClick(e, filter, option){
@@ -38,7 +54,7 @@ export default function ColorFilter({filter ,handleOptionClick}){
     }
 
     return (
-        <Container>
+        <Container show={show}>
             {
                 filter.options.map((option)=>{
                     return(

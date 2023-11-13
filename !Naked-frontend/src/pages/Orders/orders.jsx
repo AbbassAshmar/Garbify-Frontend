@@ -21,6 +21,8 @@ width:100%;
 
 export const Title = styled.div`
 font-weight:600;
+background:red;
+text-wrap:nowrap;
 font-size:clamp(1.1rem,3vw,1.5rem);
 `
 
@@ -31,7 +33,6 @@ border-bottom:1px solid black;
 height:30px;
 font-size:1rem;
 font-weight:600;
-
 `
 const PageTitle = styled.p`
 cursor:pointer;

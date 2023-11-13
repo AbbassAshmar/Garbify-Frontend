@@ -10,8 +10,8 @@ justify-content:center;
 @media screen and (max-width:800px){
     display:${({removeUnder800px})=> removeUnder800px?'none':'flex'};
 }
-
 `
+
 const Button = styled.button`   
 white-space: nowrap;
 background:none;
@@ -31,28 +31,30 @@ gap:5px;
     opacity:.7;
 }
 `
+
 const Icon =styled.i`
 transform:rotateX(${({rotate})=>rotate});
 transition:transform .3s;
 font-weight:inherit;
 font-size:inherit;
 `
+
 const SortList =styled.div`
 position:absolute;
 background:white;
 top:110%;
 left:0;
 max-height:${({height})=>height};
+width: 100%;
+min-width: fit-content;
 height:auto;
-// width:min(190%,200px);
-width:100%;
 border-radius: 0 0 10px 10px;
 z-index:100;
 overflow:hidden;
 line-height:1;
 transition:all .3s;
-
 `
+
 const Options= styled.div`
 padding:.7rem;
 display:flex;
@@ -92,7 +94,7 @@ export default function SortByButton(props){
     }
 
     function handleOptionClick(value){
-        urlSearchParams.set("sort-by",value)
+        urlSearchParams.set("sort+by",value)
         urlSearchParams.set("page", 1)
         setUrlSearchParams(urlSearchParams)
     }
@@ -103,8 +105,8 @@ export default function SortByButton(props){
                 <p>
                 {
                     // update button text if an options is clicked to " sort by : options clicked "
-                    urlSearchParams.get("sort-by")&&props.sortOptions[urlSearchParams.get("sort-by")]?
-                    `Sort By : ${props.sortOptions[urlSearchParams.get("sort-by")]}`
+                    urlSearchParams.get("sort+by")&&props.sortOptions[urlSearchParams.get("sort+by")]?
+                    `Sort By : ${props.sortOptions[urlSearchParams.get("sort+by")]}`
                     :"Sort By"
                 }
                 </p>

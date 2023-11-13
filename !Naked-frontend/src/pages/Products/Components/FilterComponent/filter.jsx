@@ -28,7 +28,7 @@ export function handleOptionClick(filter,option,searchParams,setSearchParams){
     setSearchParams(searchParams)
 }
 
-export function switchFunction(filter){
+export function switchFunction(filter,show){
     if (filter.name== "price"){
         return <PriceFilter filter={filter} handleOptionClick={handleOptionClick} /> 
     }
@@ -36,7 +36,7 @@ export function switchFunction(filter){
         return <CategoryFilter filter={filter.options} />
     }
     else if (filter.name == "color"){
-        return <ColorFilter filter={filter} handleOptionClick={handleOptionClick} />
+        return <ColorFilter show={show} filter={filter} handleOptionClick={handleOptionClick} />
     }
     else if (filter.type == 'list'){
         return <ListFilter filter={filter} handleOptionClick={handleOptionClick} />

@@ -63,7 +63,6 @@ color:black;
 
 //remove a tag from filter tags
 export function handleTagRemove(searchParams,setSearchParams,key){
-    console.log(searchParams.get("color"));
     searchParams.delete(key)
     setSearchParams(searchParams)
 }

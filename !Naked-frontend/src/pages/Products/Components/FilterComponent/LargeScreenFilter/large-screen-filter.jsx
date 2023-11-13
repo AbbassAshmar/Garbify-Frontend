@@ -91,7 +91,7 @@ export default function LargeScreenFilter({show,filtersData}){
                                     </Title>
                                     <Options height={showOptions[filter.name] ? "50vh":"0"}>
                                     {     
-                                        switchFunction(filter)
+                                        switchFunction(filter,show)
                                     }
                                     </Options> 
                                 </FilterBox>

@@ -10,7 +10,6 @@ import { Header,Products ,Content} from "../../components/StyledComponents/style
 import LikesViews from "../../components/LikesViews/likes-views"
 import { useFetchData } from "../../hooks/use-fetch-data"
 const Container = styled.div`
-
 `
 const DetailsContainer= styled.div`
 display:flex;

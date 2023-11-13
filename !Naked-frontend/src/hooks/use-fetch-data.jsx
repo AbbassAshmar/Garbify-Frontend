@@ -6,7 +6,7 @@ export function useFetchData(url,init={},dependency_array=[]){
     const [loading,setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    async function requestData(url,init={}){
+    async function sendRequest(url,init={}){
         let defaultInit = {
             method :"GET",
             headers:{
@@ -29,9 +29,9 @@ export function useFetchData(url,init={},dependency_array=[]){
         }
     }
 
-    async function handleState(url,init={}){
+    async function fetchData(url,init={}){
         try{
-            let data =  await requestData(url, init);
+            let data =  await sendRequest(url, init);
             setData(data)
         }catch(error){
             setData(null)
@@ -42,8 +42,8 @@ export function useFetchData(url,init={},dependency_array=[]){
     }
 
     useEffect(()=>{
-        handleState(url , init)
+        fetchData(url , init)
     },dependency_array)
 
-    return {data, error, loading,handleState}
+    return {data,setData, error, loading,sendRequest ,reFetchData:fetchData }
 }

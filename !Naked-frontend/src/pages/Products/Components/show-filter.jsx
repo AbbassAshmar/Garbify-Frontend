@@ -17,7 +17,7 @@ gap:5px;
 }
 @media screen and (max-width:800px){
     border:1px solid black;
-    padding: .15rem .6rem 0.08rem .6rem;    height:100%;
+    padding: .2rem .7rem 0.1rem .7rem;    height:100%;
     width:100%;
     border-radius:10px;
 }
