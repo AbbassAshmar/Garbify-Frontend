@@ -21,7 +21,6 @@ width:100%;
 
 export const Title = styled.div`
 font-weight:600;
-background:red;
 text-wrap:nowrap;
 font-size:clamp(.9rem,3vw,1.5rem);
 `

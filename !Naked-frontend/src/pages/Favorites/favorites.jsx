@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { userStateContext } from "../../Contexts/user-state";
 import {useSearchParams} from "react-router-dom";
 import { NoOrdersContainer, NoOrdersTitle, constructUrl, Title} from "../Orders/orders";
@@ -45,7 +45,6 @@ font-weight:600;
 min-width:20px;
 font-size:clamp(.9rem,3vw,1.5rem);
 border:none;
-background:green;
 outline:none;
 `
 
@@ -55,7 +54,6 @@ font-size:clamp(.9rem,3vw,1.5rem);
 font-weight:600;
 position:absolute;
 top:140px;
-background:grey;
 visibility:hidden;
 z-index:-200;
 `
@@ -121,9 +119,10 @@ export default function Favorites(){
     const [useTitleInput, setUseTitleInput] = useState(false);
     const [titleText, setTitleText] = useState(favoritesList.name)
 
-    const [titleInputWidth,setTitleInputWidth]  = useState(170)
     const spanRef = useRef(null)
     const editIconRef= useRef(null)
+    const [titleInputWidth,setTitleInputWidth]  = useState(spanRef &&spanRef.current ?spanRef.current.offsetWidth:170)
+    
 
     // request favorites 
 
@@ -189,10 +188,12 @@ export default function Favorites(){
     }
 
     function handleEditIconClick(e){
+        
         if (useTitleInput){
             handleRequestNameUpdate()
             setUseTitleInput(false)
         }else{
+            measureWidth()
             setUseTitleInput(true)
         }
     }   
@@ -204,10 +205,26 @@ export default function Favorites(){
         }
     }
 
-    useEffect(()=>{
-        let spanWidth = spanRef.current.offsetWidth
-        setTitleInputWidth(spanWidth)
-    },[titleText])
+    const replaceSpaces = (text) => {
+        return text.replace(/ /g, '\u00A0');
+    };
+
+    const measureWidth = () => {
+        if (spanRef.current) {
+          let spanWidth = spanRef.current.offsetWidth;
+          setTitleInputWidth(spanWidth);
+        }
+      };
+    
+    useLayoutEffect(()=>{
+        if (spanRef.current) {
+            // Replace spaces in titleText with a non-breaking space
+            const textWithNoSpaces = replaceSpaces(titleText);
+            // Set the text content of the span
+            spanRef.current.textContent = textWithNoSpaces;
+            measureWidth()
+        }
+    },[titleText,spanRef])
 
     return (
         <Container>
@@ -228,7 +245,7 @@ export default function Favorites(){
                                             type="text" 
                                             value={titleText} 
                                             onChange={handleTitleTextChange}
-                                            maxLength="30"
+                                            maxLength="33"
                                         />
                                     </TitleForm>
                                 }

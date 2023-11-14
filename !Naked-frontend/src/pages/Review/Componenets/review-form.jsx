@@ -34,7 +34,8 @@ const Content = styled.form`
 display:flex;
 flex-direction : column;
 gap:2rem;
-width:40%;
+width:100%;
+max-width:800px;
 margin:auto;
 `
 const FormRow = styled.div`
@@ -82,6 +83,13 @@ background:#00C2FF;
 border:none;
 padding:.5rem 0;
 `
+
+//multipart/form-data , sends file in binary fromat
+//application/json , transfer binary to base64 string and send them 
+//Url.createObjectUrl() , creates a url that acts like a pointer to an object.expires when refresh
+//FileReader(), read data from Blob object (converts it to other formats), File() object is a descendend from Blob() 
+//FileReader::readAsDataURL() converts Blob objects to base64
+//Blob() represents a file (bites)
 export default function ReviewForm(){
     const [stars,setStars] = useState(5);
     const [starsList, setStarsList ] = useState(["star","star","star","star","star"]);
@@ -132,6 +140,7 @@ export default function ReviewForm(){
 
     function handleReviewFormSubmit (e){
         e.preventDefault();
+        console.log(images)
         let form_data = new FormData(e.target);
         for (let x in images){
             form_data.append('images[]', images[x].file)
@@ -199,11 +208,12 @@ export default function ReviewForm(){
                                 type="file" 
                                 style={{visibility:"hidden",width:"1px"}} 
                                 onChange={(e)=>{
+                                    // createObjectUrl creates a url that acts like a pointer or an address to an object in memory 
                                     setImages([...images,{url:URL.createObjectURL(e.target.files[0]) , file:e.target.files[0]}])
                                 }}
                             />
                         </div>
-                        <div style={{width:"100%",display:"flex",gap:'5%'}}>
+                        <div style={{width:"100%",display:"flex",gap:'5%',felxWrap:"wrap"}}>
                             {
                                 images && images.map((image)=>{
                                     return <div style={{width:"100px"}}><img src={image.url} style={{width:"100%", height:"auto"}}/></div>
