@@ -66,6 +66,7 @@ flex-direction : column;
 export default function ReviewsSection({product_id}){
     const userState = useContext(userStateContext)
     const [reviews, setReviews] = useState(REVIEWS);
+    const [TotalPagesCount, setTotalPagesCount] = useState(30);
     const [reviewsDetails, setReviewsDetails] = useState({average_ratings:5 , reviews_count:0});
 
     // useEffect(()=>{
@@ -127,7 +128,7 @@ export default function ReviewsSection({product_id}){
                     )
                 })}  
             </Reviews>
-            <Pagination TotalPagesCount={30}/>
+            <Pagination TotalPagesCount={TotalPagesCount}/>
         </Container>
     )
 }

@@ -28,6 +28,14 @@ import jordan4_13 from "../assets/jordan4blueback.jpg"
 // name - text in header: 1rem -->.8rem (800px)
 // buttons and subtext : .9rem -->.7rem (800px)
 
+// blue : #00C2FF;
+// grey : #F1F4F9; #D8DBE0; #C0C3C7; #A8AAAE;
+export const USER = {
+    name :"Saddam Hussein",
+    email:"KuwaitIsMine@gmail.com",
+    profile_picture:Hoody,
+    
+};
 export const FILTERS =[
     {
         name : "Categories",
