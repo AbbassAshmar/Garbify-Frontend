@@ -68,7 +68,7 @@ export default function ProductsSlider(props){
                         props.products.map((product)=>{
                             return(
                                 <ProductCard 
-                                    min_width={"max(220px ,32%)"}
+                                    min_width={"max(200px ,28%)"}
                                     pk ={product.pk}
                                     name={product.name} 
                                     price={product.price} 
