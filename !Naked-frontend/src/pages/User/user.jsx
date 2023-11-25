@@ -14,7 +14,7 @@ min-height:100vh;
 const Section1 = styled.div`
 padding:min(2rem,4%);
 display:flex;
-gap:4rem;
+gap:3rem;
 @media screen and (max-width:800px){
     flex-direction:column;
 }
@@ -49,6 +49,7 @@ transition: border .3s, color .3s;
 `
 const Content = styled.div`
 min-width:400px;
+min-height:230px;
 `
 const Section2 = styled.div`
 
@@ -67,7 +68,6 @@ export default function User(){
                         <NavigationText onClick={()=>setCurrentSection("User profile")} color={currentSection === "User profile" ? "#00C2FF":"black"}>User profile</NavigationText>
                         <NavigationText onClick={()=>setCurrentSection("Your information")} color={currentSection === "Your information" ? "#00C2FF":"black"}>Your information</NavigationText>
                         <NavigationText onClick={()=>setCurrentSection("Favorites")} color={currentSection === "Favorites" ? "#00C2FF":"black"}>Favorites</NavigationText>
-
                     </Navigation>
                     <Content>
                         {
