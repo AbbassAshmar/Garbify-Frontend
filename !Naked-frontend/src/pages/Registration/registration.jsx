@@ -68,16 +68,19 @@ const Parg =styled.p`
 margin:0;
 font-weight:600;
 opacity:.7;
-
 font-size: clamp(.8rem , 2.3vw ,1.1rem);
-
 `
-
 export const Form = styled.form`
 display:flex;
 flex-direction:column;
-gap:30px;
+gap:10px;
 width:100%;
+// min-height:480px;
+`
+const FieldAndError = styled.div`
+display:flex;
+flex-direction:column;
+gap:5px;
 `
 export const InputWrapper = styled.div`
 width:100%;
@@ -97,7 +100,7 @@ font-size: clamp(.8rem , 2.3vw ,1.1rem);
 export const Label =styled.label`
 position:absolute;
 top:${({position})=>position?'-17%':"30%"};
-left:${({position})=>position?'2%':"4%"};
+left:${({position})=>position?'2%':"3%"};
 font-size:${({position})=>position?'.8rem':".9rem"};
 opacity:1;
 z-index:3;
@@ -111,20 +114,33 @@ ${Input}:focus + &{
     color:#00C2FF;
 }
 font-weight:600;
-
+`
+export const PasswordRules = styled.p`
+color:${({color})=>color};
+opacity:.7;
+font-weight:500;
+font-size: clamp(.5rem,1.8vw,.8rem);
+margin-left: 3%;
 `
 export const ErrorMsg = styled.p`
 margin:0;
 color:red;
-transform:translateY(40%);
+margin-left: 3%;
 font-weight:600;
-position:absolute;
-
-font-size:1rem;
-@media screen and (max-width:800px){
-    font-size:.8rem;
+font-size: clamp(.5rem,1.8vw,.8rem);
+&:empty::before{
+  content:"";
+  display:inline-block;
 }
 `
+const PasswordErrorMsg = styled.p`
+margin:0;
+color:red;
+margin-left: 3%;
+font-weight:600;
+font-size: clamp(.5rem,1.8vw,.8rem);
+`
+
 export const Submit = styled.button`
 height:min(10vh, 60px);
 width:100%;
@@ -138,7 +154,6 @@ transition:background .3s;
     background:#02abed;
 }
 font-weight:600;
-
 font-size: clamp(.8rem , 2.3vw ,1.1rem);
 `
 
@@ -179,7 +194,6 @@ color:white;
 font-weight:600;
 font-size:clamp(.9rem, 2.6vw, 1.3rem);
 text-shadow:1px 1px 1px black;
-
 `
 export default function Registration(){
     const location =useLocation()
@@ -187,12 +201,15 @@ export default function Registration(){
 
     const [formData, setFormData] = useState({
         email:state?state:"",
-        username:"",
+        name:"",
         password:"",
         confirm_password:"",
     })
-    const [errorMsg, setErrorMsg] = useState({})
     
+    const [error,setError] = useState({
+        fields:[] , 
+        message:{} 
+    })
    
 
     async function requestRegister (formData){
@@ -216,92 +233,116 @@ export default function Registration(){
         e.preventDefault();
         requestRegister(JSON.stringify(formData));
     }
-    return(
-        <div>
-        <Container>
-            <div style={{padding:"min(2rem ,4%)",width:'100%',display:"flex",flexDirection:"column",gap:'15px'}}>
-                <div style={{alignSelf:"flex-start"}}><Logo/></div>
-            <ContentContainer>
-                <TextContainer>
-                    <MainText>Lorem Shit + life is good I love Ghaddafi</MainText>
-                    <SecondaryText>
-                        i Think a;lskdfj askldf which 
-                        implies klajflaj jaklsjf
-                        alsjdfljlasj flkjkl ajsldk 
-                        jalkdfjalsdfj
-                    </SecondaryText>
-                </TextContainer>
-                <Content>
-                    <Text>
-                        <Title>Create Account</Title>
-                        <Parg>be the first to receive latest offers!</Parg>
-                    </Text>
-                    <Form onSubmit={handleFormSubmit}>
-                        <InputWrapper>
-                            <Input 
-                                type="email" 
-                                value={formData.email} 
-                                color={errorMsg && errorMsg.email?"red":"#A8AAAE"} 
-                                onChange={(e)=>setFormData({...formData,email:e.target.value})}
-                            />
-                            <Label 
-                                position={formData.email}
-                                color={errorMsg && errorMsg.email?"red":"#C0C3C7"} 
-                            >Email</Label>
-                            <ErrorMsg>{errorMsg.email}</ErrorMsg>
-                        </InputWrapper>
-                        <InputWrapper>
-                            <Input 
-                                type="text" 
-                                value={formData.username} 
-                                color={errorMsg && errorMsg.username?"red":" #A8AAAE"} 
-                                onChange={(e)=>setFormData({...formData,username:e.target.value})}
-                            />
-                            <Label 
-                                color={errorMsg && errorMsg.username?"red":"#C0C3C7"} 
-                                position={formData.username}
-                            >Username</Label>
-                            <ErrorMsg>{errorMsg.username}</ErrorMsg>
-                        </InputWrapper>
-                        <InputWrapper>
-                            <Input 
-                                type="password"
-                                value={formData.password} 
-                                color={errorMsg && errorMsg.password ?"red":" #A8AAAE"} 
-                                onChange={(e)=>setFormData({...formData,password:e.target.value})}
-                            />
-                            <Label 
-                                position={formData.password}
-                                color={errorMsg && errorMsg.password?"red":"#C0C3C7"} 
-                            >Password</Label>
-                            <ErrorMsg>{errorMsg.password}</ErrorMsg>
-                        </InputWrapper>
-                        <InputWrapper>
-                            <Input 
-                                type="password" 
-                                value={formData.confirm_password} 
-                                color={errorMsg && errorMsg.confirm_password?"red":"#A8AAAE"} 
-                                onChange={(e)=>setFormData({...formData,confirm_password:e.target.value})}
-                            />
-                            <Label 
-                                position={formData.confirm_password}
-                                color={errorMsg && errorMsg.confirm_password?"red":"#C0C3C7"} 
-                            >Confirm Password</Label>
-                            <ErrorMsg>{errorMsg.confirm_password}</ErrorMsg>
-                        </InputWrapper>
-                        <div style={{fontWeight:"600" , fontSize:"clamp(.6rem,2vw,.9rem)"}}>
-                            Already have an account?   
-                            <SignIn to="/login">
-                                Sign in <I className="fa-solid fa-greater-than"/>
-                            </SignIn>
-                        </div>
-                        <Submit type="submit">Register now!</Submit>
-                    </Form>
-                </Content>
-            </ContentContainer>
-            </div>
-        </Container>
-        <Footer/>
+  return(
+    <div>  
+      <Container>
+        <div style={{padding:"min(2rem ,4%)",width:'100%',display:"flex",flexDirection:"column",gap:'15px'}}>
+        <div style={{alignSelf:"flex-start"}}><Logo/></div>
+        <ContentContainer>
+          <TextContainer>
+            <MainText>Lorem Shit + life is good I love Ghaddafi</MainText>
+            <SecondaryText>
+              i Think a;lskdfj askldf which 
+              implies klajflaj jaklsjf
+              alsjdfljlasj flkjkl ajsldk 
+              jalkdfjalsdfj
+            </SecondaryText>
+          </TextContainer>
+          <Content>
+            <Text>
+              <Title>Create Account</Title>
+              <Parg>be the first to receive latest offers!</Parg>
+            </Text>
+            <Form onSubmit={handleFormSubmit}>
+
+              <FieldAndError>
+                <InputWrapper>
+                  <Input 
+                      type="email" 
+                      value={formData.email} 
+                      color={error.fields && error.fields.includes("email")?"red":"#A8AAAE"} 
+                      onChange={(e)=>setFormData({...formData,email:e.target.value})}
+                  />
+                  <Label 
+                      position={formData.email}
+                      color={error.fields && error.fields.includes("email")?"red":"#C0C3C7"} 
+                  >Email</Label>
+                </InputWrapper>
+                <ErrorMsg>{error.message.email}</ErrorMsg>
+              </FieldAndError>
+
+              <FieldAndError>
+                <InputWrapper>
+                  <Input 
+                      type="text" 
+                      value={formData.name} 
+                      color={error.fields && error.fields.includes("name")?"red":"#A8AAAE"} 
+                      onChange={(e)=>setFormData({...formData,name:e.target.value})}
+                  />
+                  <Label 
+                      color={error.fields && error.fields.includes("name")?"red":"#C0C3C7"} 
+                      position={formData.name}
+                  >Name</Label>
+                </InputWrapper>
+                <ErrorMsg>{error.message.name}</ErrorMsg>
+              </FieldAndError>
+
+              <div style={{display:'flex',flexDirection:"column",gap:'15px'}}>
+
+                <FieldAndError>
+                  <InputWrapper>
+                    <Input 
+                        type="password"
+                        value={formData.password} 
+                        color={error.fields && error.fields.includes("password")?"red":"#A8AAAE"} 
+                        onChange={(e)=>setFormData({...formData,password:e.target.value})}
+                    />
+                    <Label 
+                        position={formData.password}
+                        color={error.fields && error.fields.includes("password")?"red":"#C0C3C7"} 
+                    >Password</Label>
+                  </InputWrapper>
+                  <div style={{display:"flex",flexDirection:"column",gap:'2px'}}>
+                    <PasswordErrorMsg>{error.message.password}</PasswordErrorMsg>
+                    <PasswordRules color={error.message.password==="The password field format is invalid."?"red":"black"}>
+                        - At least one uppercase letter<br/>
+                        - At least one digit (0-9)<br/>
+                        Example: SecureP@ssw0rd'
+                    </PasswordRules>
+                  </div>
+                </FieldAndError>
+
+                <FieldAndError>
+                  <InputWrapper>
+                    <Input 
+                        type="password" 
+                        value={formData.confirm_password} 
+                        color={error.fields && error.fields.includes("confirm_password")?"red":"#A8AAAE"} 
+                        onChange={(e)=>setFormData({...formData,confirm_password:e.target.value})}
+                    />
+                    <Label 
+                        position={formData.confirm_password}
+                        color={error.fields && error.fields.includes("confirm_password")?"red":"#C0C3C7"} 
+                    >Confirm Password</Label>
+                  </InputWrapper>
+                  <ErrorMsg>{error.message.confirm_password}</ErrorMsg>
+                </FieldAndError>
+
+              </div>
+
+              <div style={{fontWeight:"600" , fontSize:"clamp(.6rem,2vw,.9rem)"}}>
+                  Already have an account?   
+                  <SignIn to="/login">
+                      Sign in <I className="fa-solid fa-greater-than"/>
+                  </SignIn>
+              </div>
+              <Submit type="submit">Register now!</Submit>
+            </Form>
+          </Content>
+        </ContentContainer>
         </div>
+      </Container>
+      <Footer/>
+    </div>
     )
 }

@@ -24,6 +24,9 @@ import jordan4_13 from "../assets/jordan4blueback.jpg"
 
 // smaller :clamp(.6rem,2vw,.9rem);
 
+// smaller : clamp(.5rem,1.8vw,.8rem);
+
+
 // main title (shipping state) : 1.3rem --> 1.1rem (800px)
 // name - text in header: 1rem -->.8rem (800px)
 // buttons and subtext : .9rem -->.7rem (800px)
