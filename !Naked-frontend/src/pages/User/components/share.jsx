@@ -25,6 +25,11 @@ const Icon = styled.svg`
 cursor:pointer;
 height:20px;
 width:20px;
+
+@media screen and (max-width:400px){
+    height:15px;
+    width:15px;
+}
 `
 const ShareOptions = styled.div`
 box-shadow: 0 0px 10px rgba(0, 0, 0, 0.3);
@@ -35,6 +40,12 @@ border-radius:60px;
 padding:0 13px;
 flex-wrap:no-wrap;
 width:auto;
+@media screen and (max-width:400px){
+    width:100%;
+    padding:0 13px;
+    justify-content:space-between;
+    gap:10px;
+}
 `
 
 const SvgContainer = styled.div`
@@ -48,6 +59,18 @@ const Svg = styled.svg`
 cursor:pointer;
 height:27px;
 width:27px;
+@media screen and (max-width:400px){
+    height:23px;
+    width:23px;
+}
+`
+const FbSvg = styled(Svg)`
+    height:23px;
+    width:23px;
+    @media screen and (max-width:400px){
+        height:20px;
+        width:20px;
+    }
 `
 
 const TextBox = styled.div`
@@ -145,9 +168,9 @@ export default function Share({id}){
             </SvgContainer>
 
             <SvgContainer>
-                <Svg style={{color:'rgba(10, 128, 236, 1)',height:"23px",width:"23px"}} viewBox="0 0 16 16" fill="currentColor">
+                <FbSvg style={{color:'rgba(10, 128, 236, 1)'}} viewBox="0 0 16 16" fill="currentColor">
                     <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"></path>
-                </Svg>
+                </FbSvg>
                 <TextBox top={'-190%'} left={"-130%"} color={"rgba(10, 128, 236, 1)"}>facebook</TextBox>
             </SvgContainer>
 

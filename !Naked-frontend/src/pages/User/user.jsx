@@ -12,11 +12,14 @@ min-height:100vh;
 
 `
 const Section1 = styled.div`
-padding:min(2rem,4%);
 display:flex;
 gap:3rem;
 @media screen and (max-width:800px){
     flex-direction:column;
+    align-items:center;
+}
+@media screen and (max-width:600px){
+    width:100%;
 }
 `
 const ProfilePicContainer = styled.div`
@@ -31,28 +34,48 @@ const ContentContainer = styled.div`
 display:flex;
 flex-direction:column;
 gap:20px;
+@media screen and (max-width:600px){
+    width:100%;
+}
+
 `
 const Navigation = styled.div`
 display:flex;
 gap:50px;
-border-bottom:1px solid black;
+border-bottom:2px solid rgba(128, 128, 128,.4);
 height:30px;
+@media screen and (max-width:800px){
+    gap:20px;
+    justify-content:space-between;
+}
+
 `
 const NavigationText = styled.p`
 font-size:clamp(.8rem , 2.3vw ,1.1rem);
 font-weight:600;
 height:30px;
-color : ${({color})=>color};
-border-bottom: 1px solid ${({color})=>color};
+text-wrap:nowrap;
+color : ${({selected})=>selected ? "#00C2FF" : 'black'};
+border-bottom: 2px solid ${({selected})=>selected?"#00C2FF":"none"};
 cursor : pointer;
 transition: border .3s, color .3s;
+&:hover{
+    color: ${({selected})=>selected ? "#00C2FF" : "black"};
+}
 `
 const Content = styled.div`
-min-width:400px;
+min-width:30vw;
 min-height:230px;
+@media screen and (max-width:800px){
+    min-width:65vw;
+}
+@media screen and (max-width:600px){
+    width:100%;
+}
 `
 const Section2 = styled.div`
-
+width:100%;
+overflow:hidden;
 `
 export default function User(){
     const [currentSection ,setCurrentSection] = useState("User profile");
@@ -65,9 +88,9 @@ export default function User(){
                 </ProfilePicContainer>
                 <ContentContainer>
                     <Navigation>
-                        <NavigationText onClick={()=>setCurrentSection("User profile")} color={currentSection === "User profile" ? "#00C2FF":"black"}>User profile</NavigationText>
-                        <NavigationText onClick={()=>setCurrentSection("Your information")} color={currentSection === "Your information" ? "#00C2FF":"black"}>Your information</NavigationText>
-                        <NavigationText onClick={()=>setCurrentSection("Favorites")} color={currentSection === "Favorites" ? "#00C2FF":"black"}>Favorites</NavigationText>
+                        <NavigationText onClick={()=>setCurrentSection("User profile")} selected={currentSection === "User profile" }>User profile</NavigationText>
+                        <NavigationText onClick={()=>setCurrentSection("Your information")} selected={currentSection === "Your information"}>Your information</NavigationText>
+                        <NavigationText onClick={()=>setCurrentSection("Favorites")} selected={currentSection === "Favorites"}>Favorites</NavigationText>
                     </Navigation>
                     <Content>
                         {

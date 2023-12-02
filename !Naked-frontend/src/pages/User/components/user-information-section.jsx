@@ -20,6 +20,10 @@ display:grid;
 justify-content:space-between;
 grid-template-columns: 1fr 80px 120px;
 grid-gap:20px;
+
+@media screen and (max-width:800px){
+    grid-template-columns: 1fr 1fr 1fr;
+}
 `
 const Key = styled.p`
 font-weight:600;
@@ -29,6 +33,13 @@ const Value = styled.div`
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 width:fit-content;
+color:grey;
+
+@media screen and (max-width:800px){
+    justify-self:center;
+}
+
+
 `
 const Star  = styled.img`
 width:16px;
@@ -44,9 +55,11 @@ export default function UserInformationSection(){
                 <KeyValuePair>
                     <Key>number of orders </Key>
                     <Value>302</Value>
-                    <Link style={{color:"#00C2FF",fontWeight:"600",fontSize:"clamp(.6rem,2vw,.9rem)"}}>
-                        view orders ->
-                    </Link>
+                    <Value>
+                        <Link style={{color:"#00C2FF",fontWeight:"600",fontSize:"clamp(.6rem,2vw,.9rem)"}}>
+                            view orders ->
+                        </Link>
+                    </Value>
                 </KeyValuePair>
                 <KeyValuePair>
                     <Key>number of reviews</Key>
