@@ -10,14 +10,15 @@ import {Link, useNavigate} from "react-router-dom"
 // max-widths : 1 ->800px , 2->600px
 
 const Container = styled.div`
-// box-shadow: 1px 1px 10px rgba(189, 189, 189,1);
+box-shadow: 1px 1px 10px #A8AAAE;
 border-radius:4px;
-border:1px solid  rgba(0,0,0,.3);
+// border:1px solid  rgba(0,0,0,.3);
 background :#F1F4F9;
 padding:20px;
 width:100%;
 display:flex;
 flex-direction:column;
+gap:20px;
 `
 const Header = styled.div`
 display:flex;
@@ -28,11 +29,18 @@ gap:20px;
 const DetailsContainer = styled.div`
 display:flex;
 justify-content:space-between;
+@media screen and (max-width:600px){
+    justify-content:start;
+    gap:15px;
+}
 `
 const OrderSummary = styled.div`
 display:flex;
 gap:max(10%,20px);
 flex:3;
+@media screen and (max-width:600px){
+    flex:none;
+}
 `
 
 const StatusIdContainer = styled.div`
@@ -40,6 +48,10 @@ display:flex;
 gap:max(10%,20px);
 flex:1.5;
 justify-content:end;
+
+@media screen and (max-width:600px){
+    flex:none;
+}
 `
 const ShippingState = styled.p`
 margin:0;
@@ -54,20 +66,21 @@ margin:0;
 color:black;
 font-size:1rem;
 font-weight:600;
-@media screen and (max-width:800px){
+@media screen and (max-width:600px){
     font-size:.8rem;
+    display:none;
 }
-
 `
 
 const ProductsContainer = styled.div`
 width:100%;
-padding:25px;
+padding: 0 20px;
 display:flex;
 flex-direction:column;
-gap:30px;
-
-
+gap:20px;
+@media screen and (max-width:800px){
+    padding:0;
+}
 `
 const Product = styled.div`
 box-shadow: 0 0 4px rgba(0, 0, 0,.3);
@@ -90,9 +103,6 @@ flex:1;
 `
 const Thumbnail = styled.img`
 width:100%;
-@media screen and (max-width:600px){
-    width:100%;
-}
 `
 const NameContainer = styled.div`
 flex:2;
@@ -196,17 +206,18 @@ export default function OrderCard(props){
     function handleWriteAReviewClick(id){
         navigate("/review/"+id);
     }
+    
     return(
         <Container>
             <Header>
                 <DetailsContainer>
                     <OrderSummary>
-                        <Text>ordered at : <br/>{props.order.created_at}</Text>
+                        <Text style={{display:'inline'}}>ordered at : <br/>{props.order.created_at}</Text>
                         <Text>total cost : <br/>${props.order.total_cost}</Text>
                         <Text>ship to : <br/>{props.order.recipiant_name}</Text>
                     </OrderSummary>
                     <StatusIdContainer>
-                        <Text>order status : <br/>{props.order.status}</Text>
+                        <Text style={{display:"inline"}}>order status : <br/>{props.order.status}</Text>
                         <Text>order id : <br/>#{props.order.id}</Text>
                     </StatusIdContainer>
                 </DetailsContainer>

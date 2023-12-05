@@ -12,6 +12,8 @@ import { ORDERS } from '../../components/products-data';
 import { Header,Content } from '../../components/StyledComponents/styled-components';
 import { useFetchData } from '../../hooks/use-fetch-data';
 import Loading from '../../components/Loading/loading';
+import OrdersSection from './orders-section';
+import CanceledOrdersSection from './canceled-orders-section';
 
 //max-width: 1500px;
 const Container = styled.div`
@@ -29,7 +31,7 @@ font-size:clamp(.9rem,3vw,1.5rem);
 const PagesContainer = styled.div`
 display:flex;
 gap:max(7%,20px);
-border-bottom:1px solid black;
+border-bottom:2px solid rgba(128, 128, 128,.4);
 height:30px;
 font-size:1rem;
 font-weight:600;
@@ -39,8 +41,10 @@ cursor:pointer;
 margin:0;
 height:30px;
 box-sizing:border-box;
-color:${({color})=> color};
-border-bottom:1px solid ${({color})=> color};
+
+color : ${({selected})=>selected ? "#00C2FF" : 'black'};
+border-bottom: 2px solid ${({selected})=>selected?"#00C2FF":"none"};
+
 transition:all .3s;
 &:hover{
     opacity:.6;
@@ -51,11 +55,7 @@ font-size:1rem;
     font-size:.8rem;
 }
 `
-const OrderCardsContainer = styled.div`
-display:flex;
-flex-direction:column;
-gap:2rem;
-`
+
 export const NoOrdersContainer = styled.div`
 display:flex;
 flex-direction:column;
@@ -123,19 +123,9 @@ export function constructUrl(url, searchParams, urlParams=null, addition=null){
 
 export default function Orders(){
     const [page,setPage] = useState("orders")
-    const {token} = useContext(userStateContext);
     const [searchParams, setSearchParams] = useSearchParams()
-    const [TotalPagesCount, setTotalPagesCount] = useState(40)
 
-    let init = { headers:{"Authorization":"Bearer " + token} }
-    let endpoint_url = "http://127.0.0.1:8000/api/orders";
-    let url = constructUrl(endpoint_url,searchParams,null,page=="orders"?"":"/"+page)
-    let {data, error, loading } = useFetchData(url , init, [searchParams,page]);
-    let orders = data?.data.orders || ORDERS;
-    
-    if (loading){
-        return <Loading />
-    }
+   
 
     function handlePageTitleClick(page){
         setPage(page);
@@ -160,47 +150,13 @@ export default function Orders(){
                         handleSearchFormSubmit={handleSearchFormSubmit}
                     />
                     <PagesContainer>
-                        <PageTitle onClick={()=>handlePageTitleClick("orders")} color={page ==="orders" ?" #00C2FF":"black"}>orders</PageTitle>
-                        <PageTitle onClick={()=>handlePageTitleClick("canceled")} color={page ==="canceled" ?" #00C2FF":"black"}>canceled orders</PageTitle>
+                        <PageTitle onClick={()=>handlePageTitleClick("orders")} selected={page ==="orders"}>orders</PageTitle>
+                        <PageTitle onClick={()=>handlePageTitleClick("canceled")} selected={page ==="canceled"}>canceled orders</PageTitle>
                     </PagesContainer>
-                </Custom_Header>
-                { 
-                    orders && orders.length > 0 ?
-                    <>
-                        <OrderCardsContainer>
-                            {   
-                                orders.map((order)=>{
-                                    return <OrderCard key={order.id} order={order} />
-                                })
-                            }
-                        </OrderCardsContainer>
-                        <Pagination TotalPagesCount={TotalPagesCount} />
-                    </>
-                    :
-                    <>
-                        {
-                            page === "canceled" &&
 
-                            <NoOrdersContainer>
-                                <NoOrdersTitle>
-                                    You haven't canceled any order yet !<br/>
-                                    keep it clean 
-                                </NoOrdersTitle>
-                                <ProductsSlider  title={"You may like to order : "} products={PRODUCTS}/>
-                            </NoOrdersContainer> 
-                        }
-                        {
-                            page === "orders" &&
-                            <NoOrdersContainer>
-                                <NoOrdersTitle>
-                                    You haven't ordered anything yet !
-                                </NoOrdersTitle>
-                                <ProductsSlider  title={"You may like to order : "} products={PRODUCTS}/>
-                            </NoOrdersContainer>
-                        
-                        }
-                    </>
-                }
+                </Custom_Header>
+                {page === "orders" && <OrdersSection />}
+                {page === "canceled" && <CanceledOrdersSection/>}
             </Custom_Content>
         </Container>
     )
