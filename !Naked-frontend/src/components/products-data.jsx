@@ -22,9 +22,10 @@ import jordan4_13 from "../assets/jordan4blueback.jpg"
 
 // smaller : clamp(.8rem , 2.3vw ,1.1rem);
 
-// smaller :clamp(.6rem,2vw,.9rem);
+// smaller :clamp(.7rem,2vw,.9rem);
 
-// smaller : clamp(.5rem,1.8vw,.8rem);
+// smaller :clamp(.65rem,1.8vw,.8rem);
+
 
 
 // main title (shipping state) : 1.3rem --> 1.1rem (800px)

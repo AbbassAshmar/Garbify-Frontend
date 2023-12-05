@@ -12,7 +12,8 @@ import SearchSort from "../../components/SearchSort/search-sort"
 import PublicPrivateButton from "../../components/PublicPrivateButton/public-private-button";
 import LikesViews from "../../components/LikesViews/likes-views";
 import { FAV_LISTS } from "../../components/products-data";
-import { useFetchData } from "../../hooks/use-fetch-data";
+import { useFetchData,sendRequest } from "../../hooks/use-fetch-data";
+import Loading from "../../components/Loading/loading";
 
 const Container = styled.div`
 width:100%;
@@ -125,16 +126,16 @@ export default function Favorites(){
     
 
     // request favorites 
-
     let favorites_url = constructUrl("http://127.0.0.1:8000/api/users/user/favorites",searchParams)
-    let {data:favoritesData, error:errorFavorites, loading:loadingFavorites,sendRequest} = useFetchData(favorites_url,request_init,[searchParams])
+    let {data:favoritesData, error:errorFavorites, loading:loadingFavorites} = useFetchData(favorites_url,request_init,[searchParams])
     let [favoritesCount, TotalPagesCount,favorites] = [0 , 0 , null];
     if (favoritesData){
         favoritesCount = favoritesData['metadata']['total_count'];
         TotalPagesCount = favoritesData['metadata']['pages_count']
-        favorites = favoritesData['data'];
+        favorites = favoritesData['data']['favorites'];
     }
     favorites = PRODUCTS
+
 
     // request products for slider 
     let all_favorites_url = "http://127.0.0.1:8000/api/favorites?limit=10";
@@ -145,7 +146,6 @@ export default function Favorites(){
     }
     sliderProducts = PRODUCTS
 
- 
     function handleSearchFormSubmit(e){
         e.preventDefault();
         let data = new FormData(e.target);
@@ -225,6 +225,12 @@ export default function Favorites(){
             measureWidth()
         }
     },[titleText,spanRef])
+
+    if(loadingFavorites){
+        return (
+            <Loading />
+        )
+    }
 
     return (
         <Container>

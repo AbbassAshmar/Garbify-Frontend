@@ -24,14 +24,20 @@ grid-gap:20px;
 @media screen and (max-width:800px){
     grid-template-columns: 1fr 1fr 1fr;
 }
+@media screen and (max-width:600px){
+    grid-template-columns: 42% 20% 25%;
+}
 `
 const Key = styled.p`
 font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
+font-size:clamp(.8rem,2vw,1rem);
+text-wrap:nowrap;
 `
 const Value = styled.div`
+text-wrap:nowrap;
+
 font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
+font-size:clamp(.7rem,2vw,.9rem);
 width:fit-content;
 color:grey;
 
@@ -56,7 +62,7 @@ export default function UserInformationSection(){
                     <Key>number of orders </Key>
                     <Value>302</Value>
                     <Value>
-                        <Link style={{color:"#00C2FF",fontWeight:"600",fontSize:"clamp(.6rem,2vw,.9rem)"}}>
+                        <Link style={{color:"#00C2FF",fontWeight:"600",fontSize:"clamp(.7rem,2vw,.9rem)",textDecoration:"none"}}>
                             view orders ->
                         </Link>
                     </Value>

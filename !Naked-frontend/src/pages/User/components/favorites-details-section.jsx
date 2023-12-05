@@ -23,13 +23,15 @@ grid-gap:20px;
 `
 const Key = styled.p`
 font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
+font-size:clamp(.8rem,2vw,1rem);
+text-wrap:nowrap;
 `
 const Value = styled.div`
 font-weight:600;
 color:grey;
-font-size:clamp(.6rem,2vw,.9rem);
+font-size:clamp(.7rem,2vw,.9rem);
 width:fit-content;
+text-wrap:nowrap;
 
 @media screen and (max-width:800px){
     justify-self:center;
@@ -44,7 +46,7 @@ export default function FavoritesDetailsSection(){
                     <Key>favorites</Key>
                     <Value>23</Value>
                     <Value>
-                        <Link style={{color:"#00C2FF",fontWeight:"600",fontSize:"clamp(.6rem,2vw,.9rem)"}}>
+                        <Link style={{color:"#00C2FF",fontWeight:"600",fontSize:"clamp(.7rem,2vw,.9rem)", textDecoration:"none"}}>
                             view all ->
                         </Link>
                     </Value>

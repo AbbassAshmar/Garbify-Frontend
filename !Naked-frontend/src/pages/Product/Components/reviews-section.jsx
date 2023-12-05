@@ -6,13 +6,13 @@ import { ratingToStars } from "./details-container"
 import star from "../../../assets/star.png"
 import half_star from "../../../assets/half_star.png"
 import empty_star from "../../../assets/empty_star.png"
-import hoody from "../../../assets/Hoody.jpg"
-import hoody2 from "../../../assets/Hoody2.jpg"
 import { userStateContext } from "../../../Contexts/user-state"
 import Pagination from "../../../components/Pagination/pagination"
 import { useSearchParams } from "react-router-dom"
 import { REVIEWS } from "../../../components/products-data"
-import { requestData } from "../../OtherUsersFavorites/other-users-favorites"
+import Loading from "../../../components/Loading/loading"
+import { constructUrl } from "../../Orders/orders"
+import { useFetchData } from "../../../hooks/use-fetch-data"
 
 const Container = styled.div`
 margin: 0 0 2rem 0;
@@ -64,33 +64,25 @@ flex-direction : column;
 `
 
 export default function ReviewsSection({product_id}){
-    const userState = useContext(userStateContext)
-    const [reviews, setReviews] = useState(REVIEWS);
-    const [TotalPagesCount, setTotalPagesCount] = useState(30);
-    const [reviewsDetails, setReviewsDetails] = useState({average_ratings:5 , reviews_count:0});
+    const {token} = useContext(userStateContext)
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    // useEffect(()=>{
-    //     let init = {
-    //         headers:{
-    //             "Authorization":"Bearer "+user_token 
-    //         }
-    //     }
+    let init = {headers:{"Authorization":"Bearer " + token}}
+    let endpoint_url = "http://127.0.0.1:8000/api/products/" + product_id + "/reviews";
+    let url = constructUrl(endpoint_url,searchParams)
+    let {data:reviewsData, error:reviewsError, loading:reviewsLoading, setData:setReviews} = useFetchData(url , init, [searchParams]);
 
-    //     const REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/reviews"
-    //     const LIKED_REVIEWS_URL = "http://127.0.0.1:8000/api/products/"+product_id+"/users/user/reviews/liked"
-    
-    //     let reviews = requestData(REVIEWS_URL);
-    //     let likedReviews = requestData(LIKED_REVIEWS_URL,init)
+    let reviews = reviewsData?.data.reviews || REVIEWS;
+    let TotalPagesCount = reviewsData?.metadata.pages_count || [];
+    let reviewsDetails = {
+        average_ratings:reviewsData?.metadata.average_ratings || 5, 
+        reviews_count:reviewsData?.metadata.total_count || 0
+    };
 
-    //     if (reviews){
-    //         setReviews(reviews['reviews'])
-    //         setReviewsDetails({average_ratings:reviews['average_ratings'],reviews_count:reviews['total_count']})
-    //     }
-    //     if (likedReviews){
-    //         setLikedReviews(likedReviews['liked_reviews'])
-    //     }
-    // },[])
-    
+    if (reviewsLoading){
+        return (<Loading />)
+    }
+
     return (
         <Container>
             <Header>

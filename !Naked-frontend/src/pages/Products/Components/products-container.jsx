@@ -7,6 +7,8 @@ import { PRODUCTS } from "../../../components/products-data"
 import { requestData } from "../../OtherUsersFavorites/other-users-favorites"
 import { Products } from "../../../components/StyledComponents/styled-components"
 import { constructUrl } from "../../Orders/orders"
+import { useFetchData } from "../../../hooks/use-fetch-data"
+import Loading from "../../../components/Loading/loading"
 
 const Container = styled.div`
 flex:4;
@@ -68,24 +70,18 @@ export function handleTagRemove(searchParams,setSearchParams,key){
 }
 
 export default function ProductsContainer(props){
-    const [TotalPagesCount,setTotalPagesCount] = useState(40)
-    const [products , setProducts ] = useState(PRODUCTS);
     const [searchParams , setSearchParams ] = useSearchParams();
     const urlParametersList = useParams()['*'].split('/')
 
-    // useEffect(()=>{
 
-    //     let endpoint_url = "http://127.0.0.1:8000/api/products"
-    //     endpoint_url+=(urlParametersList.length>0)?"?categories[]="+urlParametersList.join('&categories[]='):""
-    //     let url = constructUrl(endpoint_url,searchParams);
-    //     let data = requestData(url)
+    let endpoint_url = "http://127.0.0.1:8000/api/products"
+    endpoint_url+=(urlParametersList.length>0)?"?categories[]="+urlParametersList.join('&categories[]='):""
+    let url = constructUrl(endpoint_url,searchParams);
+    let {data, error,loading} = useFetchData(url)
 
-    //     if (data){
-    //         setProducts(data.products);
-    //         setTotalPagesCount();
-    //     }
-    // },[])
- 
+    let products = data?.data.products || PRODUCTS;
+    let TotalPagesCount = data?.metadata.pages_count || 40;
+
     // create an object of query strings 
     const searchParamsObj = ()=>{
         const tempObj= {};
@@ -93,6 +89,10 @@ export default function ProductsContainer(props){
             tempObj[key] = value
         }
         return tempObj
+    }
+
+    if (loading){
+        return <Loading />
     }
 
     return (

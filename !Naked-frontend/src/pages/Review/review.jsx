@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CanNotReview from './Componenets/can-not-review';
 import ReviewForm from './Componenets/review-form';
+import { sendRequest } from '../../hooks/use-fetch-data';
 const Container = styled.div`
 
 `
@@ -12,18 +13,18 @@ export default function Review(){
     
     
     async function checkIfReviewed(product_id){
-        const request = await fetch("http://127.0.0.1:8000/api/products/"+product_id+"/users/user/reviews");
-        const response = await request.json(); 
-        if ( request.status == 200){
-            setIsReviewed(true)
-        }
-        else {
+
+        try {
+            let url = "http://127.0.0.1:8000/api/products/"+product_id+"/users/user/reviews";
+            const response = sendRequest(url)
             setIsReviewed(false)
+        }catch(error){
+            setIsReviewed(true)
         }
     }
 
     useEffect(()=>{
-        // checkIfReviewed(product_id);
+        checkIfReviewed(product_id);
     },[])
     
     return (

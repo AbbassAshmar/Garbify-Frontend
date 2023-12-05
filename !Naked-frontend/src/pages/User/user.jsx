@@ -43,17 +43,18 @@ const Navigation = styled.div`
 display:flex;
 gap:50px;
 border-bottom:2px solid rgba(128, 128, 128,.4);
-height:30px;
+height:min(35px,max(5vw,24px));
+
 @media screen and (max-width:800px){
-    gap:20px;
+    gap:10px;
     justify-content:space-between;
 }
 
 `
 const NavigationText = styled.p`
-font-size:clamp(.8rem , 2.3vw ,1.1rem);
+font-size:clamp(.8rem, 2.6vw, 1.1rem);
 font-weight:600;
-height:30px;
+height:min(35px,max(5vw,24px));
 text-wrap:nowrap;
 color : ${({selected})=>selected ? "#00C2FF" : 'black'};
 border-bottom: 2px solid ${({selected})=>selected?"#00C2FF":"none"};
@@ -81,7 +82,7 @@ export default function User(){
     const [currentSection ,setCurrentSection] = useState("User profile");
     return (
         <Container>
-            <div style={{padding:"min(2rem, 4%)",gap:'5rem',display:'flex',flexDirection:'column',alignItems:'center'}}>
+            <div style={{padding:"min(2rem, 4%)",gap:'2rem',display:'flex',flexDirection:'column',alignItems:'center'}}>
             <Section1>
                 <ProfilePicContainer>
                     <ProfilePic src={Hoody} />

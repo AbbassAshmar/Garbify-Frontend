@@ -28,7 +28,6 @@ const SubTitle = styled.p`
 color : #00C2FF;
 font-size:1em;
 font-weight:600;
-
 `
 const Content = styled.form`
 display:flex;
@@ -56,18 +55,27 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-size:4rem;
+cursor:pointer;
+
+&:hover{
+    opacity:.7;
+}
 
 `
 const TitleInput  = styled.input`
-padding:.3em;
-height:30px;
+border:2px solid #A8AAAE;
+border-radius:3px;
+padding:10px;
 `
 
 const ReviewInput= styled.textarea`
 width:100%;
-padding:.3em;
 resize:none;
 height:200px;
+
+border:2px solid #A8AAAE;
+border-radius:3px;
+padding:10px;
 `
 const StarsContainer = styled.div`
 display:flex;
@@ -77,11 +85,35 @@ const Star = styled.img`
 width:10%;
 cursor:pointer;
 `
+const RadioField = styled.div`
+color:grey;
+&:hover {
+    color:#00C2FF;
+}
+cursor:pointer;
+dispay:inline;
+width:fit-content;
+`
+const RadioInput = styled.input`
+cursor:pointer;
+background:#00C2FF;
+cursor:pointer;
+&:checked+label{
+    color:#00C2FF;
+}
+`
+const RadioLabel= styled.label`
+font-weight:600;
+color:inherit;
+cursor:pointer;
+`
 const SubmitButton = styled.button`
 width:100%;
 background:#00C2FF;
 border:none;
 padding:.5rem 0;
+font-weight:600;
+cursor:pointer;
 `
 
 //multipart/form-data , sends file in binary fromat
@@ -96,7 +128,7 @@ export default function ReviewForm(){
     const [images , setImages ]=  useState([]);
     const [details, setDetails] = useState({sizes:ss, colors:cs});
 
-    const userContext = useContext(userStateContext);
+    const {token} = useContext(userStateContext);
     const {product_id} = useParams();
 
     useEffect(()=>{
@@ -140,7 +172,6 @@ export default function ReviewForm(){
 
     function handleReviewFormSubmit (e){
         e.preventDefault();
-        console.log(images)
         let form_data = new FormData(e.target);
         for (let x in images){
             form_data.append('images[]', images[x].file)
@@ -252,10 +283,10 @@ export default function ReviewForm(){
                         {
                             details.sizes && details.sizes.map((size)=>{
                                 return (
-                                    <div style={{display:"flex", gap:"8px"}}>
-                                        <input type="radio" name="size" value={size} id={size}/>
-                                        <label htmlFor={size}>{size}</label>
-                                    </div>
+                                    <RadioField style={{display:"flex", gap:"8px"}}>
+                                        <RadioInput type="radio" name="size" value={size} id={size}/>
+                                        <RadioLabel htmlFor={size}>{size}</RadioLabel>
+                                    </RadioField>
                                 )
                             })
                         }
@@ -269,17 +300,17 @@ export default function ReviewForm(){
                         {
                             details.colors && details.colors.map((color)=>{
                                 return (
-                                    <div style={{display:"flex", gap:"8px"}}>
-                                        <input type="radio" name="color" value={color} id={color}/>
-                                        <label htmlFor={color}>{color}</label>
-                                    </div>
+                                    <RadioField style={{display:"flex", gap:"8px"}}>
+                                        <RadioInput type="radio" name="color" value={color} id={color}/>
+                                        <RadioLabel htmlFor={color}>{color}</RadioLabel>
+                                    </RadioField>
                                 )
                             })
                         }
                     </div>
                 </FormRow>
                 <SubmitButton type="submit">
-                    Submit
+                    Add Review
                 </SubmitButton>
            </Content>
         </Container>

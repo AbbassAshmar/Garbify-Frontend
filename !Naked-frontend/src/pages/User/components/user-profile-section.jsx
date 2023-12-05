@@ -26,12 +26,12 @@ gap:5px;
 const FieldLabel = styled.p`
 margin:0;
 font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 const FieldValue = styled.p`
 margin:0;
 font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
+font-size:clamp(.7rem,2vw,.9rem);
 color:grey;
 `
 const EditProfile = styled.button`
@@ -40,7 +40,7 @@ cursor :pointer;
 border:none;
 outline:none;
 font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
+font-size:clamp(.7rem,2vw,.9rem);
 padding: 10px 20px;
 border-radius:7px;
 transition:background .3s;

@@ -134,7 +134,6 @@ export default function Share({id}){
             setLinkText("copied")
         });
         setLinkText("link copied")
-        // window.prompt("Copy to clipboard: Ctrl+C, Enter", url);
     }
 
     return (

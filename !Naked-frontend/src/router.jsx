@@ -67,14 +67,11 @@ export const router = createBrowserRouter([
     {
         path:'/login',
         element:<Login />
-
     },
     
     {
         path:"*",
         element : <div>Not Found</div>
     },
-    
-    
 
 ])

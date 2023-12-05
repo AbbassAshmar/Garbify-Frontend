@@ -27,7 +27,7 @@ color:red;
 margin-top:4px;
 margin-left: 3%;
 font-weight:600;
-font-size: clamp(.5rem,1.8vw,.8rem);
+font-size: clamp(.65rem,1.8vw,.8rem);
 `
 const PassInputsContainer = styled(InputsContainer)`
 margin-bottom:${({margin})=>margin};
@@ -77,6 +77,14 @@ flex:1;
 export default function UpdateUserProfileForm(){
     const [showPasswordInputs , setShowPasswordInputs] = useState(false)
 
+    const [formData, setFormData] = useState({
+        email:"",
+        name:"",
+        password:"",
+        old_password:"",
+        confirm_password:"",
+    })
+
     const [error,setError] = useState({
         fields:['name','email','old_password','password'] , 
         message:{password:"Wrong password bitch.",
@@ -91,14 +99,20 @@ export default function UpdateUserProfileForm(){
                 <InputsContainer>
                     <div>
                         <InputWrapper>
-                            <Input color={error.fields && error.fields.includes("name")?"red":"#A8AAAE"} />
+                            <Input 
+                                color={error.fields && error.fields.includes("name")?"red":"#A8AAAE"}                       
+                                onChange={(e)=>setFormData({...formData,name:e.target.value})}
+                            />
                             <Label color={error.fields && error.fields.includes("name")?"red":"#C0C3C7"} >Name</Label>
                         </InputWrapper> 
                         <ErrorMsg>{error.message.name}</ErrorMsg>
                     </div>
                     <div>
                         <InputWrapper>
-                            <Input color={error.fields && error.fields.includes("email")?"red":"#A8AAAE"} />
+                            <Input 
+                                color={error.fields && error.fields.includes("email")?"red":"#A8AAAE"} 
+                                onChange={(e)=>setFormData({...formData,email:e.target.value})}
+                            />
                             <Label color={error.fields && error.fields.includes("email")?"red":"#C0C3C7"} > email</Label>
                         </InputWrapper> 
                         <ErrorMsg>{error.message.email}</ErrorMsg>
@@ -110,7 +124,10 @@ export default function UpdateUserProfileForm(){
                 <PassInputsContainer maxHeight={showPasswordInputs?"50vh" :"0"} margin={showPasswordInputs?"2rem":"0"}>
                     <div>
                         <InputWrapper style={{margin:"6px 0 0 0"}}>
-                            <Input color={error.fields && error.fields.includes("old_password")?"red":"#A8AAAE"} />
+                            <Input 
+                                color={error.fields && error.fields.includes("old_password")?"red":"#A8AAAE"} 
+                                onChange={(e)=>setFormData({...formData,old_password:e.target.value})}
+                            />
                             <Label color={error.fields && error.fields.includes("old_password")?"red":"#C0C3C7"} >old password</Label>
                         </InputWrapper> 
                         <ErrorMsg>{error.message.old_password}</ErrorMsg>
@@ -118,7 +135,10 @@ export default function UpdateUserProfileForm(){
 
                     <div>
                         <InputWrapper>
-                            <Input color={error.fields && error.fields.includes("password")?"red":"#A8AAAE"} />
+                            <Input 
+                                color={error.fields && error.fields.includes("password")?"red":"#A8AAAE"} 
+                                onChange={(e)=>setFormData({...formData,password:e.target.value})}
+                            />
                             <Label color={error.fields && error.fields.includes("password")?"red":"#C0C3C7"} >new password</Label>
                         </InputWrapper> 
                         <div style={{display:"flex",flexDirection:"column",gap:'2px'}}>
@@ -133,14 +153,17 @@ export default function UpdateUserProfileForm(){
 
                     <div>
                     <InputWrapper>
-                        <Input color={error.fields && error.fields.includes("confirm_password")?"red":"#A8AAAE"} />
-                        <Label color={error.fields && error.fields.includes("confirm_password")?"red":"#C0C3C7"} >confirm password</Label>
+                        <Input 
+                            color={error.fields && error.fields.includes("confirm_password")?"red":"#A8AAAE"} 
+                            onChange={(e)=>setFormData({...formData,confirm_password:e.target.value})}
+                        />
+                        <Label color={error.fields && error.fields.includes("confirm_password")?"red":"#C0C3C7"}>confirm password</Label>
                     </InputWrapper> 
                     <ErrorMsg>{error.message.confirm_password}</ErrorMsg>
                     </div>
                 </PassInputsContainer>
                 <ButtonsContainer>
-                    <SaveButton>Save</SaveButton>
+                    <SaveButton>Save</SaveButton>   
                     <CancelButton>Cancel</CancelButton>
                 </ButtonsContainer>
             </div>

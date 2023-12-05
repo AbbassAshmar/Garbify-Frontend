@@ -58,7 +58,7 @@ export const Text = styled.div`
 text-align:left;
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:5px;
 `
 export const Title =styled.h2`
 font-weight:600;
@@ -87,6 +87,7 @@ width:100%;
 position:relative;
 `
 export const Input = styled.input`
+height:2.7rem;
 width:100%;
 border-radius:5px;
 border:2px solid ${({color})=>color};
@@ -101,7 +102,7 @@ export const Label =styled.label`
 position:absolute;
 top:${({position})=>position?'-17%':"30%"};
 left:${({position})=>position?'2%':"3%"};
-font-size:${({position})=>position?'.8rem':".9rem"};
+font-size:${({position})=>position?'.6rem':".8rem"};
 opacity:1;
 z-index:3;
 color:${({color})=>color};
@@ -110,7 +111,7 @@ transition:all .3s;
 ${Input}:focus + &{
     top:-17%;
     left:2%;
-    font-size:.8rem;
+    font-size:clamp(.5rem,1.8vw,.8rem);
     color:#00C2FF;
 }
 font-weight:600;
@@ -119,7 +120,7 @@ export const PasswordRules = styled.p`
 color:${({color})=>color};
 opacity:.7;
 font-weight:500;
-font-size: clamp(.5rem,1.8vw,.8rem);
+font-size: clamp(.65rem,1.8vw,.8rem);
 margin-left: 3%;
 `
 export const ErrorMsg = styled.p`
@@ -127,7 +128,7 @@ margin:0;
 color:red;
 margin-left: 3%;
 font-weight:600;
-font-size: clamp(.5rem,1.8vw,.8rem);
+font-size: clamp(.65rem,1.8vw,.8rem);
 &:empty::before{
   content:"";
   display:inline-block;
@@ -142,7 +143,7 @@ font-size: clamp(.5rem,1.8vw,.8rem);
 `
 
 export const Submit = styled.button`
-height:min(10vh, 60px);
+height:60px;
 width:100%;
 border-radius:5px;
 border:none;
@@ -155,6 +156,9 @@ transition:background .3s;
 }
 font-weight:600;
 font-size: clamp(.8rem , 2.3vw ,1.1rem);
+@media screen and (max-width:800px){
+  height:40px;
+}
 `
 
 export const SignIn = styled(Link)`
@@ -302,7 +306,7 @@ export default function Registration(){
                         color={error.fields && error.fields.includes("password")?"red":"#C0C3C7"} 
                     >Password</Label>
                   </InputWrapper>
-                  <div style={{display:"flex",flexDirection:"column",gap:'2px'}}>
+                  <div style={{display:"flex",flexDirection:"column",gap:'3px'}}>
                     <PasswordErrorMsg>{error.message.password}</PasswordErrorMsg>
                     <PasswordRules color={error.message.password==="The password field format is invalid."?"red":"black"}>
                         - At least one uppercase letter<br/>

@@ -11,6 +11,7 @@ import { requestData } from '../OtherUsersFavorites/other-users-favorites';
 import { ORDERS } from '../../components/products-data';
 import { Header,Content } from '../../components/StyledComponents/styled-components';
 import { useFetchData } from '../../hooks/use-fetch-data';
+import Loading from '../../components/Loading/loading';
 
 //max-width: 1500px;
 const Container = styled.div`
@@ -130,11 +131,10 @@ export default function Orders(){
     let endpoint_url = "http://127.0.0.1:8000/api/orders";
     let url = constructUrl(endpoint_url,searchParams,null,page=="orders"?"":"/"+page)
     let {data, error, loading } = useFetchData(url , init, [searchParams,page]);
-    data = ORDERS;
+    let orders = data?.data.orders || ORDERS;
     
-
     if (loading){
-        return <p>loading...</p>
+        return <Loading />
     }
 
     function handlePageTitleClick(page){
@@ -165,11 +165,11 @@ export default function Orders(){
                     </PagesContainer>
                 </Custom_Header>
                 { 
-                    data && data.length > 0 ?
+                    orders && orders.length > 0 ?
                     <>
                         <OrderCardsContainer>
                             {   
-                                data.map((order)=>{
+                                orders.map((order)=>{
                                     return <OrderCard key={order.id} order={order} />
                                 })
                             }

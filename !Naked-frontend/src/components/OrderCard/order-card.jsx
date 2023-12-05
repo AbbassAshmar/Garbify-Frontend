@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 
 // Main title :clamp(.9rem,3vw,1.5rem);
 
@@ -192,6 +192,10 @@ cursor:pointer;
 }
 `
 export default function OrderCard(props){
+    const navigate = useNavigate();
+    function handleWriteAReviewClick(id){
+        navigate("/review/"+id);
+    }
     return(
         <Container>
             <Header>
@@ -237,7 +241,7 @@ export default function OrderCard(props){
                                 <ButtonsContianer>
                                     <Button>Add to favorites</Button>
                                     {
-                                        props.order.status === "delivered" && <Button>write a review</Button>
+                                        props.order.status === "delivered" && <Button onClick={(e)=>handleWriteAReviewClick(product.id)}>write a review</Button>
                                     }
                                     {
                                         props.order.status == "delivered" && <Button>return product</Button>

@@ -5,6 +5,8 @@ import half_star from "../../../assets/half_star.png"
 import empty_star from "../../../assets/empty_star.png"
 import { useContext, useEffect, useState } from "react"
 import {userStateContext} from "../../../Contexts/user-state"
+import { sendRequest } from "../../../hooks/use-fetch-data"
+
 const Container = styled.div`
 width:100%;
 border-bottom:2px solid #F1F4F9;
@@ -160,7 +162,18 @@ font-size:.9rem;
 export default function Review(props){
     const [helpfulCount, setHelpfulCount] = useState(0)
     const [isLiked, setIsLiked] = useState(false)
-    const userState = useContext(userStateContext)
+    const {token} = useContext(userStateContext)
+
+    const init = (method) => {
+        return {
+            type:method, 
+            headers : {
+                "accepts" :"application/json",
+                "Content-type" : "application/json" ,
+                "Authorization" : "Bearer " + token
+            }
+        }
+    }
 
     useEffect(()=>{
         setHelpfulCount(props.helpful_count)
@@ -168,37 +181,32 @@ export default function Review(props){
     },[props])
 
     async function handleHelpfulButtonClick(){
-        const request = await fetch("http://127.0.0.1:8000/api/reviews/"+props.id+"/like",{
-            type:"POST",
-            headers: {
-                "Content-type" : "application/json" ,
-                "Authorization" : "Bearer " + userState.token
+        let url = "http://127.0.0.1:8000/api/reviews/"+props.id+"/like";
+        try {
+            const response = await sendRequest(url, init("POST"))
+            if (response){
+                setHelpfulCount(response.data.helpful_count)
+                setIsLiked(response.data.liked)
             }
-        });
-        const response = await request.json(); 
-        if ( request.status == 200){
-            setHelpfulCount(response.data.helpful_count)
-            setIsLiked(response.data.liked)
+        }catch(error){
+            
         }
     }
 
-    function requestDelete(){
-        const init = {
-            method:"DELETE",
-            headers:{
-                "Authorization" :"Bearer " + token
-            }
-        }
-        const request = fetch("http://127.0.0.1:8000/api/reviews/"+props.id,init)
-        return request
+    async function requestDelete(){
+        let url ="http://127.0.0.1:8000/api/reviews/"+props.id
+        return await sendRequest(url,init("DELETE"))
     }
     
-    function handleDeleteButtonClick(e){
+    async function handleDeleteButtonClick(e){
         e.preventDefault();
-        const request = requestDelete();
-        if (requestDelete.status == 200){
+        try {
+            const response = await requestDelete();
+
             // remove the review from the state
             props.setReviews(reviews=>reviews.filter((review) => review.id != props.id))
+        }catch(error){
+
         }
     }
     
