@@ -18,7 +18,6 @@ import CanceledOrdersSection from './canceled-orders-section';
 //max-width: 1500px;
 const Container = styled.div`
 width:100%;
-// box-shadow: 1px 1px 10px rgba(189, 189, 189,1);
 `
 
 

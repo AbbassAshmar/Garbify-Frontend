@@ -7,16 +7,18 @@ const spinAnimation = keyframes`
 `;
 
 const LoadingContainer = styled.div`
-  width: 200px;
-  height: 200px;
+  width: 110px;
+  height: 110px;
   display: inline-block;
   overflow: hidden;
   background:white;
+  background:transparent;
+
 `;
 
 const Spinner = styled.div`
-  width: 100%;
-  height: 100%;
+  width:100%;
+  height:100%;
   position: relative;
   transform: translateZ(0) scale(1);
   backface-visibility: hidden;
@@ -24,8 +26,8 @@ const Spinner = styled.div`
 `;
 
 const SpinnerDiv = styled.div`
-  left: 94px;
-  top: 48px;
+  left: 50px;
+  top: 0;
   position: absolute;
   animation: ${spinAnimation} linear 1s infinite;
   background: #93dbe9;
@@ -35,9 +37,9 @@ const SpinnerDiv = styled.div`
   transform-origin: 6px 52px;
 `;
 
-const Loading = () => {
+const Loading = ({style}) => {
   return (
-    <div style={{height:"83vh", width:"100%", display:"flex",alignItems:'center', justifyContent:"center"}}>
+    <div style={{...style,display:"flex",alignItems:"center",justifyContent:"center"}}>
     <LoadingContainer>
       <Spinner>
         {[...Array(12)].map((_, index) => (

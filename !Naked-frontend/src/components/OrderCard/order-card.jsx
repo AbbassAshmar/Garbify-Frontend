@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 import {Link, useNavigate} from "react-router-dom"
+import { useContext, useEffect, useRef, useState } from 'react'
+import { sendRequest } from '../../hooks/use-fetch-data'
+import { userStateContext } from '../../Contexts/user-state'
+import Loading from '../Loading/loading'
 
 // Main title :clamp(.9rem,3vw,1.5rem);
 
@@ -9,10 +13,9 @@ import {Link, useNavigate} from "react-router-dom"
 
 // max-widths : 1 ->800px , 2->600px
 
-const Container = styled.div`
+export const Container = styled.div`
 box-shadow: 1px 1px 10px #A8AAAE;
 border-radius:4px;
-// border:1px solid  rgba(0,0,0,.3);
 background :#F1F4F9;
 padding:20px;
 width:100%;
@@ -20,13 +23,13 @@ display:flex;
 flex-direction:column;
 gap:20px;
 `
-const Header = styled.div`
+export const Header = styled.div`
 display:flex;
 flex-direction:column;
 gap:20px;
 `
 
-const DetailsContainer = styled.div`
+export const DetailsContainer = styled.div`
 display:flex;
 justify-content:space-between;
 @media screen and (max-width:600px){
@@ -34,7 +37,7 @@ justify-content:space-between;
     gap:15px;
 }
 `
-const OrderSummary = styled.div`
+export const OrderSummary = styled.div`
 display:flex;
 gap:max(10%,20px);
 flex:3;
@@ -53,21 +56,18 @@ justify-content:end;
     flex:none;
 }
 `
-const ShippingState = styled.p`
+export const ShippingState = styled.p`
 margin:0;
-font-size:1.3rem;
+font-size: clamp(.8rem , 2.3vw ,1.1rem);
 font-weight:600;
-@media screen and (max-width:800px){
-    font-size:1.1rem;
-}
 `
-const Text = styled.p`
+export const Text = styled.p`
 margin:0;
 color:black;
-font-size:1rem;
+font-size: clamp(.7rem,2vw,.9rem);
+
 font-weight:600;
 @media screen and (max-width:600px){
-    font-size:.8rem;
     display:none;
 }
 `
@@ -96,9 +96,9 @@ gap:20px;
 }
 `
 const ThumbnailContainer = styled.div`
-flex:1;
+flex:.7;
 @media screen and (max-width:800px){
-    flex:1.4;
+    flex:1.2;
 }
 `
 const Thumbnail = styled.img`
@@ -116,11 +116,9 @@ gap:15px;
 `
 const Name = styled.p`
 margin:0;
-font-size:1rem;
+font-size: clamp(.7rem,2vw,.9rem);
 font-weight:600;
-@media screen and (max-width:800px){
-    font-size:.8rem;
-}
+
 `
 const ReturnTimeText = styled.p`
 margin:0;
@@ -152,16 +150,14 @@ width:100%;
 outline:none;
 border:none;
 border-radius:2px;
-padding: .2rem 0;
-font-size:.9rem;
+padding: .4rem 0;
 font-weight:600;
 cursor:pointer;
-@media screen and (max-width:800px){
-    font-size:.7rem;
-}
 &:hover{
     opacity:.8;
 }
+font-size:clamp(.65rem,1.8vw,.8rem);
+
 `
 
 const BuyViewButtonsContainer = styled.div`
@@ -187,8 +183,81 @@ justify-content:space-between;
 align-items:center;
 `
 const CancelOrderButton  = styled(Button)`
-width:max(20%, 100px);
+width:max(20%, 160px);
 background:red;
+@media screen and (max-width:340px){
+    width:120px;
+}
+`
+const CancelConfirmationContainer = styled.div`
+width:100%;
+height:100vh;
+position:fixed;
+z-index:300;
+top:0;
+left:0;
+
+display:${({display})=>display};
+align-items:center;
+justify-content:center;
+
+&:before{
+    content:"";
+    position:absolute;
+    background:black;
+    opacity:.7;
+    width:100%;
+    height:100vh;
+    z-index:-1;
+    top:0;
+    left:0;
+}
+`
+
+const CancelConfirmationMenu = styled.div`
+text-align:center;
+font-weight:600;
+background:white;
+border-radius:10px;
+padding:1.5rem;
+display:flex;
+flex-direction:column;
+gap:2rem;
+width:280px;
+`
+
+const KeepOrder = styled.button`
+border-radius:30px;
+border:2px dashed red;
+outline:none;
+// padding:1rem 1.6rem;
+background:white;
+color:red;
+font-weight:600;
+cursor:pointer;
+transition:border .3s;
+height: 52px;
+
+&:hover{
+    border:2px solid red;
+}
+`
+const CancelOrder = styled.button`
+border-radius:30px;
+border:none;
+outline:none;
+background:red;
+color:white;
+font-weight:600;
+cursor:pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 52px;
+&:disabled{
+    background:#ff8d8d;
+}
+
 `
 const ArchiveOrderButton = styled(CancelOrderButton)`
 background:rgb(0, 255, 0);
@@ -202,23 +271,80 @@ cursor:pointer;
 }
 `
 export default function OrderCard(props){
+    const {token} = useContext(userStateContext)
+    const [showCancelConfirmation,setShowCancelConfirmation] = useState(false);
+    const [requestCancelOrderLoading, setRequestCancelOrderLoading ] = useState(false)
+
+    const cancelConfirmationMenu = useRef();
+
     const navigate = useNavigate();
     function handleWriteAReviewClick(id){
         navigate("/review/"+id);
     }
+
+    function handleCancelOrderButtonClick(e){
+        setShowCancelConfirmation(true);
+    }
     
+    async function requestCancelOrder(e){
+        setRequestCancelOrderLoading(true)
+        let init = {
+            method :"DELETE",
+            headers:{
+                'content-type' : "application/json",
+                'accept' : 'application/json',
+                'Authorization' : 'Bearer ' + token
+            },
+        }
+
+        let url = "http://127.0.0.1:8000/api/orders/"+props.id;
+        try {
+            let response = await sendRequest(url,init);
+        }catch(error){
+            setShowCancelConfirmation(false)
+        }finally{
+            setRequestCancelOrderLoading(false)
+        }
+    }
+    
+    useEffect(() => {
+        if (showCancelConfirmation) document.addEventListener("mousedown", handleClickOutside);
+
+        function handleClickOutside(event) {
+            if (cancelConfirmationMenu.current && !cancelConfirmationMenu.current.contains(event.target)) {
+                setShowCancelConfirmation(false)
+                document.removeEventListener("mousedown", handleClickOutside);
+            }
+        }
+    }, [showCancelConfirmation]);
+
     return(
         <Container>
             <Header>
                 <DetailsContainer>
                     <OrderSummary>
-                        <Text style={{display:'inline'}}>ordered at : <br/>{props.order.created_at}</Text>
-                        <Text>total cost : <br/>${props.order.total_cost}</Text>
-                        <Text>ship to : <br/>{props.order.recipiant_name}</Text>
+                        <Text style={{display:'inline'}}>
+                            ordered at : <br/>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{props.order.created_at}</span>
+                        </Text>
+                        <Text>
+                            total cost : <br/>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>${props.order.total_cost}</span>
+                        </Text>
+                        <Text>
+                            ship to : <br/>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{props.order.recipiant_name}</span>
+                        </Text>
                     </OrderSummary>
                     <StatusIdContainer>
-                        <Text style={{display:"inline"}}>order status : <br/>{props.order.status}</Text>
-                        <Text>order id : <br/>#{props.order.id}</Text>
+                        <Text style={{display:"inline"}}>
+                            order status : <br/>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{props.order.status}</span>
+                        </Text>
+                        <Text>
+                            order id : <br/>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>#{props.order.id}</span>
+                        </Text>
                     </StatusIdContainer>
                 </DetailsContainer>
                 <ShippingState>
@@ -272,7 +398,28 @@ export default function OrderCard(props){
 
             <Footer>
                 {
-                    props.order.status==="paid" && <CancelOrderButton>cancel order</CancelOrderButton>
+                    props.order.status==="paid" && 
+                    <div>
+                        <CancelOrderButton onClick={handleCancelOrderButtonClick}>cancel order</CancelOrderButton>
+    
+                        <CancelConfirmationContainer display={showCancelConfirmation?"flex":"none"}>
+                            <CancelConfirmationMenu ref={cancelConfirmationMenu}>
+                                <p>Are You sure You want to cancel this order</p>
+                                <div style={{width:'100%', display:"flex", flexDirection:"column",gap:'1rem'}}>
+                                    <KeepOrder onClick={(e)=>setShowCancelConfirmation(false)}>Keep Order</KeepOrder>
+                                    
+                                        <CancelOrder disabled={requestCancelOrderLoading} onClick={requestCancelOrder}>
+                                            {
+                                                requestCancelOrderLoading ? 
+                                                <Loading style={{transform:"scale(.2)"}}/>:
+                                                "Cancel Order"
+                                            }
+                                        </CancelOrder>
+                                    
+                                </div>
+                            </CancelConfirmationMenu>
+                        </CancelConfirmationContainer>
+                    </div>
                 }
                 {
                     props.order.status!="paid" && <ArchiveOrderButton>Archive order</ArchiveOrderButton>
