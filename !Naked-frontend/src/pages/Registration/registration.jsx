@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import {Link, useLocation} from "react-router-dom"
+import {Link, useLocation, useNavigate} from "react-router-dom"
 import registerBg from "../../assets/registerBg2.jpg"
 import Logo from "../../components/Logo";
 import Footer from "../../components/Footer/footer"
+import useUserState from "../../hooks/use-user-state";
+import { sendRequest, useFetchData } from "../../hooks/use-fetch-data";
 
 export const Container = styled.div`
 width:100%;
@@ -200,7 +202,9 @@ font-size:clamp(.9rem, 2.6vw, 1.3rem);
 text-shadow:1px 1px 1px black;
 `
 export default function Registration(){
+    const {token,setToken,setUser} = useUserState();
     const location =useLocation()
+    const navigate = useNavigate();
     const {state} = location
 
     const [formData, setFormData] = useState({
@@ -214,29 +218,30 @@ export default function Registration(){
         fields:[] , 
         message:{} 
     })
-   
 
-    async function requestRegister (formData){
-        const request = await fetch("http://127.0.0.1:8000/api/register",{
-            method:"POST",
-            body:formData,
-            headers:{
-                "Content-Type":"application/json",
-                "accept":"application/json"
-            }
-        })
-        const response = await request.json();
-        if (request.status == 200){
-            setErrorMsg({})
-        }
-        if (request.status == 422){
-            setErrorMsg(response.errors)
-        }
+    useEffect(()=>{
+      if(token){
+        navigate(-1,{replace:true})
+      }
+    },[])
+   
+    async function requestRegister(formData){
+      const {response,request} = await sendRequest('/api/register',{method:"POST",body:formData},token);
+      if (request.ok){
+        setError({fields:[], message:[]});
+        setToken(response.data.token);
+        setUser(response.data.user);
+      }else{
+        setError({fields:response?.metadata.error_fields, message : response?.error.details})
+        setToken(null)
+      }
     }
+
     function handleFormSubmit(e){
         e.preventDefault();
         requestRegister(JSON.stringify(formData));
     }
+
   return(
     <div>  
       <Container>

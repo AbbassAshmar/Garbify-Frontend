@@ -5,17 +5,14 @@ const Container = styled.button`
 outline:none;
 border:none;
 cursor:pointer;
-padding:.1rem;
 border-radius:20px;
+padding:2px;
 background:${({is_public})=>is_public?'rgba(0, 255, 0,1)':'red' };
 justify-content:space-between;
 transition:background .3s;
-@media screen and (min-width:500px){
-    padding : ${({is_public})=>is_public?' 0 .2% 0 1%':' 0 1% 0 .2%' } ;
-}
+
 `
 const TextCircle = styled.div`
-padding:.1rem;
 display:flex;
 align-items:center;
 `
@@ -42,11 +39,9 @@ transition:right .3s;
 }
 `
 const Circle = styled.div`
-padding:2px;
 border-radius:50%;
 height:13px;
 width:13px;
-// transform:translateX( ${({is_public})=> is_public ? '0':'-40px'} );
 position:relative;
 
 background:${({is_public})=>is_public?'rgba(0,180,0,1)':'rgba(180,0,0,1)'};
@@ -70,8 +65,8 @@ export default function PublicPrivateButton(){
     return(
         <Container is_public={isPublic} onClick={()=>handleButtonClick()}>
             <TextCircle>
-            <Text  is_public={isPublic}>{isPublic?'public':'private'}</Text>
-            <Circle is_public={isPublic} />
+                <Text  is_public={isPublic}>{isPublic?'public':'private'}</Text>
+                <Circle is_public={isPublic} />
             </TextCircle>
         </Container>
     )

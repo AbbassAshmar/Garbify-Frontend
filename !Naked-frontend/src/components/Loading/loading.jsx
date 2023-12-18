@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 const spinAnimation = keyframes`
   0% { opacity: 1 }
   100% { opacity: 0 }
-`;
+`
 
 const LoadingContainer = styled.div`
   width: 110px;
@@ -13,8 +13,7 @@ const LoadingContainer = styled.div`
   overflow: hidden;
   background:white;
   background:transparent;
-
-`;
+`
 
 const Spinner = styled.div`
   width:100%;
@@ -23,7 +22,7 @@ const Spinner = styled.div`
   transform: translateZ(0) scale(1);
   backface-visibility: hidden;
   transform-origin: 0 0;
-`;
+`
 
 const SpinnerDiv = styled.div`
   left: 50px;
@@ -35,11 +34,16 @@ const SpinnerDiv = styled.div`
   height: 24px;
   border-radius: 6px / 12px;
   transform-origin: 6px 52px;
-`;
-
+`
+const Container = styled.div`
+display:flex;
+align-items:center;
+justify-content:center;
+width:100%;
+`
 const Loading = ({style}) => {
   return (
-    <div style={{...style,display:"flex",alignItems:"center",justifyContent:"center"}}>
+    <Container style={style}>
     <LoadingContainer>
       <Spinner>
         {[...Array(12)].map((_, index) => (
@@ -47,7 +51,7 @@ const Loading = ({style}) => {
         ))}
       </Spinner>
     </LoadingContainer>
-    </div>
+    </Container>
   );
 };
 

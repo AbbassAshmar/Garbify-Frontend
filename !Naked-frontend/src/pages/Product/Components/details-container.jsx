@@ -4,6 +4,7 @@ import half_star from "../../../assets/half_star.png"
 import empty_star from "../../../assets/empty_star.png"
 import { Link } from "react-router-dom"
 import { useRef, useState } from "react"
+import AddToCartButton from "../../../components/AddToCartButton/add-to-cart-button"
 
 const Container = styled.div`
 flex:3.5;
@@ -168,11 +169,12 @@ transition:background .3s;
 const ButtonContainer = styled.div`
 // margin: 0 0 2rem 0;
 `
-const AddToBag = styled.button`
+
+const OutOfStock = styled.button`
+background:#9C9C9C;
 width : 100%;
 height:8.4vh;
 max-height: 50px;
-background:black;
 color:white;
 border:none;
 outline:none;
@@ -180,9 +182,6 @@ margin : 0 0 .8rem 0;
 
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
-`
-const OutOfStock = styled(AddToBag)`
-background:#9C9C9C;
 `
 const BadgesContainer = styled.div`
 display:flex;
@@ -354,7 +353,7 @@ export default function DetailsContainer({ quantity,product,setImagesColor,Image
             <ButtonContainer>
                 {
                     quantity > 0 ?
-                    <AddToBag>Add to Bag</AddToBag>
+                    <AddToCartButton />
                     :
                     <div>
                         <OutOfStock disabled="true">

@@ -1,43 +1,44 @@
-import styled from "styled-components"
 import { Container,Content,Text, Title, Form, InputWrapper,Input,Label,ErrorMsg,Submit,SignIn,I} from "../Registration/registration"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import useUserState from "../../hooks/use-user-state"
+import { useNavigate } from "react-router-dom";
 
 
 export default function Login(){
+    const {token} = useUserState();
     const [formData, setFormData] = useState({
         email:"",
         password:"",
     })
 
-    const [errorMsg, setErrorMsg] = useState({})
+    const [error,setError] = useState({
+        fields:[] , 
+        message:{} 
+    })
+    const navigate = useNavigate()
 
-
-    async function requestLogin (formData){
-        const request = await fetch("http://127.0.0.1:8000/api/login",{
-            method:"POST",
-            body:formData,
-            headers:{
-                "Content-Type":"application/json",
-                "accept":"application/json"
-            }
-        })
-        const response = await request.json();
-        console.log(response)
-        if (request.status == 200){
-            //pass for now
+    useEffect(()=>{
+        if(token){
+            navigate(-1,{replace:true})
         }
-        if (request.status==422){
-            setErrorMsg(response.errors)
-            console.log(response.errors)
+    },[])
+
+    async function requestLogin(formData){
+        const {response,request} = await sendRequest('/api/login',{method:"POST",body:formData},token);
+        if (request.ok){
+            setError({fields:[], message:[]});
+            setToken(response.data.token);
+            setUser(response.data.user);
+        }else{
+            setError({fields:response?.metadata.error_fields, message : response?.error.details})
+            setToken(null)
         }
     }
+
     function handleFormSubmit(e){
         e.preventDefault();
-        console.log("submit")
         requestLogin(JSON.stringify(formData));
     }
-
-
 
     return (
     <Container>
@@ -53,27 +54,27 @@ export default function Login(){
                     <Input 
                         type="email" 
                         value={formData.email} 
-                        color={errorMsg &&( errorMsg.email || errorMsg.emailPassword)?"red":"black"} 
+                        color={error &&( error.email || error.emailPassword)?"red":"black"} 
                         onChange={(e)=>setFormData({...formData,email:e.target.value})}
                     />
                     <Label 
                         position={formData.email}
-                        color={errorMsg  &&( errorMsg.email || errorMsg.emailPassword)?"red":"grey"} 
+                        color={error  &&( error.email || error.emailPassword)?"red":"grey"} 
                     >Email</Label>
-                    <ErrorMsg>{errorMsg.email}</ErrorMsg>
+                    <ErrorMsg>{error.email}</ErrorMsg>
                 </InputWrapper>
                 <InputWrapper>
                     <Input
                         type="password"
                         value={formData.password} 
-                        color={errorMsg && (errorMsg.password||errorMsg.emailPassword)?"red":"black"} 
+                        color={error && (error.password||error.emailPassword)?"red":"black"} 
                         onChange={(e)=>setFormData({...formData,password:e.target.value})}
                     />
                     <Label 
                         position={formData.password}
-                        color={errorMsg && (errorMsg.password||errorMsg.emailPassword)?"red":"grey"} 
+                        color={error && (error.password||error.emailPassword)?"red":"grey"} 
                     >Password</Label>
-                    <ErrorMsg>{errorMsg.password}</ErrorMsg>
+                    <ErrorMsg>{error.password}</ErrorMsg>
                 </InputWrapper>
                 <div style={{fontWeight:"600"}}>
                     Don't have an account?   

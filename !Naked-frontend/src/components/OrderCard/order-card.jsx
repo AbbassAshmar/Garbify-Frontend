@@ -138,7 +138,6 @@ gap:10px;
 @media screen and (max-width:600px){
     width:100%;
 }
-
 `
 const Button = styled.button`
 box-shadow: 0 0 3px rgba(0, 0, 0,.4);
@@ -219,7 +218,7 @@ text-align:center;
 font-weight:600;
 background:white;
 border-radius:10px;
-padding:1.5rem;
+padding:2.5rem 1.5rem;
 display:flex;
 flex-direction:column;
 gap:2rem;
@@ -230,7 +229,6 @@ const KeepOrder = styled.button`
 border-radius:30px;
 border:2px dashed red;
 outline:none;
-// padding:1rem 1.6rem;
 background:white;
 color:red;
 font-weight:600;
@@ -257,7 +255,6 @@ height: 52px;
 &:disabled{
     background:#ff8d8d;
 }
-
 `
 const ArchiveOrderButton = styled(CancelOrderButton)`
 background:rgb(0, 255, 0);
@@ -401,21 +398,16 @@ export default function OrderCard(props){
                     props.order.status==="paid" && 
                     <div>
                         <CancelOrderButton onClick={handleCancelOrderButtonClick}>cancel order</CancelOrderButton>
-    
                         <CancelConfirmationContainer display={showCancelConfirmation?"flex":"none"}>
                             <CancelConfirmationMenu ref={cancelConfirmationMenu}>
-                                <p>Are You sure You want to cancel this order</p>
+                                <p>Are You sure You want to cancel this order ?</p>
                                 <div style={{width:'100%', display:"flex", flexDirection:"column",gap:'1rem'}}>
                                     <KeepOrder onClick={(e)=>setShowCancelConfirmation(false)}>Keep Order</KeepOrder>
-                                    
-                                        <CancelOrder disabled={requestCancelOrderLoading} onClick={requestCancelOrder}>
-                                            {
-                                                requestCancelOrderLoading ? 
-                                                <Loading style={{transform:"scale(.2)"}}/>:
-                                                "Cancel Order"
-                                            }
-                                        </CancelOrder>
-                                    
+                                    <CancelOrder disabled={requestCancelOrderLoading} onClick={requestCancelOrder}>
+                                        {requestCancelOrderLoading ? 
+                                        <Loading style={{transform:"scale(.2)"}}/>:
+                                        "Cancel Order"}
+                                    </CancelOrder>
                                 </div>
                             </CancelConfirmationMenu>
                         </CancelConfirmationContainer>

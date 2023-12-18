@@ -92,7 +92,9 @@ export default function ProductsContainer(props){
     }
 
     if (loading){
-        return <Loading />
+        return (
+            <Loading />
+        )
     }
 
     return (
