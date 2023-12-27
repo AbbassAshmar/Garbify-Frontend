@@ -20,7 +20,6 @@ margin:auto;
 const AboveTheFolds = styled.div`
 display:flex;
 align-items:flex-start;
-
 @media screen and (max-width:600px){
     flex-direction:column;
     gap:2rem;

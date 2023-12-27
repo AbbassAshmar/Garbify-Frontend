@@ -4,6 +4,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { sendRequest } from '../../hooks/use-fetch-data'
 import { userStateContext } from '../../Contexts/user-state'
 import Loading from '../Loading/loading'
+import ReactDOM from 'react-dom';
 
 // Main title :clamp(.9rem,3vw,1.5rem);
 
@@ -196,7 +197,7 @@ z-index:300;
 top:0;
 left:0;
 
-display:${({display})=>display};
+display:flex;
 align-items:center;
 justify-content:center;
 
@@ -267,10 +268,11 @@ cursor:pointer;
     font-size:.7rem;
 }
 `
-export default function OrderCard(props){
-    const {token} = useContext(userStateContext)
+export default function OrderCard({order}){
+    const userContext = useContext(userStateContext)
     const [showCancelConfirmation,setShowCancelConfirmation] = useState(false);
-    const [requestCancelOrderLoading, setRequestCancelOrderLoading ] = useState(false)
+    const [cancelOrderLoading, setCancelOrderLoading ] = useState(false)
+    const [showCancelOrderResult ,setShowCancelOrderResult] = useState(false)
 
     const cancelConfirmationMenu = useRef();
 
@@ -284,23 +286,19 @@ export default function OrderCard(props){
     }
     
     async function requestCancelOrder(e){
-        setRequestCancelOrderLoading(true)
-        let init = {
-            method :"DELETE",
-            headers:{
-                'content-type' : "application/json",
-                'accept' : 'application/json',
-                'Authorization' : 'Bearer ' + token
-            },
-        }
+        setCancelOrderLoading(true)
+        let uri = "/api/orders/"+order.id;
+        let init = { method :"DELETE" };
 
-        let url = "http://127.0.0.1:8000/api/orders/"+props.id;
         try {
-            let response = await sendRequest(url,init);
+            let {request, response} = await sendRequest(uri,init,userContext);
+            console.log(response);
         }catch(error){
+            console.log(error)
+            setShowCancelOrderResult(true)
             setShowCancelConfirmation(false)
         }finally{
-            setRequestCancelOrderLoading(false)
+            setCancelOrderLoading(false)
         }
     }
     
@@ -322,36 +320,36 @@ export default function OrderCard(props){
                     <OrderSummary>
                         <Text style={{display:'inline'}}>
                             ordered at : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{props.order.created_at}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{order.created_at}</span>
                         </Text>
                         <Text>
                             total cost : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>${props.order.total_cost}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>${order.total_cost}</span>
                         </Text>
                         <Text>
                             ship to : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{props.order.recipiant_name}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{order.recipiant_name}</span>
                         </Text>
                     </OrderSummary>
                     <StatusIdContainer>
                         <Text style={{display:"inline"}}>
                             order status : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{props.order.status}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{order.status}</span>
                         </Text>
                         <Text>
                             order id : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>#{props.order.id}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>#{order.id}</span>
                         </Text>
                     </StatusIdContainer>
                 </DetailsContainer>
                 <ShippingState>
-                    {props.order.shipping_state}
+                    {order.shipping_state}
                 </ShippingState>
             </Header>
 
             <ProductsContainer>
                 {
-                    props.order.products.map((product)=>{
+                    order.products.map((product)=>{
                         return(
                             <Product>
                                 <ThumbnailContainer>
@@ -375,16 +373,16 @@ export default function OrderCard(props){
                                 <ButtonsContianer>
                                     <Button>Add to favorites</Button>
                                     {
-                                        props.order.status === "delivered" && <Button onClick={(e)=>handleWriteAReviewClick(product.id)}>write a review</Button>
+                                        order.status === "delivered" && <Button onClick={(e)=>handleWriteAReviewClick(product.id)}>write a review</Button>
                                     }
                                     {
-                                        props.order.status == "delivered" && <Button>return product</Button>
+                                        order.status == "delivered" && <Button>return product</Button>
                                     }
                                     {
-                                        props.order.status == "paid" && <Button>remove product</Button>
+                                        order.status == "paid" && <Button>remove product</Button>
                                     }
                                     {
-                                        props.order.status == "paid" && <Button>edit shipping address</Button>
+                                        order.status == "paid" && <Button>edit shipping address</Button>
                                     }
                                     
                                 </ButtonsContianer>
@@ -395,26 +393,32 @@ export default function OrderCard(props){
 
             <Footer>
                 {
-                    props.order.status==="paid" && 
+                    order.status==="paid" && 
                     <div>
                         <CancelOrderButton onClick={handleCancelOrderButtonClick}>cancel order</CancelOrderButton>
-                        <CancelConfirmationContainer display={showCancelConfirmation?"flex":"none"}>
-                            <CancelConfirmationMenu ref={cancelConfirmationMenu}>
-                                <p>Are You sure You want to cancel this order ?</p>
-                                <div style={{width:'100%', display:"flex", flexDirection:"column",gap:'1rem'}}>
-                                    <KeepOrder onClick={(e)=>setShowCancelConfirmation(false)}>Keep Order</KeepOrder>
-                                    <CancelOrder disabled={requestCancelOrderLoading} onClick={requestCancelOrder}>
-                                        {requestCancelOrderLoading ? 
-                                        <Loading style={{transform:"scale(.2)"}}/>:
-                                        "Cancel Order"}
-                                    </CancelOrder>
-                                </div>
-                            </CancelConfirmationMenu>
-                        </CancelConfirmationContainer>
+                        {
+                            showCancelConfirmation &&
+                            ReactDOM.createPortal(
+                                <CancelConfirmationContainer>
+                                    <CancelConfirmationMenu ref={cancelConfirmationMenu}>
+                                        <p>Are You sure You want to cancel this order ?</p>
+                                        <div style={{width:'100%', display:"flex", flexDirection:"column",gap:'1rem'}}>
+                                            <KeepOrder onClick={(e)=>setShowCancelConfirmation(false)}>Keep Order</KeepOrder>
+                                            <CancelOrder disabled={cancelOrderLoading} onClick={requestCancelOrder}>
+                                                {cancelOrderLoading ? 
+                                                <Loading style={{transform:"scale(.2)"}}/>:
+                                                "Cancel Order"}
+                                            </CancelOrder>
+                                        </div>
+                                    </CancelConfirmationMenu>
+                                </CancelConfirmationContainer>,
+                                document.body
+                            )
+                        }
                     </div>
                 }
                 {
-                    props.order.status!="paid" && <ArchiveOrderButton>Archive order</ArchiveOrderButton>
+                    order.status!="paid" && <ArchiveOrderButton>Archive order</ArchiveOrderButton>
                 }
                 <OrderDetailsLink>
                     order details <i class="fa-solid fa-arrow-right"/>

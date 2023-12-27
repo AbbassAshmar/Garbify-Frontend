@@ -48,9 +48,11 @@ opacity:.7;
 `
 export default function ImagesContainer({imagesList,ImagesColor}){
     const sliderRef = useRef(null)
+    
     function handleLeftButtonClick(leftOffset){
         sliderRef.current.scrollLeft += leftOffset
     }
+
     return (
         <Container ref={sliderRef}>
             <SlideButtonCustom onClick={()=>handleLeftButtonClick(-300)} style={{left:"6%"}}>

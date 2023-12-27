@@ -7,13 +7,15 @@ import { useRef, useState } from "react"
 import AddToCartButton from "../../../components/AddToCartButton/add-to-cart-button"
 
 const Container = styled.div`
-flex:3.5;
-margin-left:2rem;
+flex:4;
+background:white;
+margin-left:4rem;
 position:sticky;
 top:60px;
 gap:2rem;
 display:flex;
 flex-direction:column;
+overflow:hidden;
 @media screen and (max-width:600px){
     margin:0;
     position:static;
@@ -33,7 +35,7 @@ font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 const Title = styled.h2`
-margin:0 0 .8rem 0;
+margin:0 0 .4rem 0;
 font-weight:600;
 font-size:clamp(.9rem, 2.6vw, 1.3rem);
 `
@@ -109,7 +111,7 @@ width:100%;
 const ColorSizeTitle = styled.div`
 width:100%;
 font-weight:600;
-margin: 0 0 .5em 0;
+margin: 0 0 .4em 0;
 
 font-size:clamp(.6rem,2vw,.9rem);
 
@@ -140,7 +142,7 @@ const SizesTitles = styled.div`
 display:flex;
 justify-content:space-between;
 align-items:flex-start;
-margin: 0 0 .5em 0;
+margin: 0 0 .4em 0;
 
 `
 const SizeGuideLink = styled(Link)`
@@ -151,7 +153,7 @@ text-decoration:none;
 const Sizes = styled.div`
 display:flex;
 flex-wrap:wrap;
-gap:.2em;
+gap:.4em;
 `
 const Size =styled.div`
 font-weight:600;
@@ -159,11 +161,13 @@ padding: .3em .8em ;
 border:${({border})=>border};
 border-radius:2px;
 cursor:pointer;
-background: #F1F4F9;
+// background: #F1F4F9;
+background:white;
 transition:background .3s;
 
+transition:box-shadow .3s;
 &:hover{
-    opacity:.8;
+    box-shadow:3px 3px 5px rgba(0,0,0,.4);
 }
 `
 const ButtonContainer = styled.div`
@@ -178,8 +182,7 @@ max-height: 50px;
 color:white;
 border:none;
 outline:none;
-margin : 0 0 .8rem 0;
-
+margin : 0 0 .4rem 0;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
@@ -272,7 +275,7 @@ export function ratingToStars(rating){
     return result;
 }
 
-export default function DetailsContainer({ quantity,product,setImagesColor,ImagesColor,setSizePicked, sizePicked}){
+export default function DetailsContainer({quantity,product,setImagesColor,ImagesColor,setSizePicked, sizePicked}){
     const [showTable, setShowTable] = useState(false)
     const sizeTableRef  = useRef(null)
     
@@ -322,7 +325,7 @@ export default function DetailsContainer({ quantity,product,setImagesColor,Image
                     product.colors.map((color)=>{
                         return(<ColorImage 
                             border={ImagesColor === color?"2px solid #00C2FF":"none"}
-                            onClick={(e)=>{return setImagesColor(color)}}
+                            onClick={(e)=>{setImagesColor(color)}}
                             src={product.images[color][0].url} 
                             alt={product.images[color][0].image_details}
                         />
@@ -342,8 +345,8 @@ export default function DetailsContainer({ quantity,product,setImagesColor,Image
                     {product.sizes.map((size)=>{
                         return (
                             <Size   
-                            border={sizePicked == size ? "2px solid #00C2FF":"1px solid  rgba(0,0,0,.3)"}
-                            onClick={(e)=>{return setSizePicked(size)}}>
+                                border={sizePicked == size ? "1px solid #00C2FF":"1px solid #D8DBE0"}
+                                onClick={(e)=>{return setSizePicked(size)}}>
                                 {size}
                             </Size>
                         )
@@ -353,8 +356,12 @@ export default function DetailsContainer({ quantity,product,setImagesColor,Image
             <ButtonContainer>
                 {
                     quantity > 0 ?
-                    <AddToCartButton />
-                    :
+                    <AddToCartButton 
+                        product={product} 
+                        size={sizePicked} 
+                        color={ImagesColor} 
+                        quantity={1}
+                    />:
                     <div>
                         <OutOfStock disabled="true">
                             Out of Stock

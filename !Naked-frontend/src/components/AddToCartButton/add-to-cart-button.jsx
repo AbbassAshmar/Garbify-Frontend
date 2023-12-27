@@ -1,99 +1,107 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import styled from "styled-components"
 import { userStateContext } from "../../Contexts/user-state"
 import useUserState from "../../hooks/use-user-state"
 import ReactDOM from 'react-dom';
+import Loading from "../Loading/loading";
+import PopUpShoppingCart from "../PopUpShoppingCart/pop-up-shopping-cart";
+import { sendRequest } from "../../hooks/use-fetch-data";
 
-const DropDownCart = styled.div`
-height:100vh;
-width:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-position:fixed;
-top:0;
-left:0;
-z-index:2000;
-
-&:before{
-    content:"";
-    position:absolute;
-    background:black;
-    opacity:.7;
-    width:100%;
-    height:100vh;
-    z-index:-1;
-    top:0;
-    left:0;
-}
-`
-const Content = styled.div`
-width:300px;
-height:500px;
-background:white;
-`
 const Button = styled.button`
 width : 100%;
 height:8.4vh;
 max-height: 50px;
-background:black;
+background:${({loading})=> loading?'grey':'black'};
 color:white;
 border:none;
 outline:none;
-margin : 0 0 .8rem 0;
+margin : 0 0 .4rem 0;
+display:flex;
+align-items:center;
+justify-content:center;
 
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 
-export default function AddToCartButton(){
+export default function AddToCartButton({product, color,size,quantity}){
     const {token ,user} = useUserState();
+    const [buttonLoading,setButtonLoading] = useState(false);
+    const [showPopUpShoppingCart, setShowPopUpShoppingCart] = useState(false);
 
-    const p = {
-        product_id:3,
-        size : 'xl',
-        color : 'green',
-        quantity : 32
-    };
 
-    function addToLocalStorageCart(product){
-        cart = localStorage.getItem('shopping_cart');
-        if (cart){
-            cart.push(product);
-        }else{ 
-            cart = [product];
-        }
-        localStorage.setItem('shopping_cart' , cart)
-    }
+    // function cartItemEquals(item_1 , item_2){
+    //     let keys = Object.keys(obj);
+    //     for (let key of keys){
+    //         if (key === 'quantity') continue;
+    //         if (obj[key] != obj2[key] ) return false;
+    //     }
+    //     return true;
+    // }
+    
+    // function addToLocalStorageCart(product){
+    //     cart = localStorage.getItem('shopping_cart');
+    //     if (cart){
+    //         for (let item of cart){
+    //             if (cartItemEquals(item, product)){
+    //                 item.quantity ++
+    //                 localStorage.setItem('shopping_cart' , cart)
+    //                 return null;
+    //             }
+    //         }
+    //         cart.push(product);
+    //     }else{ 
+    //         cart = [product];
+    //     }
+    //     localStorage.setItem('shopping_cart' , cart)
+    //     return null;
+    // }
 
     async function handleAddToCartClick(e){
-        if (token){
-            // send request to add to cart
-            let uri = '/api/users/user/shopping_carts';
-            const {response,request} = await sendRequest(uri,{method:"POST",body:formData},token);
+        setButtonLoading(true)
 
-        }else{
-            // add cart to local storage
+        let payload = {
+            product_id : product.id,
+            color,
+            size,
+            quantity
+        }   
 
+        try {
+            if (token){
+                // send request to add to cart
+                let uri = '/api/users/user/shopping_carts/items';
+                const {response,request} = await sendRequest(uri,{method:"POST",body:payload},token);
+              
+                if(request.status == 201){
+                    setShowPopUpShoppingCart(true)
+                }
+            }else{
+                let uri = '/api/users/anonymous/shopping_carts/items';
+                const {response,request} = await sendRequest(uri,{method:"POST",body:payload},token);
+                if(request.status == 201){
+                    setShowPopUpShoppingCart(true)
+                }
+                setShowPopUpShoppingCart(true)
+            }
+
+        }catch(error){
+
+        }finally{
+            setButtonLoading(false)
         }
     }
 
     return (
         <div>
-            
-            <Button onClick={handleAddToCartClick}>Add to Cart</Button>
+            <Button loading={buttonLoading} onClick={handleAddToCartClick}>
+                { buttonLoading ?<Loading style={{transform:"scale(.2)"}}/> : 'Add to Cart' }
+            </Button>
             
             {
-                ReactDOM.createPortal(
-                    <DropDownCart>
-                        <Content>
-                            <p>jdfajsfio</p>
-                        </Content>
-                    </DropDownCart>,
-                    document.body
-                )
+                showPopUpShoppingCart && 
+                <PopUpShoppingCart product={product} quantity={quantity} color={color} size={size}/>
             }
-
         </div>
     )
 }

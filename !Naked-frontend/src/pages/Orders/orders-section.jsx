@@ -38,13 +38,12 @@ font-size:1.3rem;
 }
 `
 export default function OrdersSection(){
-    const {token} = useContext(userStateContext);
+    const userContext = useContext(userStateContext);
     const [searchParams,setSearchParams] = useSearchParams();
 
-    let init = { headers:{"Authorization":"Bearer " + token} }
-    let endpoint_url = "http://127.0.0.1:8000/api/users/users/orders";
-    let url = constructUrl(endpoint_url,searchParams)
-    let {data, error, loading } = useFetchData(url , init, [searchParams]);
+    let endpoint_uri = "/api/users/users/orders";
+    let url = constructUrl(endpoint_uri,searchParams)
+    let {data, error, loading } = useFetchData(url,[searchParams],userContext);
     let orders = data?.data.orders || ORDERS;
     let TotalPagesCount =data?.metadata.pages_count || 30;
 
