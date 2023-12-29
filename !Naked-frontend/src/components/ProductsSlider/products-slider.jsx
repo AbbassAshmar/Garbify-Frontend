@@ -1,6 +1,10 @@
 import { styled } from "styled-components"
 import ProductCard from "../ProductCard/product-card"
 import { useEffect, useRef } from "react"
+import { useFetchData } from "../../hooks/use-fetch-data"
+import useUserState from "../../hooks/use-user-state"
+import Loading from "../Loading/loading"
+import { PRODUCTS } from "../products-data"
 
 const Container = styled.div`
 display:flex;
@@ -46,15 +50,29 @@ font-size:1.3rem;
     font-size:1.1rem;
 }
 `
-export default function ProductsSlider(props){
+export default function ProductsSlider({title ,url}){
+    const userContext = useUserState();
+    let {data, error, loading}= useFetchData(url,[],userContext);
+
+    let products = data?.data?.products || PRODUCTS;
+    
     const sliderRef = useRef(null)
     function handleLeftButtonClick(leftOffset){
         sliderRef.current.scrollLeft += leftOffset
     }
+
+    if (loading){
+        return <Loading />;
+    }
+
+    // if (error){
+    //     return <></>
+    // }
+
     return(
         <Container> 
             <Title>
-                {props.title}
+                {title}
             </Title>
             <SliderContainer>
                 <SlideButton onClick={()=>{handleLeftButtonClick(-300)}} style={{left:"1%"}}>
@@ -65,7 +83,7 @@ export default function ProductsSlider(props){
                 </SlideButton>
                 <Slider ref={sliderRef}>
                     {
-                        props.products.map((product)=>{
+                        products.map((product)=>{
                             return(
                                 <ProductCard 
                                     min_width={"max(200px ,28%)"}

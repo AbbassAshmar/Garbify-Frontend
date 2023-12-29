@@ -23,17 +23,17 @@ export default function Login(){
         }
     },[])
 
-    async function requestLogin(formData){
-        const {response,request} = await sendRequest('/api/login',{method:"POST",body:formData},token);
-        if (request.ok){
-            setError({fields:[], message:[]});
-            setToken(response.data.token);
-            setUser(response.data.user);
-        }else{
-            setError({fields:response?.metadata.error_fields, message : response?.error.details})
-            setToken(null)
-        }
-    }
+    // async function requestLogin(formData){
+    //     const {response,request} = await sendRequest('/api/login',{method:"POST",body:formData},token);
+    //     if (request.ok){
+    //         setError({fields:[], message:[]});
+    //         setToken(response.data.token);
+    //         setUser(response.data.user);
+    //     }else{
+    //         setError({fields:response?.metadata.error_fields, message : response?.error.details})
+    //         setToken(null)
+    //     }
+    // }
 
     function handleFormSubmit(e){
         e.preventDefault();

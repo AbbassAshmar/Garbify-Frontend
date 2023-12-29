@@ -3,11 +3,17 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import CanNotReview from './Componenets/can-not-review';
 import ReviewForm from './Componenets/review-form';
-import { sendRequest } from '../../hooks/use-fetch-data';
+import { useSendRequest } from '../../hooks/use-fetch-data';
+import useUserState from '../../hooks/use-user-state';
+
 const Container = styled.div`
 
 `
-export default function Review(){
+
+export default function ReviewPurchasedProduct(){
+    const userContext = useUserState();
+    const {sendRequest, isServerError} = useSendRequest(userContext);
+
     const {product_id} = useParams();
     const [isReviewed ,setIsReviewed] = useState(false);
     

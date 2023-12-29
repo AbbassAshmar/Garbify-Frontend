@@ -1,11 +1,10 @@
-import { useContext, useState } from "react"
+import {useState } from "react"
 import styled from "styled-components"
-import { userStateContext } from "../../Contexts/user-state"
 import useUserState from "../../hooks/use-user-state"
 import ReactDOM from 'react-dom';
 import Loading from "../Loading/loading";
 import PopUpShoppingCart from "../PopUpShoppingCart/pop-up-shopping-cart";
-import { sendRequest } from "../../hooks/use-fetch-data";
+import {useSendRequest } from "../../hooks/use-fetch-data";
 
 const Button = styled.button`
 width : 100%;
@@ -25,7 +24,9 @@ font-size:clamp(.6rem,2vw,.9rem);
 `
 
 export default function AddToCartButton({product, color,size,quantity}){
-    const {token ,user} = useUserState();
+    const userContext = useUserState();
+    const {sendRequest, isServerError} = useSendRequest(userContext);
+
     const [buttonLoading,setButtonLoading] = useState(false);
     const [showPopUpShoppingCart, setShowPopUpShoppingCart] = useState(false);
 

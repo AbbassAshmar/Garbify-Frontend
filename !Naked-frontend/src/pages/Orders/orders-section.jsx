@@ -44,8 +44,8 @@ export default function OrdersSection(){
     let endpoint_uri = "/api/users/users/orders";
     let url = constructUrl(endpoint_uri,searchParams)
     let {data, error, loading } = useFetchData(url,[searchParams],userContext);
-    let orders = data?.data.orders || ORDERS;
-    let TotalPagesCount =data?.metadata.pages_count || 30;
+    let orders = data?.data?.orders || ORDERS;
+    let TotalPagesCount =data?.metadata?.pages_count || 30;
 
     if (loading){
         return <Loading />
@@ -70,7 +70,7 @@ export default function OrdersSection(){
                 <NoOrdersTitle>
                     You haven't ordered anything yet !
                 </NoOrdersTitle>
-                <ProductsSlider  title={"You may like to order : "} products={PRODUCTS}/>
+                <ProductsSlider  title={"You may like to order : "} url={"/api/favorites?limit=10"}/>
             </NoOrdersContainer>
         }
         </>

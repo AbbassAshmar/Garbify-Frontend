@@ -4,7 +4,6 @@ import Logo from "../Logo"
 import { useEffect, useState } from "react"
 import {PRODUCTS} from "../products-data"
 import ProductCard from "../ProductCard/product-card"
-import { requestData } from "../../pages/OtherUsersFavorites/other-users-favorites"
 // Parent z-index : 200
 
 
@@ -141,10 +140,10 @@ export default function NavbarSearch({show,setShow}){
     },[])
 
     function getPopularProducts(){
-        let endpoint_url = "http://127.0.0.1:8000/api/products/popular";
-        let url = endpoint_url + "?limit=5"
-        let products = requestData(url);
-        setPopularSuggestions(products['data']);
+        // let endpoint_url = "http://127.0.0.1:8000/api/products/popular";
+        // let url = endpoint_url + "?limit=5"
+        // let products = requestData(url);
+        // setPopularSuggestions(products['data']);
     }
 
     function handleSearchInputChange(e){

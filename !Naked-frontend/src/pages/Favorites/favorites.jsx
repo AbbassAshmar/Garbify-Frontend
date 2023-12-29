@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { userStateContext } from "../../Contexts/user-state";
+import {useLayoutEffect, useRef, useState } from "react";
 import {useSearchParams} from "react-router-dom";
 import { NoOrdersContainer, NoOrdersTitle, constructUrl, Title} from "../Orders/orders";
 import ProductCard from "../../components/ProductCard/product-card";
@@ -12,8 +11,9 @@ import SearchSort from "../../components/SearchSort/search-sort"
 import PublicPrivateButton from "../../components/PublicPrivateButton/public-private-button";
 import LikesViews from "../../components/LikesViews/likes-views";
 import { FAV_LISTS } from "../../components/products-data";
-import { useFetchData,sendRequest } from "../../hooks/use-fetch-data";
+import { useFetchData, useSendRequest } from "../../hooks/use-fetch-data";
 import Loading from "../../components/Loading/loading";
+import useUserState from "../../hooks/use-user-state";
 
 const Container = styled.div`
 width:100%;
@@ -96,26 +96,14 @@ const OrderBytoSortBy={
 }
 
 export default function Favorites(){
-    const {token} = useContext(userStateContext);
+    const userContext = useUserState();
+    const {sendRequest, isServerError} = useSendRequest(userContext);
     const [searchParams,setSearchParams] = useSearchParams();
 
-    // init with token for all requests
-    let request_init = {
-        headers:{
-            "Authorization" : "Bearer " + token,
-            "content-type ": "application/json",
-            "accept ": 'application/json'
-        }
-    }
-
     // request favorites list info 
-    let favorites_list_url= "http://127.0.0.1:8000/api/users/user/favorites_list";
-    let {data:favoritesListData, error:favoritesListError, loading:favoritesListLoading,setData} = useFetchData(favorites_list_url,request_init)
-    let favoritesList = []
-    if (favoritesListData){
-        favoritesList = favoritesList['data']
-    }
-    favoritesList = FAV_LISTS[0]
+    let favorites_list_url= "/api/users/user/favorites_list";
+    let {data:favoritesListData, error:favoritesListError, loading:favoritesListLoading,setData} = useFetchData(favorites_list_url,[],userContext)
+    let favoritesList = favoritesListData?.data || FAV_LISTS[0]
 
     const [useTitleInput, setUseTitleInput] = useState(false);
     const [titleText, setTitleText] = useState(favoritesList.name)
@@ -126,25 +114,15 @@ export default function Favorites(){
     
 
     // request favorites 
-    let favorites_url = constructUrl("http://127.0.0.1:8000/api/users/user/favorites",searchParams)
-    let {data:favoritesData, error:errorFavorites, loading:loadingFavorites} = useFetchData(favorites_url,request_init,[searchParams])
-    let [favoritesCount, TotalPagesCount,favorites] = [0 , 0 , null];
-    if (favoritesData){
-        favoritesCount = favoritesData['metadata']['total_count'];
-        TotalPagesCount = favoritesData['metadata']['pages_count']
-        favorites = favoritesData['data']['favorites'];
-    }
-    favorites = PRODUCTS
+    let favorites_url = constructUrl("/api/users/user/favorites",searchParams)
+    let {data:favoritesData, error:errorFavorites, loading:loadingFavorites} = useFetchData(favorites_url,[searchParams],userContext)
 
-
-    // request products for slider 
-    let all_favorites_url = "http://127.0.0.1:8000/api/favorites?limit=10";
-    let {data:sliderProductsData, error:sliderProductsError,loading:sliderProductsLoading} = useFetchData(all_favorites_url,request_init)
-    let sliderProducts = []
-    if (sliderProductsData){
-        sliderProducts = sliderProductsData['data']
-    }
-    sliderProducts = PRODUCTS
+    let [favorites,favoritesCount, TotalPagesCount] =[
+        favoritesData?.data?.favorites||PRODUCTS,
+        favoritesData?.metadata?.pages_count || 0 ,
+        favoritesData?.metadata?.total_count || 0
+    ]
+  
 
     function handleSearchFormSubmit(e){
         e.preventDefault();
@@ -157,22 +135,17 @@ export default function Favorites(){
     }
 
     async function handleRequestNameUpdate(){
+        let update_favorites_list_uri =  "/api/favorites_list/"+favoritesList.id;
         let patch_request_init = {
             method : "PATCH",
-            body: {
-                'name' : titleText
-            },
-            ...request_init
+            body: {'name' : titleText},
         } 
-        let update_favorites_list_url =  "http://127.0.0.1:8000/api/favorites_list/"+favoritesList.id;
 
-        try {
-            update_request = await sendRequest(update_favorites_list_url, patch_request_init)
-            if (update_request && update_request.name){
-                setData({...favoritesListData ,name:update_request.name})
-                setTitleText(favoritesList.name)
-            }
-        }catch(error){
+        let {request,response} = await sendRequest(update_favorites_list_uri, patch_request_init)
+        if (request.status == 200 && response?.name){
+            setData({...favoritesListData ,name:update_request.name})
+            setTitleText(favoritesList.name)
+        }else{
             setTitleText(favoritesList.name) // display the old name
         }
     }
@@ -187,8 +160,7 @@ export default function Favorites(){
         setUseTitleInput(false)
     }
 
-    function handleEditIconClick(e){
-        
+    function handleEditIconClick(e){  
         if (useTitleInput){
             handleRequestNameUpdate()
             setUseTitleInput(false)
@@ -269,7 +241,9 @@ export default function Favorites(){
                             </div>
                         </TitleWrapper>
                         <PublicPrivateWrapper><PublicPrivateButton/></PublicPrivateWrapper>
-                        <span style={{gridRow:'2',alignSelf: 'end'}}><LikesViews disabled={true} views={favoritesList["views_count"]} likes={favoritesList["likes_count"]}/></span>
+                        <span style={{gridRow:'2',alignSelf: 'end'}}>
+                            <LikesViews disabled={true} views={favoritesList["views_count"]} likes={favoritesList["likes_count"]}/>
+                        </span>
                     </TopInfoContainer>
                     <SearchSort 
                         placeholder={"search your favorites"} 
@@ -309,12 +283,10 @@ export default function Favorites(){
                             <NoFavoritesTitls>
                                 You don't have any favorites yet !
                             </NoFavoritesTitls>
-                            <ProductsSlider title={"Might be your first favorite"} products={sliderProducts}/>
+                            <ProductsSlider title={"Might be your first favorite"} url={"/api/favorites?limit=10"}/>
                         </NoFavoritesContainer>
                     </>
                 }
-                
-                
             </Content>
         </Container>
     )

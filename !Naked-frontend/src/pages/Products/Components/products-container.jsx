@@ -1,10 +1,8 @@
 import styled from "styled-components"
 import ProductCard from "../../../components/ProductCard/product-card"
 import Pagination from "../../../components/Pagination/pagination"
-import { useEffect, useState } from "react"
-import { useLocation, useParams, useSearchParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { PRODUCTS } from "../../../components/products-data"
-import { requestData } from "../../OtherUsersFavorites/other-users-favorites"
 import { Products } from "../../../components/StyledComponents/styled-components"
 import { constructUrl } from "../../Orders/orders"
 import { useFetchData } from "../../../hooks/use-fetch-data"
@@ -73,8 +71,7 @@ export default function ProductsContainer(props){
     const [searchParams , setSearchParams ] = useSearchParams();
     const urlParametersList = useParams()['*'].split('/')
 
-
-    let endpoint_url = "http://127.0.0.1:8000/api/products"
+    let endpoint_url = "/api/products"
     endpoint_url+=(urlParametersList.length>0)?"?categories[]="+urlParametersList.join('&categories[]='):""
     let url = constructUrl(endpoint_url,searchParams);
     let {data, error,loading} = useFetchData(url)

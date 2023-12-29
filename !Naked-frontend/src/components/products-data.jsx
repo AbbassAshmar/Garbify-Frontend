@@ -108,7 +108,8 @@ export const FAV_LISTS =[
             id:1,
             profile_picture:Hoody2,
             name:"josh",
-        }
+        },
+        favorites_count:3
     },
     {
         id:321,
@@ -120,7 +121,9 @@ export const FAV_LISTS =[
             id:1,
             profile_picture:Hoody,
             name:"josh",
-        }
+        },
+        favorites_count:4
+
     },
     {
         id:43,
@@ -132,7 +135,8 @@ export const FAV_LISTS =[
             id:1,
             profile_picture:Hoody2,
             name:"josh",
-        }
+        },
+        favorites_count:3
     },
     {
         id:13,
@@ -144,7 +148,8 @@ export const FAV_LISTS =[
             id:1,
             profile_picture:Hoody2,
             name:"josh",
-        }
+        },
+        favorites_count:3
     },
     {
         id:23,
@@ -156,7 +161,8 @@ export const FAV_LISTS =[
             id:1,
             profile_picture:Hoody2,
             name:"josh",
-        }
+        },
+        favorites_count:3
     },
     {
         id:32,
@@ -168,7 +174,8 @@ export const FAV_LISTS =[
             id:1,
             profile_picture:Hoody2,
             name:"josh",
-        }
+        },
+        favorites_count:3
     },
     {
         id:30,
@@ -180,7 +187,8 @@ export const FAV_LISTS =[
             id:1,
             profile_picture:Hoody2,
             name:"josh",
-        }
+        },
+        favorites_count:3
     },  
     {
         id:10,
@@ -192,7 +200,8 @@ export const FAV_LISTS =[
             id:1,
             profile_picture:Hoody2,
             name:"josh",
-        }
+        },
+        favorites_count:3
     }
 ]
 

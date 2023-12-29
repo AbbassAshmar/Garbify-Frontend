@@ -1,18 +1,12 @@
 import styled from 'styled-components'
 import {Link, useNavigate} from "react-router-dom"
 import { useContext, useEffect, useRef, useState } from 'react'
-import { sendRequest } from '../../hooks/use-fetch-data'
+import { useSendRequest } from '../../hooks/use-fetch-data'
 import { userStateContext } from '../../Contexts/user-state'
 import Loading from '../Loading/loading'
 import ReactDOM from 'react-dom';
+import SuccessOrErrorPopUp from '../SuccessOrErrorPopUp/success-or-error-pop-up'
 
-// Main title :clamp(.9rem,3vw,1.5rem);
-
-// main title (shipping state) : 1.3rem --> 1.1rem (800px)
-// name - text in header: 1rem -->.8rem (800px)
-// buttons and subtext : .9rem -->.7rem (800px)
-
-// max-widths : 1 ->800px , 2->600px
 
 export const Container = styled.div`
 box-shadow: 1px 1px 10px #A8AAAE;
@@ -24,6 +18,7 @@ display:flex;
 flex-direction:column;
 gap:20px;
 `
+
 export const Header = styled.div`
 display:flex;
 flex-direction:column;
@@ -119,7 +114,6 @@ const Name = styled.p`
 margin:0;
 font-size: clamp(.7rem,2vw,.9rem);
 font-weight:600;
-
 `
 const ReturnTimeText = styled.p`
 margin:0;
@@ -153,11 +147,10 @@ border-radius:2px;
 padding: .4rem 0;
 font-weight:600;
 cursor:pointer;
+font-size:clamp(.65rem,1.8vw,.8rem);
 &:hover{
     opacity:.8;
 }
-font-size:clamp(.65rem,1.8vw,.8rem);
-
 `
 
 const BuyViewButtonsContainer = styled.div`
@@ -268,11 +261,15 @@ cursor:pointer;
     font-size:.7rem;
 }
 `
+
+
 export default function OrderCard({order}){
     const userContext = useContext(userStateContext)
+    const {sendRequest,serverError} = useSendRequest(userContext);
+
     const [showCancelConfirmation,setShowCancelConfirmation] = useState(false);
     const [cancelOrderLoading, setCancelOrderLoading ] = useState(false)
-    const [showCancelOrderResult ,setShowCancelOrderResult] = useState(false)
+    const [resultPopUp ,setResultPopUp] = useState({show:false,status:'',message:''})
 
     const cancelConfirmationMenu = useRef();
 
@@ -290,16 +287,15 @@ export default function OrderCard({order}){
         let uri = "/api/orders/"+order.id;
         let init = { method :"DELETE" };
 
-        try {
-            let {request, response} = await sendRequest(uri,init,userContext);
-            console.log(response);
-        }catch(error){
-            console.log(error)
-            setShowCancelOrderResult(true)
-            setShowCancelConfirmation(false)
-        }finally{
-            setCancelOrderLoading(false)
+        let {request, response} = await sendRequest(uri,init);
+        if (request?.ok ){
+            setResultPopUp({show:true,status:"Success",message:'Your order was successfully canceled -_-'})
+        }else if (request?.error){
+            setResultPopUp({show:true,status:"Error",message:response.error.message})
         }
+
+        setShowCancelConfirmation(false) // close the Confirm Cancel Order menu
+        setCancelOrderLoading(false) // stop the loading of Cancel button
     }
     
     useEffect(() => {
@@ -315,30 +311,31 @@ export default function OrderCard({order}){
 
     return(
         <Container>
+            <SuccessOrErrorPopUp settings={resultPopUp} setSettings={setResultPopUp} serverError={serverError}/>
             <Header>
                 <DetailsContainer>
                     <OrderSummary>
                         <Text style={{display:'inline'}}>
                             ordered at : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{order.created_at}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>{order.created_at}</span>
                         </Text>
                         <Text>
                             total cost : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>${order.total_cost}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>${order.total_cost}</span>
                         </Text>
                         <Text>
                             ship to : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{order.recipiant_name}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>{order.recipiant_name}</span>
                         </Text>
                     </OrderSummary>
                     <StatusIdContainer>
                         <Text style={{display:"inline"}}>
                             order status : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>{order.status}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>{order.status}</span>
                         </Text>
                         <Text>
                             order id : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem);"}}>#{order.id}</span>
+                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>#{order.id}</span>
                         </Text>
                     </StatusIdContainer>
                 </DetailsContainer>
@@ -372,22 +369,14 @@ export default function OrderCard({order}){
                                 </NameContainer>
                                 <ButtonsContianer>
                                     <Button>Add to favorites</Button>
-                                    {
-                                        order.status === "delivered" && <Button onClick={(e)=>handleWriteAReviewClick(product.id)}>write a review</Button>
-                                    }
-                                    {
-                                        order.status == "delivered" && <Button>return product</Button>
-                                    }
-                                    {
-                                        order.status == "paid" && <Button>remove product</Button>
-                                    }
-                                    {
-                                        order.status == "paid" && <Button>edit shipping address</Button>
-                                    }
-                                    
+                                    {order.status === "delivered" && <Button onClick={(e)=>handleWriteAReviewClick(product.id)}>write a review</Button>}
+                                    {order.status == "delivered" && <Button>return product</Button>}
+                                    {order.status == "paid" && <Button>remove product</Button>}
+                                    {order.status == "paid" && <Button>edit shipping address</Button>}
                                 </ButtonsContianer>
                             </Product>
-                        )})
+                        )
+                    })
                 }
             </ProductsContainer>
 
@@ -417,9 +406,7 @@ export default function OrderCard({order}){
                         }
                     </div>
                 }
-                {
-                    order.status!="paid" && <ArchiveOrderButton>Archive order</ArchiveOrderButton>
-                }
+                {order.status!="paid" && <ArchiveOrderButton>Archive order</ArchiveOrderButton>}
                 <OrderDetailsLink>
                     order details <i class="fa-solid fa-arrow-right"/>
                 </OrderDetailsLink>

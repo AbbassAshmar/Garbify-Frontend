@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ImagesContainer from "./Components/images-container";
 import DetailsContainer from "./Components/details-container";
 import ProductsSlider from "../../components/ProductsSlider/products-slider";
-import { PRODUCTS,PRODUCT,REVIEWS } from "../../components/products-data";
+import { PRODUCT } from "../../components/products-data";
 import ReviewsSection from "./Components/reviews-section";
-import { requestData } from "../OtherUsersFavorites/other-users-favorites";
+import { useFetchData } from "../../hooks/use-fetch-data";
+import Loading from "../../components/Loading/loading";
 
 const Container = styled.div`
 width:100%;
@@ -27,30 +28,22 @@ align-items:flex-start;
 `
 
 export default function Product(){
-    const [product,setProduct] = useState(PRODUCT);
-    const [similarProducts, setSimilarProducts] = useState(PRODUCTS);
     const [ImagesColor, setImagesColor] = useState('red')
     const [sizePicked, setSizePicked] = useState(null)
     const [quantiy, setQuantity] = useState(400)
     const {id , name} = useParams()
 
-    // useEffect(()=>{
-    //     const PRODUCT_URL = "http://127.0.0.1:8000/api/products/"+id
-    //     const SIMILAR_PRODUCTS_URL = "http://127.0.0.1:8000/api/products/"+id+"/similar"
+    const {data,loading,error} = useFetchData("/api/products/"+id,[id]);
+    let product = PRODUCT;
+    if (data){
+        product = data.data.product
+        setImagesColor(Object.keys(retrieveProduct['product']['colors'])[0])
+        setQuantity(retrieveProduct['product']['quantity'])
+    }
 
-    //     const retrieveProduct = requestData(PRODUCT_URL)
-    //     const retrieveSimilarProducts = requestData(SIMILAR_PRODUCTS_URL)
-
-    //     if (retrieveProduct) {
-    //         setProduct(retrieveProduct['product'])
-    //         setImagesColor(Object.keys(retrieveProduct['product']['colors'])[0])
-    //         setQuantity(retrieveProduct['product']['quantity'])
-    //     }
-
-    //     if (retrieveSimilarProducts){
-    //         setSimilarProducts(retrieveSimilarProducts['products'])
-    //     }
-    // } , [id])
+    if (loading){
+        return (<Loading />)
+    }
     
     return (
         <Container>
@@ -64,7 +57,7 @@ export default function Product(){
                     setImagesColor={setImagesColor} 
                     product={product}/>
             </AboveTheFolds>
-            <ProductsSlider title={"You may also like : "} products={similarProducts}/>
+            <ProductsSlider title={"You may also like : "} url={"/api/products/"+id+"/similar"}/>
             <ReviewsSection product_id={id}/>
         </Container>
     )

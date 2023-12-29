@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState,useEffect } from "react";
 import {Title, constructUrl } from "../Orders/orders";
 import { FAV_LISTS, PRODUCTS } from "../../components/products-data";
 import SearchSort from "../../components/SearchSort/search-sort"
@@ -7,7 +6,6 @@ import  FavoriteListCard  from "../../components/FavoriteListCard/favorite-list-
 import Pagination from "../../components/Pagination/pagination";
 import { useSearchParams } from "react-router-dom";
 import ProductsSlider from "../../components/ProductsSlider/products-slider";
-import { requestData } from "../OtherUsersFavorites/other-users-favorites";
 import { Content , Products ,Header} from "../../components/StyledComponents/styled-components";
 import { useFetchData } from "../../hooks/use-fetch-data";
 const Container = styled.div`

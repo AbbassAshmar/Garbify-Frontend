@@ -12,6 +12,7 @@ import { PRODUCTS } from "../../components/products-data";
 import OrderCard from "../../components/OrderCard/order-card";
 import Pagination from "../../components/Pagination/pagination";
 import CanceledOrderCard from "../../components/CanceledOrderCard/caceled-order-card";
+import useUserState from "../../hooks/use-user-state";
 
 const OrderCardsContainer = styled.div`
 display:flex;
@@ -23,11 +24,11 @@ gap:2rem;
 export default function CanceledOrdersSection(){
     const {token} = useContext(userStateContext);
     const [searchParams,setSearchParams] = useSearchParams();
+    let userContext = useUserState();
 
-    let init = { headers:{"Authorization":"Bearer " + token} }
-    let endpoint_url = "http://127.0.0.1:8000/api/users/user/orders/canceled";
+    let endpoint_url = "/api/users/user/orders/canceled";
     let url = constructUrl(endpoint_url,searchParams)
-    let {data, error, loading } = useFetchData(url , init, [searchParams]);
+    let {data, error, loading } = useFetchData(url ,[searchParams] ,userContext);
     let orders = data?.data.orders || ORDERS;
     let TotalPagesCount =data?.metadata.pages_count || 30;
 
@@ -55,7 +56,7 @@ export default function CanceledOrdersSection(){
                     You haven't canceled any order yet !<br/>
                     keep it clean 
                 </NoOrdersTitle>
-                <ProductsSlider  title={"You may like to order : "} products={PRODUCTS}/>
+                <ProductsSlider  title={"You may like to order : "} url={"/api/favorites?limit=10"}/>
             </NoOrdersContainer> 
         }
         </>

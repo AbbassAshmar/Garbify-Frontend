@@ -5,7 +5,8 @@ import half_star from "../../../assets/half_star.png"
 import empty_star from "../../../assets/empty_star.png"
 import { useContext, useEffect, useState } from "react"
 import {userStateContext} from "../../../Contexts/user-state"
-import { sendRequest } from "../../../hooks/use-fetch-data"
+import { useSendRequest } from "../../../hooks/use-fetch-data"
+import useUserState from "../../../hooks/use-user-state"
 
 const Container = styled.div`
 width:100%;
@@ -160,6 +161,9 @@ font-size:.9rem;
 }
 `
 export default function Review(props){
+    const userContext = useUserState();
+    const {sendRequest, isServerError} = useSendRequest(userContext);
+
     const [helpfulCount, setHelpfulCount] = useState(0)
     const [isLiked, setIsLiked] = useState(false)
     const {token} = useContext(userStateContext)

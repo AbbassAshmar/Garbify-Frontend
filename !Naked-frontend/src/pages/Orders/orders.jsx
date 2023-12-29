@@ -7,7 +7,6 @@ import ProductsSlider from '../../components/ProductsSlider/products-slider';
 import { PRODUCTS } from "../../components/products-data";
 import SearchSort from '../../components/SearchSort/search-sort';
 import Pagination from '../../components/Pagination/pagination';
-import { requestData } from '../OtherUsersFavorites/other-users-favorites';
 import { ORDERS } from '../../components/products-data';
 import { Header,Content } from '../../components/StyledComponents/styled-components';
 import { useFetchData } from '../../hooks/use-fetch-data';

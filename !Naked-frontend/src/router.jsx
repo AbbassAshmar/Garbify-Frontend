@@ -6,7 +6,7 @@ import Login from "./pages/Login/login"
 import Products from "./pages/Products/products"
 import Product from "./pages/Product/product"
 import Orders from './pages/Orders/orders'
-import Review from "./pages/Review/review"
+import ReviewPurchasedProduct from "./pages/ReviewPurchasedProduct/review-purchased-product"
 import Favorites from "./pages/Favorites/favorites"
 import OtherUsersFavoritesLists from "./pages/OtherUsersFavoritesLists/other-users-favorites-lists"
 import OtherUsersFavorites from "./pages/OtherUsersFavorites/other-users-favorites"
@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
            
             {
                 path:"/review/:product_id",
-                element:<Review />
+                element:<ReviewPurchasedProduct />
             },
             {
                 path:'/favorites',

@@ -5,7 +5,7 @@ import registerBg from "../../assets/registerBg2.jpg"
 import Logo from "../../components/Logo";
 import Footer from "../../components/Footer/footer"
 import useUserState from "../../hooks/use-user-state";
-import { sendRequest, useFetchData } from "../../hooks/use-fetch-data";
+import { useSendRequest } from "../../hooks/use-fetch-data";
 
 export const Container = styled.div`
 width:100%;
@@ -202,7 +202,9 @@ font-size:clamp(.9rem, 2.6vw, 1.3rem);
 text-shadow:1px 1px 1px black;
 `
 export default function Registration(){
-    const {token,setToken,setUser} = useUserState();
+    const userContext = useUserState();
+    const {sendRequest, isServerError} = useSendRequest(userContext);
+    
     const location =useLocation()
     const navigate = useNavigate();
     const {state} = location
