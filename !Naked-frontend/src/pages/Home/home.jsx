@@ -9,6 +9,7 @@ import ImageSection from "./Components/image-section"
 import SuitsSection from "./Components/suits-section"
 import CardsSection from "./Components/cards-section"
 import FormSection from "./Components/form-section"
+
 const Container = styled.div`
 background:white;
 overflow:hidden;

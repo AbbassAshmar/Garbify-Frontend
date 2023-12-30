@@ -16,8 +16,6 @@ display:flex;
 flex-direction:column;
 gap:2rem;
 `
-
-
 export const NoOrdersContainer = styled.div`
 display:flex;
 flex-direction:column;
@@ -39,7 +37,7 @@ font-size:1.3rem;
 `
 export default function OrdersSection(){
     const userContext = useContext(userStateContext);
-    const [searchParams,setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     let endpoint_uri = "/api/users/users/orders";
     let url = constructUrl(endpoint_uri,searchParams)

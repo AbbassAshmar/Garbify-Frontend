@@ -7,8 +7,8 @@ import { FAV_LISTS } from "../../components/products-data"
 import { Header ,Content} from "../../components/StyledComponents/styled-components"
 import LikesViews from "../../components/LikesViews/likes-views"
 import { useFetchData } from "../../hooks/use-fetch-data"
-import FavoritesContainer from "./favorites-container"
 import Loading from "../../components/Loading/loading"
+import FavoriteProductsGrid from "../../components/FavoriteProductsGrid/favorite-products-grid"
 
 const Container = styled.div`
 `
@@ -83,11 +83,11 @@ font-size :clamp(.6rem,2vw,.9rem);
 `
 
 const OrderBytoSortBy={
-    "name-ASC":"From A-Z",
-    "created_at-DESC":"Newest-Oldest",
-    "created_at-ASC":"Oldest-Newest",
-    "total_cost-DESC":"Price: High-Low",
-    "total_cost-ASC":"Price: Low-High",
+    "name+ASC":"From A+Z",
+    "created_at+DESC":"Newest+Oldest",
+    "created_at+ASC":"Oldest+Newest",
+    "total_cost+DESC":"Price: High+Low",
+    "total_cost+ASC":"Price: Low+High",
 }
 
 
@@ -155,8 +155,7 @@ export default function OtherUsersFavorites(){
                         handleSearchFormSubmit={handleSearchFormSubmit}
                     />
                 </Header>
-                
-                <FavoritesContainer />
+                <FavoriteProductsGrid url={"/api/favorites_lists/"+favorites_list_id+"/favorites"}/>
             </Content>
         </Container>
     )

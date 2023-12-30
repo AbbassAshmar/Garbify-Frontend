@@ -1,16 +1,8 @@
 import styled from 'styled-components';
-import OrderCard from '../../components/OrderCard/order-card';
-import { useState ,useContext, useEffect} from 'react';
-import { userStateContext } from '../../Contexts/user-state';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import ProductsSlider from '../../components/ProductsSlider/products-slider';
-import { PRODUCTS } from "../../components/products-data";
 import SearchSort from '../../components/SearchSort/search-sort';
-import Pagination from '../../components/Pagination/pagination';
-import { ORDERS } from '../../components/products-data';
 import { Header,Content } from '../../components/StyledComponents/styled-components';
-import { useFetchData } from '../../hooks/use-fetch-data';
-import Loading from '../../components/Loading/loading';
 import OrdersSection from './orders-section';
 import CanceledOrdersSection from './canceled-orders-section';
 
@@ -18,12 +10,11 @@ import CanceledOrdersSection from './canceled-orders-section';
 const Container = styled.div`
 width:100%;
 `
-
-
 export const Title = styled.div`
 font-weight:600;
 text-wrap:nowrap;
 font-size:clamp(.9rem,3vw,1.5rem);
+color:${({color})=>color};
 `
 
 const PagesContainer = styled.div`
@@ -139,9 +130,7 @@ export default function Orders(){
         <Container>
             <Custom_Content>
                 <Custom_Header>
-                    <Title>
-                        My Orders
-                    </Title>
+                    <Title>My Orders</Title>
                     <SearchSort 
                         placeholder={"search your orders"} 
                         sortOptions={OrderBytoSortBy} 
@@ -151,7 +140,6 @@ export default function Orders(){
                         <PageTitle onClick={()=>handlePageTitleClick("orders")} selected={page ==="orders"}>orders</PageTitle>
                         <PageTitle onClick={()=>handlePageTitleClick("canceled")} selected={page ==="canceled"}>canceled orders</PageTitle>
                     </PagesContainer>
-
                 </Custom_Header>
                 {page === "orders" && <OrdersSection />}
                 {page === "canceled" && <CanceledOrdersSection/>}
