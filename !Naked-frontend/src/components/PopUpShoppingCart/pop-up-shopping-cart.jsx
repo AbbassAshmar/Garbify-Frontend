@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import ReactDOM from "react-dom";
 import PopUpShoppingCartItem from "./pop-up-shopping-cart-item";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSendRequest } from "../../hooks/use-fetch-data";
+import useUserState from "../../hooks/use-user-state";
+import Loading from "../Loading/loading";
 
 const DropDownCart = styled.div`
 height:100vh;
@@ -13,7 +16,6 @@ position:fixed;
 top:0;
 left:0;
 z-index:100;
-
 &:before{
     content:"";
     position:absolute;
@@ -28,9 +30,14 @@ z-index:100;
 `
 const Container = styled.div`
 width:50%;
-// height:45%;
 background:white;
 padding :2.5rem;
+min-width:550px;
+@media screen and (max-width:600px){
+    width:100%;
+    height:100vh;
+    min-width:0;
+}
 `
 const Content = styled.div`
 width:100%;
@@ -63,6 +70,12 @@ const ButtonsContainer = styled.div`
 display:flex;
 justify-content:space-between;
 align-items:center;
+width:100%;
+gap:15px;
+
+@media screen and (max-width:600px){
+    flex-direction:column;
+}
 `
 
 const ViewBagButton = styled.button`
@@ -73,9 +86,11 @@ outline : none;
 border-radius: 25px;
 color:black;
 font-weight:600;
-width:48%;
+width:100%;
 cursor:pointer;
 font-size:clamp(.7rem,2vw,.9rem);
+height:7.5vh;
+
 `
 
 const CheckoutButton = styled.button`
@@ -86,13 +101,41 @@ outline : none;
 border-radius: 25px;
 color:white;
 font-weight:600;
-width:48%;
+width:100%;
 cursor:pointer;
 font-size:clamp(.7rem,2vw,.9rem);
+display:flex;
+align-items:center;
+justify-content:center;
+height:7.5vh;
+
 `
 
-export default function PopUpShoppingCart({cartData}){
+export default function PopUpShoppingCart({cartData,setShow}){
+    const userContext= useUserState();
     const [amountSubtotal, setAmountSubtotal] = useState(cartData?.shopping_cart_item?.shopping_cart?.amount_subtotal||1)
+    const {sendRequest,serverError} = useSendRequest(userContext);
+    const [checkoutButtonLoading,setCheckoutButtonLoading]= useState(false)
+
+    function handleCloseButtonClick (e){
+        setShow(false);
+    }
+
+    function handleViewBagButtonClick(e){
+
+    }
+    
+    async function handleCheckoutButtonClick(e){
+        setCheckoutButtonLoading(true)
+        let uri = '/api/checkout/shopping_cart'
+        let init = {method:"POST"};
+        let {request,response} = await sendRequest(uri,init)
+
+        if (request?.status == 201){
+            window.location.href = response.data.form_url;
+        }
+        setCheckoutButtonLoading(false)
+    }
 
     return (
         <>
@@ -103,7 +146,7 @@ export default function PopUpShoppingCart({cartData}){
                             <Content>
                                 <Header>
                                     <AddedToCart>Item added to your cart</AddedToCart> 
-                                    <CloseButton className="fa-solid fa-xmark"/>
+                                    <CloseButton onClick={handleCloseButtonClick} className="fa-solid fa-xmark"/>
                                 </Header>
                                 <ItemsContainer>
                                     <PopUpShoppingCartItem cartData={cartData} setAmountSubtotal={setAmountSubtotal} />
@@ -113,8 +156,12 @@ export default function PopUpShoppingCart({cartData}){
                                     <SubTotal>{amountSubtotal}$</SubTotal>
                                 </SummaryContainer>
                                 <ButtonsContainer>
-                                    <ViewBagButton>View Bag ({cartData?.shopping_cart_item?.shopping_cart?.count_items})</ViewBagButton>
-                                    <CheckoutButton>Checkout</CheckoutButton>
+                                    <ViewBagButton onClick={handleViewBagButtonClick}>
+                                        View Bag ({cartData?.shopping_cart_item?.shopping_cart?.count_items})
+                                    </ViewBagButton>
+                                    <CheckoutButton onClick={handleCheckoutButtonClick}>
+                                      <Loading style={{transform:"scale(.2)"}}/> 
+                                    </CheckoutButton>                                                                
                                 </ButtonsContainer>
                             </Content>
                         </Container>

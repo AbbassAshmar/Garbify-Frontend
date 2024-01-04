@@ -97,6 +97,7 @@ export default function PopUpShoppingCartItem({cartData,setAmountSubtotal}){
     const [price,setPrice] = useState(cartData?.shopping_cart_item?.amount_subtotal || 1);
 
     const [popUpSettings,setPopUpSettings] = useState({show:false,status:"",message:""});
+    const [disableQuantityButtons,setDisableQuantityButtons] = useState(false);
 
     const updated_cart  = {
         shopping_cart_item : { 
@@ -109,10 +110,11 @@ export default function PopUpShoppingCartItem({cartData,setAmountSubtotal}){
         },
     }
 
-    function handleQuantityUpdate(new_quantity){
+    async function handleQuantityUpdate(new_quantity){
+        setDisableQuantityButtons(true)
         let init = {method:"PATCH", body:{quantity:new_quantity}};
         let url = "/users/user/shopping_carts/items"
-        const {request, response}  = sendRequest(url,init);
+        const {request, response}  = await sendRequest(url,init);
 
         if (request?.status === 400){
             setPopUpSettings({show:true,status:"Error",message:response.error.message})
@@ -123,7 +125,10 @@ export default function PopUpShoppingCartItem({cartData,setAmountSubtotal}){
             setPrice(response.data.shopping_cart_item.amount_subtotal)
             setAmountSubtotal(response.data.shopping_cart_item.shopping_cart.amount_subtotal)
         }
+
+        setDisableQuantityButtons(false)
     }
+
     function handleDecrementQuantity (e){
         let new_quantity = cartData.shopping_cart_item.quantity-1;
         handleQuantityUpdate(new_quantity);
@@ -132,6 +137,16 @@ export default function PopUpShoppingCartItem({cartData,setAmountSubtotal}){
     function handleIncrementQuantity (e){
         let new_quantity = cartData.shopping_cart_item.quantity+1;
         handleQuantityUpdate(new_quantity);
+    }
+
+    let renderMinusSign = ()=>{
+        let isDisabled= currentQuantity <=0 || disableQuantityButtons;
+        return <MinusSign disabled={isDisabled || ""} onClick={handleDecrementQuantity}>-</MinusSign>
+    }
+
+    let renderPlusSign = ()=>{
+        let isDisabled= cartData.shopping_cart_item.product.quantity <= currentQuantity || disableQuantityButtons;
+        return <PlusSign disabled={isDisabled || ''} onClick={handleIncrementQuantity}>+</PlusSign>
     }
 
     return (
@@ -145,9 +160,9 @@ export default function PopUpShoppingCartItem({cartData,setAmountSubtotal}){
                 <PriceQuantityContainer>
                     <Price>{price}$</Price>
                     <Quantity>
-                        <MinusSign onClick={handleDecrementQuantity}>-</MinusSign>
+                        {renderMinusSign()}
                         <CurrentQuantity>{currentQuantity}</CurrentQuantity>
-                        <PlusSign onClick={handleIncrementQuantity}>+</PlusSign>
+                        {renderPlusSign()}
                     </Quantity>
                 </PriceQuantityContainer>
             </ProductDetails>

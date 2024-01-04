@@ -31,12 +31,15 @@ const cartData1={
         size:"M",
         quantity:2,
         amount_subtotal: 2342,
+
         product:{
             name:"red shoes with black stains",
             id : 4,
             thumbnail : Hoody2,
             price:324,
+            quantity:19,
         },
+
         shopping_cart:{
             amount_subtotal:23432,
             count_items : 43,
@@ -94,10 +97,10 @@ export default function AddToCartButton({product, color,size,quantity}){
         const {response,request} = await sendRequest(uri,{method:"POST",body:payload});
 
         if(request?.status == 201){
+            setCartData(response)
             setShowPopUpShoppingCart(true)
         }
 
-        setCartData(response)
         setButtonLoading(false)
     }
         
@@ -109,7 +112,7 @@ export default function AddToCartButton({product, color,size,quantity}){
             </Button>
             {
                 showPopUpShoppingCart && 
-                <PopUpShoppingCart cartData={cartData}/>
+                <PopUpShoppingCart cartData={cartData} setShow={setShowPopUpShoppingCart}/>
             }
         </div>
     )
