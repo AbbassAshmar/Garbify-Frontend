@@ -9,7 +9,6 @@ max-width:430px;
 background : white;
 border-radius:10px;
 box-shadow:0px 0px 10px ${({color})=>color};
-// height:10%;
 position:fixed;
 z-index:100;
 top:18vh;
@@ -97,13 +96,14 @@ function PopUp({color,text,status,setSettings,serverError}){
 
 export default function SuccessOrErrorPopUp(props){
     const [settings ,setSettings] = useState(props.settings ?? {show:false,status:"",message:""})
+
     useEffect(()=>{
-        if (props?.settings)
+        if (props?.settings && JSON.stringify(props.settings) !== JSON.stringify(settings))
         setSettings(props.settings);
     },[props])
     
     useEffect(()=>{
-        if (props.settings)
+        if (props.settings  && JSON.stringify(props.settings) !== JSON.stringify(settings))
         props.setSettings(settings)
     },[settings])
 

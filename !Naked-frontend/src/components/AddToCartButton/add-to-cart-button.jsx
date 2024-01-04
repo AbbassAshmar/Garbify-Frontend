@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import Loading from "../Loading/loading";
 import PopUpShoppingCart from "../PopUpShoppingCart/pop-up-shopping-cart";
 import {useSendRequest } from "../../hooks/use-fetch-data";
+import SuccessOrErrorPopUp from "../SuccessOrErrorPopUp/success-or-error-pop-up";
+import Hoody2 from "../../assets/Hoody2.jpg"
 
 const Button = styled.button`
 width : 100%;
@@ -22,13 +24,33 @@ justify-content:center;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
+const cartData1={
+    shopping_cart_item : {
+        id:3,
+        color:"red",
+        size:"M",
+        quantity:2,
+        amount_subtotal: 2342,
+        product:{
+            name:"red shoes with black stains",
+            id : 4,
+            thumbnail : Hoody2,
+            price:324,
+        },
+        shopping_cart:{
+            amount_subtotal:23432,
+            count_items : 43,
+        },
+    },
+}
 
 export default function AddToCartButton({product, color,size,quantity}){
     const userContext = useUserState();
-    const {sendRequest, isServerError} = useSendRequest(userContext);
+    const {sendRequest, serverError} = useSendRequest(userContext);
 
+    const [cartData,setCartData] = useState(cartData1);
     const [buttonLoading,setButtonLoading] = useState(false);
-    const [showPopUpShoppingCart, setShowPopUpShoppingCart] = useState(false);
+    const [showPopUpShoppingCart, setShowPopUpShoppingCart] = useState(true);
 
 
     // function cartItemEquals(item_1 , item_2){
@@ -68,40 +90,26 @@ export default function AddToCartButton({product, color,size,quantity}){
             quantity
         }   
 
-        try {
-            if (token){
-                // send request to add to cart
-                let uri = '/api/users/user/shopping_carts/items';
-                const {response,request} = await sendRequest(uri,{method:"POST",body:payload},token);
-              
-                if(request.status == 201){
-                    setShowPopUpShoppingCart(true)
-                }
-            }else{
-                let uri = '/api/users/anonymous/shopping_carts/items';
-                const {response,request} = await sendRequest(uri,{method:"POST",body:payload},token);
-                if(request.status == 201){
-                    setShowPopUpShoppingCart(true)
-                }
-                setShowPopUpShoppingCart(true)
-            }
+        let uri = userContext.token?'/api/users/user/shopping_carts/items':'/api/users/anonymous/shopping_carts/items' ;
+        const {response,request} = await sendRequest(uri,{method:"POST",body:payload});
 
-        }catch(error){
-
-        }finally{
-            setButtonLoading(false)
+        if(request?.status == 201){
+            setShowPopUpShoppingCart(true)
         }
-    }
 
+        setCartData(response)
+        setButtonLoading(false)
+    }
+        
     return (
         <div>
+            <SuccessOrErrorPopUp serverError={serverError} />
             <Button loading={buttonLoading} onClick={handleAddToCartClick}>
                 { buttonLoading ?<Loading style={{transform:"scale(.2)"}}/> : 'Add to Cart' }
             </Button>
-            
             {
                 showPopUpShoppingCart && 
-                <PopUpShoppingCart product={product} quantity={quantity} color={color} size={size}/>
+                <PopUpShoppingCart cartData={cartData}/>
             }
         </div>
     )
