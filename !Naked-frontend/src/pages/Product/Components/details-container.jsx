@@ -24,10 +24,11 @@ overflow:hidden;
 `
 
 const TitleContainer = styled.div`
-
+display:flex;
+flex-direction:column;
+gap:.3rem;
 `
 const SoldOut = styled.p`
-margin:0 0 .5rem 0;
 width:fit-content;
 padding: .3em .8em;
 color:white;
@@ -35,18 +36,22 @@ font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 const Title = styled.h2`
-margin:0 0 .4rem 0;
 font-weight:600;
 font-size:clamp(.9rem, 2.6vw, 1.3rem);
+`
+const Type= styled.p`
+font-weight:600;
+font-size:clamp(.7rem,2vw,.9rem);
+color:grey;
+margin: 0 0 .5rem 0;
 `
 const ReviewsContainer = styled.div`
 display:flex;
 gap: 2rem;
-// margin: 0 0 2rem 0;
 `
 const StarsContainer = styled.div`
 display:flex;
-align-items:start;
+align-items:center;
 gap:4px;
 `
 const Rating = styled.p`
@@ -72,12 +77,10 @@ font-size:clamp(.6rem,2vw,.9rem);
 const PriceContainer = styled.div`
 display:flex;
 align-items:flex-end;
-gap:1.3rem;
-// margin: 0 0 2rem 0;
+gap:1rem;
 `
 const NewPrice = styled.p`
 margin:0;
-
 font-weight:600;
 font-size:clamp(.9rem, 2.6vw, 1.3rem);
 `
@@ -120,7 +123,6 @@ const Colors= styled.div`
 width:100%;
 display:flex;
 gap:1.3rem;
-// margin:0 0 2rem 0;
 `
 const ColorImage = styled.img`
 border:${({border})=>border};
@@ -133,8 +135,6 @@ max-width:80px;
 max-height:80px;
 `
 const SizesContainer = styled.div`
-// margin: 0 0 2rem 0 ;
-
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
@@ -203,8 +203,6 @@ gap:3px;
 opacity:.7;
 `
 const OverViewContainer = styled.div`
-// margin:0 0 2rem 0;
-
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
@@ -289,6 +287,7 @@ export default function DetailsContainer({quantity,product,setImagesColor,Images
             <TitleContainer>
                 { !quantity && <SoldOut>Sold out</SoldOut>}
                 <Title>{product.name}</Title>
+                <Type>{product.type}</Type>
                 <ReviewsContainer>
                     <StarsContainer>
                         <Rating>{product.reviews_summary.average_ratings}</Rating>
@@ -318,7 +317,7 @@ export default function DetailsContainer({quantity,product,setImagesColor,Images
             </PriceContainer>
             <ColorsContainer>
                 <ColorSizeTitle>   
-                    colors :  <span style={{opacity:".7",color:`${ImagesColor}`}}>{ImagesColor&&ImagesColor}</span>
+                    Colors :  <span style={{color:`grey`}}>{ImagesColor&&ImagesColor}</span>
                 </ColorSizeTitle>
                 <Colors>
                 {
@@ -337,7 +336,7 @@ export default function DetailsContainer({quantity,product,setImagesColor,Images
             <SizesContainer>
                 <SizesTitles>
                     <p style={{flex:"1"}}>
-                        sizes : <span style={{opacity:".7"}}>{sizePicked&&sizePicked}</span>
+                        Sizes : <span style={{color:"grey"}}>{sizePicked&&sizePicked}</span>
                     </p>
                     <SizeGuideLink  onClick={(e)=>{return handleSizeGuideClick(sizeTableRef)}}>size guide</SizeGuideLink>
                 </SizesTitles>

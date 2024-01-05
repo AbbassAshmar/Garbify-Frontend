@@ -20,7 +20,7 @@ margin : 0 0 .4rem 0;
 display:flex;
 align-items:center;
 justify-content:center;
-
+cursor:pointer;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
@@ -53,35 +53,7 @@ export default function AddToCartButton({product, color,size,quantity}){
 
     const [cartData,setCartData] = useState(cartData1);
     const [buttonLoading,setButtonLoading] = useState(false);
-    const [showPopUpShoppingCart, setShowPopUpShoppingCart] = useState(true);
-
-
-    // function cartItemEquals(item_1 , item_2){
-    //     let keys = Object.keys(obj);
-    //     for (let key of keys){
-    //         if (key === 'quantity') continue;
-    //         if (obj[key] != obj2[key] ) return false;
-    //     }
-    //     return true;
-    // }
-    
-    // function addToLocalStorageCart(product){
-    //     cart = localStorage.getItem('shopping_cart');
-    //     if (cart){
-    //         for (let item of cart){
-    //             if (cartItemEquals(item, product)){
-    //                 item.quantity ++
-    //                 localStorage.setItem('shopping_cart' , cart)
-    //                 return null;
-    //             }
-    //         }
-    //         cart.push(product);
-    //     }else{ 
-    //         cart = [product];
-    //     }
-    //     localStorage.setItem('shopping_cart' , cart)
-    //     return null;
-    // }
+    const [showPopUpShoppingCart, setShowPopUpShoppingCart] = useState(false);
 
     async function handleAddToCartClick(e){
         setButtonLoading(true)
@@ -107,7 +79,7 @@ export default function AddToCartButton({product, color,size,quantity}){
     return (
         <div>
             <SuccessOrErrorPopUp serverError={serverError} />
-            <Button loading={buttonLoading} onClick={handleAddToCartClick}>
+            <Button disabled={buttonLoading || ""} loading={buttonLoading} onClick={handleAddToCartClick}>
                 { buttonLoading ?<Loading style={{transform:"scale(.2)"}}/> : 'Add to Cart' }
             </Button>
             {

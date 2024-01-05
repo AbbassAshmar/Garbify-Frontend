@@ -88,6 +88,46 @@ font-size:inherit;
 
 
 
+function MinusSignComponent({currentQuantity, disableQuantityButtons,handleQuantityUpdate,quantity}){
+    function handleDecrementQuantity (e){
+        let new_quantity = quantity.requested-1;
+        handleQuantityUpdate(new_quantity);
+    }
+
+    let renderMinusSign = ()=>{
+        let isDisabled= currentQuantity <=0 || disableQuantityButtons;
+        return <MinusSign disabled={isDisabled || ""} onClick={handleDecrementQuantity}>-</MinusSign>
+    }
+
+    return renderMinusSign();
+}
+
+
+function PlusSignComponent({currentQuantity, disableQuantityButtons,handleQuantityUpdate,quantity}){
+    function handleIncrementQuantity (e){
+        let new_quantity = quantity.requested+1;
+        handleQuantityUpdate(new_quantity);
+    }
+
+    let renderPlusSign = ()=>{
+        let isDisabled= quantity.available <= currentQuantity || disableQuantityButtons;
+        return <PlusSign disabled={isDisabled || ''} onClick={handleIncrementQuantity}>+</PlusSign>
+    }
+
+    return renderPlusSign();
+}
+
+
+const updated_cart  = {
+    shopping_cart_item : { 
+        quantity : 2 ,
+        new_price : 2343,
+        shopping_cart:{
+            amount_subtotal:23432,
+            count_items : 43,
+        },
+    },
+}
 
 export default function PopUpShoppingCartItem({cartData,setAmountSubtotal}){
     const userContext = useUserState();
@@ -98,17 +138,6 @@ export default function PopUpShoppingCartItem({cartData,setAmountSubtotal}){
 
     const [popUpSettings,setPopUpSettings] = useState({show:false,status:"",message:""});
     const [disableQuantityButtons,setDisableQuantityButtons] = useState(false);
-
-    const updated_cart  = {
-        shopping_cart_item : { 
-            quantity : 2 ,
-            new_price : 2343,
-            shopping_cart:{
-                amount_subtotal:23432,
-                count_items : 43,
-            },
-        },
-    }
 
     async function handleQuantityUpdate(new_quantity){
         setDisableQuantityButtons(true)
@@ -129,26 +158,6 @@ export default function PopUpShoppingCartItem({cartData,setAmountSubtotal}){
         setDisableQuantityButtons(false)
     }
 
-    function handleDecrementQuantity (e){
-        let new_quantity = cartData.shopping_cart_item.quantity-1;
-        handleQuantityUpdate(new_quantity);
-    }
-
-    function handleIncrementQuantity (e){
-        let new_quantity = cartData.shopping_cart_item.quantity+1;
-        handleQuantityUpdate(new_quantity);
-    }
-
-    let renderMinusSign = ()=>{
-        let isDisabled= currentQuantity <=0 || disableQuantityButtons;
-        return <MinusSign disabled={isDisabled || ""} onClick={handleDecrementQuantity}>-</MinusSign>
-    }
-
-    let renderPlusSign = ()=>{
-        let isDisabled= cartData.shopping_cart_item.product.quantity <= currentQuantity || disableQuantityButtons;
-        return <PlusSign disabled={isDisabled || ''} onClick={handleIncrementQuantity}>+</PlusSign>
-    }
-
     return (
         <Container>
             <SuccessOrErrorPopUp serverError={serverError} settings={popUpSettings} setSettings={setPopUpSettings}/>
@@ -160,9 +169,21 @@ export default function PopUpShoppingCartItem({cartData,setAmountSubtotal}){
                 <PriceQuantityContainer>
                     <Price>{price}$</Price>
                     <Quantity>
-                        {renderMinusSign()}
+                        <MinusSignComponent
+                        handleQuantityUpdate={handleQuantityUpdate} 
+                        currentQuantity={currentQuantity} 
+                        disableQuantityButtons={disableQuantityButtons}
+                        quantity={{available:cartData.shopping_cart_item.product.quantity,
+                        requested:cartData.shopping_cart_item.quantity}}/>
+
                         <CurrentQuantity>{currentQuantity}</CurrentQuantity>
-                        {renderPlusSign()}
+
+                        <PlusSignComponent 
+                        handleQuantityUpdate={handleQuantityUpdate} 
+                        currentQuantity={currentQuantity} 
+                        disableQuantityButtons={disableQuantityButtons}
+                        quantity={{available:cartData.shopping_cart_item.product.quantity,
+                        requested:cartData.shopping_cart_item.quantity}}/>
                     </Quantity>
                 </PriceQuantityContainer>
             </ProductDetails>

@@ -19,11 +19,11 @@ margin: 0 0 2rem 0;
 `
 const Header = styled.div`
 padding: 0 0 4rem 0;
-border-bottom:2px solid black;
+border-bottom:2px solid #F1F4F9;
 `
 const Title = styled.h2`
 margin: 0 0 4rem 0;
-
+font-weight:600;
 font-size:1.3rem;
 @media screen and (max-width:800px){
     font-size:1.1rem;
@@ -32,12 +32,10 @@ font-size:1.3rem;
 `
 const StarsContainer = styled.div`
 display:flex;
-gap:8px;
-align-items:flex-start;
+gap:12px;
+align-items:center;
 margin:auto;
 justify-content:center;
-
-
 `
 const Rating = styled.div`
 font-weight:600;

@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useSendRequest } from "../../hooks/use-fetch-data";
 import useUserState from "../../hooks/use-user-state";
 import Loading from "../Loading/loading";
+import { useNavigate } from "react-router-dom";
+import ProductsSlider from "../ProductsSlider/products-slider";
 
 const DropDownCart = styled.div`
 height:100vh;
@@ -22,7 +24,7 @@ z-index:100;
     background:black;
     opacity:.7;
     width:100%;
-    height:100vh;
+    height:100%;
     z-index:-1;
     top:0;
     left:0;
@@ -31,19 +33,24 @@ z-index:100;
 const Container = styled.div`
 width:50%;
 background:white;
-padding :2.5rem;
+padding :min(7vh,40px);
 min-width:550px;
+display:flex;
+flex-direction:column;
+gap:min(7vh,40px);
 @media screen and (max-width:600px){
     width:100%;
     height:100vh;
     min-width:0;
+    overflow-y:scroll;
 }
 `
+
 const Content = styled.div`
 width:100%;
 display:flex;
 flex-direction:column;
-gap:2.5rem;
+gap:min(7vh,40px);
 `
 const Header = styled.div`
 display:flex;
@@ -81,7 +88,7 @@ gap:15px;
 const ViewBagButton = styled.button`
 padding: 1rem 1rem;
 background:white;
-border:1px solid black;
+border:1px solid grey;
 outline : none;
 border-radius: 25px;
 color:black;
@@ -90,6 +97,10 @@ width:100%;
 cursor:pointer;
 font-size:clamp(.7rem,2vw,.9rem);
 height:7.5vh;
+transition:border .3s;
+&:hover{
+    border:1px solid black;
+}
 
 `
 
@@ -108,7 +119,16 @@ display:flex;
 align-items:center;
 justify-content:center;
 height:7.5vh;
-
+transition:background .3s;
+&:hover{
+    background:#009BCC;
+}
+`
+const SliderContainer = styled.div`
+width:100%;
+@media screen and (min-width:600px){
+    display:none;
+}
 `
 
 export default function PopUpShoppingCart({cartData,setShow}){
@@ -116,13 +136,14 @@ export default function PopUpShoppingCart({cartData,setShow}){
     const [amountSubtotal, setAmountSubtotal] = useState(cartData?.shopping_cart_item?.shopping_cart?.amount_subtotal||1)
     const {sendRequest,serverError} = useSendRequest(userContext);
     const [checkoutButtonLoading,setCheckoutButtonLoading]= useState(false)
+    const navigate = useNavigate();
 
     function handleCloseButtonClick (e){
         setShow(false);
     }
 
     function handleViewBagButtonClick(e){
-
+        navigate('/shopping_cart')
     }
     
     async function handleCheckoutButtonClick(e){
@@ -160,10 +181,13 @@ export default function PopUpShoppingCart({cartData,setShow}){
                                         View Bag ({cartData?.shopping_cart_item?.shopping_cart?.count_items})
                                     </ViewBagButton>
                                     <CheckoutButton onClick={handleCheckoutButtonClick}>
-                                      <Loading style={{transform:"scale(.2)"}}/> 
+                                      {checkoutButtonLoading ? <Loading style={{transform:"scale(.2)"}}/> :"Check out"}
                                     </CheckoutButton>                                                                
                                 </ButtonsContainer>
                             </Content>
+                            <SliderContainer>
+                                <ProductsSlider title={'You would also like'} url={'/api/favorites?limit=10'} />
+                            </SliderContainer>
                         </Container>
                     </DropDownCart>,
                     document.body

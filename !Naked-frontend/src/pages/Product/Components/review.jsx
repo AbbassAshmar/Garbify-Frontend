@@ -21,7 +21,7 @@ padding: min(2rem ,5%) min(2rem ,5%);
 }
 `
 const Name = styled.h2`
-font-weight:800;
+font-weight:600;
 
 font-size:1rem;
 @media screen and (max-width:800px){
@@ -43,7 +43,7 @@ font-size:.9rem;
 }
 `
 const Star = styled.img`
-    width:16px;
+width:16px;
 `
 const ColorSizeContainer = styled.div`
 display:flex;
@@ -69,7 +69,7 @@ gap:.2rem;
 }
 `
 const Title = styled.h2`
-font-weight:800;
+font-weight:600;
 
 font-size:1rem;
 @media screen and (max-width:800px){
@@ -77,7 +77,7 @@ font-size:1rem;
 }
 `
 const Date= styled.div`
-font-weight:800;
+font-weight:600;
 
 font-size:1rem;
 @media screen and (max-width:800px){
@@ -86,7 +86,7 @@ font-size:1rem;
 `
 const Comment = styled.p`
 font-weight:600;
-
+color:grey;
 font-size:.9rem;
 @media screen and (max-width:800px){
     font-size:.7rem;
@@ -111,12 +111,8 @@ gap:1rem;
 const HeightWeight= styled.p`
 margin:0;
 font-weight:600;
-opacity:.7;
-
-font-size:.9rem;
-@media screen and (max-width:800px){
-    font-size:.7rem;
-}
+font-size:clamp(.7rem,2vw,.9rem);
+color:grey;
 `
 const Footer = styled.div`
 width:100%;
@@ -254,11 +250,11 @@ export default function Review(props){
             <Footer>
             <UserInfoContainer>
                 <div>
-                    <HeightWeight>Height : </HeightWeight>
+                    <p style={{fontWeight:"600",fontSize:"clamp(.7rem,2vw,.9rem)"}}>Height : </p>
                     <HeightWeight>{props.height}</HeightWeight>
                 </div>
                 <div>
-                    <HeightWeight>Weight: </HeightWeight>
+                    <p style={{fontWeight:"600",fontSize:"clamp(.7rem,2vw,.9rem)"}}>Weight : </p>
                     <HeightWeight>{props.weight}</HeightWeight>
                 </div>
             </UserInfoContainer>

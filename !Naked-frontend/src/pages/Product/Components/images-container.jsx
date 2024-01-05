@@ -37,7 +37,7 @@ height:100%;
 
 `
 const SlideButtonCustom = styled(SlideButton)`
-z-index:200;
+z-index:4;
 opacity:.7;
 @media screen and (min-width:600px){
     display:none;
