@@ -1,15 +1,13 @@
 import { styled } from "styled-components"
-import star from "../../../assets/star.png"
-import half_star from "../../../assets/half_star.png"
-import empty_star from "../../../assets/empty_star.png"
 import { Link } from "react-router-dom"
 import { useRef, useState } from "react"
 import AddToCartButton from "../../../components/AddToCartButton/add-to-cart-button"
+import RatingStars from "../../../components/RatingStars/rating-stars"
 
 const Container = styled.div`
 flex:4;
 background:white;
-margin-left:4rem;
+margin-left:10%;
 position:sticky;
 top:60px;
 gap:2rem;
@@ -28,13 +26,7 @@ display:flex;
 flex-direction:column;
 gap:.3rem;
 `
-const SoldOut = styled.p`
-width:fit-content;
-padding: .3em .8em;
-color:white;
-font-weight:600;
-font-size:clamp(.6rem,2vw,.9rem);
-`
+
 const Title = styled.h2`
 font-weight:600;
 font-size:clamp(.9rem, 2.6vw, 1.3rem);
@@ -49,29 +41,18 @@ const ReviewsContainer = styled.div`
 display:flex;
 gap: 2rem;
 `
-const StarsContainer = styled.div`
+const RatingContainer = styled.div`
 display:flex;
 align-items:center;
 gap:4px;
+line-height:0;
 `
-const Rating = styled.p`
+const Rating = styled(Link)`
+color:black;
+text-decoration:none;
 font-weight:600;
 display:inline;
 margin:0;
-
-font-size:clamp(.6rem,2vw,.9rem);
-`
-const Stars = styled.div`
-margin:0;
-`
-const ReviewsNumber = styled(Link)`
-color:black;
-opacity:.7;
-font-weight:800;
-&:hover{ 
-    opacity:1;
-}
-
 font-size:clamp(.6rem,2vw,.9rem);
 `
 const PriceContainer = styled.div`
@@ -89,35 +70,29 @@ margin:0;
 color:black;
 opacity:.7;
 text-decoration-line: line-through;
-
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 const SalePercent = styled.p`
 margin:0;
 color:green;
-
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 const Price = styled.p`
 margin:0;
-
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 
 const ColorsContainer = styled.div`
 width:100%;
-// margin:0 0 2rem 0;
 `
 const ColorSizeTitle = styled.div`
 width:100%;
 font-weight:600;
 margin: 0 0 .4em 0;
-
 font-size:clamp(.6rem,2vw,.9rem);
-
 `
 const Colors= styled.div`
 width:100%;
@@ -161,30 +136,31 @@ padding: .3em .8em ;
 border:${({border})=>border};
 border-radius:2px;
 cursor:pointer;
-// background: #F1F4F9;
 background:white;
-transition:background .3s;
-
-transition:box-shadow .3s;
+transition:background .3s, box-shadow .3s;
 &:hover{
     box-shadow:3px 3px 5px rgba(0,0,0,.4);
 }
 `
-const ButtonContainer = styled.div`
-// margin: 0 0 2rem 0;
-`
 
-const OutOfStock = styled.button`
-background:#9C9C9C;
+const AddToFavoritesButton = styled.button`
+background:white;
+color:black;
 width : 100%;
 height:8.4vh;
 max-height: 50px;
-color:white;
-border:none;
-outline:none;
+border:1px solid #C0C3C7;
+border-radius:7px;
 margin : 0 0 .4rem 0;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
+&:hover{
+    border:1px solid black;
+}
 `
 const BadgesContainer = styled.div`
 display:flex;
@@ -192,7 +168,6 @@ align-items:center;
 margin:0 auto;
 width:fit-content;
 gap:1.6em;
-
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
@@ -213,9 +188,6 @@ const OverView = styled.p`
 margin:0;
 white-space: pre-line;
 `
-const Star = styled.img`
-width:15px;
-`
 
 const SizeGuideTitle = styled.div`
 display:flex;
@@ -223,7 +195,6 @@ align-items:flex-end;
 gap:5px;
 margin: 0 0 .5em 0;
 cursor:pointer;
-
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
@@ -235,10 +206,8 @@ transition:max-height .3s;
 `
 const SizeGuideTable = styled.table`
 border-collapse:collapse;
-
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
-
 `
 const TableHead = styled.th`
 border:1.4px solid rgba(0,194,255,1);
@@ -254,23 +223,51 @@ text-align:center;
 height:5vh;
 `
 
-// converts rating (int) to array ([star,star,half,empty,empty])
-// result is rendered in jsx as images
-export function ratingToStars(rating){
-    let result = [];
-    let i =0 ;
-    for (; i < parseInt(rating);  i++ ){
-        result.push("star")
-    }
-   
-    if (((rating*10) % 10 ) != 0 ){
-        result.push("half")
-        i++;
-    }
-    for (; i <5 ; i++){
-        result.push('empty')
-    }
-    return result;
+function AvailableSizes({sizePicked,setSizePicked,sizeTableRef,product}){
+    return (
+        <SizesContainer>
+            <SizesTitles>
+                <p style={{flex:"1"}}>
+                    Sizes : <span style={{color:"grey"}}>{sizePicked&&sizePicked}</span>
+                </p>
+                <SizeGuideLink  onClick={(e)=>{return handleSizeGuideClick(sizeTableRef)}}>size guide</SizeGuideLink>
+            </SizesTitles>
+            <Sizes>
+                {product.sizes.map((size)=>{
+                    return (
+                        <Size   
+                            border={sizePicked == size ? "1px solid #00C2FF":"1px solid #D8DBE0"}
+                            onClick={(e)=>{return setSizePicked(size)}}>
+                            {size}
+                        </Size>
+                    )
+                })}
+            </Sizes>
+        </SizesContainer>
+    )
+}
+
+function AvailableColors({setImagesColor,ImagesColor,product}){
+    return(
+        <ColorsContainer>
+            <ColorSizeTitle>   
+                Colors :  <span style={{color:`grey`}}>{ImagesColor&&ImagesColor}</span>
+            </ColorSizeTitle>
+            <Colors>
+            {
+                product.colors.map((color)=>{
+                    return(<ColorImage 
+                        border={ImagesColor === color?"2px solid #00C2FF":"none"}
+                        onClick={(e)=>{setImagesColor(color)}}
+                        src={product.images[color][0].url} 
+                        alt={product.images[color][0].image_details}
+                    />
+                    )
+                })
+            }
+            </Colors>
+        </ColorsContainer>
+    )
 }
 
 export default function DetailsContainer({quantity,product,setImagesColor,ImagesColor,setSizePicked, sizePicked}){
@@ -285,23 +282,18 @@ export default function DetailsContainer({quantity,product,setImagesColor,Images
     return (
         <Container>
             <TitleContainer>
-                { !quantity && <SoldOut>Sold out</SoldOut>}
                 <Title>{product.name}</Title>
                 <Type>{product.type}</Type>
                 <ReviewsContainer>
-                    <StarsContainer>
-                        <Rating>{product.reviews_summary.average_ratings}</Rating>
-                        <Stars>
-                            {ratingToStars(product.reviews_summary.average_ratings).map((value)=>{
-                                if (value === "star") return <Star src={star} />
-                                if (value=== "half") return <Star src={half_star} />
-                                if (value=== "empty") return <Star src={empty_star} /> 
-                            })}
-                        </Stars>
-                    </StarsContainer>
-                    <ReviewsNumber>
-                            {product.reviews_summary.reviews_count} reviews
-                    </ReviewsNumber>
+                    <RatingContainer>
+                        <RatingStars rating={product.reviews_summary.average_ratings}/>
+                        <Rating>
+                            {product.reviews_summary.average_ratings}&nbsp;(
+                            <span style={{textDecoration:"underline"}}>
+                                {product.reviews_summary.reviews_count}
+                            </span>)
+                        </Rating>
+                    </RatingContainer>
                 </ReviewsContainer>
             </TitleContainer>
             <PriceContainer>
@@ -315,61 +307,27 @@ export default function DetailsContainer({quantity,product,setImagesColor,Images
                     <Price>${product.price}</Price>
                 }
             </PriceContainer>
-            <ColorsContainer>
-                <ColorSizeTitle>   
-                    Colors :  <span style={{color:`grey`}}>{ImagesColor&&ImagesColor}</span>
-                </ColorSizeTitle>
-                <Colors>
-                {
-                    product.colors.map((color)=>{
-                        return(<ColorImage 
-                            border={ImagesColor === color?"2px solid #00C2FF":"none"}
-                            onClick={(e)=>{setImagesColor(color)}}
-                            src={product.images[color][0].url} 
-                            alt={product.images[color][0].image_details}
-                        />
-                        )
-                    })
-                }
-                </Colors>
-            </ColorsContainer>
-            <SizesContainer>
-                <SizesTitles>
-                    <p style={{flex:"1"}}>
-                        Sizes : <span style={{color:"grey"}}>{sizePicked&&sizePicked}</span>
-                    </p>
-                    <SizeGuideLink  onClick={(e)=>{return handleSizeGuideClick(sizeTableRef)}}>size guide</SizeGuideLink>
-                </SizesTitles>
-                <Sizes>
-                    {product.sizes.map((size)=>{
-                        return (
-                            <Size   
-                                border={sizePicked == size ? "1px solid #00C2FF":"1px solid #D8DBE0"}
-                                onClick={(e)=>{return setSizePicked(size)}}>
-                                {size}
-                            </Size>
-                        )
-                    })}
-                </Sizes>
-            </SizesContainer>
-            <ButtonContainer>
-                {
-                    quantity > 0 ?
-                    <AddToCartButton 
-                        product={product} 
-                        size={sizePicked} 
-                        color={ImagesColor} 
-                        quantity={1}
-                    />:
-                    <div>
-                        <OutOfStock disabled="true">
-                            Out of Stock
-                        </OutOfStock>
-                        <p style={{margin:'.5em auto',width:"fit-content",fontWeight:600}}>
-                            Coming back soon !
-                        </p>
-                    </div>
-                }
+            <AvailableColors 
+            setImagesColor={setImagesColor} 
+            ImagesColor={ImagesColor} 
+            product={product}/>
+
+            <AvailableSizes
+            setSizePicked={setSizePicked}
+            sizeTableRef={sizeTableRef}
+            sizePicked={sizePicked}
+            product={product}/>
+
+            <div>
+                <AddToCartButton 
+                    product={product} 
+                    size={sizePicked} 
+                    color={ImagesColor} 
+                    availableQuantity={quantity}
+                />
+                <AddToFavoritesButton>
+                    Add to Favorites&nbsp;<i className="fa-solid fa-heart"/>
+                </AddToFavoritesButton>
                 <BadgesContainer>
                     <ShippingReturnsBadge>
                         <i className="fa-solid fa-truck-fast"/>
@@ -380,12 +338,10 @@ export default function DetailsContainer({quantity,product,setImagesColor,Images
                         <p>Free returns</p>
                     </ShippingReturnsBadge>
                 </BadgesContainer>
-            </ButtonContainer>
+            </div>
             <OverViewContainer>
                 <OverViewTitle>Overview : </OverViewTitle>
-                <OverView> 
-                    {product.description}
-                </OverView>
+                <OverView>{product.description}</OverView>
             </OverViewContainer>
             <div ref={sizeTableRef}>
                 <SizeGuideTitle  onClick={()=>{setShowTable(!showTable)}}>

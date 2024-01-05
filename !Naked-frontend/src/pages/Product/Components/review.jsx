@@ -1,12 +1,10 @@
 import styled from "styled-components"
-import { ratingToStars } from "./details-container"
-import star from "../../../assets/star.png"
-import half_star from "../../../assets/half_star.png"
-import empty_star from "../../../assets/empty_star.png"
 import { useContext, useEffect, useState } from "react"
 import {userStateContext} from "../../../Contexts/user-state"
 import { useSendRequest } from "../../../hooks/use-fetch-data"
 import useUserState from "../../../hooks/use-user-state"
+import RatingStars from "../../../components/RatingStars/rating-stars"
+import SuccessOrErrorPopUp from "../../../components/SuccessOrErrorPopUp/success-or-error-pop-up"
 
 const Container = styled.div`
 width:100%;
@@ -42,9 +40,7 @@ font-size:.9rem;
     font-size:.7rem;
 }
 `
-const Star = styled.img`
-width:16px;
-`
+
 const ColorSizeContainer = styled.div`
 display:flex;
 gap:15px;
@@ -158,22 +154,12 @@ font-size:.9rem;
 `
 export default function Review(props){
     const userContext = useUserState();
-    const {sendRequest, isServerError} = useSendRequest(userContext);
+    const {sendRequest, serverError} = useSendRequest(userContext);
 
     const [helpfulCount, setHelpfulCount] = useState(0)
     const [isLiked, setIsLiked] = useState(false)
     const {token} = useContext(userStateContext)
 
-    const init = (method) => {
-        return {
-            type:method, 
-            headers : {
-                "accepts" :"application/json",
-                "Content-type" : "application/json" ,
-                "Authorization" : "Bearer " + token
-            }
-        }
-    }
 
     useEffect(()=>{
         setHelpfulCount(props.helpful_count)
@@ -181,52 +167,43 @@ export default function Review(props){
     },[props])
 
     async function handleHelpfulButtonClick(){
-        let url = "http://127.0.0.1:8000/api/reviews/"+props.id+"/like";
-        try {
-            const response = await sendRequest(url, init("POST"))
-            if (response){
-                setHelpfulCount(response.data.helpful_count)
-                setIsLiked(response.data.liked)
-            }
-        }catch(error){
-            
+        const uri = "/api/reviews/"+props.id+"/like";
+        const {request,response} = await sendRequest(uri, {method:"POST"})
+        if (request?.status == 200){
+            setHelpfulCount(response.data.helpful_count)
+            setIsLiked(response.data.liked)
         }
     }
 
     async function requestDelete(){
-        let url ="http://127.0.0.1:8000/api/reviews/"+props.id
-        return await sendRequest(url,init("DELETE"))
+        const uri ="/api/reviews/"+props.id
+        return await sendRequest(uri,{method:"DELETE"})
     }
     
     async function handleDeleteButtonClick(e){
         e.preventDefault();
-        try {
-            const response = await requestDelete();
+        const {request,response} = await requestDelete();
 
+        if (request?.status== 200){
             // remove the review from the state
             props.setReviews(reviews=>reviews.filter((review) => review.id != props.id))
-        }catch(error){
-
         }
     }
     
     return (
         <Container>
+            <SuccessOrErrorPopUp serverError={serverError}/>
             <div>
                 <div style={{display:"flex", alignItems:"flex-end", justifyContent:"space-between",}}>
                     <Name>{props.username}</Name>
                     <Date>{props.date}</Date>
                 </div>
+
                 <StarsContainer>
                     <Rating>{props.rating}</Rating>
-                    <div>
-                        {ratingToStars(props.rating).map((value)=>{
-                            if (value === "star") return <Star src={star} />
-                            if (value=== "half") return <Star src={half_star} />
-                            if (value=== "empty") return <Star src={empty_star} /> 
-                        })}
-                    </div>
+                    <RatingStars rating={props.rating}/>
                 </StarsContainer>
+
                 <ColorSizeContainer>
                         <ColorSizeText>color: {props.color}</ColorSizeText>
                         <ColorSizeText>size: {props.size}</ColorSizeText>

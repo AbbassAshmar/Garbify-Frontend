@@ -8,9 +8,10 @@ import {useSendRequest } from "../../hooks/use-fetch-data";
 import SuccessOrErrorPopUp from "../SuccessOrErrorPopUp/success-or-error-pop-up";
 import Hoody2 from "../../assets/Hoody2.jpg"
 
-const Button = styled.button`
+const AddToCart = styled.button`
 width : 100%;
 height:8.4vh;
+border-radius:7px;
 max-height: 50px;
 background:${({loading})=> loading?'grey':'black'};
 color:white;
@@ -23,6 +24,19 @@ justify-content:center;
 cursor:pointer;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
+`
+const OutOfStock = styled.button`
+background:#9C9C9C;
+width : 100%;
+height:8.4vh;
+max-height: 50px;
+color:white;
+border:none;
+outline:none;
+margin : 0 0 .4rem 0;
+font-weight:600;
+font-size:clamp(.6rem,2vw,.9rem);
+border-radius:7px;
 `
 const cartData1={
     shopping_cart_item : {
@@ -47,7 +61,7 @@ const cartData1={
     },
 }
 
-export default function AddToCartButton({product, color,size,quantity}){
+export default function AddToCartButton({product, color,size,availableQuantity}){
     const userContext = useUserState();
     const {sendRequest, serverError} = useSendRequest(userContext);
 
@@ -62,7 +76,7 @@ export default function AddToCartButton({product, color,size,quantity}){
             product_id : product.id,
             color,
             size,
-            quantity
+            quantity:1,
         }   
 
         let uri = userContext.token?'/api/users/user/shopping_carts/items':'/api/users/anonymous/shopping_carts/items' ;
@@ -79,9 +93,20 @@ export default function AddToCartButton({product, color,size,quantity}){
     return (
         <div>
             <SuccessOrErrorPopUp serverError={serverError} />
-            <Button disabled={buttonLoading || ""} loading={buttonLoading} onClick={handleAddToCartClick}>
-                { buttonLoading ?<Loading style={{transform:"scale(.2)"}}/> : 'Add to Cart' }
-            </Button>
+
+            {
+                availableQuantity > 0 && 
+                <AddToCart disabled={buttonLoading || ""} loading={buttonLoading} onClick={handleAddToCartClick}>
+                    {buttonLoading ?<Loading style={{transform:"scale(.2)"}}/> : 
+                    <>Add to Cart &nbsp;<i className="fa-solid fa-cart-shopping"/></>}
+                </AddToCart>
+            }
+            {
+                availableQuantity <= 0 && 
+                <OutOfStock disabled="true">
+                    Out of Stock
+                </OutOfStock>
+            }
             {
                 showPopUpShoppingCart && 
                 <PopUpShoppingCart cartData={cartData} setShow={setShowPopUpShoppingCart}/>

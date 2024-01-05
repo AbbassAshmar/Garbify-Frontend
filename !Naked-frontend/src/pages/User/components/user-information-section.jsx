@@ -1,10 +1,5 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { ratingToStars } from "../../Product/Components/details-container";
-
-import star from "../../../assets/star.png"
-import half_star from "../../../assets/half_star.png"
-import empty_star from "../../../assets/empty_star.png"
 
 const Container = styled.div`
 
@@ -74,11 +69,7 @@ export default function UserInformationSection(){
                 <KeyValuePair>
                     <Key>average ratings</Key>
                     <Value>
-                        {ratingToStars(4).map((value)=>{
-                            if (value === "star") return <Star src={star} />
-                            if (value=== "half") return <Star src={half_star} />
-                            if (value=== "empty") return <Star src={empty_star} /> 
-                        })}
+                        <RatingStars rating={4}/>
                     </Value>
                 </KeyValuePair>
             </Content>

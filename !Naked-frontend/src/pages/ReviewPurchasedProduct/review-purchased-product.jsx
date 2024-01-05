@@ -12,19 +12,18 @@ const Container = styled.div`
 
 export default function ReviewPurchasedProduct(){
     const userContext = useUserState();
-    const {sendRequest, isServerError} = useSendRequest(userContext);
+    const {sendRequest, serverError} = useSendRequest(userContext);
 
     const {product_id} = useParams();
     const [isReviewed ,setIsReviewed] = useState(false);
     
     
     async function checkIfReviewed(product_id){
-
-        try {
-            let url = "http://127.0.0.1:8000/api/products/"+product_id+"/users/user/reviews";
-            const response = sendRequest(url)
+        let url = "/api/products/"+product_id+"/users/user/reviews";
+        const {reqeust,response} = sendRequest(url)
+        if (reqeust?.ok){
             setIsReviewed(false)
-        }catch(error){
+        }else {    
             setIsReviewed(true)
         }
     }
