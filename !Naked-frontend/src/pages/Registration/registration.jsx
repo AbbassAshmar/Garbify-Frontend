@@ -39,7 +39,7 @@ display:flex;
 align-items:start;
 justify-content:space-between;
 @media screen and (max-width:1000px){
-    justify-content:center
+  justify-content:center
 }
 `
 export const Content = styled.div`
@@ -54,8 +54,8 @@ display:flex;
 flex-direction:column;
 gap:30px;
 box-shadow:0px 0px 20px rgba(0,0,0,.7);
-
 `
+
 export const Text = styled.div`
 text-align:left;
 display:flex;
@@ -92,7 +92,7 @@ export const Input = styled.input`
 height:2.7rem;
 width:100%;
 border-radius:5px;
-border:2px solid ${({color})=>color};
+border:2px solid ${({$color})=>$color};
 outline:none;
 padding:.7rem 1rem;
 font-size: clamp(.8rem , 2.3vw ,1.1rem);
@@ -102,12 +102,12 @@ font-size: clamp(.8rem , 2.3vw ,1.1rem);
 `
 export const Label =styled.label`
 position:absolute;
-top:${({position})=>position?'-17%':"30%"};
-left:${({position})=>position?'2%':"3%"};
-font-size:${({position})=>position?'.6rem':".8rem"};
+top:${({$position})=>$position?'-17%':"30%"};
+left:${({$position})=>$position?'2%':"3%"};
+font-size:${({$position})=>$position?'.6rem':".8rem"};
 opacity:1;
 z-index:3;
-color:${({color})=>color};
+color:${({$color})=>$color};
 background:white;
 transition:all .3s;
 ${Input}:focus + &{
@@ -119,11 +119,12 @@ ${Input}:focus + &{
 font-weight:600;
 `
 export const PasswordRules = styled.p`
-color:${({color})=>color};
+color:${({$color})=>$color};
 opacity:.7;
 font-weight:500;
 font-size: clamp(.65rem,1.8vw,.8rem);
 margin-left: 3%;
+margin-top:4px;
 `
 export const ErrorMsg = styled.p`
 margin:0;
@@ -210,25 +211,25 @@ export default function Registration(){
     const {state} = location
 
     const [formData, setFormData] = useState({
-        email:state?state:"",
-        name:"",
-        password:"",
-        confirm_password:"",
+      email:state?state:"",
+      name:"",
+      password:"",
+      confirm_password:"",
     })
     
     const [error,setError] = useState({
-        fields:[] , 
-        message:{} 
+      fields:[] , 
+      message:{} 
     })
 
     useEffect(()=>{
-      if(token){
+      if(userContext.token){
         navigate(-1,{replace:true})
       }
     },[])
    
     async function requestRegister(formData){
-      const {response,request} = await sendRequest('/api/register',{method:"POST",body:formData},token);
+      const {response,request} = await sendRequest('/api/register',{method:"POST",body:formData});
       if (request.ok){
         setError({fields:[], message:[]});
         setToken(response.data.token);
@@ -242,6 +243,27 @@ export default function Registration(){
     function handleFormSubmit(e){
         e.preventDefault();
         requestRegister(JSON.stringify(formData));
+    }
+
+    function renderInput(field,input_type){
+      return (
+        <div>
+          <InputWrapper>
+            <Input 
+                type={input_type}
+                value={formData[field]} 
+                color={error.fields && error.fields.includes(field)?"red":"#A8AAAE"} 
+                onChange={(e)=>setFormData({...formData,[field]:e.target.value})}
+            />
+            <Label 
+            position={formData[field]}
+            color={error.fields && error.fields.includes(field)?"red":"#C0C3C7"}>
+                {`${field.replace("_"," ")}`}
+            </Label>
+          </InputWrapper> 
+          <ErrorMsg>{error.message.field}</ErrorMsg>
+        </div>
+      )
     }
 
   return(
@@ -267,80 +289,27 @@ export default function Registration(){
             <Form onSubmit={handleFormSubmit}>
 
               <FieldAndError>
-                <InputWrapper>
-                  <Input 
-                      type="email" 
-                      value={formData.email} 
-                      color={error.fields && error.fields.includes("email")?"red":"#A8AAAE"} 
-                      onChange={(e)=>setFormData({...formData,email:e.target.value})}
-                  />
-                  <Label 
-                      position={formData.email}
-                      color={error.fields && error.fields.includes("email")?"red":"#C0C3C7"} 
-                  >Email</Label>
-                </InputWrapper>
-                <ErrorMsg>{error.message.email}</ErrorMsg>
+                {renderInput("email",'email')}
               </FieldAndError>
 
               <FieldAndError>
-                <InputWrapper>
-                  <Input 
-                      type="text" 
-                      value={formData.name} 
-                      color={error.fields && error.fields.includes("name")?"red":"#A8AAAE"} 
-                      onChange={(e)=>setFormData({...formData,name:e.target.value})}
-                  />
-                  <Label 
-                      color={error.fields && error.fields.includes("name")?"red":"#C0C3C7"} 
-                      position={formData.name}
-                  >Name</Label>
-                </InputWrapper>
-                <ErrorMsg>{error.message.name}</ErrorMsg>
+                {renderInput("name",'text')}
               </FieldAndError>
 
               <div style={{display:'flex',flexDirection:"column",gap:'15px'}}>
-
                 <FieldAndError>
-                  <InputWrapper>
-                    <Input 
-                        type="password"
-                        value={formData.password} 
-                        color={error.fields && error.fields.includes("password")?"red":"#A8AAAE"} 
-                        onChange={(e)=>setFormData({...formData,password:e.target.value})}
-                    />
-                    <Label 
-                        position={formData.password}
-                        color={error.fields && error.fields.includes("password")?"red":"#C0C3C7"} 
-                    >Password</Label>
-                  </InputWrapper>
-                  <div style={{display:"flex",flexDirection:"column",gap:'3px'}}>
-                    <PasswordErrorMsg>{error.message.password}</PasswordErrorMsg>
-                    <PasswordRules color={error.message.password==="The password field format is invalid."?"red":"black"}>
-                        - At least one uppercase letter<br/>
-                        - At least one digit (0-9)<br/>
-                        Example: SecureP@ssw0rd'
-                    </PasswordRules>
-                  </div>
+                  {renderInput("email",'email')}
+                  <PasswordRules $color={error.message.password==="The password field format is invalid."?"red":"black"}>
+                      - At least one uppercase letter<br/>
+                      - At least one digit (0-9)<br/>
+                      Example: SecureP@ssw0rd'
+                  </PasswordRules>
                 </FieldAndError>
 
                 <FieldAndError>
-                  <InputWrapper>
-                    <Input 
-                        type="password" 
-                        value={formData.confirm_password} 
-                        color={error.fields && error.fields.includes("confirm_password")?"red":"#A8AAAE"} 
-                        onChange={(e)=>setFormData({...formData,confirm_password:e.target.value})}
-                    />
-                    <Label 
-                        position={formData.confirm_password}
-                        color={error.fields && error.fields.includes("confirm_password")?"red":"#C0C3C7"} 
-                    >Confirm Password</Label>
-                  </InputWrapper>
-                  <ErrorMsg>{error.message.confirm_password}</ErrorMsg>
+                  {renderInput("email",'email')}
                 </FieldAndError>
-
               </div>
-
               <div style={{fontWeight:"600" , fontSize:"clamp(.6rem,2vw,.9rem)"}}>
                   Already have an account?   
                   <SignIn to="/login">

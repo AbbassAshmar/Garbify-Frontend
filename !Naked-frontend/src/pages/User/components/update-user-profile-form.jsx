@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Input, InputWrapper, Label, PasswordRules } from "../../Registration/registration";
+import { useSendRequest } from "../../../hooks/use-fetch-data";
+import useUserState from "../../../hooks/use-user-state";
 
 const ChangePassword = styled.p`
 margin-bottom:14px;
@@ -30,10 +32,11 @@ font-weight:600;
 font-size: clamp(.65rem,1.8vw,.8rem);
 `
 const PassInputsContainer = styled(InputsContainer)`
+padding-top:${({paddingTop})=>paddingTop};
 margin-bottom:${({margin})=>margin};
 max-height:${({maxHeight})=>maxHeight};
 min-width:100%;
-transition:max-height .3s,margin-bottom .3s;
+transition:max-height .3s,margin-bottom .3s,padding-top .3s;
 overflow:hidden;
 `
 const ButtonsContainer = styled.div`
@@ -74,8 +77,10 @@ transition:background .3s;
 flex:1;
 `
 
-export default function UpdateUserProfileForm(){
-    const [showPasswordInputs , setShowPasswordInputs] = useState(false)
+export default function UpdateUserProfileForm({setCurrentSection}){
+    const userContext = useUserState();
+    const [showPasswordInputs , setShowPasswordInputs] = useState(false);
+    const {sendRequest,serverError} = useSendRequest(userContext);
 
     const [formData, setFormData] = useState({
         email:"",
@@ -86,85 +91,77 @@ export default function UpdateUserProfileForm(){
     })
 
     const [error,setError] = useState({
-        fields:['name','email','old_password','password'] , 
-        message:{password:"Wrong password bitch.",
-        old_password:"Wrong fiasodfj asiodfj.",
-        confirm_password:"Wroaodjfioaj"
-        } 
+        fields:['password','old_password'] , 
+        message:{password:"lkdjfakldjfkls",old_password:""}
     })
-    useEffect(()=>{console.log(showPasswordInputs)}, [showPasswordInputs])
+
+    function handleCancelButtonClick(e){
+        setCurrentSection('Profile')
+    }
+
+    function handleFormSubmit(e){
+        e.preventDefault();
+        const init = {method:"PATCH",body:formData}
+        const uri = '/api/users/user';
+        let {request,response} = sendRequest(uri, init);
+
+        if (request?.status == 200){
+            let newFields = response?.data.user;
+            userContext.setUser({...userContext.user, newFields})
+        }
+    }
+
+    function renderInput(field,input_type){
+        return (
+            <div>
+                <InputWrapper>
+                    <Input 
+                        type={input_type}
+                        value={formData[field]} 
+                        color={error.fields && error.fields.includes(field)?"red":"#A8AAAE"} 
+                        onChange={(e)=>setFormData({...formData,[field]:e.target.value})}
+                    />
+                    <Label 
+                    position={formData[field]}
+                    color={error.fields && error.fields.includes(field)?"red":"#C0C3C7"}>
+                        {`${field.replace("_"," ")}`}
+                    </Label>
+                </InputWrapper> 
+                <ErrorMsg>{error.message.field}</ErrorMsg>
+            </div>
+        )
+    }
+    
     return(
-        <Form>
+        <Form onSubmit={handleFormSubmit}>
             <div style={{display:"flex", flexDirection:"column"}}>
                 <InputsContainer>
-                    <div>
-                        <InputWrapper>
-                            <Input 
-                                color={error.fields && error.fields.includes("name")?"red":"#A8AAAE"}                       
-                                onChange={(e)=>setFormData({...formData,name:e.target.value})}
-                            />
-                            <Label color={error.fields && error.fields.includes("name")?"red":"#C0C3C7"} >Name</Label>
-                        </InputWrapper> 
-                        <ErrorMsg>{error.message.name}</ErrorMsg>
-                    </div>
-                    <div>
-                        <InputWrapper>
-                            <Input 
-                                color={error.fields && error.fields.includes("email")?"red":"#A8AAAE"} 
-                                onChange={(e)=>setFormData({...formData,email:e.target.value})}
-                            />
-                            <Label color={error.fields && error.fields.includes("email")?"red":"#C0C3C7"} > email</Label>
-                        </InputWrapper> 
-                        <ErrorMsg>{error.message.email}</ErrorMsg>
-                    </div>
+                    {renderInput("name",'text')}
+                    {renderInput("email",'email')}
                 </InputsContainer>
+
                 <ChangePassword onClick={()=>setShowPasswordInputs(!showPasswordInputs)}>
                     Change password <i className="fa-solid fa-angle-down"/>
                 </ChangePassword>
-                <PassInputsContainer maxHeight={showPasswordInputs?"50vh" :"0"} margin={showPasswordInputs?"2rem":"0"}>
-                    <div>
-                        <InputWrapper style={{margin:"6px 0 0 0"}}>
-                            <Input 
-                                color={error.fields && error.fields.includes("old_password")?"red":"#A8AAAE"} 
-                                onChange={(e)=>setFormData({...formData,old_password:e.target.value})}
-                            />
-                            <Label color={error.fields && error.fields.includes("old_password")?"red":"#C0C3C7"} >old password</Label>
-                        </InputWrapper> 
-                        <ErrorMsg>{error.message.old_password}</ErrorMsg>
-                    </div>
 
+                <PassInputsContainer 
+                paddingTop={showPasswordInputs?".3rem" :"0"} 
+                maxHeight={showPasswordInputs?"50vh" :"0"} 
+                margin={showPasswordInputs?"2rem":"0"}>
+                    {renderInput("old_password",'password')}
                     <div>
-                        <InputWrapper>
-                            <Input 
-                                color={error.fields && error.fields.includes("password")?"red":"#A8AAAE"} 
-                                onChange={(e)=>setFormData({...formData,password:e.target.value})}
-                            />
-                            <Label color={error.fields && error.fields.includes("password")?"red":"#C0C3C7"} >new password</Label>
-                        </InputWrapper> 
-                        <div style={{display:"flex",flexDirection:"column",gap:'2px'}}>
-                            <ErrorMsg>{error.message.password}</ErrorMsg>
-                            <PasswordRules color={error.message.password==="The password field format is invalid."?"red":"black"}>
-                                - At least one uppercase letter<br/>
-                                - At least one digit (0-9)<br/>
-                                Example: SecureP@ssw0rd'
-                            </PasswordRules>  
-                        </div>  
+                        {renderInput("password",'password')}
+                        <PasswordRules color={error.message.password==="The password field format is invalid."?"red":"black"}>
+                            - At least one uppercase letter<br/>
+                            - At least one digit (0-9)<br/>
+                            Example: SecureP@ssw0rd'
+                        </PasswordRules>  
                     </div>
-
-                    <div>
-                    <InputWrapper>
-                        <Input 
-                            color={error.fields && error.fields.includes("confirm_password")?"red":"#A8AAAE"} 
-                            onChange={(e)=>setFormData({...formData,confirm_password:e.target.value})}
-                        />
-                        <Label color={error.fields && error.fields.includes("confirm_password")?"red":"#C0C3C7"}>confirm password</Label>
-                    </InputWrapper> 
-                    <ErrorMsg>{error.message.confirm_password}</ErrorMsg>
-                    </div>
+                    {renderInput("confirm_password",'password')}
                 </PassInputsContainer>
                 <ButtonsContainer>
                     <SaveButton>Save</SaveButton>   
-                    <CancelButton>Cancel</CancelButton>
+                    <CancelButton type="button" onClick={handleCancelButtonClick}>Cancel</CancelButton>
                 </ButtonsContainer>
             </div>
         </Form>

@@ -13,7 +13,7 @@ z-index:500;
 top:0;
 left:0;
 width:100%;
-height:${({width})=> width};
+height:${({$width})=> $width};
 display:block;
 overflow:hidden;
 transition:height .3s;
@@ -168,7 +168,7 @@ export default function NavbarSearch({show,setShow}){
     }
 
     return (
-        <Parent width={show?"100%":"0"}>
+        <Parent $width={show?"100%":"0"}>
             <ContentContainer>
                 <Content>
                     <SearchSection>
@@ -192,7 +192,6 @@ export default function NavbarSearch({show,setShow}){
                                 suggestions.map((product)=>{
                                     return (
                                         <ProductCard
-                                            // min_width={"max(220px ,32%)"}
                                             key={product.id}
                                             id ={product.id}
                                             name={product.name} 

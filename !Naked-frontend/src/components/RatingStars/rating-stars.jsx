@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 const Stars = styled.div`
 margin:0;
+display:flex;
 `
 const Star = styled.img`
 width:15px;
@@ -31,13 +32,13 @@ export function ratingToStars(rating){
 }
 
 
-export default function RatingStars({style,rating}){
+export default function RatingStars({style,rating,width='15px'}){
     return (
         <Stars style={style}>
             {ratingToStars(rating).map((value)=>{
-                if (value === "star") return <Star src={star} />
-                if (value=== "half") return <Star src={half_star} />
-                if (value=== "empty") return <Star src={empty_star} /> 
+                if (value === "star") return <Star style={{width:`${width}`}} src={star} />
+                if (value=== "half") return <Star style={{width:`${width}`}} src={half_star} />
+                if (value=== "empty") return <Star style={{width:`${width}`}} src={empty_star} /> 
             })}
         </Stars>
     )

@@ -14,7 +14,7 @@ export const Title = styled.div`
 font-weight:600;
 text-wrap:nowrap;
 font-size:clamp(.9rem,3vw,1.5rem);
-color:${({color})=>color};
+color:${({$color})=>$color};
 `
 
 const PagesContainer = styled.div`
@@ -31,8 +31,8 @@ margin:0;
 height:30px;
 box-sizing:border-box;
 
-color : ${({selected})=>selected ? "#00C2FF" : 'black'};
-border-bottom: 2px solid ${({selected})=>selected?"#00C2FF":"none"};
+color : ${({$selected})=>$selected ? "#00C2FF" : 'black'};
+border-bottom: 2px solid ${({$selected})=>$selected?"#00C2FF":"none"};
 
 transition:all .3s;
 &:hover{
@@ -137,8 +137,8 @@ export default function Orders(){
                         handleSearchFormSubmit={handleSearchFormSubmit}
                     />
                     <PagesContainer>
-                        <PageTitle onClick={()=>handlePageTitleClick("orders")} selected={page ==="orders"}>orders</PageTitle>
-                        <PageTitle onClick={()=>handlePageTitleClick("canceled")} selected={page ==="canceled"}>canceled orders</PageTitle>
+                        <PageTitle onClick={()=>handlePageTitleClick("orders")} $selected={page ==="orders"}>orders</PageTitle>
+                        <PageTitle onClick={()=>handlePageTitleClick("canceled")} $selected={page ==="canceled"}>canceled orders</PageTitle>
                     </PagesContainer>
                 </Custom_Header>
                 {page === "orders" && <OrdersSection />}

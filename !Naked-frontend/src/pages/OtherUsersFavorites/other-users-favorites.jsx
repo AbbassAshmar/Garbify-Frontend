@@ -39,7 +39,7 @@ white-space: nowrap;
 background:white;
 z-index:100;
 box-shadow:1px 1px 10px rgba(189, 189, 189,1);
-max-height:${({show})=>show};
+max-height:${({$show})=>$show};
 overflow:hidden;
 display:flex;
 flex-direction:column;
@@ -135,7 +135,7 @@ export default function OtherUsersFavorites(){
                             <Title>{favoritesList['name']} ({favoritesList['favorites_count']})</Title>
                             <ActionsDropDownContainer>
                                 <i style={{cursor:"pointer"}} class="fa-solid fa-ellipsis-vertical" onClick={handleEllipsesIconClick}/> 
-                                <DropDown ref={DropDownRef} show={showActionsDropDown?"20vh":"0"}>
+                                <DropDown ref={DropDownRef} $show={showActionsDropDown?"20vh":"0"}>
                                     <Action>add all to my favorites</Action>
                                     <Action>report this list</Action>
                                     <Action>follow this user</Action>

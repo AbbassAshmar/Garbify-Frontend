@@ -4,16 +4,11 @@ import { useState } from "react"
 import { FILTERS } from "../../../../../components/products-data"
 import { useSearchParams } from "react-router-dom"
 
-import PriceFilter from "../LargeScreenFilter/Components/price-filter"
-import ColorFilter from "../LargeScreenFilter/Components/color-filter"
-import CategoryFilter from "../LargeScreenFilter/Components/category-filter"
-import ListFilter from "../LargeScreenFilter/Components/list-filter"
-import { handleTagRemove } from "../../products-container"
-import { handleOptionClick, handleTitleClick, switchFunction } from "../filter"
+import {  handleTitleClick, switchFunction } from "../filter"
 
 const Container = styled.div`
 display:none;
-width:${({show})=> show ? '100%' : '0'};
+width:${({$show})=> $show ? '100%' : '0'};
 transition:width .3s;
 height:100vh;
 position:fixed;
@@ -102,11 +97,11 @@ font-size: clamp(.9rem, 2.6vw, 1.3rem);
 
 `
 const AngleIcon = styled.i`
-transform:rotateX(${({angle})=>angle});
+transform:rotateX(${({$angle})=>$angle});
 transition:transform .3s;
 `
 const Options = styled.div`
-max-height:${({height})=>height};
+max-height:${({$height})=>$height};
 width:100%;
 overflow:hidden;
 display:flex;
@@ -171,7 +166,7 @@ export default function SmallScreenFitler({show,setShow,filtersData}){
     }
     
     return (
-       <Container show={show}>
+       <Container $show={show}>
             <SideFilter>
                 <Header>
                     <HeaderText>filters</HeaderText>
@@ -186,12 +181,12 @@ export default function SmallScreenFitler({show,setShow,filtersData}){
                                     <FilterBox key={filter.name}>
                                         <Title onClick={(e)=>{handleTitleClick(filter,showOptions,setShowOptions)}}>
                                             <span>{filter.name}</span> 
-                                            <AngleIcon angle={showOptions[filter.name]?"180deg":"0"} className="fa-solid fa-angle-down"/>
+                                            <AngleIcon 
+                                            $angle={showOptions[filter.name]?"180deg":"0"} 
+                                            className="fa-solid fa-angle-down"/>
                                         </Title>
-                                        <Options height={showOptions[filter.name] ? "50vh":"0"}>
-                                        {     
-                                            switchFunction(filter)
-                                        }
+                                        <Options $height={showOptions[filter.name] ? "50vh":"0"}>
+                                        {switchFunction(filter)}
                                         </Options> 
                                     </FilterBox>
                                 )
@@ -199,7 +194,9 @@ export default function SmallScreenFitler({show,setShow,filtersData}){
                         }
                     </Filters>
                 </Content>
-                <ClearAllButton disabled={getFiltersCount(searchParams,filters)?false:true} onClick={(e)=>removeAllFilters(searchParams)}>
+                <ClearAllButton 
+                disabled={getFiltersCount(searchParams,filters)?false:true} 
+                onClick={(e)=>removeAllFilters(searchParams)}>
                     Clear all ({getFiltersCount(searchParams,filters)})
                 </ClearAllButton>
             </SideFilter>

@@ -2,13 +2,12 @@ import styled from "styled-components"
 import { Title } from "./featured-section"
 import { SectionContent } from "./category-section"
 import { SectionContainer } from "./featured-section"
+
 const Container = styled(SectionContainer)`
 display:flex;
 align-items:center;
 justify-content:center;
 `
-
-
 const Imgs = styled.div`
 display:flex;
 align-items:center;
@@ -38,7 +37,6 @@ margin-top:0;
 `
 const Img = styled.img`
 width:100%;
-
 `
 export default function BestSelling(props){
     return(

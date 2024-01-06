@@ -4,9 +4,9 @@ import {FILTERS} from "../../../../../components/products-data"
 import { handleTitleClick, switchFunction } from "../filter"
 
 const Container = styled.div`
-flex:${({flex})=>flex};
+flex:${({$flex})=>$flex};
 display:flex;
-margin-right:${({margin})=>margin};
+margin-right:${({$margin})=>$margin};
 transition:flex .3s;
 overflow:clip;
 
@@ -56,11 +56,11 @@ font-weight:600;
 font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 const AngleIcon = styled.i`
-transform:rotateX(${({angle})=>angle});
+transform:rotateX(${({$angle})=>$angle});
 transition:transform .3s;
 `
 const Options = styled.div`
-max-height:${({height})=>height};
+max-height:${({$height})=>$height};
 width:100%;
 overflow:hidden;
 display:flex;
@@ -76,7 +76,7 @@ export default function LargeScreenFilter({show,filtersData}){
  
 
     return ( 
-        <Container margin={show?"2rem":"0"} flex={show?"1":"0"}>
+        <Container $margin={show?"2rem":"0"} $flex={show?"1":"0"}>
             <ContentContainer>
             <Content>
                 <FilterBy>Filter by</FilterBy>
@@ -87,9 +87,11 @@ export default function LargeScreenFilter({show,filtersData}){
                                 <FilterBox key={filter.name}>
                                     <Title onClick={(e)=>{handleTitleClick(filter,showOptions,setShowOptions)}}>
                                         <span>{filter.name}</span> 
-                                        <AngleIcon angle={showOptions[filter.name]?"180deg":"0"} className="fa-solid fa-angle-down"/>
+                                        <AngleIcon 
+                                        $angle={showOptions[filter.name]?"180deg":"0"} 
+                                        className="fa-solid fa-angle-down"/>
                                     </Title>
-                                    <Options height={showOptions[filter.name] ? "50vh":"0"}>
+                                    <Options $height={showOptions[filter.name] ? "50vh":"0"}>
                                     {     
                                         switchFunction(filter,show)
                                     }

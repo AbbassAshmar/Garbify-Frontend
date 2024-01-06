@@ -1,11 +1,13 @@
 import styled from "styled-components"
 import Hoody from "../../assets/Hoody.jpg"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import UserProfileSection from "./components/user-profile-section"
 import UserInformationSection from "./components/user-information-section"
 import {PRODUCTS} from "../../components/products-data";
 import ProductsSlider from "../../components/ProductsSlider/products-slider"
 import FavoritesDetailsSection from "./components/favorites-details-section"
+import useUserState from "../../hooks/use-user-state"
+import { useNavigate } from "react-router-dom"
 
 const Container  = styled.div`
 min-height:100vh;
@@ -79,13 +81,22 @@ width:100%;
 overflow:hidden;
 `
 export default function User(){
+    const userContext = useUserState();
     const [currentSection ,setCurrentSection] = useState("User profile");
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if (!userContext.token){
+            navigate("/login");
+        }
+    },[])
+
     return (
         <Container>
             <div style={{padding:"min(2rem, 4%)",gap:'2rem',display:'flex',flexDirection:'column',alignItems:'center'}}>
             <Section1>
                 <ProfilePicContainer>
-                    <ProfilePic src={Hoody} />
+                    <ProfilePic src={userContext.user?.pfp} />
                 </ProfilePicContainer>
                 <ContentContainer>
                     <Navigation>

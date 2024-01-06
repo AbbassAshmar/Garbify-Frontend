@@ -23,20 +23,15 @@ display:flex;
 flex-direction:column;
 width:100%;
 height:83vh;
-// max-height:640px; 
-
 @media screen and (max-width:800px){
-background : white;
-background-position:top right;
-height:auto;
-max-height:none; 
+    background : white;
+    background-position:top right;
+    height:auto;
+    max-height:none; 
 }
-
 @media screen and (min-width:800px) and (min-height:1000px){
     max-height: 45vh;
 }
-
-
 `
 
 const ContentContainer =styled.div`
@@ -46,18 +41,16 @@ align-items:center;
 justify-content:space-between;
 width:100%;
 height:100%;
-
 @media screen and (max-width:800px){
     flex-direction:column;
 }
-
 `
 const BackgroundContainer = styled.img`
 display:none;
 width:120%;
 
 @media screen and (max-width:800px){
-display:block;
+    display:block;
 }
 `
 
@@ -72,47 +65,16 @@ width:100%;
     margin-top:1rem;
     gap:30px;
 }
-
 `
 
 const MainText =styled.h2`
-// font-size:3rem;
 font-weight:600;
 font-size:clamp(1.5rem,6vw,3rem);
-// @media screen and (max-width:900px){
-//     font-size:2.8rem;
-// }
-// @media screen and (max-width:785px){
-//     font-size:2.6rem;
-// }
-// @media screen and (max-width:580px){
-//     font-size:2.4rem;
-// }
-// @media screen and (max-width:400px){
-//     font-size:2.2rem;
-// }
-// @media screen and (max-width:350px){
-//     font-size:2rem;
-// }
 `
 const SecondaryText =styled.p`
 font-size:clamp(.8rem,4vw,1.7rem);
 font-weight:600;
 opacity:.7;
-
-// @media screen and (max-width:900px){
-//     font-size:1.3rem;
-// }
-// @media screen and (max-width:785px){
-//     font-size:1.1rem;
-// }
-// @media screen and (max-width:320px){
-//     font-size:.9rem;
-// }
-// @media screen and (max-width:290px){
-//     font-size:.7rem;
-// }
-
 `
 const ShopNowBtn  = styled.button`
 background:black;
@@ -148,14 +110,11 @@ export default function Home(){
                             homeless by providing high quality <br/>
                             and superior clothes
                         </SecondaryText>
-                        <ShopNowBtn>
-                            Shop Now
-                        </ShopNowBtn>
+                        <ShopNowBtn>Shop Now</ShopNowBtn>
                     </TextContainer>
                     <BackgroundContainer src={ModelCropped}/>
                 </ContentContainer>
             </Section1>
-
             <CategorySection />
             <FeaturedSection />
             <WhyUsSection />

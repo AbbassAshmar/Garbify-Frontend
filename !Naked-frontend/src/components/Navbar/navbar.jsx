@@ -17,7 +17,6 @@ const NavContainer = styled.div`
 width :100%;
 height:18vh;
 max-height:110px;
-// background:#E4E4E4;
 background:#F1F4F9;
 display:flex;
 justify-content:center;
@@ -25,7 +24,6 @@ align-items:center;
 @media screen and (max-width:1000px){
     height:auto;
 }
-
 `
 const NavWrapper = styled.div`
 width:100%;
@@ -43,8 +41,7 @@ const NavPosition = styled.div`
 width:100%;
 top:0;
 z-index:100;
-position:${({position})=>position};
-
+position:${({$position})=>$position};
 @media screen and (max-width:1000px){
     position:static;
 }
@@ -57,7 +54,6 @@ gap:30px;
     gap:20px;
 }
 `
-
 const Icon = styled.i`
 cursor:pointer;
 color:black;
@@ -89,7 +85,7 @@ overflow:hidden;
 `
 
 const Category = styled.div`
-opacity:${({selected})=> (selected?"1":".6") };
+opacity:${({$selected})=> ($selected?"1":".6") };
 height:85%;
 cursor:pointer;
 padding:.1rem 1rem 1rem 1rem;
@@ -100,7 +96,7 @@ align-items:center;
     content:"";
     top:92%;
     left:0;
-    width:${({selected})=> (selected?"100%":"0") };
+    width:${({$selected})=> ($selected?"100%":"0") };
     position:absolute;
     height:3px;
     background:black;
@@ -151,6 +147,7 @@ export default function Navbar({lockContainerScroll}){
         // adjust the state whenever scrollY changes to the value of scrollY
         setY(latest)
     })
+
     useEffect(()=>{
         if (y < 25 ){
             if (position === "fixed"){
@@ -164,14 +161,13 @@ export default function Navbar({lockContainerScroll}){
         }
     },[y])
 
-
     return (
         <>
         <NavbarSearch show={showNavbarSearch} setShow={setShowNavbarSearch}/>
         <SideNavbar show={showSideNavbar} setShow={setShowSideNavbar}/>
 
         <NavContainer >
-            <NavPosition position={position} >
+            <NavPosition $position={position} >
             <NavWrapper >
                 <Logo />
                 <CategoriesContainer onMouseLeave={()=>{setShowCategoryList((prevState)=>({...prevState,display:false})) }} >
@@ -180,7 +176,7 @@ export default function Navbar({lockContainerScroll}){
                             return (
                                 <Category 
                                     key = {category.name}
-                                    selected={showCategoryList.display && showCategoryList.value==category.children?true:false}
+                                    $selected={showCategoryList.display && showCategoryList.value==category.children}
                                     onMouseEnter={()=>{setShowCategoryList({display:true, value:category.children,topParent:category.name})}}
                                 >{category.name}
                                 </Category>
@@ -197,9 +193,9 @@ export default function Navbar({lockContainerScroll}){
                 <IconsContainer>
                     <Icon onClick={handleSearchIconClick}><i  className="fa-solid fa-magnifying-glass"/></Icon>
                     <UserIcon><i className="fa-regular fa-user"/></UserIcon>
-                    <Icon><i class="fa-regular fa-heart"/></Icon>
+                    <Icon><i className="fa-regular fa-heart"/></Icon>
                     <Icon><i className="fa-solid fa-cart-shopping"/></Icon>
-                    <BarsIcon onClick={handleBarsIconClick}><i class="fa-solid fa-bars"></i></BarsIcon>
+                    <BarsIcon onClick={handleBarsIconClick}><i className="fa-solid fa-bars"></i></BarsIcon>
                 </IconsContainer>
             </NavWrapper>
             </NavPosition>

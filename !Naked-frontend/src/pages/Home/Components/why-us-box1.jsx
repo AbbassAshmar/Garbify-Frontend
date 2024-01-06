@@ -2,9 +2,6 @@ import styled from "styled-components"
 import girl from "../../../assets/girl.png"
 
 const Container= styled.div`
-// width: 546.4px; // 40vw
-// aspect-ratio:1/1.035;
-
 width:100%;
 height:537px; // 70vh
 position:relative;
@@ -23,8 +20,6 @@ overflow:hidden;
 @media screen and (max-width:477px){
     aspect-ratio:1/1.5
 }
-
-
 `
 
 const Border= styled.div`
@@ -118,12 +113,11 @@ export default function WhyUsBox1(){
             <Border>
                 <Content>
                     <Title>
-                    Experience luxury with our 
-                    high-quality materials   
+                        Experience luxury with our 
+                        high-quality materials   
                     </Title>
                     <ImgBtnContainer>
                         <Button>View Collection</Button>
-
                         <Img src={girl}/>
                     </ImgBtnContainer>
                 </Content>

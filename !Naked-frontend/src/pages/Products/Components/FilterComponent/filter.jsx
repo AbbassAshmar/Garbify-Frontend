@@ -1,4 +1,3 @@
-import styled from "styled-components"
 import SmallScreenFitler from "./SmallScreenFilter/small-screen-filter"
 import LargeScreenFilter from "./LargeScreenFilter/large-screen-filter"
 import CategoryFilter from "./LargeScreenFilter/Components/category-filter"
@@ -8,8 +7,7 @@ import ColorFilter from "./LargeScreenFilter/Components/color-filter"
 import { handleTagRemove } from "../products-container"
 import { useFetchData } from "../../../../hooks/use-fetch-data"
 import { constructUrl } from "../../../Orders/orders"
-import { useLocation, useParams, useSearchParams } from "react-router-dom"
-import { useEffect } from "react"
+import { useLocation, useParams } from "react-router-dom"
 
 export function handleOptionClick(filter,option,searchParams,setSearchParams){
     searchParams.set('page',1)

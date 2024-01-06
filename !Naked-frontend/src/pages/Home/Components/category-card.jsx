@@ -13,15 +13,12 @@ aspect-ratio: 1/1.6;
     aspect-ratio: 1/1.6;
     width:100%;
 }
-    
-
 `
 const Background = styled.img`
 width:100%;
 height:100%;
 cursor:pointer;
 transition:all .3s;
-
 `
 const Border =styled.div`
 top:3.5%;
@@ -29,7 +26,7 @@ left:5%;
 z-index:2;
 height:93%;
 width:90%;
-border:5px solid ${({color})=>color};
+border:5px solid ${({$color})=>$color};
 position:absolute;
 display:flex;
 align-items:flex-end;
@@ -38,7 +35,7 @@ justify-content:center;
 
 `
 const Button =styled.button`
-background:${({color})=>color};
+background:${({$color})=>$color};
 border-radius:30px;
 padding:.2rem 1rem;
 color:black;
@@ -53,18 +50,15 @@ font-size:1rem;
     font-size:.8rem;
     margin-bottom:2rem;
 }
-
-
 `
 export default function CatgegoryCard(props){
 
     return (
-
         <CardContainer >
             <Link to="/home" style={{textDecoration:"none"}}>
             <Background src={props.image} className="background-photo" />
-            <Border color={props.color}>
-                <Button color={props.color}>
+            <Border $color={props.color}>
+                <Button $color={props.color}>
                     {props.text}
                 </Button>
             </Border>

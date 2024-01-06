@@ -40,42 +40,37 @@ export default function Login(){
         requestLogin(JSON.stringify(formData));
     }
 
+    function renderInput(field,input_type){
+        return (
+            <div>
+                <InputWrapper>
+                    <Input 
+                        type={input_type}
+                        value={formData[field]} 
+                        color={error.fields && error.fields.includes(field)?"red":"#A8AAAE"} 
+                        onChange={(e)=>setFormData({...formData,[field]:e.target.value})}
+                    />
+                    <Label 
+                    position={formData[field]}
+                    color={error.fields && error.fields.includes(field)?"red":"#C0C3C7"}>
+                        {`${field.replace("_"," ")}`}
+                    </Label>
+                </InputWrapper> 
+                <ErrorMsg>{error.message.field}</ErrorMsg>
+            </div>
+        )
+    }
+    
     return (
     <Container>
         <Content>
             <Text>
-                <Title>
-                    Sign In 
-                </Title>
+                <Title>Sign In</Title>
                 <p style={{fontWeight:"600",opacity:".7"}}>Be the first to receive our latest offers !</p>
             </Text>
             <Form onSubmit={handleFormSubmit}>
-                <InputWrapper>
-                    <Input 
-                        type="email" 
-                        value={formData.email} 
-                        color={error &&( error.email || error.emailPassword)?"red":"black"} 
-                        onChange={(e)=>setFormData({...formData,email:e.target.value})}
-                    />
-                    <Label 
-                        position={formData.email}
-                        color={error  &&( error.email || error.emailPassword)?"red":"grey"} 
-                    >Email</Label>
-                    <ErrorMsg>{error.email}</ErrorMsg>
-                </InputWrapper>
-                <InputWrapper>
-                    <Input
-                        type="password"
-                        value={formData.password} 
-                        color={error && (error.password||error.emailPassword)?"red":"black"} 
-                        onChange={(e)=>setFormData({...formData,password:e.target.value})}
-                    />
-                    <Label 
-                        position={formData.password}
-                        color={error && (error.password||error.emailPassword)?"red":"grey"} 
-                    >Password</Label>
-                    <ErrorMsg>{error.password}</ErrorMsg>
-                </InputWrapper>
+                {renderInput('email','email')}
+                {renderInput('password','password')}
                 <div style={{fontWeight:"600"}}>
                     Don't have an account?   
                     <SignIn to="/register">

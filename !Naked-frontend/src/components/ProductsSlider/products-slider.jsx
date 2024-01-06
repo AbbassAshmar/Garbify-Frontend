@@ -12,12 +12,9 @@ flex-direction:column;
 gap:min(7vh,40px);
 `
 const Title = styled.h2`
-font-size:1.3em; 
+font-size:clamp(1rem, 2.6vw, 1.3rem);
 font-weight:600;
 
-@media screen and (max-width:800px){
-    font-size:1.1rem;
-}
 
 `
 const SliderContainer = styled.div`

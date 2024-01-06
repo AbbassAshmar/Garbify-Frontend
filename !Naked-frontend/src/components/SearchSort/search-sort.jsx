@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import SortByButton from "../SortByButton/sort-by-button";
 
-
 const Container = styled.div`
 
 `
-
 const SearchSortContainer = styled.div`
 width:100%;
 display:flex;

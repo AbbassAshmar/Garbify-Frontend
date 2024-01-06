@@ -18,7 +18,7 @@ import jordan4_13 from "../assets/jordan4blueback.jpg"
 
 // Main title :clamp(1.1rem,3vw,1.5rem);
 
-// Smaller title : clamp(.9rem, 2.6vw, 1.3rem);
+// Smaller title : clamp(1rem, 2.6vw, 1.3rem);
 
 // smaller : clamp(.8rem , 2.3vw ,1.1rem);
 

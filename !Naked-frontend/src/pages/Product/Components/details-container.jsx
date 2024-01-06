@@ -100,7 +100,7 @@ display:flex;
 gap:1.3rem;
 `
 const ColorImage = styled.img`
-border:${({border})=>border};
+border:${({$border})=>$border};
 overflow:hidden;
 cursor:pointer;
 border-radius:2px;
@@ -133,7 +133,7 @@ gap:.4em;
 const Size =styled.div`
 font-weight:600;
 padding: .3em .8em ;
-border:${({border})=>border};
+border:${({$border})=>$border};
 border-radius:2px;
 cursor:pointer;
 background:white;
@@ -199,7 +199,7 @@ font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
 const TableWrapper = styled.div`
-max-height:${({maxHeight})=>maxHeight};
+max-height:${({$maxHeight})=>$maxHeight};
 height:auto;
 overflow:hidden;
 transition:max-height .3s;
@@ -230,13 +230,13 @@ function AvailableSizes({sizePicked,setSizePicked,sizeTableRef,product}){
                 <p style={{flex:"1"}}>
                     Sizes : <span style={{color:"grey"}}>{sizePicked&&sizePicked}</span>
                 </p>
-                <SizeGuideLink  onClick={(e)=>{return handleSizeGuideClick(sizeTableRef)}}>size guide</SizeGuideLink>
+                <SizeGuideLink onClick={(e)=>{return handleSizeGuideClick(sizeTableRef)}}>size guide</SizeGuideLink>
             </SizesTitles>
             <Sizes>
                 {product.sizes.map((size)=>{
                     return (
                         <Size   
-                            border={sizePicked == size ? "1px solid #00C2FF":"1px solid #D8DBE0"}
+                            $border={sizePicked == size ? "1px solid #00C2FF":"1px solid #D8DBE0"}
                             onClick={(e)=>{return setSizePicked(size)}}>
                             {size}
                         </Size>
@@ -257,7 +257,7 @@ function AvailableColors({setImagesColor,ImagesColor,product}){
             {
                 product.colors.map((color)=>{
                     return(<ColorImage 
-                        border={ImagesColor === color?"2px solid #00C2FF":"none"}
+                        $border={ImagesColor === color?"2px solid #00C2FF":"none"}
                         onClick={(e)=>{setImagesColor(color)}}
                         src={product.images[color][0].url} 
                         alt={product.images[color][0].image_details}
@@ -348,7 +348,7 @@ export default function DetailsContainer({quantity,product,setImagesColor,Images
                     <p style={{margin:"0"}}>Size guide </p>
                     <i style={{transition:"transform .3s",margin:"0",transform:`rotateX(${showTable?'180deg':"0"})`}} className="fa-solid fa-angle-down"></i>
                 </SizeGuideTitle>
-                <TableWrapper maxHeight={showTable?"100vh":"0px"}>
+                <TableWrapper $maxHeight={showTable?"100vh":"0px"}>
                 <SizeGuideTable>
                     {product.sizes_table.units.map((unit)=>{
                         return (

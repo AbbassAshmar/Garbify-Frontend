@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 export const userStateContext = createContext({
     user:null,
@@ -8,9 +8,38 @@ export const userStateContext = createContext({
 })
 
 export default function UserState({children}){
-
     const [token , setToken] = useState(localStorage.getItem("token")||null);
     const [user, setUser] = useState({});
+
+    useEffect(()=>{console.log("fetch")},[])
+    useEffect(()=>{
+        if (token && !user){
+            try{
+                fetchUserInfo();
+            }catch(e){
+                setUser({})
+            }
+        }
+    },[token])
+
+    async function fetchUserInfo(){
+        const domain = process.env.REACT_APP_DOMAIN
+        const uri = domain+'/api/users/user'
+        let init = {
+            method: "GET",
+            headers: {
+                'content-type': "application/json",
+                'accept': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+        };
+
+        let request = await fetch(uri,init);
+        if (request?.status == 200){
+            let response = await request.json();
+            _setUser(response.data.user);
+        }
+    }
 
     const _setToken = (token)=>{
         setToken(token)

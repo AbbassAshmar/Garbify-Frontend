@@ -8,7 +8,7 @@ min-width:250px;
 max-width:430px;
 background : white;
 border-radius:10px;
-box-shadow:0px 0px 10px ${({color})=>color};
+box-shadow:0px 0px 10px ${({$color})=>$color};
 position:fixed;
 z-index:100;
 top:18vh;
@@ -29,7 +29,7 @@ gap:20px;
 const StatusCircle = styled.div`
 width:40px;
 height:40px;
-background:${({color})=>color};
+background:${({$color})=>$color};
 border-radius:50%;
 display:flex;
 align-items:center;
@@ -50,7 +50,7 @@ const Header = styled.p`
 margin:0;
 font-size:clamp(.8rem , 2.3vw ,1.1rem);
 font-weight:600;
-color:${({color})=>color};
+color:${({$color})=>$color};
 `
 const Message = styled.p`
 margin:0;
@@ -73,15 +73,15 @@ function PopUp({color,text,status,setSettings,serverError}){
     return(
         <>
         {ReactDOM.createPortal(
-        <Container color={color}>
+        <Container $color={color}>
             <Content>
                 <div style={{display:'flex',gap:'20px',alignItems:"center"}}>
-                    <StatusCircle color={color}>
+                    <StatusCircle $color={color}>
                         {status=="Error" && <Icon className="fa-solid fa-x"/>}
                         {status=="Success" && <Icon className="fa-solid fa-check"/>}
                     </StatusCircle>
                     <Text>
-                        <Header color={color}>{status}</Header>
+                        <Header $color={color}>{status}</Header>
                         <Message>{text}</Message>
                     </Text>
                 </div>

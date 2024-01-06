@@ -2,7 +2,7 @@ import styled from "styled-components"
 import {Link} from "react-router-dom"
 
 const Container = styled.div`
-min-width:${({min_width})=>{return (min_width?min_width:"auto")}};
+min-width:${({$min_width})=>{return ($min_width?$min_width:"auto")}};
 overflow:hidden;
 box-shadow: 1px 1px 10px rgba(189, 189, 189,1);
 height:auto;
@@ -50,7 +50,7 @@ color:grey;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 `
-const Price = styled.p`
+const Price = styled.div`
 margin:0;
 font-weight:600;
 `
@@ -98,8 +98,9 @@ export default function ProductCard({thumbnail, price, name,quantity,type,sale,c
         }
         return `${price} $`
     }
+
     return(
-        <Container min_width={min_width}>
+        <Container $min_width={min_width}>
             <LinkContainer to={`/product/${name.replaceAll(" ",'-')}/${pk}`}>
             <ImageContainer>
                 <Image src={thumbnail}/>
@@ -110,12 +111,10 @@ export default function ProductCard({thumbnail, price, name,quantity,type,sale,c
                 {
                     colors && 
                     <ColorCount>
-                    {colors.length} {colors.length==1 ? "Color" : "Colors"}
+                        {colors.length} {colors.length==1 ? "Color" : "Colors"}
                     </ColorCount>
                 }   
-                <Price>
-                    {getPrice()}
-                </Price>
+                <Price>{getPrice()}</Price>
             </Details>
             </LinkContainer>
         </Container>

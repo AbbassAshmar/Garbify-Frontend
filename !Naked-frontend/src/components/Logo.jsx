@@ -7,7 +7,7 @@ cursor:pointer;
 margin:0;
 @media screen and (max-width:800px){
     width:100px;
-    display:${({off})=>off?"none":"inline-block"};
+    display:${({$off})=>$off?"none":"inline-block"};
 }
 @media screen and (max-width:400px){
     width:90px;
@@ -16,6 +16,6 @@ margin:0;
 
 export default function Logo({style,hide_for_mobile=false}){
     return (
-        <Logoo src={logo} style={style} off={hide_for_mobile}/>
+        <Logoo src={logo} style={style} $off={hide_for_mobile}/>
     )
 }

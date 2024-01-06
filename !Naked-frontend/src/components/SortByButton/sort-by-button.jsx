@@ -8,7 +8,7 @@ font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
 justify-content:center;
 @media screen and (max-width:800px){
-    display:${({removeUnder800px})=> removeUnder800px?'none':'flex'};
+    display:${({$removeUnder800px})=> $removeUnder800px?'none':'flex'};
 }
 `
 
@@ -33,7 +33,7 @@ gap:5px;
 `
 
 const Icon =styled.i`
-transform:rotateX(${({rotate})=>rotate});
+transform:rotateX(${({$rotate})=>$rotate});
 transition:transform .3s;
 font-weight:inherit;
 font-size:inherit;
@@ -44,7 +44,7 @@ position:absolute;
 background:white;
 top:110%;
 left:0;
-max-height:${({height})=>height};
+max-height:${({$height})=>$height};
 width: 100%;
 min-width: fit-content;
 height:auto;
@@ -100,7 +100,7 @@ export default function SortByButton(props){
     }
     
     return (
-        <Container style={props.style} removeUnder800px={props.removeUnder800px}>
+        <Container style={props.style} $removeUnder800px={props.removeUnder800px}>
             <Button ref={button} onClick={handleSortButtonClick}>
                 <p>
                 {
@@ -110,9 +110,9 @@ export default function SortByButton(props){
                     :"Sort By"
                 }
                 </p>
-                <Icon rotate={showList?"180deg":"0"} className="fa-solid fa-angle-down"></Icon>
+                <Icon $rotate={showList?"180deg":"0"} className="fa-solid fa-angle-down"></Icon>
             </Button>
-            <SortList ref={list} height={showList?"100vh":"0px"}>
+            <SortList ref={list} $height={showList?"100vh":"0px"}>
                 <Options>
                     {
                         Object.keys(props.sortOptions).map((key)=>{

@@ -11,7 +11,6 @@ overflow:hidden;
 display:flex;
 flex-direction:column;
 align-items:center;
-
 gap:min(17vh, 7rem);
 padding: 0 min(2rem ,5%);
 `
@@ -20,9 +19,6 @@ const Section2Title = styled.div`
 font-weight:800;
 text-align:center;
 font-size:clamp(.8rem,4vw,1.7rem);
-// @media screen and (max-width:800px){
-//     font-size:1.3rem;
-// }
 `
 
 const CategoryCardsContainer = styled.div`
@@ -31,13 +27,10 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 gap:25px;
-
 @media screen and (max-width:600px){
     flex-direction:column;
     gap:10px;
 }
-    
-
 `
 
 export default function CategorySection(){

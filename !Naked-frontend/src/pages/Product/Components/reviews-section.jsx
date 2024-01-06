@@ -19,11 +19,7 @@ border-bottom:2px solid #F1F4F9;
 const Title = styled.h2`
 margin: 0 0 4rem 0;
 font-weight:600;
-font-size:1.3rem;
-@media screen and (max-width:800px){
-    font-size:1.1rem;
-}
-
+font-size:clamp(1rem, 2.6vw, 1.3rem);
 `
 const StarsContainer = styled.div`
 display:flex;
@@ -31,6 +27,7 @@ gap:12px;
 align-items:center;
 margin:auto;
 justify-content:center;
+line-height:0;
 `
 const Rating = styled.div`
 font-weight:600;
@@ -71,7 +68,7 @@ export default function ReviewsSection({product_id}){
                 <Title>Reviews ({reviewsDetails.reviews_count}): </Title>
                 <StarsContainer>
                     <Rating>{reviewsDetails.average_ratings}</Rating>
-                    <RatingStars rating={reviewsDetails.average_ratings}/>
+                    <RatingStars width={"min(8vw,30px)"} rating={reviewsDetails.average_ratings}/>
                 </StarsContainer>
             </Header>
             <Reviews>

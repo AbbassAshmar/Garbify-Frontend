@@ -91,7 +91,6 @@ font-size:.8rem;
 export default function Footer(){
 
     return (
-      
         <Container>
             <Content>
                 <TopContainer>
@@ -100,26 +99,17 @@ export default function Footer(){
                         © 2011 - 2024 NotNaked Inc.
                     </CompanyName>
                     <SocialMedia>
-                        <Link >
-                        <SMLogo src={LinkedInLogo}/>
-                        </Link>
-                        <Link>
-                        <SMLogo src={GithubLogo} />
-                        </Link>
-                        <Link>
-                        <SMLogo  src={InstagramLogo}/>
-                        </Link>
+                        <Link ><SMLogo src={LinkedInLogo}/></Link>
+                        <Link><SMLogo src={GithubLogo} /></Link>
+                        <Link><SMLogo  src={InstagramLogo}/></Link>
                     </SocialMedia>
                 </TopContainer>
                 <LinksContainer>
                     <Column>
-                       <Title>
-                        Our Story
-                       </Title>
+                       <Title>Our Story</Title>
                        <Story>
                         We started as a small business and sold clothes from home, to become one of the most known and trusted sellers in the region
                        </Story>
-
                     </Column>
                     <Column>
                         <Title>ABOUT US</Title>
@@ -128,7 +118,6 @@ export default function Footer(){
                         <StyledLink>Blog</StyledLink>
                         <StyledLink>Job Openinigs</StyledLink>
                         <StyledLink>Shipping & Returns</StyledLink>
-
                     </Column>
                     <Column>
                         <Title>NAVIGATION</Title>
@@ -137,11 +126,7 @@ export default function Footer(){
                         <StyledLink>Shop</StyledLink>
                     </Column>
                 </LinksContainer>
-
             </Content>
-
-
         </Container>
-     
     )
 }

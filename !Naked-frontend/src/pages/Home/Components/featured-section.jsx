@@ -12,12 +12,6 @@ width:100%;
 export const Title = styled.h2`
 font-size:clamp(.8rem,4vw,1.7rem);
 font-weight:800;
-
-// text-align:center;
-// font-size:1.3rem;
-// @media screen and (max-width:800px){
-//     font-size:1.3rem;
-// }
 `
 
 const Boxes = styled.div`
@@ -27,20 +21,16 @@ align-items:center;
 justify-content:space-between;
 gap:11px;
 overflow:hidden;
-
 @media screen and (max-width:670px){
     flex-direction:column;
     gap:10px;
 }
-
 `
 export default function FeaturedSection(){
     return (
         <SectionContainer>
             <SectionContent style={{justifyContent:"center"}}>
-                <Title>
-                    Featured
-                </Title>
+                <Title>Featured</Title>
                 <Boxes>
                     <FeaturedBox image={hoody}  category={"Hoody"} text={"New High Quality Hoodies"} />
                     <FeaturedBox image={hoody2} category={"Hoody"} text={"Custom Made Hoodies"} />

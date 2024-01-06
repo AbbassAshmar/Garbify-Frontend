@@ -30,7 +30,7 @@ export const useSendRequest = (userContext) => {
     const [isServerError, setIsServerError] = useState(false);
 
     const sendRequest = async (uri, init={}) => {
-        let url = 'http://127.0.0.1:8000' + uri;
+        let url = process.env.REACT_APP_DOMAIN + uri;
         let defaultInit = {
             method: "GET",
             headers: {

@@ -33,8 +33,6 @@ height:100%;
 @media screen and (max-width:600px){
     height:90vh;
 }
-
-
 `
 const SlideButtonCustom = styled(SlideButton)`
 z-index:4;

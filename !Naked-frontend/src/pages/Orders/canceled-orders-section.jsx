@@ -1,15 +1,13 @@
 import styled from "styled-components";
 import { ORDERS } from "../../components/products-data";
 import Loading from "../../components/Loading/loading";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import { userStateContext } from "../../Contexts/user-state";
 import { useFetchData } from "../../hooks/use-fetch-data";
 import { NoOrdersContainer, NoOrdersTitle } from "./orders-section";
 import ProductsSlider from "../../components/ProductsSlider/products-slider";
 import { constructUrl } from "./orders";
-import { PRODUCTS } from "../../components/products-data";
-import OrderCard from "../../components/OrderCard/order-card";
 import Pagination from "../../components/Pagination/pagination";
 import CanceledOrderCard from "../../components/CanceledOrderCard/caceled-order-card";
 import useUserState from "../../hooks/use-user-state";

@@ -47,9 +47,7 @@ export default function WhyUsSection(){
     return (
         <SectionContainer>
             <SectionContent>
-                <Title>
-                    Why Us ?
-                </Title>
+                <Title>Why Us ?</Title>
                 <Boxes>
                     <BigBox>
                         <WhyUsBox1 />
@@ -62,8 +60,7 @@ export default function WhyUsSection(){
                         color="#00C2FF"
                         border="#85E2FF"
                         img={airplane}
-                        imgRotate='-20deg'
-                        />
+                        imgRotate='-20deg'/>
                         <WhyUsBox2 
                         title="Quick Exchange" 
                         text="Hassle-free returns or
@@ -71,8 +68,7 @@ export default function WhyUsSection(){
                         color="#DEDADA"
                         border="#B7BBBC"
                         img={clothes}
-                        reverse={true}
-                        />
+                        reverse={true}/>
                     </SmallBoxes>
                 </Boxes>
             </SectionContent>
