@@ -6,7 +6,7 @@ aspect-ratio:1/.8;
 
 width:46.5vw;
 overflow:hidden;
-background:url(${({image})=> image});
+background:url(${({$image})=> $image});
 background-position:center;
 background-size:cover;
 display:flex;
@@ -99,7 +99,7 @@ transition: background .3s;
 export default function FeaturedBox(props){
     return (
         <Link style={{textDecoration:"none",width:"100%"}}>
-        <Container image={props.image}>
+        <Container $image={props.image}>
             <Content>
                 <TextContainer>
                     <Text1>{props.category}</Text1>

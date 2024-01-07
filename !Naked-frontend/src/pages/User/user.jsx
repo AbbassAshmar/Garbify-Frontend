@@ -86,9 +86,8 @@ export default function User(){
     const navigate = useNavigate();
 
     useEffect(()=>{
-        if (!userContext.token){
-            navigate("/login");
-        }
+        if (!userContext.token)
+        navigate("/login"); 
     },[])
 
     return (
@@ -96,7 +95,7 @@ export default function User(){
             <div style={{padding:"min(2rem, 4%)",gap:'2rem',display:'flex',flexDirection:'column',alignItems:'center'}}>
             <Section1>
                 <ProfilePicContainer>
-                    <ProfilePic src={userContext.user?.pfp} />
+                    <ProfilePic src={userContext.user?.profile_picture} />
                 </ProfilePicContainer>
                 <ContentContainer>
                     <Navigation>

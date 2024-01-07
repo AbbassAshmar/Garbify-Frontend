@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import styled from "styled-components"
-import { Input, InputWrapper, Label, PasswordRules } from "../../Registration/registration";
+import { PasswordRules } from "../../Registration/registration";
 import { useSendRequest } from "../../../hooks/use-fetch-data";
 import useUserState from "../../../hooks/use-user-state";
+import useRenderInputField from "../../../hooks/user-render-input-field";
 
 const ChangePassword = styled.p`
 margin-bottom:14px;
@@ -14,6 +15,7 @@ transition:color .3s;
     color:#A8AAAE;
 }
 `
+
 const Form = styled.form`
 
 `
@@ -23,18 +25,11 @@ flex-direction:column;
 gap:15px;
 margin-bottom:20px;
 `
-const ErrorMsg = styled.p`
-margin:0;
-color:red;
-margin-top:4px;
-margin-left: 3%;
-font-weight:600;
-font-size: clamp(.65rem,1.8vw,.8rem);
-`
+
 const PassInputsContainer = styled(InputsContainer)`
-padding-top:${({paddingTop})=>paddingTop};
-margin-bottom:${({margin})=>margin};
-max-height:${({maxHeight})=>maxHeight};
+padding-top:${({$paddingTop})=>$paddingTop};
+margin-bottom:${({$margin})=>$margin};
+max-height:${({$maxHeight})=>$maxHeight};
 min-width:100%;
 transition:max-height .3s,margin-bottom .3s,padding-top .3s;
 overflow:hidden;
@@ -95,6 +90,9 @@ export default function UpdateUserProfileForm({setCurrentSection}){
         message:{password:"lkdjfakldjfkls",old_password:""}
     })
 
+    const inputField = useRenderInputField(error,formData,setFormData);
+
+
     function handleCancelButtonClick(e){
         setCurrentSection('Profile')
     }
@@ -110,34 +108,13 @@ export default function UpdateUserProfileForm({setCurrentSection}){
             userContext.setUser({...userContext.user, newFields})
         }
     }
-
-    function renderInput(field,input_type){
-        return (
-            <div>
-                <InputWrapper>
-                    <Input 
-                        type={input_type}
-                        value={formData[field]} 
-                        color={error.fields && error.fields.includes(field)?"red":"#A8AAAE"} 
-                        onChange={(e)=>setFormData({...formData,[field]:e.target.value})}
-                    />
-                    <Label 
-                    position={formData[field]}
-                    color={error.fields && error.fields.includes(field)?"red":"#C0C3C7"}>
-                        {`${field.replace("_"," ")}`}
-                    </Label>
-                </InputWrapper> 
-                <ErrorMsg>{error.message.field}</ErrorMsg>
-            </div>
-        )
-    }
     
     return(
         <Form onSubmit={handleFormSubmit}>
             <div style={{display:"flex", flexDirection:"column"}}>
                 <InputsContainer>
-                    {renderInput("name",'text')}
-                    {renderInput("email",'email')}
+                    {inputField('name','text')}
+                    {inputField('email','email')}
                 </InputsContainer>
 
                 <ChangePassword onClick={()=>setShowPasswordInputs(!showPasswordInputs)}>
@@ -145,19 +122,21 @@ export default function UpdateUserProfileForm({setCurrentSection}){
                 </ChangePassword>
 
                 <PassInputsContainer 
-                paddingTop={showPasswordInputs?".3rem" :"0"} 
-                maxHeight={showPasswordInputs?"50vh" :"0"} 
-                margin={showPasswordInputs?"2rem":"0"}>
-                    {renderInput("old_password",'password')}
+                $paddingTop={showPasswordInputs?".3rem" :"0"} 
+                $maxHeight={showPasswordInputs?"50vh" :"0"} 
+                $margin={showPasswordInputs?"2rem":"0"}>
+                    {inputField('old_password','password')}
+
                     <div>
-                        {renderInput("password",'password')}
+                        {inputField("password",'password')}
                         <PasswordRules color={error.message.password==="The password field format is invalid."?"red":"black"}>
                             - At least one uppercase letter<br/>
                             - At least one digit (0-9)<br/>
                             Example: SecureP@ssw0rd'
                         </PasswordRules>  
                     </div>
-                    {renderInput("confirm_password",'password')}
+
+                    {inputField("confirm_password",'password')}
                 </PassInputsContainer>
                 <ButtonsContainer>
                     <SaveButton>Save</SaveButton>   

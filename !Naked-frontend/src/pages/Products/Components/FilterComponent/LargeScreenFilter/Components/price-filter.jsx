@@ -1,8 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Input,Label,Submit } from "../../../../../Registration/registration";
+import { Submit } from "../../../../../Registration/registration";
 import { useSearchParams } from "react-router-dom";
 import { checkSelectedOption } from "./list-filter";
+
+import { Input,Label } from "../../../../../../hooks/user-render-input-field";
 
 const Form = styled.form`
 display:flex;
@@ -59,6 +61,7 @@ font-size:clamp(.6rem,2vw,.9rem);
 export default function PriceFilter({filter,handleOptionClick}){
     const [priceForm, setPriceForm] =useState({})
     const [searchParams,setSearchParams] = useSearchParams();
+
     function handleFormSubmit(e){
         e.preventDefault();
         if (!priceForm['min'] || !priceForm['max']){
@@ -94,7 +97,6 @@ export default function PriceFilter({filter,handleOptionClick}){
         obj[option] = parseInt(e.target.value);
         setPriceForm(obj);
     }
-
 
     return (
         <>

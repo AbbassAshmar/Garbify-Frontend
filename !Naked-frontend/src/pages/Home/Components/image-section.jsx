@@ -5,7 +5,7 @@ import { SectionContainer } from "./featured-section"
 const Container = styled(SectionContainer)`
 height:min(80vh, 34rem);
 
-background:url(${({img}) =>img});
+background:url(${({$image}) =>$image});
 background-size:115%;
 background-position:center right;
 position:relative;
@@ -74,7 +74,7 @@ width:100%;
 export default function ImageSection(){
 
     return (
-        <Container img={FrontGirl}>
+        <Container $image={FrontGirl}>
             <Content>
                 <Text>
                     Chic<br/>

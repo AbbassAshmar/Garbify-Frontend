@@ -51,15 +51,15 @@ font-size:1rem;
     margin-bottom:2rem;
 }
 `
-export default function CatgegoryCard(props){
+export default function CatgegoryCard({image,color,text}){
 
     return (
         <CardContainer >
             <Link to="/home" style={{textDecoration:"none"}}>
-            <Background src={props.image} className="background-photo" />
-            <Border $color={props.color}>
-                <Button $color={props.color}>
-                    {props.text}
+            <Background src={image} className="background-photo" />
+            <Border $color={color}>
+                <Button $color={color}>
+                    {text}
                 </Button>
             </Border>
             </Link>

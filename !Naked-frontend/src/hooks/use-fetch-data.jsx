@@ -1,8 +1,7 @@
-import { useState,useEffect, useContext } from "react";
+import { useState,useEffect } from "react";
 
-
-async function refreshAccessToken(userContext){
-    let access_token_url = 'http://127.0.0.1:8000/api/access_tokens';
+export async function refreshAccessToken(userContext){
+    let access_token_url = import.meta.env.VITE_API_URL + "/api/access_tokens";
     let accessTokensInit = {
         method :"POST",
         headers:{
@@ -30,7 +29,7 @@ export const useSendRequest = (userContext) => {
     const [isServerError, setIsServerError] = useState(false);
 
     const sendRequest = async (uri, init={}) => {
-        let url = process.env.REACT_APP_DOMAIN + uri;
+        let url = import.meta.env.VITE_API_URL + uri;
         let defaultInit = {
             method: "GET",
             headers: {
@@ -75,7 +74,7 @@ export function useFetchData(url,dependency_array=[],userContext=null,init={}){
     const {sendRequest, serverError} = useSendRequest(userContext)
 
 
-    async function fetchData(url,init={},userContext=null){
+    async function fetchData(url,init={}){
         let {request,response} =  await sendRequest(url, init);
 
         if (!request){
@@ -93,7 +92,7 @@ export function useFetchData(url,dependency_array=[],userContext=null,init={}){
     }
 
     useEffect(()=>{
-        fetchData(url , init,userContext)
+        fetchData(url , init)
     },dependency_array)
 
     return {data,setData, error, loading ,reFetchData:fetchData}

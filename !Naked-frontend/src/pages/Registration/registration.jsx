@@ -6,6 +6,8 @@ import Logo from "../../components/Logo";
 import Footer from "../../components/Footer/footer"
 import useUserState from "../../hooks/use-user-state";
 import { useSendRequest } from "../../hooks/use-fetch-data";
+import SuccessOrErrorPopUp from "../../components/SuccessOrErrorPopUp/success-or-error-pop-up";
+import useRenderInputField from "../../hooks/user-render-input-field";
 
 export const Container = styled.div`
 width:100%;
@@ -29,6 +31,10 @@ z-index:0;
     position:absolute;
     z-index:-1;
     opacity:.4;
+}
+
+@media screen and (max-width:600px){
+  min-height:0;
 }
 `
 const ContentContainer = styled.div`
@@ -84,40 +90,7 @@ display:flex;
 flex-direction:column;
 gap:5px;
 `
-export const InputWrapper = styled.div`
-width:100%;
-position:relative;
-`
-export const Input = styled.input`
-height:2.7rem;
-width:100%;
-border-radius:5px;
-border:2px solid ${({$color})=>$color};
-outline:none;
-padding:.7rem 1rem;
-font-size: clamp(.8rem , 2.3vw ,1.1rem);
-&:focus{
-    border:2px solid #00C2FF;
-}
-`
-export const Label =styled.label`
-position:absolute;
-top:${({$position})=>$position?'-17%':"30%"};
-left:${({$position})=>$position?'2%':"3%"};
-font-size:${({$position})=>$position?'.6rem':".8rem"};
-opacity:1;
-z-index:3;
-color:${({$color})=>$color};
-background:white;
-transition:all .3s;
-${Input}:focus + &{
-    top:-17%;
-    left:2%;
-    font-size:clamp(.5rem,1.8vw,.8rem);
-    color:#00C2FF;
-}
-font-weight:600;
-`
+
 export const PasswordRules = styled.p`
 color:${({$color})=>$color};
 opacity:.7;
@@ -125,24 +98,6 @@ font-weight:500;
 font-size: clamp(.65rem,1.8vw,.8rem);
 margin-left: 3%;
 margin-top:4px;
-`
-export const ErrorMsg = styled.p`
-margin:0;
-color:red;
-margin-left: 3%;
-font-weight:600;
-font-size: clamp(.65rem,1.8vw,.8rem);
-&:empty::before{
-  content:"";
-  display:inline-block;
-}
-`
-const PasswordErrorMsg = styled.p`
-margin:0;
-color:red;
-margin-left: 3%;
-font-weight:600;
-font-size: clamp(.5rem,1.8vw,.8rem);
 `
 
 export const Submit = styled.button`
@@ -203,71 +158,57 @@ font-size:clamp(.9rem, 2.6vw, 1.3rem);
 text-shadow:1px 1px 1px black;
 `
 export default function Registration(){
-    const userContext = useUserState();
-    const {sendRequest, isServerError} = useSendRequest(userContext);
-    
-    const location =useLocation()
-    const navigate = useNavigate();
-    const {state} = location
+  const userContext = useUserState();
+  const {sendRequest, serverError} = useSendRequest(userContext);
+  
+  const {state} =useLocation()
+  const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-      email:state?state:"",
-      name:"",
-      password:"",
-      confirm_password:"",
-    })
-    
-    const [error,setError] = useState({
-      fields:[] , 
-      message:{} 
-    })
+  const [formData, setFormData] = useState({
+    email:state?state:"",
+    name:"",
+    password:"",
+    confirm_password:"",
+  })
+  
+  const [error,setError] = useState({
+    fields:[] , 
+    message:{} 
+  })
 
-    useEffect(()=>{
-      if(userContext.token){
-        navigate(-1,{replace:true})
-      }
-    },[])
+  const inputField = useRenderInputField(error,setFormData,formData);
+
+  useEffect(()=>{
+    if(userContext.token)
+    navigate(-1,{replace:true})
+  },[])
    
-    async function requestRegister(formData){
-      const {response,request} = await sendRequest('/api/register',{method:"POST",body:formData});
-      if (request.ok){
-        setError({fields:[], message:[]});
-        setToken(response.data.token);
-        setUser(response.data.user);
-      }else{
-        setError({fields:response?.metadata.error_fields, message : response?.error.details})
-        setToken(null)
-      }
+  async function requestRegister(formData){
+    const {response,request} = await sendRequest('/api/register',{method:"POST",body:formData});
+    if (request?.status === 201){
+      setError({fields:[], message:[]});
+      userContext.setToken(response.data.token);
+      userContext.setUser(response.data.user);
+      navigate('/products', {replace:true})
     }
 
-    function handleFormSubmit(e){
-        e.preventDefault();
-        requestRegister(JSON.stringify(formData));
+    else if (request?.status === 400){ // error related to user's input
+      setError({fields:response.metadata.error_fields, message : response.error.details})
     }
+    
+    else {  //error that is not related to user's input
+      setError({fields:[], message:[]});
+    }
+  }
 
-    function renderInput(field,input_type){
-      return (
-        <div>
-          <InputWrapper>
-            <Input 
-                type={input_type}
-                value={formData[field]} 
-                color={error.fields && error.fields.includes(field)?"red":"#A8AAAE"} 
-                onChange={(e)=>setFormData({...formData,[field]:e.target.value})}
-            />
-            <Label 
-            position={formData[field]}
-            color={error.fields && error.fields.includes(field)?"red":"#C0C3C7"}>
-                {`${field.replace("_"," ")}`}
-            </Label>
-          </InputWrapper> 
-          <ErrorMsg>{error.message.field}</ErrorMsg>
-        </div>
-      )
-    }
+  function handleFormSubmit(e){
+    e.preventDefault();
+    requestRegister(JSON.stringify(formData));
+  }
 
   return(
     <div>  
+      <SuccessOrErrorPopUp serverError={serverError} />
       <Container>
         <div style={{padding:"min(2rem ,4%)",width:'100%',display:"flex",flexDirection:"column",gap:'15px'}}>
         <div style={{alignSelf:"flex-start"}}><Logo/></div>
@@ -289,16 +230,16 @@ export default function Registration(){
             <Form onSubmit={handleFormSubmit}>
 
               <FieldAndError>
-                {renderInput("email",'email')}
+                {inputField("email",'email')}
               </FieldAndError>
 
               <FieldAndError>
-                {renderInput("name",'text')}
+                {inputField("name",'text')}
               </FieldAndError>
 
               <div style={{display:'flex',flexDirection:"column",gap:'15px'}}>
                 <FieldAndError>
-                  {renderInput("email",'email')}
+                  {inputField("password",'password')}
                   <PasswordRules $color={error.message.password==="The password field format is invalid."?"red":"black"}>
                       - At least one uppercase letter<br/>
                       - At least one digit (0-9)<br/>
@@ -307,7 +248,7 @@ export default function Registration(){
                 </FieldAndError>
 
                 <FieldAndError>
-                  {renderInput("email",'email')}
+                  {inputField("confirm_password",'password')}
                 </FieldAndError>
               </div>
               <div style={{fontWeight:"600" , fontSize:"clamp(.6rem,2vw,.9rem)"}}>
@@ -324,5 +265,5 @@ export default function Registration(){
       </Container>
       <Footer/>
     </div>
-    )
+  )
 }

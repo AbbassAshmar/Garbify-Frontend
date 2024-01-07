@@ -1,11 +1,10 @@
 import styled from "styled-components"
 import {Link} from "react-router-dom"
-import { useEffect } from "react"
 
 // z-index : 200
 export const Parent = styled.div`
 height:100vh;
-max-height:${({display})=>display?"100vh":"0"};
+max-height:${({$display})=>$display?"100vh":"0"};
 width:100%;
 position:absolute;
 top:100%;
@@ -19,7 +18,7 @@ export const Background = styled.div`
 backdrop-filter: blur(10px) ;
 height:100%;
 width:100%;
-opacity:${({opacity})=>opacity};
+opacity:${({$opacity})=>$opacity};
 transition:opacity .2s .2s;
 `
 
@@ -106,15 +105,14 @@ export function arrayNameParentsForm(obj, arr){
 export default function CategoryList(props){
 
     return (
-        <Parent display={props.show}>
+        <Parent $display={props.show}>
             <ListContainer>
                 <ListContent>
                     {props.categories.map((category)=>{
                         let optionsArr = arrayNameParentsForm(category,[props.topParent])
                         optionsArr.shift()
                         return (
-                            <>
-                            {
+                            <>{
                             optionsArr&&optionsArr.length>0?
                             <CategoryColumn key={category.name}>
                                 <Title to={getTitlesUrl(props.topParent, category.name)}>
@@ -141,7 +139,7 @@ export default function CategoryList(props){
                     })}
                 </ListContent>
             </ListContainer>
-            <Background opacity={props.show?'1':'0'} onMouseEnter={()=>{props.setShowCategoryList((prevState)=>({...prevState,display:false}))}} />
+            <Background $opacity={props.show?'1':'0'} onMouseEnter={()=>{props.setShowCategoryList((prevState)=>({...prevState,display:false}))}} />
         </Parent>
     )
 }
