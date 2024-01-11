@@ -12,7 +12,6 @@ import useRenderInputField from "../../hooks/user-render-input-field";
 export const Container = styled.div`
 width:100%;
 display:flex;
-padding-bottom:2rem;
 flex-direction:column;
 align-items:center;
 justify-content:center;
@@ -24,13 +23,13 @@ position:relative;
 overflow:hidden;
 z-index:0;
 &:before {
-    content:" ";
-    width:100%;
-    height:130%;
-    background:black;
-    position:absolute;
-    z-index:-1;
-    opacity:.4;
+  content:" ";
+  width:100%;
+  height:130%;
+  background:black;
+  position:absolute;
+  z-index:-1;
+  opacity:.4;
 }
 
 @media screen and (max-width:600px){
@@ -38,6 +37,7 @@ z-index:0;
 }
 `
 const ContentContainer = styled.div`
+margin:2rem 0;
 width:100%;
 height:100%;
 gap:15px;
@@ -134,6 +134,7 @@ font-size:.7em;
 `
 const TextContainer = styled.div`
 flex:2;
+padding: 0 5%;
 display:flex;
 flex-direction:column;
 gap:15px;
@@ -147,7 +148,7 @@ const MainText = styled.p`
 margin:0;
 color:white;
 font-weight:800;
-font-size:clamp(1.1rem,3vw,1.9rem);
+font-size:clamp(1.1rem,2.3vw,1.9rem);
 text-shadow:1px 1px 1px black;
 `
 const SecondaryText = styled.p`
@@ -252,10 +253,10 @@ export default function Registration(){
                 </FieldAndError>
               </div>
               <div style={{fontWeight:"600" , fontSize:"clamp(.6rem,2vw,.9rem)"}}>
-                  Already have an account?   
-                  <SignIn to="/login">
-                      Sign in <I className="fa-solid fa-greater-than"/>
-                  </SignIn>
+                Already have an account?   
+                <SignIn to="/login">
+                  Sign in <I className="fa-solid fa-greater-than"/>
+                </SignIn>
               </div>
               <Submit type="submit">Register now!</Submit>
             </Form>

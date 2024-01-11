@@ -53,6 +53,7 @@ export const useSendRequest = (userContext) => {
             return {request, response};
         } catch (error) {
             setIsServerError(true); // set error state to true if there's an error
+            setTimeout(()=>{setIsServerError(false)},3000)
         }
 
         return {request:null, response:null};

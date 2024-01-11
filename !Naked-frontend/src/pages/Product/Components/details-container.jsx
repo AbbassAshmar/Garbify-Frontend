@@ -1,13 +1,12 @@
 import { styled } from "styled-components"
 import { Link } from "react-router-dom"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import AddToCartButton from "../../../components/AddToCartButton/add-to-cart-button"
 import RatingStars from "../../../components/RatingStars/rating-stars"
 
 const Container = styled.div`
-flex:4;
+flex:1;
 background:white;
-margin-left:10%;
 position:sticky;
 top:60px;
 gap:2rem;
@@ -93,6 +92,7 @@ width:100%;
 font-weight:600;
 margin: 0 0 .4em 0;
 font-size:clamp(.6rem,2vw,.9rem);
+color:black;
 `
 const Colors= styled.div`
 width:100%;
@@ -223,21 +223,32 @@ text-align:center;
 height:5vh;
 `
 
-function AvailableSizes({sizePicked,setSizePicked,sizeTableRef,product}){
+export function AvailableSizes({sizePicked,setSizePicked,product,handleSizeGuideClick=null}){
+    
+
+    if (!product?.sizes) return <></>
+
+    function handleSizeClick(size){
+        setSizePicked(size);
+    }
+
     return (
         <SizesContainer>
             <SizesTitles>
                 <p style={{flex:"1"}}>
                     Sizes : <span style={{color:"grey"}}>{sizePicked&&sizePicked}</span>
                 </p>
-                <SizeGuideLink onClick={(e)=>{return handleSizeGuideClick(sizeTableRef)}}>size guide</SizeGuideLink>
+                {handleSizeGuideClick && <SizeGuideLink onClick={handleSizeGuideClick}>size guide</SizeGuideLink>}
             </SizesTitles>
             <Sizes>
                 {product.sizes.map((size)=>{
                     return (
                         <Size   
                             $border={sizePicked == size ? "1px solid #00C2FF":"1px solid #D8DBE0"}
-                            onClick={(e)=>{return setSizePicked(size)}}>
+                            onClick={(e)=> {
+                                e.preventDefault()
+                                handleSizeClick(size)}
+                            }>
                             {size}
                         </Size>
                     )
@@ -247,22 +258,30 @@ function AvailableSizes({sizePicked,setSizePicked,sizeTableRef,product}){
     )
 }
 
-function AvailableColors({setImagesColor,ImagesColor,product}){
+export function AvailableColors({setColorPicked,colorPicked,product}){
+    if (!product?.images) return <></>
+
+    function handleColorClick(color){
+        setColorPicked(color);
+    }
+    
     return(
         <ColorsContainer>
             <ColorSizeTitle>   
-                Colors :  <span style={{color:`grey`}}>{ImagesColor&&ImagesColor}</span>
+                Colors :  <span style={{color:`grey`}}>{colorPicked&&colorPicked}</span>
             </ColorSizeTitle>
             <Colors>
-            {
-                product.colors.map((color)=>{
+            { 
+                Object.keys(product.images).map((color)=>{
                     return(<ColorImage 
-                        $border={ImagesColor === color?"2px solid #00C2FF":"none"}
-                        onClick={(e)=>{setImagesColor(color)}}
+                        $border={colorPicked === color?"2px solid #00C2FF":"none"}
+                        onClick={(e)=>{
+                            e.preventDefault; 
+                            handleColorClick(color)}
+                        }
                         src={product.images[color][0].url} 
                         alt={product.images[color][0].image_details}
-                    />
-                    )
+                    />)
                 })
             }
             </Colors>
@@ -271,14 +290,15 @@ function AvailableColors({setImagesColor,ImagesColor,product}){
 }
 
 export default function DetailsContainer({quantity,product,setImagesColor,ImagesColor,setSizePicked, sizePicked}){
-    const [showTable, setShowTable] = useState(false)
-    const sizeTableRef  = useRef(null)
+    const [addToCartLoading,setAddToCartLoading] = useState(false);
+    const [showTable, setShowTable] = useState(false);
+    const sizeTableRef  = useRef(null);
     
-    function handleSizeGuideClick(ref){
+    function handleSizeGuideClick(e){
         setShowTable(true)
-        ref.current.scrollIntoView({ behavior: 'smooth'})
+        sizeTableRef.current.scrollIntoView({ behavior: 'smooth'})
     }
-    
+
     return (
         <Container>
             <TitleContainer>
@@ -307,23 +327,26 @@ export default function DetailsContainer({quantity,product,setImagesColor,Images
                     <Price>${product.price}</Price>
                 }
             </PriceContainer>
+
             <AvailableColors 
-            setImagesColor={setImagesColor} 
-            ImagesColor={ImagesColor} 
+            setColorPicked={setImagesColor} 
+            colorPicked={ImagesColor} 
             product={product}/>
 
             <AvailableSizes
             setSizePicked={setSizePicked}
-            sizeTableRef={sizeTableRef}
             sizePicked={sizePicked}
-            product={product}/>
+            product={product}
+            handleSizeGuideClick={handleSizeGuideClick}/>
 
             <div>
                 <AddToCartButton 
-                    product={product} 
+                    product_id={product.id} 
                     size={sizePicked} 
                     color={ImagesColor} 
                     availableQuantity={quantity}
+                    addToCartLoading={addToCartLoading}
+                    setAddToCartLoading={setAddToCartLoading}
                 />
                 <AddToFavoritesButton>
                     Add to Favorites&nbsp;<i className="fa-solid fa-heart"/>

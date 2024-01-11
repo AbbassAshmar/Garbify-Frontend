@@ -3,7 +3,7 @@ import { styled } from "styled-components"
 import { ArrowIcon, SlideButton } from "../../../components/ProductsSlider/products-slider"
 
 const Container = styled.div`
-flex:6;
+flex:1.2;
 display:grid;
 grid-template-columns: repeat(2,50%);
 overflow:hidden;

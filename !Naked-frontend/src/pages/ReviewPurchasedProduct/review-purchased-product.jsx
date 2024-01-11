@@ -29,7 +29,7 @@ export default function ReviewPurchasedProduct(){
     }
 
     useEffect(()=>{
-        checkIfReviewed(product_id);
+        // checkIfReviewed(product_id);
     },[])
     
     return (

@@ -89,9 +89,7 @@ export default function ProductsContainer(props){
     }
 
     if (loading){
-        return (
-            <Loading />
-        )
+        return <Loading />
     }
 
     return (
@@ -122,19 +120,7 @@ export default function ProductsContainer(props){
             <div style={{display:'flex', flexDirection:'column',gap:'min(7vh,40px)'}}>
             <Products>
                 {products && products.map((product) =>{
-                    return (
-                        <ProductCard
-                            key={product.pk}
-                            pk ={product.pk}
-                            name={product.name} 
-                            price={product.price} 
-                            quantity={product.quantity}
-                            colors={product.colors}
-                            type={product.type}
-                            thumbnail={product.thumbnail}
-                            sale={product.sale}
-                        />
-                    )
+                    return <ProductCard product={product}/>
                 })}
             </Products>
             <Pagination TotalPagesCount={TotalPagesCount} />

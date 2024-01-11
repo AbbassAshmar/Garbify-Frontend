@@ -16,7 +16,7 @@ gap:5px;
     opacity:.7;
 }
 @media screen and (max-width:800px){
-    border:1px solid black;
+    border:1px solid #C0C3C7;
     padding: .2rem .7rem 0.1rem .7rem;    height:100%;
     width:100%;
     border-radius:10px;
@@ -35,13 +35,13 @@ export default function ShowFilter(props){
     return (
         <div>
             <Button onClick={handleButtonClick}>
-                <p style={{margin:'0'}}>
-                    {window.innerWidth >800 ?
+                <p style={{margin:'0',}}>
+                    {
+                        window.innerWidth >800 ?
                         (props.show? "Close Filter" : "Show Filter" ):
                         'filters'
                     }
                 </p>
-
                 <Icon className="fa-solid fa-filter"></Icon>
             </Button>
         </div>

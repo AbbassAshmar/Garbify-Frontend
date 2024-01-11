@@ -20,13 +20,15 @@ align-self:center;
 text-align:center;
 `
 const Title =styled.p`
-color : #00C2FF;
+// color : #00C2FF;
+color : black;
 font-size:1.5em;
 font-weight:600;
 margin: 0 0 .3em 0 ;
 `
 const SubTitle = styled.p`
-color : #00C2FF;
+// color : #00C2FF;
+color:black;
 font-size:1em;
 font-weight:600;
 `
@@ -83,7 +85,7 @@ display:flex;
 gap:15px;
 `
 const Star = styled.img`
-width:10%;
+width:7%;
 cursor:pointer;
 `
 const RadioField = styled.div`
@@ -112,9 +114,11 @@ const SubmitButton = styled.button`
 width:100%;
 background:#00C2FF;
 border:none;
-padding:.5rem 0;
+padding:.8rem 0;
 font-weight:600;
 cursor:pointer;
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
+border-radius:3px;
 `
 
 //multipart/form-data , sends file in binary fromat
@@ -237,9 +241,7 @@ export default function ReviewForm(){
            </Text>
            <Content onSubmit={handleReviewFormSubmit}>
                 <FormRow>
-                    <Label htmlFor="title">
-                        Rating : 
-                    </Label>
+                    <Label htmlFor="title">Rating :</Label>
                     <StarsContainer>
                         {
                             starsList.map((value, index)=>{

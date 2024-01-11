@@ -38,8 +38,8 @@ export const USER = {
     name :"Saddam Hussein",
     email:"KuwaitIsMine@gmail.com",
     profile_picture:Hoody,
-    
 };
+
 export const FILTERS =[
     {
         name : "Categories",
@@ -206,92 +206,722 @@ export const FAV_LISTS =[
 ]
 
 export const PRODUCTS = [
-    // {
-    //     id:3,
-    //     name:"Brooks sport shoes",
-    //     price:150,
-    //     colors:["white"],
-    //     thumbnail:Hoody,
-    //     quantity:400,
-    //     type:"men shoes",
-    //     sale:{
-    //         price_after_sale:100,
-    //         percentage:50,
-    //     }
-    // },
-    // {
-    //     id:4,
-    //     name:"Brooks sport shoes",
-    //     price:150,
-    //     colors:["white"],
-    //     thumbnail:Hoody2,
-    //     quantity:400,
-    //     type:"men shoes",
-    //     sale:{
-    //         price_after_sale:100,
-    //         percentage:50,
-    //     }
-    // },
+    {
+        id:3,
+        name:"Brooks sport shoes",
+        price:150,
+        thumbnail:Hoody,
+        quantity:400,
+        type:"men shoes",
+        sizes:['W 5 / M 6.5', 'W 6 / M 8.5', 'W 10.5 / M 9','W 12.5 / M 14', 'W 17.5 / M 19'],
+        sale:{
+            price_after_sale:100,
+            percentage:50,
+        },
+        reviews_summary:{
+            reviews_count:324,
+            average_ratings:3.4
+        },
+        images:{
+            red : [
+                {
+                    image_details: "front image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_1,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_2,
+                },
+                {
+                    image_details: "side image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_3,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_4,
+                },
+                {
+                    image_details: "back image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_5,
+                }
+            ],
+            blue : [
+                {
+                    image_details: "front image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_10,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_11,
+                },
+                {
+                    image_details: "side image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_12,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_13,
+                },
+            ],
+            green : [
+                {
+                    image_details: "front image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_6,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_7,
+                },
+                {
+                    image_details: "side image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_8,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_9,
+                },
+            ]
+        }
+    },
+    {
+        id:4,
+        name:"Brooks sport shoes",
+        price:150,
+        thumbnail:Hoody2,
+        quantity:400,
+        type:"men shoes",
+        sizes:['W 5 / M 6.5', 'W 6 / M 8.5', 'W 10.5 / M 9','W 12.5 / M 14', 'W 17.5 / M 19'],
+        sale:{
+            price_after_sale:100,
+            percentage:50,
+        },
+        reviews_summary:{
+            reviews_count:324,
+            average_ratings:3.4
+        },
+        images:{
+            red : [
+                {
+                    image_details: "front image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_1,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_2,
+                },
+                {
+                    image_details: "side image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_3,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_4,
+                },
+                {
+                    image_details: "back image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_5,
+                }
+            ],
+            blue : [
+                {
+                    image_details: "front image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_10,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_11,
+                },
+                {
+                    image_details: "side image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_12,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_13,
+                },
+            ],
+            green : [
+                {
+                    image_details: "front image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_6,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_7,
+                },
+                {
+                    image_details: "side image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_8,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_9,
+                },
+            ]
+        }
+    },
     {
         id:6,
         name:"Brooks sport shoes",
         price:150,
-        colors:["white"],
         thumbnail:Hoody2,
         quantity:400,
         type:"men shoes",
+        sizes:['W 5 / M 6.5', 'W 6 / M 8.5', 'W 10.5 / M 9','W 12.5 / M 14', 'W 17.5 / M 19'],
         sale:{
             price_after_sale:100,
             percentage:50,
+        },
+        reviews_summary:{
+            reviews_count:324,
+            average_ratings:3.4
+        },
+        images:{
+            red : [
+                {
+                    image_details: "front image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_1,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_2,
+                },
+                {
+                    image_details: "side image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_3,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_4,
+                },
+                {
+                    image_details: "back image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_5,
+                }
+            ],
+            blue : [
+                {
+                    image_details: "front image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_10,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_11,
+                },
+                {
+                    image_details: "side image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_12,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_13,
+                },
+            ],
+            green : [
+                {
+                    image_details: "front image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_6,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_7,
+                },
+                {
+                    image_details: "side image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_8,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_9,
+                },
+            ]
         }
     },
     {
         id:23,
         name:"Brooks sport shoes",
         price:150,
-        colors:["white"],
         thumbnail:Hoody2,
         quantity:400,
         type:"men shoes",
+        sizes:['W 5 / M 6.5', 'W 6 / M 8.5', 'W 10.5 / M 9','W 12.5 / M 14', 'W 17.5 / M 19'],
         sale:{
             price_after_sale:100,
             percentage:50,
+        }, 
+        reviews_summary:{
+            reviews_count:324,
+            average_ratings:3.4
+        },
+        images:{
+            red : [
+                {
+                    image_details: "front image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_1,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_2,
+                },
+                {
+                    image_details: "side image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_3,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_4,
+                },
+                {
+                    image_details: "back image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_5,
+                }
+            ],
+            blue : [
+                {
+                    image_details: "front image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_10,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_11,
+                },
+                {
+                    image_details: "side image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_12,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_13,
+                },
+            ],
+            green : [
+                {
+                    image_details: "front image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_6,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_7,
+                },
+                {
+                    image_details: "side image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_8,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_9,
+                },
+            ]
         }
+
     },
     {
         id:32,
         name:"Brooks sport shoes",
         price:150,
-        colors:["white"],
         thumbnail:Hoody2,
         quantity:400,
         type:"men shoes",
+        sizes:['W 5 / M 6.5', 'W 6 / M 8.5', 'W 10.5 / M 9','W 12.5 / M 14', 'W 17.5 / M 19'],
         sale:{
             price_after_sale:100,
             percentage:50,
+        },
+        reviews_summary:{
+            reviews_count:324,
+            average_ratings:3.4
+        },
+        images:{
+            red : [
+                {
+                    image_details: "front image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_1,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_2,
+                },
+                {
+                    image_details: "side image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_3,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_4,
+                },
+                {
+                    image_details: "back image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_5,
+                }
+            ],
+            blue : [
+                {
+                    image_details: "front image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_10,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_11,
+                },
+                {
+                    image_details: "side image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_12,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_13,
+                },
+            ],
+            green : [
+                {
+                    image_details: "front image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_6,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_7,
+                },
+                {
+                    image_details: "side image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_8,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_9,
+                },
+            ]
         }
     },
     {   
         id:435,
         name:"Brooks sport shoes",
         price:150,
-        colors:["white"],
         thumbnail:Hoody2,
         quantity:400,
         type:"men shoes",
-        
+        sizes:['W 5 / M 6.5', 'W 6 / M 8.5', 'W 10.5 / M 9','W 12.5 / M 14', 'W 17.5 / M 19'],
+        reviews_summary:{
+            reviews_count:324,
+            average_ratings:3.4
+        },
+        images:{
+            red : [
+                {
+                    image_details: "front image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_1,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_2,
+                },
+                {
+                    image_details: "side image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_3,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_4,
+                },
+                {
+                    image_details: "back image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_5,
+                }
+            ],
+            blue : [
+                {
+                    image_details: "front image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_10,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_11,
+                },
+                {
+                    image_details: "side image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_12,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_13,
+                },
+            ],
+            green : [
+                {
+                    image_details: "front image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_6,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_7,
+                },
+                {
+                    image_details: "side image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_8,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_9,
+                },
+            ]
+        }
     },
     {
         id:43,
         name:"Brooks sport shoes",
         price:240,
-        colors:["white"],
         thumbnail:Hoody2,
         quantity:400,
         type:"men shoes",
+        sizes:['W 5 / M 6.5', 'W 6 / M 8.5', 'W 10.5 / M 9','W 12.5 / M 14', 'W 17.5 / M 19'],
         sale:{
             price_after_sale:200,
             percentage:20,
+        },
+        reviews_summary:{
+            reviews_count:324,
+            average_ratings:3.4
+        },
+        images:{
+            red : [
+                {
+                    image_details: "front image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_1,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_2,
+                },
+                {
+                    image_details: "side image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_3,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_4,
+                },
+                {
+                    image_details: "back image",
+                    color:"red",
+                    size:"xl",
+                    url: jordan4_5,
+                }
+            ],
+            blue : [
+                {
+                    image_details: "front image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_10,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_11,
+                },
+                {
+                    image_details: "side image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_12,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"blue",
+                    size:"xl",
+                    url: jordan4_13,
+                },
+            ],
+            green : [
+                {
+                    image_details: "front image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_6,
+                },
+                {
+                    image_details: "front 2  image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_7,
+                },
+                {
+                    image_details: "side image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_8,
+                },
+                {
+                    image_details: "side 2 image",
+                    color:"green",
+                    size:"xl",
+                    url: jordan4_9,
+                },
+            ]
         }
     }
 ]

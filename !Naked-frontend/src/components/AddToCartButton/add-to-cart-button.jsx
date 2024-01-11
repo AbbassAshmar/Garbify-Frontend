@@ -12,18 +12,21 @@ const AddToCart = styled.button`
 width : 100%;
 height:8.4vh;
 border-radius:7px;
-max-height: 50px;
-background:${({loading})=> loading?'grey':'black'};
+max-height: 60px;
+background:${({$background})=>$background}; 
 color:white;
 border:none;
 outline:none;
-margin : 0 0 .4rem 0;
 display:flex;
 align-items:center;
 justify-content:center;
 cursor:pointer;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
+
+&:disabled{
+    background:grey;
+}
 `
 const OutOfStock = styled.button`
 background:#9C9C9C;
@@ -61,19 +64,18 @@ const cartData1={
     },
 }
 
-export default function AddToCartButton({product, color,size,availableQuantity}){
+export default function AddToCartButton({background,style,addToCartLoading,setAddToCartLoading,product_id,color,size,availableQuantity}){
     const userContext = useUserState();
     const {sendRequest, serverError} = useSendRequest(userContext);
 
     const [cartData,setCartData] = useState(cartData1);
-    const [buttonLoading,setButtonLoading] = useState(false);
     const [showPopUpShoppingCart, setShowPopUpShoppingCart] = useState(false);
 
     async function handleAddToCartClick(e){
-        setButtonLoading(true)
+        setAddToCartLoading(true)
 
         let payload = {
-            product_id : product.id,
+            product_id ,
             color,
             size,
             quantity:1,
@@ -87,17 +89,17 @@ export default function AddToCartButton({product, color,size,availableQuantity})
             setShowPopUpShoppingCart(true)
         }
 
-        setButtonLoading(false)
+        setAddToCartLoading(false)
     }
         
     return (
-        <div>
+        <>
             <SuccessOrErrorPopUp serverError={serverError} />
 
             {
                 availableQuantity > 0 && 
-                <AddToCart disabled={buttonLoading || ""} loading={buttonLoading} onClick={handleAddToCartClick}>
-                    {buttonLoading ?<Loading style={{transform:"scale(.2)"}}/> : 
+                <AddToCart $background={background?background:'black'} style={style} disabled={addToCartLoading || ""} onClick={handleAddToCartClick}>
+                    {addToCartLoading ?<Loading style={{transform:"scale(.2)"}}/> : 
                     <>Add to Cart &nbsp;<i className="fa-solid fa-cart-shopping"/></>}
                 </AddToCart>
             }
@@ -111,6 +113,6 @@ export default function AddToCartButton({product, color,size,availableQuantity})
                 showPopUpShoppingCart && 
                 <PopUpShoppingCart cartData={cartData} setShow={setShowPopUpShoppingCart}/>
             }
-        </div>
+        </>
     )
 }
