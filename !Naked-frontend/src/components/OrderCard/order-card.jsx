@@ -379,7 +379,6 @@ export default function OrderCard({order}){
                     })
                 }
             </ProductsContainer>
-
             <Footer>
                 {
                     order.status==="paid" && 

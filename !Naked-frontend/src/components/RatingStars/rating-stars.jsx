@@ -25,9 +25,11 @@ export function ratingToStars(rating){
         result.push("half")
         i++;
     }
+
     for (; i <5 ; i++){
         result.push('empty')
     }
+
     return result;
 }
 
@@ -35,10 +37,10 @@ export function ratingToStars(rating){
 export default function RatingStars({style,rating,width='15px'}){
     return (
         <Stars style={style}>
-            {ratingToStars(rating).map((value)=>{
-                if (value === "star") return <Star style={{width:`${width}`}} src={star} />
-                if (value=== "half") return <Star style={{width:`${width}`}} src={half_star} />
-                if (value=== "empty") return <Star style={{width:`${width}`}} src={empty_star} /> 
+            {ratingToStars(rating).map((value,i)=>{
+                if (value === "star") return <Star key={i} style={{width:`${width}`}} src={star} />
+                if (value=== "half") return <Star key={i} style={{width:`${width}`}} src={half_star} />
+                if (value=== "empty") return <Star key={i} style={{width:`${width}`}} src={empty_star} /> 
             })}
         </Stars>
     )

@@ -16,16 +16,15 @@ const Head = styled.div`
 display:flex;
 width:100%;
 justify-content:space-between;
+padding: 0 min(2rem ,4%);
 align-items:center;
 @media screen and (max-width:800px){
     position:sticky;
     top:0;
     height:5vh;
-    z-index:200;
+    z-index:90;
     background:white;
 }
-padding: 0 min(2rem ,4%);
-
 `
 const Main = styled.div`
 display:flex;

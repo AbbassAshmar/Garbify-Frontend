@@ -107,7 +107,7 @@ border-radius:2px;
 object-fit:cover;
 flex:1;
 max-width:80px;
-max-height:80px;
+
 `
 const SizesContainer = styled.div`
 font-weight:600;
@@ -136,6 +136,7 @@ padding: .3em .8em ;
 border:${({$border})=>$border};
 border-radius:2px;
 cursor:pointer;
+font-size:clamp(.65rem,1.8vw,.8rem);
 background:white;
 transition:background .3s, box-shadow .3s;
 &:hover{
@@ -224,8 +225,6 @@ height:5vh;
 `
 
 export function AvailableSizes({sizePicked,setSizePicked,product,handleSizeGuideClick=null}){
-    
-
     if (!product?.sizes) return <></>
 
     function handleSizeClick(size){
@@ -244,6 +243,7 @@ export function AvailableSizes({sizePicked,setSizePicked,product,handleSizeGuide
                 {product.sizes.map((size)=>{
                     return (
                         <Size   
+                            key={size}
                             $border={sizePicked == size ? "1px solid #00C2FF":"1px solid #D8DBE0"}
                             onClick={(e)=> {
                                 e.preventDefault()
@@ -274,6 +274,7 @@ export function AvailableColors({setColorPicked,colorPicked,product}){
             { 
                 Object.keys(product.images).map((color)=>{
                     return(<ColorImage 
+                        key={color}
                         $border={colorPicked === color?"2px solid #00C2FF":"none"}
                         onClick={(e)=>{
                             e.preventDefault; 

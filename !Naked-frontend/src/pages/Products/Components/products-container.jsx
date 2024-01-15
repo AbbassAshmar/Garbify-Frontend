@@ -17,7 +17,6 @@ const TagsContainer= styled.div`
 display:flex;
 gap:2%;
 margin: 0 0 13px 0;
-
 `
 const Tag = styled.button`
 background:none;
@@ -118,12 +117,12 @@ export default function ProductsContainer(props){
                 }
             </TagsContainer>
             <div style={{display:'flex', flexDirection:'column',gap:'min(7vh,40px)'}}>
-            <Products>
-                {products && products.map((product) =>{
-                    return <ProductCard product={product}/>
-                })}
-            </Products>
-            <Pagination TotalPagesCount={TotalPagesCount} />
+                <Products>
+                    {products && products.map((product) =>{
+                        return <ProductCard key={product.id} product={product}/>
+                    })}
+                </Products>
+                <Pagination TotalPagesCount={TotalPagesCount} />
             </div>
         </Container>
     )
