@@ -1,6 +1,7 @@
-import styled from "styled-components";
 import ReactDOM from 'react-dom';
+import styled from "styled-components";
 import { useEffect, useState } from "react";
+import {motion, AnimatePresence} from "framer-motion";
 
 const Container = styled.div`
 width:50%;
@@ -64,7 +65,7 @@ font-weight:600;
 cursor:pointer;
 `
 
-function PopUp({color,text,status,setSettings,serverError}){
+function PopUp({color,text,status,setSettings,serverError,show}){
     function handleCloseButtonClick(e){
         serverError.get() && serverError.set(false);
         setSettings((prevSettings) => ({ ...prevSettings, show: false, status: "", message: "" }));
@@ -72,24 +73,30 @@ function PopUp({color,text,status,setSettings,serverError}){
 
     return(
         <>
-        {ReactDOM.createPortal(
-        <Container $color={color}>
-            <Content>
-                <div style={{display:'flex',gap:'20px',alignItems:"center"}}>
-                    <StatusCircle $color={color}>
-                        {status=="Error" && <Icon className="fa-solid fa-x"/>}
-                        {status=="Success" && <Icon className="fa-solid fa-check"/>}
-                    </StatusCircle>
-                    <Text>
-                        <Header $color={color}>{status}</Header>
-                        <Message>{text}</Message>
-                    </Text>
-                </div>
-                <ClosePopUp className="fa-solid fa-x" onClick={handleCloseButtonClick}/>
-            </Content>
-        </Container>,
-        document.body
-        )}
+            {
+                ReactDOM.createPortal(
+                <AnimatePresence>
+                    {show && 
+                        <Container as={motion.div} initial={{ x: 30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 30, opacity: 0 }} $color={color}>
+                            <Content>
+                                <div style={{display:'flex',gap:'20px',alignItems:"center"}}>
+                                    <StatusCircle $color={color}>
+                                        {status=="Error" && <Icon className="fa-solid fa-x"/>}
+                                        {status=="Success" && <Icon className="fa-solid fa-check"/>}
+                                    </StatusCircle>
+                                    <Text>
+                                        <Header $color={color}>{status}</Header>
+                                        <Message>{text}</Message>
+                                    </Text>
+                                </div>
+                                <ClosePopUp className="fa-solid fa-x" onClick={handleCloseButtonClick}/>
+                            </Content>
+                        </Container>
+                    }
+                </AnimatePresence>,
+                document.body
+                )   
+            }
         </>
     )
 }
@@ -120,13 +127,14 @@ export default function SuccessOrErrorPopUp(props){
         }
     } , [props.serverError.get()])
 
-    return settings?.show ? (
+    return (
         <PopUp
-            status={settings.status}
-            text={settings.message}
-            color={settings.status === "Error" ? "rgba(255,0,0,0.8)" : "rgba(0,255,0,.8)"}
-            setSettings={setSettings}
-            serverError={props.serverError}
+        show={settings.show}
+        status={settings.status}
+        text={settings.message}
+        color={settings.status === 'Error' ? 'rgba(255,0,0,0.8)' : 'rgba(0,255,0,.8)'}
+        setSettings={setSettings}
+        serverError={props.serverError}
         />
-    ) : null;
+    );
 }

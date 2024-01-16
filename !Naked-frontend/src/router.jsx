@@ -11,6 +11,7 @@ import Favorites from "./pages/Favorites/favorites"
 import OtherUsersFavoritesLists from "./pages/OtherUsersFavoritesLists/other-users-favorites-lists"
 import OtherUsersFavorites from "./pages/OtherUsersFavorites/other-users-favorites"
 import User from "./pages/User/user"
+import Reviews from "./pages/Reviews/reviews"
 
 export const router = createBrowserRouter([
     {
@@ -53,7 +54,15 @@ export const router = createBrowserRouter([
             {
                 path:"/user",
                 element:<User />
-            }
+            },
+            {
+                path:"/reviews",
+                element:<Reviews />
+            },
+            {
+                path:"*",
+                element : <div>Not Found</div>
+            },
         ],
     },
     {
@@ -65,9 +74,6 @@ export const router = createBrowserRouter([
         element:<Login />
     },
     
-    {
-        path:"*",
-        element : <div>Not Found</div>
-    },
+    
 
 ])

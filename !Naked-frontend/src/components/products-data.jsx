@@ -39,7 +39,87 @@ export const USER = {
     email:"KuwaitIsMine@gmail.com",
     profile_picture:Hoody,
 };
-
+export const REVIEWS_USERS_PRODUCTS = [
+    {
+        'id' : 1,
+        'user_weight' : '324 kg',
+        'user_height' : '234 cm',
+        'created_at'  : '2023-02-03',
+        'helpful_count' : 234,
+        'product_rating' : 4.5,
+        'color' : 'red',
+        'size' : 'xl',
+        'title' : 'best product ever, the matrial is not that good',
+        'text' : 'The matrial is bad , service was ok, the service guy cursed my family buy it not important, why would you hire indians tho?',
+        'images' : [
+            Hoody2,
+            Hoody
+        ],
+        'user' : {
+            'id' : 3,
+            'name' : 'User1_dummy',
+            'email': 'user1_dummy@gmail.com',
+            'profile_picture' : Hoody
+        },
+        'product' : {
+            'thumbnail' : Hoody,
+            'id' : 4,
+            'name' :  "Shoes with night light",
+            'quantity' : 234,
+            'price' : 430,
+            'type' : 'top notch',
+            "colors" : ['red','brown'],
+            "created_at": '2023-03-02',
+            'reviews_summary':{
+                'average_ratings': 4.5,
+                'reviews_count' : 345,
+            },
+            "sale" : {
+                'price_after_sale': 215,
+                'percentage': 50.00 ,
+                'starts_at' :  '2012-02-03',
+                'ends_at' :  '2025-05-06',
+            }
+        }
+    },
+    {
+        'id' : 2,
+        'user_weight' : '324 kg',
+        'user_height' : '234 cm',
+        'created_at'  : '2023-02-03',
+        'helpful_count' : 234,
+        'product_rating' : 4.5,
+        'color' : 'red',
+        'size' : 'xl',
+        'title' : 'best product ever, the matrial is not that good',
+        'text' : 'The matrial is bad , service was ok, the service guy cursed my family buy it not important, why would you hire indians tho?',
+        'images' : [
+            Hoody2,
+            Hoody
+        ],
+        'user' : {
+            'id' : 3,
+            'name' : 'User1_dummy',
+            'email': 'user1_dummy@gmail.com',
+            'profile_picture' : Hoody
+        },
+        'product' : {
+            'thumbnail' : Hoody,
+            'id' : 4,
+            'name' :  "Shoes with night light",
+            'quantity' : 234,
+            'price' : 430,
+            'type' : 'top notch',
+            "colors" : ['red','brown'],
+            "created_at": '2023-03-02',
+            'reviews_summary':{
+                'average_ratings': 4.5,
+                'reviews_count' : 345,
+            },
+        }
+    }
+    
+]
 export const FILTERS =[
     {
         name : "Categories",

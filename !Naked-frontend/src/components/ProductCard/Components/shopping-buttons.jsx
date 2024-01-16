@@ -3,7 +3,7 @@ import {motion,AnimatePresence} from "framer-motion";
 import { useState } from "react";
 import { Icon } from "../product-card";
 
-const ButtonsDisplayer = styled.div`
+export const ButtonsDisplayer = styled.div`
 height:25px;
 background:#00C2FF;
 padding: 0 8px;
@@ -14,19 +14,15 @@ justify-content:center;
 border-radius:30px;
 transition:width .3s;
 width:${({$hover})=>$hover?"65px":"25px"};
-
 @media screen and (max-width:1300px){
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
 }
 @media screen and (max-width:600px){
-    width: 22px;
-    height: 22px;
-}
-@media screen and (max-width:460px){
     width: 20px;
     height: 20px;
 }
+
 `
 
 const ButtonsContainer = styled.div`
@@ -37,6 +33,7 @@ height: 100%;
 width: 100%;
 justify-content: space-between;
 align-items: center;
+
 `
 
 const Button = styled.button`
@@ -92,26 +89,25 @@ ${Button}:hover &{
 `
 
 const ButtonsDropDown = styled.div`
-bottom: -164%;
+top:105%;
+overflow:hidden;
 right:62%;
 background: #00C2FF;
+border-radius: 4px;
+z-index: 1;
+transform-origin:center;
+position:absolute;
+transition:max-height .5s;
+margin: 0 auto;
+`
+const ButtonsDropDownContent = styled.div`
+padding:3px 5px;
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-position: absolute;
-padding: 3px 5px;
 gap:4px;
-border-radius: 4px;
-z-index: 1;
-@media screen and (max-width:600px){
-    bottom: -174%;
-    right:62%;
-}
-@media screen and (max-width:460px){
-    bottom: -184%;
-    right:62%;
-}
+width:100%;
 `
 
 const IconContainer = styled.div`
@@ -127,7 +123,7 @@ justify-content:center;
 
 export default function ShoppingButtons({actionLoading,setShowColorsSizes}){
     const [hover, setHover] = useState(false);
-    
+
     function handleButtonsDisplayerClick(){
         if (window.innerWidth < 1300)
         setHover(!hover);
@@ -172,18 +168,22 @@ export default function ShoppingButtons({actionLoading,setShowColorsSizes}){
                 </ButtonsContainer>
             }
 
-            { hover && window.innerWidth < 1300 &&
-                <AnimatePresence as={motion.div} initial={{height:0}} animate={{height:100}} exit={{height:0}}>
-                    <ButtonsDropDown>
-                        <Button onClick={handleBuyNowClick}>
-                            Buy now <Icon className="fa-regular fa-credit-card"/>
-                        </Button>
-                        <Button onClick={handleAddToCartClick}>
-                            Add to cart <Icon className="fa-solid fa-cart-shopping"/>
-                        </Button>
-                    </ButtonsDropDown>
-                </AnimatePresence>
+            <AnimatePresence>
+            {hover && window.innerWidth < 1300 &&
+            <ButtonsDropDown as={motion.div} initial={{ height: 0 }} animate={{ height: "auto" }} transition={{ duration: .3}} exit={{ height: 0 }} key={"container"}>
+                <ButtonsDropDownContent>
+                    <Button onClick={handleBuyNowClick}>
+                        Buy now <Icon className="fa-regular fa-credit-card"/>
+                    </Button>
+                    <Button onClick={handleAddToCartClick}>
+                        Add to cart <Icon className="fa-solid fa-cart-shopping"/>
+                    </Button>
+                </ButtonsDropDownContent>
+            </ButtonsDropDown>
             }
+            </AnimatePresence>
+            
+            
         </ButtonsDisplayer>
     )
 }

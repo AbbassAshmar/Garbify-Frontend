@@ -6,7 +6,7 @@ import {useSendRequest} from "../../hooks/use-fetch-data";
 import useUserState from "../../hooks/use-user-state";
 import SuccessOrErrorPopUp from "../SuccessOrErrorPopUp/success-or-error-pop-up";
 import OverlayColorsSizesMenu from "./Components/overlay-colors-sizes-menu";
-import ShoppingButtons from "./Components/shopping-buttons";
+import ShoppingButtons, { ButtonsDisplayer } from "./Components/shopping-buttons";
 import PopUpColorsSizesMenu from "./Components/pop-up-colors-sizes-menu";
 
 const Container = styled.div`
@@ -29,12 +29,15 @@ const HighLight =styled.div`
 background:#00C2FF;
 position:absolute;
 padding:.2rem .4rem;
+border-radius: 8px 0 0 0;
+
 `
 const Image  = styled.img`
 object-fit: cover; 
 width: 100%;
 height: 100%;
 margin:0;
+border-radius: 8px 8px 0 0;
 `
 const Details = styled.div`
 margin:0;
@@ -125,35 +128,21 @@ transition:transform .3s;
 `
 
 
-const ToggleFavoritesButton = styled.button`
-outline:none;
-position:relative;
-width:25px;
-height:25px;
-padding:1px;
-display:flex;
-align-items:center;
-justify-content:center;
+const ToggleFavoritesButton = styled(ButtonsDisplayer)`
 background:white;
 border:1px solid #C0C3C7;
-cursor:pointer;
-border-radius:50%;
-
+padding: 2px 0 0 0;
 &:hover ${Icon}{
-    transform:scale(1.1);
-}
-
-@media screen and (max-width:1300px){
-    width: 24px;
-    height: 24px;
+    transform:scale(1.05);
 }
 @media screen and (max-width:600px){
-    width: 22px;
-    height: 22px;
+    padding:0;
 }
-@media screen and (max-width:460px){
-    width: 20px;
-    height: 20px;
+@media screen and (max-width:400px){
+    padding:1px 0 0 0;
+}
+@media screen and (max-width:380){
+    padding:0 0 0 0;
 }
 `
 

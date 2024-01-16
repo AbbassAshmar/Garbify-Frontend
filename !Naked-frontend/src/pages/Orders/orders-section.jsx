@@ -42,7 +42,8 @@ export default function OrdersSection(){
     let endpoint_uri = "/api/users/users/orders";
     let url = constructUrl(endpoint_uri,searchParams)
     let {data, error, loading } = useFetchData(url,[searchParams],userContext);
-    let orders = data?.data?.orders || ORDERS;
+
+    let orders = data?.orders || ORDERS;
     let TotalPagesCount =data?.metadata?.pages_count || 30;
 
     if (loading){

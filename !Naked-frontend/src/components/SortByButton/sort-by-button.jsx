@@ -18,14 +18,12 @@ background:none;
 outline:none;
 border:none;
 cursor:pointer;
-display:flex;
-align-items:flex-end;
 font-weight:inherit;
 font-size:inherit;
 line-height:1;
 display:flex;
 justify-content:center;
-align-items:center;
+align-items:flex-end;
 gap:5px;
 &:hover{
     opacity:.7;
@@ -72,7 +70,7 @@ font-size:clamp(.6rem,2vw,.9rem);
 
 `
 
-export default function SortByButton(props){
+export default function SortByButton({style,removeUnder800px,sortOptions}){
     const [showList, setShowList] = useState(false)
     const [urlSearchParams,setUrlSearchParams] = useSearchParams()
 
@@ -100,13 +98,13 @@ export default function SortByButton(props){
     }
     
     return (
-        <Container style={props.style} $removeUnder800px={props.removeUnder800px}>
+        <Container style={style} $removeUnder800px={removeUnder800px}>
             <Button ref={button} onClick={handleSortButtonClick}>
                 <p>
                 {
                     // update button text if an options is clicked to " sort by : options clicked "
-                    urlSearchParams.get("sort+by")&&props.sortOptions[urlSearchParams.get("sort+by")]?
-                    `Sort By : ${props.sortOptions[urlSearchParams.get("sort+by")]}`
+                    urlSearchParams.get("sort+by")&&sortOptions[urlSearchParams.get("sort+by")]?
+                    `Sort By : ${sortOptions[urlSearchParams.get("sort+by")]}`
                     :"Sort By"
                 }
                 </p>
@@ -115,8 +113,8 @@ export default function SortByButton(props){
             <SortList ref={list} $height={showList?"100vh":"0px"}>
                 <Options>
                     {
-                        Object.keys(props.sortOptions).map((key)=>{
-                            return  <Option onClick={(e)=>handleOptionClick(key)}>{props.sortOptions[key]}</Option>
+                        Object.keys(sortOptions).map((key)=>{
+                            return  <Option onClick={(e)=>handleOptionClick(key)}>{sortOptions[key]}</Option>
                         })
                     }
                 </Options>

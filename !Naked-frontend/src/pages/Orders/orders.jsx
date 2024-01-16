@@ -75,11 +75,11 @@ const Custom_Header = styled(Header)`
 }
 `
 const OrderBytoSortBy={
-    "name-ASC":"From A-Z",
-    "created_at-DESC":"Newest-Oldest",
-    "created_at-ASC":"Oldest-Newest",
-    "total_cost-DESC":"Price: High-Low",
-    "total_cost-ASC":"Price: Low-High",
+    "name+ASC":"From A-Z",
+    "created_at+DESC":"Newest-Oldest",
+    "created_at+ASC":"Oldest-Newest",
+    "total_cost+DESC":"Price: High-Low",
+    "total_cost+ASC":"Price: Low-High",
 }
 
 // add current search params to the end of a url
