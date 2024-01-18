@@ -76,11 +76,13 @@ export default function ReviewsSection({product_id}){
             <Reviews>
                 {reviews && reviews.map((review)=>{
                     return(
-                        <ReviewCard 
+                        <div style={{padding: 'min(2rem ,5%) min(2rem ,5%)'}}>
+                            <ReviewCard 
                             key={review.id}
                             review={review}
                             user={review.user}
-                        />
+                            />
+                        </div>
                     )
                 })}  
             </Reviews>

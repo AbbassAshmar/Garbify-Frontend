@@ -9,19 +9,15 @@ import OverlayColorsSizesMenu from "./Components/overlay-colors-sizes-menu";
 import ShoppingButtons, { ButtonsDisplayer } from "./Components/shopping-buttons";
 import PopUpColorsSizesMenu from "./Components/pop-up-colors-sizes-menu";
 
-const Container = styled.div`
+export const ProductCardContainer = styled.div`
 min-width:${({$min_width})=>{return ($min_width?$min_width:"auto")}};
-// overflow:hidden;
 height:auto;
 border-radius:6px;
 min-height:200px;
 `
-const LinkContainer = styled(Link)`
-flex:4;
-aspect-ratio:1/1.04;
+export const ProductLinkImage = styled(Link)`
 `
-const ImageContainer = styled.div`
-flex:4;
+export const ProductCardImageContainer = styled.div`
 aspect-ratio:1/1.04;
 position:relative;
 `
@@ -30,16 +26,15 @@ background:#00C2FF;
 position:absolute;
 padding:.2rem .4rem;
 border-radius: 8px 0 0 0;
-
 `
-const Image  = styled.img`
+export const ProductCardImage  = styled.img`
 object-fit: cover; 
 width: 100%;
 height: 100%;
 margin:0;
 border-radius: 8px 8px 0 0;
 `
-const Details = styled.div`
+export const ProductCardDetailsContainer = styled.div`
 margin:0;
 display:flex;
 flex-direction:column;
@@ -56,6 +51,7 @@ gap:10px;
 justify-content:center;
 align-items:center;
 `
+
 const Rating = styled.p`
 font-weight:600;
 font-size:clamp(.7rem,2vw,.9rem)
@@ -128,7 +124,7 @@ transition:transform .3s;
 `
 
 
-const ToggleFavoritesButton = styled(ButtonsDisplayer)`
+const HeartButton = styled(ButtonsDisplayer)`
 background:white;
 border:1px solid #C0C3C7;
 padding: 2px 0 0 0;
@@ -161,7 +157,7 @@ margin:0;
 `
 
 
-function ToggleFavoritesComponent(){
+export function ToggleFavoritesButton({style}){
     const userContext = useUserState();
     const {sendRequest,serverError} = useSendRequest(userContext);
 
@@ -187,12 +183,46 @@ function ToggleFavoritesComponent(){
     return (
         <>
             <SuccessOrErrorPopUp serverError={serverError} />
-            <ToggleFavoritesButton disabled={isLoading||""} onClick={handleHeartClick} >
+            <HeartButton style={style} disabled={isLoading||""} onClick={handleHeartClick} >
                 {isInFavorites?
                     <Icon style={{color:"red"}} className="fa-solid fa-heart"/>:
                     <Icon className="fa-regular fa-heart"/>
                 }
-            </ToggleFavoritesButton>
+            </HeartButton>
+        </>
+    )
+}
+
+export function ProductCardInfo({product,name_first=false}){
+    const renderRatingCont = ()=>{
+        return (
+            <RatingContainer>
+                <Rating>{product?.reviews_summary.average_ratings}</Rating>
+                <RatingStars rating={product?.reviews_summary.average_ratings} />
+                <ReviewsCount>
+                    ({product?.reviews_summary.reviews_count}
+                    <ReviewsWord> reviews</ReviewsWord>)
+                </ReviewsCount>
+            </RatingContainer>
+        )
+    }
+
+    if (name_first){
+        return(
+            <>
+                <Name>{product?.name}</Name>
+                {renderRatingCont()}
+                <Category>{product?.type}</Category>
+
+            </>
+        )
+    }
+    
+    return (
+        <>
+            {renderRatingCont()}
+            <Name>{product?.name}</Name>
+            <Category>{product?.type}</Category>
         </>
     )
 }
@@ -238,10 +268,10 @@ export default function ProductCard({product,min_width}){
         setActionLoading={setActionLoading}
         closeMenu={handleCloseSizesColorsMenu}/>
 
-        <Container onMouseLeave={handleCloseSizesColorsMenu} $min_width={min_width}>
+        <ProductCardContainer onMouseLeave={handleCloseSizesColorsMenu} $min_width={min_width}>
             <div style={{position:'relative'}}>
-                <LinkContainer to={`/product/${product?.name.replaceAll(" ",'-')}/${product?.id}`}>
-                    <ImageContainer>
+                <ProductLinkImage to={`/product/${product?.name.replaceAll(" ",'-')}/${product?.id}`}>
+                    <ProductCardImageContainer>
                         {product?.sale &&
                             <HighLight>
                                 <SalePercentage>
@@ -249,9 +279,9 @@ export default function ProductCard({product,min_width}){
                                 </SalePercentage>
                             </HighLight>
                         }
-                        <Image src={product?.thumbnail}/>
-                    </ImageContainer>
-                </LinkContainer>
+                        <ProductCardImage src={product?.thumbnail}/>
+                    </ProductCardImageContainer>
+                </ProductLinkImage>
                 <OverlayColorsSizesMenu 
                 product={product} 
                 sizePicked={sizePicked} 
@@ -262,26 +292,17 @@ export default function ProductCard({product,min_width}){
                 showMenu={showColorsSizesMenu} 
                 setActionLoading={setActionLoading}/>
             </div>
-            <Details>
-                <RatingContainer>
-                    <Rating>{product?.reviews_summary.average_ratings}</Rating>
-                    <RatingStars rating={product?.reviews_summary.average_ratings} />
-                    <ReviewsCount>
-                        ({product?.reviews_summary.reviews_count}
-                        <ReviewsWord> reviews</ReviewsWord>)
-                    </ReviewsCount>
-                </RatingContainer>
-                <Name>{product?.name}</Name>
-                <Category>{product?.type}</Category>
+            <ProductCardDetailsContainer>
+                <ProductCardInfo product={product} />
                 <PriceButtonsContainer>
                     {getPrice()}
                     <ButtonsContainer>
                         <ShoppingButtons actionLoading={actionLoading} setShowColorsSizes={setShowColorsSizesMenu}/>
-                        <ToggleFavoritesComponent />
+                        <ToggleFavoritesButton />
                     </ButtonsContainer>
                 </PriceButtonsContainer>
-            </Details>
-        </Container>
+            </ProductCardDetailsContainer>
+        </ProductCardContainer>
         </>
     )
 }

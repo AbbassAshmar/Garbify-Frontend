@@ -11,10 +11,12 @@ const ReviewsSection = styled.div`
 
 `
 const ReviewsContainer = styled.div`
-
+display:flex;
+flex-direction:column;
+gap:3rem;
 `
 
-export default function UserReviewsSection(){
+export default function UserReviewsContainer(){
     const userContext = useUserState();
     const [searchParams,setSearchParams] = useSearchParams();
     
@@ -30,11 +32,11 @@ export default function UserReviewsSection(){
     return (
         <ReviewsSection>
             <ReviewsContainer>
-                {reviews &&
+                {reviews && (
                     reviews.map((review)=>{
                         return <UserReviewCard review={review}/>
                     })
-                }
+                )}
             </ReviewsContainer>
             <Pagination TotalPagesCount={TotalPagesCount}/>
         </ReviewsSection>

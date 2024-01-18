@@ -42,7 +42,7 @@ export default function ShowFilter(props){
                         'filters'
                     }
                 </p>
-                <Icon className="fa-solid fa-filter"></Icon>
+                <Icon className="fa-solid fa-sliders"/>
             </Button>
         </div>
     )

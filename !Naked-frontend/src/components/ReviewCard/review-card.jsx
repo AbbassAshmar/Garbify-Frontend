@@ -8,11 +8,11 @@ import SuccessOrErrorPopUp from "../SuccessOrErrorPopUp/success-or-error-pop-up"
 
 const Container = styled.div`
 width:100%;
-border-bottom:2px solid #F1F4F9;
 display:flex;
 flex-direction:column;
 gap:2rem;
-padding: min(2rem ,5%) min(2rem ,5%);
+// border-bottom:2px solid #F1F4F9;
+// padding: min(2rem ,5%) min(2rem ,5%);
 @media screen and (max-width:800px){
     padding: 1rem 0;
 }
@@ -60,7 +60,7 @@ font-size:clamp(.7rem,2vw,.9rem);
 margin-left:8px;
 `
 const CommentContainer =styled.div`
-width:40%;
+width:60%;
 display:flex;
 flex-direction:column;
 gap:.4rem;
@@ -71,7 +71,7 @@ gap:.4rem;
 `
 const Title = styled.h2`
 font-weight:600;
-font-size:clamp(.7rem,2vw,.9rem);
+font-size:clamp(.8rem , 2.3vw ,1.1rem);
 `
 const Date= styled.div`
 font-weight:600;
@@ -88,8 +88,8 @@ width:100%;
 display:flex;
 justify-content:space-between;
 align-items:flex-end;
-gap:1.5rem;
-@media screen and (max-width:600px){
+gap:2rem;
+@media screen and (max-width:800px){
     flex-direction:column;
     align-items:flex-start;
 }
@@ -102,10 +102,15 @@ justify-content:flex-start;
 gap:.5rem;
 flex-wrap:wrap;
 max-width:80%;
+margin-top:1rem;
 `
 
 const Image = styled.img`
-width: max(10%,70px);
+// width: max(10%,80px);
+// width:150px;
+width:30%;
+max-width:300px;
+min-width:80px;
 height:100%;
 `
 

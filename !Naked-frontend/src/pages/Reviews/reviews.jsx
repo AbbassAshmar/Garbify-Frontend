@@ -4,10 +4,8 @@ import { Title } from "../Orders/orders";
 import SortByButton from "../../components/SortByButton/sort-by-button";
 import UserReviewCard from "./Components/user-review-card";
 import { useFetchData } from "../../hooks/use-fetch-data";
-import { useSearchParams } from "react-router-dom";
-import useUserState from "../../hooks/use-user-state";
 import Loading from "../../components/Loading/loading";
-import UserReviewsSection from "./Components/user-reviews-section";
+import UserReviewsContainer from "./Components/user-reviews-container";
 
 const Container = styled.div`
 
@@ -45,7 +43,7 @@ export default function Reviews(){
                     <Title>Your Reviews</Title>
                     <SortByButton style={SortByButtonStyle} sortOptions={sortOptions}/>
                 </Header>
-                <UserReviewsSection />
+                <UserReviewsContainer />
             </Content>
         </Container>
     )
