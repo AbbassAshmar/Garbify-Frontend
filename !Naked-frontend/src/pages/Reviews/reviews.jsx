@@ -7,6 +7,7 @@ import { useFetchData } from "../../hooks/use-fetch-data";
 import { useSearchParams } from "react-router-dom";
 import useUserState from "../../hooks/use-user-state";
 import Loading from "../../components/Loading/loading";
+import UserReviewsSection from "./Components/user-reviews-section";
 
 const Container = styled.div`
 
@@ -36,7 +37,6 @@ marginRight:"20px"
 
 
 export default function Reviews(){
-    
 
     return(
         <Container>
@@ -45,7 +45,7 @@ export default function Reviews(){
                     <Title>Your Reviews</Title>
                     <SortByButton style={SortByButtonStyle} sortOptions={sortOptions}/>
                 </Header>
-                
+                <UserReviewsSection />
             </Content>
         </Container>
     )

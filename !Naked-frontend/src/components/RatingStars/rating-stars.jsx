@@ -9,7 +9,11 @@ margin:0;
 display:flex;
 `
 const Star = styled.img`
-width:15px;
+width:${({$width})=>$width};
+
+@media screen and (max-width:600px){
+    width: ${({$width_600})=>$width_600};
+}
 `
 
 // converts rating (int) to array ([star,star,half,empty,empty])
@@ -34,13 +38,13 @@ export function ratingToStars(rating){
 }
 
 
-export default function RatingStars({style,rating,width='15px'}){
+export default function RatingStars({style,rating,width='15px',width_600='15px'}){
     return (
         <Stars style={style}>
             {ratingToStars(rating).map((value,i)=>{
-                if (value === "star") return <Star key={i} style={{width:`${width}`}} src={star} />
-                if (value=== "half") return <Star key={i} style={{width:`${width}`}} src={half_star} />
-                if (value=== "empty") return <Star key={i} style={{width:`${width}`}} src={empty_star} /> 
+                if (value === "star") return <Star key={i} $width={width} $width_600={width_600} src={star} />
+                if (value=== "half") return <Star key={i} $width={width} $width_600={width_600} src={half_star} />
+                if (value=== "empty") return <Star key={i} $width={width} $width_600={width_600} src={empty_star} /> 
             })}
         </Stars>
     )

@@ -15,6 +15,7 @@ const DEFAULT_USER = {
     profile_picture:defaultUserProfilePicture,
 }
 
+// tries to fetch user one time if a token exists
 export default function UserState({children}){
     const [token , setToken] = useState(localStorage.getItem("token")||null);
     const [user, setUser] = useState(DEFAULT_USER);

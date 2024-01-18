@@ -7,12 +7,13 @@ import RatingStars from "../../../components/RatingStars/rating-stars"
 const Container = styled.div`
 flex:1;
 background:white;
-position:sticky;
-top:60px;
+background :#F1F4F9 ;
+padding:2rem 3.5rem;
 gap:2rem;
 display:flex;
 flex-direction:column;
 overflow:hidden;
+scroll-behavior:smooth;
 @media screen and (max-width:600px){
     margin:0;
     position:static;
@@ -143,7 +144,11 @@ transition:background .3s, box-shadow .3s;
     box-shadow:3px 3px 5px rgba(0,0,0,.4);
 }
 `
-
+const ButtonsContainer = styled.div`
+display:flex;
+flex-direction:column;
+gap:1rem;
+`
 const AddToFavoritesButton = styled.button`
 background:white;
 color:black;
@@ -341,17 +346,19 @@ export default function DetailsContainer({quantity,product,setImagesColor,Images
             handleSizeGuideClick={handleSizeGuideClick}/>
 
             <div>
-                <AddToCartButton 
-                    product_id={product.id} 
-                    size={sizePicked} 
-                    color={ImagesColor} 
-                    availableQuantity={quantity}
-                    addToCartLoading={addToCartLoading}
-                    setAddToCartLoading={setAddToCartLoading}
-                />
-                <AddToFavoritesButton>
-                    Add to Favorites&nbsp;<i className="fa-solid fa-heart"/>
-                </AddToFavoritesButton>
+                <ButtonsContainer>
+                    <AddToCartButton 
+                        product_id={product.id} 
+                        size={sizePicked} 
+                        color={ImagesColor} 
+                        availableQuantity={quantity}
+                        addToCartLoading={addToCartLoading}
+                        setAddToCartLoading={setAddToCartLoading}
+                    />
+                    <AddToFavoritesButton>
+                        Add to Favorites&nbsp;<i className="fa-solid fa-heart"/>
+                    </AddToFavoritesButton>
+                </ButtonsContainer>
                 <BadgesContainer>
                     <ShippingReturnsBadge>
                         <i className="fa-solid fa-truck-fast"/>

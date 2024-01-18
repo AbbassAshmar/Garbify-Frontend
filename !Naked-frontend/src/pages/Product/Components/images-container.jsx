@@ -59,16 +59,15 @@ export default function ImagesContainer({imagesList,ImagesColor}){
             <SlideButtonCustom onClick={()=>handleLeftButtonClick(300)}  style={{right:"6%"}}>
                 <ArrowIcon className="fa-solid fa-arrow-right"/>
             </SlideButtonCustom>
-            {
-                ImagesColor&&imagesList[ImagesColor].map((image)=>{
+            {ImagesColor && (
+                imagesList[ImagesColor].map((image)=>{
                     return(
                         <ImageContainer>
                             <Image src={image.url} alt={image.image_details}/>
                         </ImageContainer>
                     )
                 })
-            }
-
+            )}
         </Container>
     )
 }

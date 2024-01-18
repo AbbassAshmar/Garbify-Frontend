@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import useUserState from "../../../hooks/use-user-state";
 import { useFetchData } from "../../../hooks/use-fetch-data";
 import { REVIEWS_USERS_PRODUCTS } from "../../../components/products-data";
+import Pagination from "../../../components/Pagination/pagination";
 
 const ReviewsSection = styled.div`
 
@@ -35,6 +36,7 @@ export default function UserReviewsSection(){
                     })
                 }
             </ReviewsContainer>
+            <Pagination TotalPagesCount={TotalPagesCount}/>
         </ReviewsSection>
     )
 }

@@ -36,11 +36,13 @@ display:flex;
 align-items:center;
 justify-content:center;
 `
+
 const Icon = styled.i`
 font-size:1.3rem;
 color:white;
 text-shadow:0px 1px 3px black;
 `
+
 const Text = styled.div`
 display:flex;
 flex-direction:column;

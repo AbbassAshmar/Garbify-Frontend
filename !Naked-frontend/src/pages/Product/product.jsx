@@ -8,10 +8,10 @@ import { PRODUCT } from "../../components/products-data";
 import ReviewsSection from "./Components/reviews-section";
 import { useFetchData } from "../../hooks/use-fetch-data";
 import Loading from "../../components/Loading/loading";
+import ImagesSlider from "./Components/images-slider";
 
 const Container = styled.div`
 width:100%;
-padding: min(2rem ,5%);
 display:flex;
 flex-direction:column;
 gap:4rem;
@@ -50,7 +50,8 @@ export default function Product(){
     return (
         <Container>
             <AboveTheFolds>
-                <ImagesContainer ImagesColor={ImagesColor} imagesList={product.images} />
+                {/* <ImagesContainer ImagesColor={ImagesColor} imagesList={product.images} /> */}
+                <ImagesSlider ImagesColor={ImagesColor} imagesList={product.images} />
                 <DetailsContainer 
                     quantity= {quantiy}
                     sizePicked={sizePicked} 
@@ -59,8 +60,10 @@ export default function Product(){
                     setImagesColor={setImagesColor} 
                     product={product}/>
             </AboveTheFolds>
-            <ProductsSlider title={"You may also like : "} url={"/api/products/"+id+"/similar"}/>
-            <ReviewsSection product_id={id}/>
+            <div style={{padding: '0 min(2rem ,5%)',display:'flex',flexDirection:'column',gap:'5rem'}}>
+                <ProductsSlider title={"You may also like : "} url={"/api/products/"+id+"/similar"}/>
+                <ReviewsSection product_id={id}/>
+            </div>
         </Container>
     )
 }

@@ -37,6 +37,7 @@ top:40%;
 border:none;
 outline:none;
 transition:background .3s;
+z-index:70;
 &:hover{
     background:rgba(0,194,255,1);
 }
@@ -68,9 +69,7 @@ export default function ProductsSlider({title ,url}){
 
     return(
         <Container> 
-            <Title>
-                {title}
-            </Title>
+            <Title>{title}</Title>
             <SliderContainer>
                 <SlideButton onClick={()=>{handleLeftButtonClick(-300)}} style={{left:"1%"}}>
                     <ArrowIcon className="fa-solid fa-arrow-left"/>
@@ -83,15 +82,9 @@ export default function ProductsSlider({title ,url}){
                         products.map((product)=>{
                             return(
                                 <ProductCard 
+                                    key={product.id}
                                     min_width={"max(200px ,28%)"}
-                                    pk ={product.pk}
-                                    name={product.name} 
-                                    price={product.price} 
-                                    quantity={product.quantity}
-                                    colors={product.colors}
-                                    type={product.type}
-                                    thumbnail={product.thumbnail}
-                                    sale={product.sale}
+                                    product={product}
                                 />
                             )
                         })
