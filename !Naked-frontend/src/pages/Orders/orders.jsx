@@ -114,8 +114,6 @@ export default function Orders(){
     const [page,setPage] = useState("orders")
     const [searchParams, setSearchParams] = useSearchParams()
 
-   
-
     function handlePageTitleClick(page){
         setPage(page);
     }
@@ -147,6 +145,7 @@ export default function Orders(){
         </Container>
     )
 }
+
 // $table->id();
 // $table->timestamps();
 // $table->text("status");

@@ -1,6 +1,7 @@
 import { useEffect, useState ,useRef} from "react"
 import { useSearchParams } from "react-router-dom"
 import styled from "styled-components"
+import useClickOutside from "../../hooks/use-click-outside"
 
 const Container = styled.div`
 position:relative;
@@ -40,13 +41,14 @@ font-size:inherit;
 const SortList =styled.div`
 position:absolute;
 background:white;
-top:110%;
-left:0;
+box-shadow:0px 0px 4px rgba(0,0,0,0.8);
+top:125%;
+right:0;
 max-height:${({$height})=>$height};
 width: 100%;
 min-width: fit-content;
 height:auto;
-border-radius: 0 0 10px 10px;
+border-radius: 7px 0 7px 7px;
 z-index:100;
 overflow:hidden;
 line-height:1;
@@ -54,38 +56,29 @@ transition:all .3s;
 `
 
 const Options= styled.div`
-padding:.7rem;
 display:flex;
 flex-direction:column;
-gap:.7rem;
 `
 const Option = styled.div`
 cursor:pointer;
-&:hover{
-    opacity:.7;
-}
+padding:.7rem;
 white-space: nowrap;
 font-weight:600;
 font-size:clamp(.6rem,2vw,.9rem);
-
+border-bottom: 2px solid #C0C3C7;
+&:hover{
+    background:#C0C3C7;
+}
 `
 
 export default function SortByButton({style,removeUnder800px,sortOptions}){
     const [showList, setShowList] = useState(false)
     const [urlSearchParams,setUrlSearchParams] = useSearchParams()
-
     const list =useRef(null)
-    const button = useRef(null)
-    
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (list.current && !list.current.contains(event.target) && !button.current.contains(event.target)) {
-                setShowList(false)
-                document.removeEventListener("mousedown", handleClickOutside);
-            }
-        }
-        if (showList) document.addEventListener("mousedown", handleClickOutside);
-    }, [showList]);
+
+    const handleClickOutside = useClickOutside([list],showList,()=>{
+        setShowList(false)
+    })
   
     function handleSortButtonClick(){
         setShowList(!showList)
@@ -98,8 +91,8 @@ export default function SortByButton({style,removeUnder800px,sortOptions}){
     }
     
     return (
-        <Container style={style} $removeUnder800px={removeUnder800px}>
-            <Button ref={button} onClick={handleSortButtonClick}>
+        <Container ref={list} style={style} $removeUnder800px={removeUnder800px}>
+            <Button onClick={handleSortButtonClick}>
                 <p>
                 {
                     // update button text if an options is clicked to " sort by : options clicked "
@@ -110,11 +103,11 @@ export default function SortByButton({style,removeUnder800px,sortOptions}){
                 </p>
                 <Icon $rotate={showList?"180deg":"0"} className="fa-solid fa-angle-down"></Icon>
             </Button>
-            <SortList ref={list} $height={showList?"100vh":"0px"}>
+            <SortList $height={showList?"100vh":"0px"}>
                 <Options>
                     {
-                        Object.keys(sortOptions).map((key)=>{
-                            return  <Option onClick={(e)=>handleOptionClick(key)}>{sortOptions[key]}</Option>
+                        Object.keys(sortOptions).map((key,index)=>{
+                            return  <Option key={index} onClick={(e)=>handleOptionClick(key)}>{sortOptions[key]}</Option>
                         })
                     }
                 </Options>

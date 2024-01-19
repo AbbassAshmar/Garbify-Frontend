@@ -8,7 +8,9 @@ import { REVIEWS_USERS_PRODUCTS } from "../../../components/products-data";
 import Pagination from "../../../components/Pagination/pagination";
 
 const ReviewsSection = styled.div`
-
+display:flex;
+flex-direction:column;
+gap:3rem;
 `
 const ReviewsContainer = styled.div`
 display:flex;

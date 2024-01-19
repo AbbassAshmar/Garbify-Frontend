@@ -16,6 +16,8 @@ import jordan4_11 from "../assets/jordan4blueside.jpg"
 import jordan4_12 from "../assets/jordan4bluefront.jpg"
 import jordan4_13 from "../assets/jordan4blueback.jpg"
 
+//update metadata to add success message
+
 // Main title :clamp(1.1rem,3vw,1.5rem);
 
 // Smaller title : clamp(1rem, 2.6vw, 1.3rem);
@@ -39,6 +41,7 @@ export const USER = {
     email:"KuwaitIsMine@gmail.com",
     profile_picture:Hoody,
 };
+
 export const REVIEWS_USERS_PRODUCTS = [
     {
         'id' : 1,
@@ -1206,7 +1209,7 @@ export const ORDERS = [
                 return_cancellation_info:"return available till 2/2/2022" // calculated
             },
             {
-                id:1,
+                id:2,
                 thumbnail:Hoody2,
                 name:'some shoe made by utilizing child labor and it sucks ultra shit',
                 ordered_quantity:2,
@@ -1215,7 +1218,7 @@ export const ORDERS = [
         ]
     },
     {
-        id : 2,
+        id : 3,
         created_at:"2023/10/10", 
         status:'delivered',
         total_cost:1000, 

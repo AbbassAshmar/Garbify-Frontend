@@ -29,7 +29,6 @@ const SortByButtonStyle ={
 boxShadow:"0px 0px 4px rgba(0,0,0,0.6)",
 padding:"4px 14px 4px 16px",
 borderRadius:'3px',
-marginRight:"20px"
 }
 
 

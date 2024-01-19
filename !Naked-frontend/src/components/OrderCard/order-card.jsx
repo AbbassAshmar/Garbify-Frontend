@@ -1,12 +1,7 @@
 import styled from 'styled-components'
 import {Link, useNavigate} from "react-router-dom"
-import { useContext, useEffect, useRef, useState } from 'react'
-import { useSendRequest } from '../../hooks/use-fetch-data'
-import { userStateContext } from '../../Contexts/user-state'
-import Loading from '../Loading/loading'
-import ReactDOM from 'react-dom';
-import SuccessOrErrorPopUp from '../SuccessOrErrorPopUp/success-or-error-pop-up'
-
+import {  useRef, useState } from 'react'
+import ConfirmationPopUp from '../ConfirmationPopUp/confirmation-pop-up';
 
 export const Container = styled.div`
 box-shadow: 1px 1px 10px #A8AAAE;
@@ -66,6 +61,11 @@ font-weight:600;
 @media screen and (max-width:600px){
     display:none;
 }
+`
+
+const SummaryValue = styled.span`
+color:rgba(100,100,100);
+font-size:clamp(.65rem,1.8vw,.8rem);
 `
 
 const ProductsContainer = styled.div`
@@ -182,74 +182,7 @@ background:red;
     width:120px;
 }
 `
-const CancelConfirmationContainer = styled.div`
-width:100%;
-height:100vh;
-position:fixed;
-z-index:300;
-top:0;
-left:0;
 
-display:flex;
-align-items:center;
-justify-content:center;
-
-&:before{
-    content:"";
-    position:absolute;
-    background:black;
-    opacity:.7;
-    width:100%;
-    height:100vh;
-    z-index:-1;
-    top:0;
-    left:0;
-}
-`
-
-const CancelConfirmationMenu = styled.div`
-text-align:center;
-font-weight:600;
-background:white;
-border-radius:10px;
-padding:2.5rem 1.5rem;
-display:flex;
-flex-direction:column;
-gap:2rem;
-width:280px;
-`
-
-const KeepOrder = styled.button`
-border-radius:30px;
-border:2px dashed red;
-outline:none;
-background:white;
-color:red;
-font-weight:600;
-cursor:pointer;
-transition:border .3s;
-height: 52px;
-
-&:hover{
-    border:2px solid red;
-}
-`
-const CancelOrder = styled.button`
-border-radius:30px;
-border:none;
-outline:none;
-background:red;
-color:white;
-font-weight:600;
-cursor:pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-height: 52px;
-&:disabled{
-    background:#ff8d8d;
-}
-`
 const ArchiveOrderButton = styled(CancelOrderButton)`
 background:rgb(0, 255, 0);
 `
@@ -264,15 +197,9 @@ cursor:pointer;
 
 
 export default function OrderCard({order}){
-    const userContext = useContext(userStateContext)
-    const {sendRequest,serverError} = useSendRequest(userContext);
-
     const [showCancelConfirmation,setShowCancelConfirmation] = useState(false);
-    const [cancelOrderLoading, setCancelOrderLoading ] = useState(false)
-    const [resultPopUp ,setResultPopUp] = useState({show:false,status:'',message:''})
-
-    const cancelConfirmationMenu = useRef();
-
+    
+    const cancelButtonRef = useRef();
     const navigate = useNavigate();
     function handleWriteAReviewClick(id){
         navigate("/review/"+id);
@@ -281,61 +208,33 @@ export default function OrderCard({order}){
     function handleCancelOrderButtonClick(e){
         setShowCancelConfirmation(true);
     }
-    
-    async function requestCancelOrder(e){
-        setCancelOrderLoading(true)
-        let uri = "/api/orders/"+order.id;
-        let init = { method :"DELETE" };
-
-        let {request, response} = await sendRequest(uri,init);
-        if (request?.ok ){
-            setResultPopUp({show:true,status:"Success",message:'Your order was successfully canceled -_-'})
-        }else if (request?.error){
-            setResultPopUp({show:true,status:"Error",message:response.error.message})
-        }
-
-        setShowCancelConfirmation(false) // close the Confirm Cancel Order menu
-        setCancelOrderLoading(false) // stop the loading of Cancel button
-    }
-    
-    useEffect(() => {
-        if (showCancelConfirmation) document.addEventListener("mousedown", handleClickOutside);
-
-        function handleClickOutside(event) {
-            if (cancelConfirmationMenu.current && !cancelConfirmationMenu.current.contains(event.target)) {
-                setShowCancelConfirmation(false)
-                document.removeEventListener("mousedown", handleClickOutside);
-            }
-        }
-    }, [showCancelConfirmation]);
 
     return(
         <Container>
-            <SuccessOrErrorPopUp settings={resultPopUp} setSettings={setResultPopUp} serverError={serverError}/>
             <Header>
                 <DetailsContainer>
                     <OrderSummary>
                         <Text style={{display:'inline'}}>
                             ordered at : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>{order.created_at}</span>
+                            <SummaryValue>{order.created_at}</SummaryValue>
                         </Text>
                         <Text>
                             total cost : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>${order.total_cost}</span>
+                            <SummaryValue>${order.total_cost}</SummaryValue>
                         </Text>
                         <Text>
                             ship to : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>{order.recipiant_name}</span>
+                            <SummaryValue>{order.recipiant_name}</SummaryValue>
                         </Text>
                     </OrderSummary>
                     <StatusIdContainer>
                         <Text style={{display:"inline"}}>
                             order status : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>{order.status}</span>
+                            <SummaryValue>{order.status}</SummaryValue>
                         </Text>
                         <Text>
                             order id : <br/>
-                            <span style={{color:"rgba(100,100,100)",fontSize:"clamp(.65rem,1.8vw,.8rem)"}}>#{order.id}</span>
+                            <SummaryValue>#{order.id}</SummaryValue>
                         </Text>
                     </StatusIdContainer>
                 </DetailsContainer>
@@ -348,14 +247,12 @@ export default function OrderCard({order}){
                 {
                     order.products.map((product)=>{
                         return(
-                            <Product>
+                            <Product key={product.id}>
                                 <ThumbnailContainer>
-                                <Thumbnail src={product.thumbnail} />
+                                    <Thumbnail src={product.thumbnail} />
                                 </ThumbnailContainer>
                                 <NameContainer>
-                                    <Name>
-                                        {product.name} (x{product.ordered_quantity})
-                                    </Name>
+                                    <Name>{product.name} (x{product.ordered_quantity})</Name>
                                     <ReturnTimeText>
                                         {product.return_cancellation_info}
                                     </ReturnTimeText>
@@ -383,31 +280,21 @@ export default function OrderCard({order}){
                 {
                     order.status==="paid" && 
                     <div>
-                        <CancelOrderButton onClick={handleCancelOrderButtonClick}>cancel order</CancelOrderButton>
-                        {
-                            showCancelConfirmation &&
-                            ReactDOM.createPortal(
-                                <CancelConfirmationContainer>
-                                    <CancelConfirmationMenu ref={cancelConfirmationMenu}>
-                                        <p>Are You sure You want to cancel this order ?</p>
-                                        <div style={{width:'100%', display:"flex", flexDirection:"column",gap:'1rem'}}>
-                                            <KeepOrder onClick={(e)=>setShowCancelConfirmation(false)}>Keep Order</KeepOrder>
-                                            <CancelOrder disabled={cancelOrderLoading} onClick={requestCancelOrder}>
-                                                {cancelOrderLoading ? 
-                                                <Loading style={{transform:"scale(.2)"}}/>:
-                                                "Cancel Order"}
-                                            </CancelOrder>
-                                        </div>
-                                    </CancelConfirmationMenu>
-                                </CancelConfirmationContainer>,
-                                document.body
-                            )
-                        }
+                        <CancelOrderButton ref={cancelButtonRef} onClick={handleCancelOrderButtonClick}>cancel order</CancelOrderButton>
+                        <ConfirmationPopUp 
+                        uri = {"/api/orders/"+order.id}
+                        show={showCancelConfirmation} 
+                        setShow={setShowCancelConfirmation} 
+                        cancelButtonRef={cancelButtonRef}
+                        subTitle={'Are You sure You want to cancel this order ?'}
+                        title={'Cancel Order'}
+                        cancelAction={'keep Order'}
+                        confirmAction={'Cancel Order'}/>
                     </div>
                 }
                 {order.status!="paid" && <ArchiveOrderButton>Archive order</ArchiveOrderButton>}
                 <OrderDetailsLink>
-                    order details <i class="fa-solid fa-arrow-right"/>
+                    order details <i className="fa-solid fa-arrow-right"/>
                 </OrderDetailsLink>
             </Footer>
 
