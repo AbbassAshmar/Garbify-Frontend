@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import ProductsSlider from '../../../components/ProductsSlider/products-slider';
 import { PRODUCTS } from '../../../components/products-data';
 import ReviewImage from "../../../../src/assets/ReviewImage.png";
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const Container = styled.div`
 padding:2rem;
@@ -60,6 +61,7 @@ height:35px;
 border:none;
 color:white;
 outline:none;
+text-decoration:none;
 box-shadow:0px 0px 6px rgba(0,0,0,0.4);
 background: #00C2FF;
 font-weight:600;
@@ -77,11 +79,13 @@ background:white;
     background: rgb(230,230,230);
 }
 `
+
 const ImageContainer = styled.div`
 flex:1;
 display:flex;
 align-items:start;
 `
+
 const Image = styled.img`
 width:100%;
 `
@@ -94,7 +98,16 @@ const CheckCircle = ({size=60, color="#00C2FF"}) => (
     </svg>
 );
 
-export default function CanNotReview(){
+export default function CanNotReview({reviewId}){
+    const navigate = useNavigate();
+
+    function handleGoBackClick(e){
+        navigate(-1);
+    }
+
+    function handleEditReviewClick(e){
+        navigate('/review/'+reviewId+'/edit');
+    }
 
    
     return (
@@ -112,8 +125,8 @@ export default function CanNotReview(){
                     <SubText>If you'd like to make changes or add more details, feel free to edit your review below.</SubText>
 
                     <ButtonsContainer>
-                        <EditReviewButton >Edit review</EditReviewButton>
-                        <GoBackButton>Go back</GoBackButton>
+                        <EditReviewButton onClick={handleEditReviewClick}>Edit review</EditReviewButton>
+                        <GoBackButton onClick={handleGoBackClick}>Go back</GoBackButton>
                     </ButtonsContainer>
                 </TextContainer>
                 <ImageContainer>

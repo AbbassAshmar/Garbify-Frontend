@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
                 element:<ReviewPurchasedProduct />
             },
             {
-                path:"/review/:product_id/edit",
+                path:"/review/:review_id/edit",
                 element:<ReviewPurchasedProductEdit />
             },
             {

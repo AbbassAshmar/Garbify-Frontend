@@ -7,6 +7,7 @@ import { useSendRequest } from '../../../hooks/use-fetch-data';
 import useUserState from '../../../hooks/use-user-state';
 import SuccessOrErrorPopUp from '../../../components/SuccessOrErrorPopUp/success-or-error-pop-up';
 import { ratingToStars } from '../../../components/RatingStars/rating-stars';
+import Loading from '../../../components/Loading/loading';
 
 const Container = styled.div`
 padding: min(2rem ,5%);
@@ -69,6 +70,7 @@ const TitleInput  = styled.input`
 border:2px solid #A8AAAE;
 border-radius:3px;
 padding:10px;
+font-weight:600;
 `
 
 const ReviewInput= styled.textarea`
@@ -79,6 +81,7 @@ height:200px;
 border:2px solid #A8AAAE;
 border-radius:3px;
 padding:10px;
+font-weight:600;
 `
 const StarsContainer = styled.div`
 display:flex;
@@ -119,6 +122,13 @@ font-weight:600;
 cursor:pointer;
 font-size:clamp(.8rem , 2.3vw ,1.1rem);
 border-radius:3px;
+height:50px;
+display:flex;
+align-items:center;
+justify-content:center;
+&:disabled{
+    background:grey;
+}
 `
 
 //multipart/form-data , sends file in binary fromat
@@ -231,20 +241,27 @@ export default function ReviewForm({review,handleSubmit}){
     const [stars,setStars] = useState(5);
     const [starsList, setStarsList ] = useState(["star","star","star","star","star"]);
 
+    const [deletedImages, setDeletedImages] = useState([]);
     const [images , setImages]=  useState([]);
     const {product_id} = useParams();
+
+    const [submitLoading,setSubmitLoading] = useState(false);
 
     const userContext = useUserState();
     const {sendRequest,serverError} = useSendRequest(userContext);
 
     useEffect(()=>{
+        return ()=>{
+            const imageUrls = images.map((image) => image.url);
+            for (const url of imageUrls) {
+                URL.revokeObjectURL(url);
+            }
+        }
+    },[])
+
+    useEffect(()=>{
         setStarsList(ratingToStars(stars))
     },[stars])
-
-    function handleReviewFormSubmit (e){
-        e.preventDefault();
-        handleSubmit(e,stars,product_id,images);
-    }
 
     // Update state based on the provided review data
     useEffect(() => {
@@ -257,9 +274,73 @@ export default function ReviewForm({review,handleSubmit}){
             document.getElementById('height').value = review.user_height || '';
             document.getElementById('weight').value = review.user_weight || '';
             
-            setImages(review.images?.map((x) => ({ url: x, file: null })) || []);
+            setImages(review.images?.map((x) => ({ url: x, file: null ,new:false})) || []);
         }
     }, [review]);
+
+    function handleImageUpload(e){
+        // createObjectUrl creates a url that acts like a pointer or an address to an object in memory 
+        setImages([...images,{url:URL.createObjectURL(e.target.files[0]) , file:e.target.files[0],new:true}])
+    }
+
+    function handleImageDelete(image_url){
+        setImages(images.filter((image)=> {
+            if(image.url == image_url && !image.new){
+                setDeletedImages([...deletedImages,image_url])
+            }
+            return image.url != image_url
+        }))
+    }
+
+    async function handleReviewFormSubmit (e){
+        e.preventDefault();
+        let data=  handleformData(e,stars,product_id,images,deletedImages);
+
+        setSubmitLoading(true);
+        await (review ? updateReview(data) :  createReview(data))
+        setSubmitLoading(false);
+
+    }
+
+    async function createReview(data){
+        const uri = '/api/reviews';
+        const init = {method:"POST",body:data};
+        const {request,response} = await sendRequest(uri,init)
+
+        if (request?.status == 201){
+            // review created
+        }
+        
+    }
+
+    async function updateReview(data){
+        const review_id = review.id;
+        const uri = '/api/reviews/' + review_id;
+        const init = {method:"PATCH",body:data};
+        const {request,response} = await sendRequest(uri,init)
+
+        if (request?.status == 200)[
+            // review updated
+        ]
+    }
+
+    
+    async function handleformData (e,stars,product_id,images,deletedImages){
+        let form_data = new FormData(e.target);
+        form_data.append("product_rating" , stars);
+        form_data.append("product_id",product_id);
+
+        for (let image in images){
+            images[image].file && form_data.append('images[]', images[image].file);
+        }
+
+        for (let image of deletedImages){
+            form_data.append('deletedImages[]', image);
+        }
+
+        return form_data;
+    }
+    
 
     return (
         <Container>
@@ -274,13 +355,13 @@ export default function ReviewForm({review,handleSubmit}){
                     <StarsContainer>
                         {
                             starsList.map((value, index)=>{
-                                return <Star 
+                                return <Star
+                                key={index} 
                                 onMouseEnter={()=>{setStars(index+1)}} 
                                 onClick={(e)=>{setStarsOnLastClick(stars)}}
                                 onMouseLeave={(e)=>{setStars(starsOnLastClick)}}
                                 src={value == "empty" ? empty_star :star}/>
                             })
-                        
                         }
                     </StarsContainer>
                 </FormRow>
@@ -311,16 +392,17 @@ export default function ReviewForm({review,handleSubmit}){
                                 accept=".jpg, .jpeg, .png"
                                 type="file" 
                                 style={{visibility:"hidden",width:"1px"}} 
-                                onChange={(e)=>{
-                                    // createObjectUrl creates a url that acts like a pointer or an address to an object in memory 
-                                    setImages([...images,{url:URL.createObjectURL(e.target.files[0]) , file:e.target.files[0]}])
-                                }}
+                                onChange={handleImageUpload}
                             />
                         </div>
-                        <div style={{width:"100%",display:"flex",gap:'5%',felxWrap:"wrap"}}>
+                        <div style={{width:"100%",display:"flex",gap:'5%',flexWrap:"wrap"}}>
                             {
-                                images && images.map((image)=>{
-                                    return <div style={{width:"100px"}}><img src={image.url} style={{width:"100%", height:"auto"}}/></div>
+                                images && images.map((image,index)=>{
+                                    return (
+                                        <div key={index} style={{width:"100px"}} onClick={(e)=>{handleImageDelete(image.url)} }>
+                                            <img src={image.url} style={{width:"100%", height:"auto",cursor:'pointer'}}/>
+                                        </div>
+                                    )
                                 })
                             }
                         </div>
@@ -352,24 +434,13 @@ export default function ReviewForm({review,handleSubmit}){
                 <AvailableSizes prefil_size={review?.size}/>
                 <AvailableColors prefil_color={'red'}/>
 
-                <SubmitButton type="submit">
-                    Add Review
+                <SubmitButton disabled={submitLoading || ""} type="submit" >
+                    {submitLoading && <Loading style={{scale:'.3'}}/> }
+                    {!submitLoading && 'Submit Review' }
                 </SubmitButton>
            </Content>
         </Container>
     )
 }
 
-const ss = [
-    'Large', 
-    'Small',
-    'Medium',
-    'Xlarge'
-]
 
-const cs = [
-    'red',
-    'purple',
-    'dark black',
-    'yellow'
-]
