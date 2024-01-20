@@ -7,6 +7,7 @@ import useClickOutside from "../../../hooks/use-click-outside";
 import ConfirmationPopUp from "../../../components/ConfirmationPopUp/confirmation-pop-up";
 import useUserState from "../../../hooks/use-user-state";
 import { useSendRequest } from "../../../hooks/use-fetch-data";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
 box-shadow:0px 0px 10px rgba(0,0,0,0.6);
@@ -99,6 +100,7 @@ export default function UserReviewCard({review}){
     const [showDeleteConfirmation,setShowDeleteConfirmation] = useState(false);
     const [showArchiveConfirmation , setShowArchiveConfirmation] = useState(false);
 
+    let navigate = useNavigate();
     const userContext = useUserState();
     const {sendRequest, serverError} = useSendRequest(userContext);
 
@@ -115,7 +117,8 @@ export default function UserReviewCard({review}){
     }
 
     function handleEditReviewClick(){
-        
+        let state = review;
+        navigate('review/')
     }
 
     function handleArchiveReviewClick(){

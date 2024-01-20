@@ -15,8 +15,7 @@ export default function ReviewPurchasedProduct(){
     const {sendRequest, serverError} = useSendRequest(userContext);
 
     const {product_id} = useParams();
-    const [isReviewed ,setIsReviewed] = useState(false);
-    
+    const [isReviewed ,setIsReviewed] = useState(true);
     
     async function checkIfReviewed(product_id){
         let url = "/api/products/"+product_id+"/users/user/reviews";
@@ -28,6 +27,28 @@ export default function ReviewPurchasedProduct(){
         }
     }
 
+    async function postFormData(data){
+        const uri = '/api/reviews';
+        const init = {method:"POST",body:data};
+        const {request,response} = await sendRequest(uri,init)
+
+        if (request?.status == 201){
+            // handle review post
+        }
+    }
+
+    function handleReviewFormSubmit (e,stars,product_id,images){
+        let form_data = new FormData(e.target);
+        form_data.append("product_rating" , stars)
+        form_data.append("product_id",product_id)
+
+        for (let x in images){
+            images[x].file && form_data.append('images[]', images[x].file);
+        }
+        
+        postFormData(form_data)
+    }
+
     useEffect(()=>{
         // checkIfReviewed(product_id);
     },[])
@@ -37,7 +58,7 @@ export default function ReviewPurchasedProduct(){
             {
             isReviewed? 
                 <CanNotReview />:
-                <ReviewForm />
+                <ReviewForm handleSubmit={handleReviewFormSubmit}/>
             }
     
         </Container>

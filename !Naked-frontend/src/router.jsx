@@ -8,10 +8,11 @@ import Product from "./pages/Product/product"
 import Orders from './pages/Orders/orders'
 import ReviewPurchasedProduct from "./pages/ReviewPurchasedProduct/review-purchased-product"
 import Favorites from "./pages/Favorites/favorites"
-import OtherUsersFavoritesLists from "./pages/OtherUsersFavoritesLists/other-users-favorites-lists"
 import OtherUsersFavorites from "./pages/OtherUsersFavorites/other-users-favorites"
 import User from "./pages/User/user"
 import Reviews from "./pages/Reviews/reviews"
+import OtherUsersFavoritesLists from "./pages/OtherUsersFavoritesLists/other-users-favorites-lists"
+import ReviewPurchasedProductEdit from "./pages/ReviewPurchasedProduct/review-purchased-product-edit"
 
 export const router = createBrowserRouter([
     {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
             {
                 path:"/review/:product_id",
                 element:<ReviewPurchasedProduct />
+            },
+            {
+                path:"/review/:product_id/edit",
+                element:<ReviewPurchasedProductEdit />
             },
             {
                 path:'/favorites',

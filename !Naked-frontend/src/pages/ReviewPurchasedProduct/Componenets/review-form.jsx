@@ -128,19 +128,32 @@ border-radius:3px;
 //FileReader::readAsDataURL() converts Blob objects to base64
 //Blob() represents a file (bites)
 
-function AvailableColors({product_id}){
+function AvailableColors({prefil_color}){
+    let {product_id} = useParams();
+
+    const [productColors,setProductColors] = useState();
+    const [chosenColor ,setChosenColor] = useState();
+    
     const userContext = useUserState();
     const {sendRequest,serverError} = useSendRequest(userContext);
-    const [productColors,setProductColors] = useState();
 
-    useEffect(()=>{requestColorsOfProduct()},[]);
+    useEffect(()=>{
+        requestColorsOfProduct(product_id)
+
+        if (prefil_color){
+            setChosenColor(prefil_color);
+        }
+    },[]);
+
     function requestColorsOfProduct(product_id){
         const uri = "/api/products/"+product_id+"/colors"
         const {request, response} = sendRequest(uri)
     
         if (request?.status == 200){
-            setProductColors(response.colors)
+            setProductColors(response.data.colors)
         }
+        //test
+        setProductColors(['red','green','yellow','blue'])
     }
 
     return(
@@ -149,10 +162,10 @@ function AvailableColors({product_id}){
                 what color did you purchase ? (optional)
             </Label>
             <div style={{display:"flex" , flexDirection:"column", gap:"1em"}}>
-                {productColors && productColors.map((color)=>{
+                {productColors && productColors.map((color,index)=>{
                     return (
-                        <RadioField key={color} style={{display:"flex", gap:"8px"}}>
-                            <RadioInput type="radio" name="color" value={color} id={color}/>
+                        <RadioField key={index} style={{display:"flex", gap:"8px"}}>
+                            <RadioInput onChange={()=>setChosenColor(color)} checked={chosenColor === color} type="radio" name="color" value={color} id={color}/>
                             <RadioLabel htmlFor={color}>{color}</RadioLabel>
                         </RadioField>
                     )
@@ -162,19 +175,34 @@ function AvailableColors({product_id}){
     )
 }
 
-function AvailableSizes({sizes}){
+function AvailableSizes({prefil_size}){
+    let {product_id} = useParams();
+
     const userContext = useUserState();
     const {sendRequest,serverError} = useSendRequest(userContext);
+
+    const [chosenSize,setChosenSize] = useState()
     const [productSizes,setProductSizes] = useState();
 
-    useEffect(()=>{requestSizesOfProduct()},[])
-    function requestSizesOfProduct(product_id){
+    useEffect(()=>{
+        requestSizesOfProduct(product_id)
+
+        if (prefil_size){
+            setChosenSize(prefil_size);
+        }
+    
+    },[])
+
+    async function requestSizesOfProduct(product_id){
         const uri = "/api/products/"+product_id+"/sizes"
-        const {request, response} = sendRequest(uri)
+        const {request, response} = await sendRequest(uri)
     
         if (request?.status == 200){
-            setProductSizes(response.colors)
+            setProductSizes(response.data.sizes)
         }
+
+        // test 
+        setProductSizes(['xl','small','medium']);
     }
 
     return (
@@ -184,10 +212,10 @@ function AvailableSizes({sizes}){
             </Label>
             <div style={{display:"flex" , flexDirection:"column", gap:"1em"}}>
                 {
-                    productSizes && productSizes.map((size)=>{
+                    productSizes && productSizes.map((size,index)=>{
                         return (
-                            <RadioField key={color} style={{display:"flex", gap:"8px"}}>
-                                <RadioInput type="radio" name="size" value={size} id={size}/>
+                            <RadioField key={index} style={{display:"flex", gap:"8px"}}>
+                                <RadioInput onChange={()=>{setChosenSize(size)}} checked={chosenSize === size} type="radio" name="size" value={size} id={size}/>
                                 <RadioLabel htmlFor={size}>{size}</RadioLabel>
                             </RadioField>
                         )
@@ -198,9 +226,11 @@ function AvailableSizes({sizes}){
     )
 }
 
-export default function ReviewForm(){
+export default function ReviewForm({review,handleSubmit}){
+    const [starsOnLastClick,setStarsOnLastClick] = useState(5)
     const [stars,setStars] = useState(5);
     const [starsList, setStarsList ] = useState(["star","star","star","star","star"]);
+
     const [images , setImages]=  useState([]);
     const {product_id} = useParams();
 
@@ -211,26 +241,25 @@ export default function ReviewForm(){
         setStarsList(ratingToStars(stars))
     },[stars])
 
-    async function postFormData(data){
-        const uri = '/api/reviews';
-        const init = {method:"POST",body:data};
-        const {request,response} = await sendRequest(uri,init)
-
-        if (request?.status == 201){
-            // handle review post
-        }
-    }
-
     function handleReviewFormSubmit (e){
         e.preventDefault();
-        let form_data = new FormData(e.target);
-        form_data.append("product_rating" , stars)
-        form_data.append("product_id",product_id)
-        for (let x in images){
-            form_data.append('images[]', images[x].file)
-        }
-        postFormData(form_data)
+        handleSubmit(e,stars,product_id,images);
     }
+
+    // Update state based on the provided review data
+    useEffect(() => {
+        if (review) {
+            setStars(review.rating || 5);
+            setStarsOnLastClick(review.rating || 5);
+
+            document.getElementById('title').value = review.title || '';
+            document.getElementById('review').value = review.text || '';
+            document.getElementById('height').value = review.user_height || '';
+            document.getElementById('weight').value = review.user_weight || '';
+            
+            setImages(review.images?.map((x) => ({ url: x, file: null })) || []);
+        }
+    }, [review]);
 
     return (
         <Container>
@@ -240,13 +269,15 @@ export default function ReviewForm(){
                 <SubTitle>Help others make the right decision</SubTitle>
            </Text>
            <Content onSubmit={handleReviewFormSubmit}>
-                <FormRow>
+                <FormRow >
                     <Label htmlFor="title">Rating :</Label>
                     <StarsContainer>
                         {
                             starsList.map((value, index)=>{
                                 return <Star 
                                 onMouseEnter={()=>{setStars(index+1)}} 
+                                onClick={(e)=>{setStarsOnLastClick(stars)}}
+                                onMouseLeave={(e)=>{setStars(starsOnLastClick)}}
                                 src={value == "empty" ? empty_star :star}/>
                             })
                         
@@ -318,8 +349,8 @@ export default function ReviewForm(){
                     />
                 </FormRow>
 
-                <AvailableSizes />
-                <AvailableColors />
+                <AvailableSizes prefil_size={review?.size}/>
+                <AvailableColors prefil_color={'red'}/>
 
                 <SubmitButton type="submit">
                     Add Review
