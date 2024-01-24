@@ -9,55 +9,88 @@ padding:2rem;
 display:flex;
 flex-direction:column;
 gap:4rem;
+margin-bottom:3rem;
+
+@media screen and (max-width:800px){
+    padding:1rem;
+}
 `
 
 const MainSection = styled.div`
 width:100%;
 display:flex;
 justify-content:space-between;
-gap:20%;
+gap:5%;
+align-items:center;
+@media screen and (max-width:800px){
+    gap:4rem;
+    flex-direction:column;
+}
 `
 
-const TextContainer  = styled.div`
+export const TextContainer  = styled.div`
 flex:1;
 display:flex;
 flex-direction:column;
-gap:3rem;
+gap:2rem;
+
+@media screen and (max-width:800px){
+    align-items:center;
+    text-align:center;
+}
 `
-const TitleContainer = styled.div`
+export const TitleContainer = styled.div`
 display:flex;
 flex-direction:column;
-gap:.7rem;
+gap:1rem;
+@media screen and (max-width:800px){
+    align-items:center;
+}
 `
-const DoneContainer = styled.div`
+export const DoneContainer = styled.div`
 display:flex;
 gap:1rem;
 align-items:flex-end;
 `
-const DoneWord  = styled.p`
+export const DoneWord  = styled.h2`
 font-weight:600;
-font-size:3rem;
+font-size:var(--heading-2);
 color:#00C2FF;
+@media screen and (max-width:600px){
+    font-size:var(--heading-2-mobile);
+}
 `
-const Title = styled.h2 `
+export const Title = styled.h4 `
 color : black;
 font-weight:600;
-font-size:clamp(1.1rem,3vw,1.8rem);
+letter-spacing:-0.01em;
+font-size:var(--heading-4);
+@media screen and (max-width:600px){
+    font-size:var(--heading-4-mobile);
+}
 `
-const SubText = styled.p`
+export const SubText = styled.h6`
 margin:0;
-font-weight:600;
+font-weight:500;
 color:grey;
-font-size:clamp(1.1rem,3vw,1.4rem);
+line-height:1.3em;
+font-size:var(--heading-6);
+@media screen and (max-width:600px){
+    font-size:var(--heading-6-mobile);
+}
 `
 const ButtonsContainer = styled.div`
 display:flex;
 gap:1rem;
 justify-content:flex-start;
+@media screen and (max-width:800px){
+    width:100%;
+    flex-direction:column;
+}
 `
-const EditReviewButton = styled.button`
-width:25%;
-height:35px;
+export const EditReviewButton = styled.button`
+width:180px;
+height:40px;
 border:none;
 color:white;
 outline:none;
@@ -70,6 +103,9 @@ cursor:pointer;
 transition:background .3s;
 &:hover{
     background: #009BCC;
+}
+@media screen and (max-width:800px){
+    width:100%;
 }
 `
 const GoBackButton = styled(EditReviewButton)`
@@ -91,7 +127,7 @@ width:100%;
 `
 
 
-const CheckCircle = ({size=60, color="#00C2FF"}) => (
+export const CheckCircle = ({size=60, color="#00C2FF"}) => (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
         <polyline points="22 4 12 14.01 9 11.01"/>
@@ -116,7 +152,7 @@ export default function CanNotReview({reviewId}){
                 <TextContainer>
                     <TitleContainer>
                         <DoneContainer>
-                            <CheckCircle /> 
+                            <CheckCircle size={window.innerWidth<600 ? 40 : 60}/> 
                             <DoneWord>Done</DoneWord>
                         </DoneContainer>
                         <Title>You have already reviewed this product !</Title>

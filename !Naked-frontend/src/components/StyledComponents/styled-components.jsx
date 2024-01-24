@@ -1,5 +1,11 @@
 import styled from "styled-components"
 
+
+export const SliderTitle = styled.h2`
+font-size:clamp(1rem, 2.6vw, 1.3rem);
+font-weight:600;
+`
+
 export const Products = styled.div`
 display:grid;
 grid-template-columns:repeat(3,1fr);

@@ -8,6 +8,7 @@ import useUserState from '../../../hooks/use-user-state';
 import SuccessOrErrorPopUp from '../../../components/SuccessOrErrorPopUp/success-or-error-pop-up';
 import { ratingToStars } from '../../../components/RatingStars/rating-stars';
 import Loading from '../../../components/Loading/loading';
+import ReviewSuccess from '../../ReviewSuccess/review-success';
 
 const Container = styled.div`
 padding: min(2rem ,5%);
@@ -236,7 +237,7 @@ function AvailableSizes({prefil_size}){
     )
 }
 
-export default function ReviewForm({review,handleSubmit}){
+export default function ReviewForm({review}){
     const [starsOnLastClick,setStarsOnLastClick] = useState(5)
     const [stars,setStars] = useState(5);
     const [starsList, setStarsList ] = useState(["star","star","star","star","star"]);
@@ -246,6 +247,7 @@ export default function ReviewForm({review,handleSubmit}){
     const {product_id} = useParams();
 
     const [submitLoading,setSubmitLoading] = useState(false);
+    const [actionSuccess, setActionSuccess] = useState(true);
 
     const userContext = useUserState();
     const {sendRequest,serverError} = useSendRequest(userContext);
@@ -265,7 +267,7 @@ export default function ReviewForm({review,handleSubmit}){
 
     // Update state based on the provided review data
     useEffect(() => {
-        if (review) {
+        if (review && !actionSuccess) {
             setStars(review.rating || 5);
             setStarsOnLastClick(review.rating || 5);
 
@@ -309,6 +311,7 @@ export default function ReviewForm({review,handleSubmit}){
 
         if (request?.status == 201){
             // review created
+            setActionSuccess(true);
         }
         
     }
@@ -319,9 +322,11 @@ export default function ReviewForm({review,handleSubmit}){
         const init = {method:"PATCH",body:data};
         const {request,response} = await sendRequest(uri,init)
 
-        if (request?.status == 200)[
+        if (request?.status == 200){
             // review updated
-        ]
+            setActionSuccess(true)
+        }
+
     }
 
     
@@ -341,6 +346,9 @@ export default function ReviewForm({review,handleSubmit}){
         return form_data;
     }
     
+    if (actionSuccess){
+        return (<ReviewSuccess action={review ? 'edited' : 'created'}/>)
+    }
 
     return (
         <Container>

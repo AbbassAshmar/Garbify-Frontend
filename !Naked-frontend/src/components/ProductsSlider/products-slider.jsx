@@ -5,18 +5,15 @@ import { useFetchData } from "../../hooks/use-fetch-data"
 import useUserState from "../../hooks/use-user-state"
 import Loading from "../Loading/loading"
 import { PRODUCTS } from "../products-data"
+import { SliderTitle } from "../StyledComponents/styled-components"
+
 
 const Container = styled.div`
 display:flex;
 flex-direction:column;
-gap:min(7vh,40px);
+gap:2rem;
 `
-const Title = styled.h2`
-font-size:clamp(1rem, 2.6vw, 1.3rem);
-font-weight:600;
 
-
-`
 const SliderContainer = styled.div`
 position:relative;
 `
@@ -52,7 +49,7 @@ export default function ProductsSlider({title ,url}){
     const userContext = useUserState();
     let {data, error, loading}= useFetchData(url,[],userContext);
 
-    let products = data?.data?.products || PRODUCTS;
+    let products = data?.products || PRODUCTS;
     
     const sliderRef = useRef(null)
     function handleLeftButtonClick(leftOffset){
@@ -69,7 +66,7 @@ export default function ProductsSlider({title ,url}){
 
     return(
         <Container> 
-            <Title>{title}</Title>
+            <SliderTitle>{title}</SliderTitle>
             <SliderContainer>
                 <SlideButton onClick={()=>{handleLeftButtonClick(-300)}} style={{left:"1%"}}>
                     <ArrowIcon className="fa-solid fa-arrow-left"/>

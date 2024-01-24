@@ -35,13 +35,12 @@ export const router = createBrowserRouter([
                 path:'/orders',
                 element:<Orders />
             },
-           
             {
-                path:"/review/:product_id",
+                path:"/reviews/:product_id",
                 element:<ReviewPurchasedProduct />
             },
             {
-                path:"/review/:review_id/edit",
+                path:"/reviews/:review_id/edit",
                 element:<ReviewPurchasedProductEdit />
             },
             {
@@ -68,6 +67,9 @@ export const router = createBrowserRouter([
                 path:"*",
                 element : <div>Not Found</div>
             },
+            {
+                path:"/reviews/success"
+            }
         ],
     },
     {
@@ -78,7 +80,5 @@ export const router = createBrowserRouter([
         path:'/login',
         element:<Login />
     },
-    
-    
 
 ])
