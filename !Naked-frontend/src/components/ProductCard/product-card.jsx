@@ -292,7 +292,7 @@ export default function ProductCard({product,min_width}){
                 setActionLoading={setActionLoading}/>
             </div>
             <ProductCardDetailsContainer>
-                <ProductCardInfo product={product} />
+                <ProductCardInfo average_ratings={product?.reviews_summary.average_ratings} reviews_count={product?.reviews_summary.reviews_count} name={product?.name} type={product?.type}/>
                 <PriceButtonsContainer>
                     {getPrice()}
                     <ButtonsContainer>

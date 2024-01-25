@@ -7,13 +7,18 @@ import { PRODUCTS } from "../../components/products-data";
 import { useEffect, useRef, useState } from "react";
 import SimplifiedReviewProductCard from "../../components/SimplifiedProductCard/simplified-review-product-card";
 import { motion, useAnimation, useInView, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import SimplifiedProductCard from "../../components/SimplifiedProductCard/simplified-product-card";
+import ProductCard from "../../components/ProductCard/product-card";
 
 const Container = styled.div`
 overflow:hidden;
-padding:2rem 0;
 display:flex;
 flex-direction:column;
 margin:auto;
+position:relative;
+background:white;
+margin: 2rem 0;
+
 `
 
 const FirstSection = styled.div`
@@ -99,13 +104,30 @@ align-self:center;
 `
 const CardContainer = styled.div`
 flex:1;
+transition:transform .1s;
 `
 const ThirdSection = styled.div`
-background:green;
 width:100%;
-height:100vh;
 background:red;
+
+z-index:0;
 `
+
+const ThirdSectionContent = styled.div`
+gap:4rem;
+width:100%;
+padding: 0 2rem;
+display:flex;
+flex-direction:column;
+justify-content:center;
+`
+
+const FourthSection = styled.div`
+height:100vh;
+background:pink;
+position:relative;
+`
+
 
 const cardsTitleVariant = {
     'initial': {
@@ -117,7 +139,7 @@ const cardsTitleVariant = {
         opacity: 1,
         transition:{
             duration:.4,
-            delay:.5
+            delay:.3
         }
     }
 };
@@ -127,14 +149,14 @@ const cardVariant = {
         y:100,
         opacity: 0,
     },
-    'animate': {
+    'animate': (delay=0)=> ({
         y:0,
         opacity: 1,
         transition:{
-            duration:.5,
-            delay:.5
+            duration:.3,
+            delay:delay
         }
-    }
+    })
 }
 
 export default function ReviewSuccess({action}){
@@ -147,6 +169,8 @@ export default function ReviewSuccess({action}){
 
     const firstSectionRef = useRef();
     const secondSectionRef = useRef();
+    const thirdSectionRef = useRef();
+    const forthSectionRef = useRef();
     const card1Ref = useRef();
     const card2Ref = useRef();
 
@@ -174,6 +198,11 @@ export default function ReviewSuccess({action}){
         offset:['start start','end start']
     })
 
+    const {scrollYProgress:thirdSectionScrollYProgress} = useScroll({
+        target:thirdSectionRef,
+        offset:['start start','end start']
+    })
+
     let firstSectionY = useTransform(scrollYProgress,[0,1],["0%", "100%"]);
     let secondSectionY = useTransform(scrollYProgress,[0,1],["0%", "200%"]);
 
@@ -181,24 +210,29 @@ export default function ReviewSuccess({action}){
     let secondSectionExit = useTransform(secondSectionScrollYProgress,[0,1],['0deg','30deg']);
 
     let card1Y = useTransform(card1ScrollYProgress,[0,1],["0%", "-50%"]);
-    let card2Y = useTransform(card2ScrollYProgress,[0,1],["0%", "-100%"]);
+    let card2Y = useTransform(card2ScrollYProgress,[0,1],["0%", "-50%"]);
 
     let card1Opacity = useTransform(card1ScrollYProgress,[0,1],["100%", "0%"]);
     let card2Opacity = useTransform(card2ScrollYProgress,[0,1],["100%", "0%"]);
 
+    let fourthSectionEntrance = useTransform(thirdSectionScrollYProgress,[0,1],['0%', '100%']);
+
     let card1IsInView = useInView(card1Ref, {once:true, margin:"0px 0px -40% 0px"});
     let card2IsInView = useInView(card2Ref, {once:true, margin:"0px 0px -40% 0px"});
-
+    
     let card1Animate = useAnimation();
     let card2Animate = useAnimation();
 
     const [card1Mounted, setCard1Mounted] = useState(false);
     const [card2Mounted, setCard2Mounted] = useState(false);
 
-
+    useMotionValueEvent(thirdSectionScrollYProgress,'change',(latest)=>{
+        console.log(latest)
+    } )
     useEffect(()=>{
         if (card1IsInView){
-            let totalInitialAnimationDuration=(cardVariant['animate'].transition.duration + cardVariant['animate'].transition.delay + .1) * 1000;
+            let totalInitialAnimationDuration=.3 * 1000;
+
             card1Animate.start('animate');
 
             setTimeout(() => {
@@ -209,7 +243,8 @@ export default function ReviewSuccess({action}){
 
     useEffect(()=>{
         if (card2IsInView){
-            let totalInitialAnimationDuration=(cardVariant['animate'].transition.duration + cardVariant['animate'].transition.delay + .1) * 1000;
+            let totalInitialAnimationDuration=.3 * 1000;
+
             card2Animate.start('animate')
 
             setTimeout(() => {
@@ -268,9 +303,26 @@ export default function ReviewSuccess({action}){
                 </SecondSectionContent>
             </SecondSection>
 
-            <ThirdSection>
-
+            <ThirdSection as={motion.div} ref={thirdSectionRef} style={{y:fourthSectionEntrance}}>
+                <ThirdSectionContent>
+                    <CardsTitle variants={cardsTitleVariant} initial="initial" whileInView='animate' viewport={{margin:"0px 0px -40% 0px",once:"true",}} as={motion.div}>
+                        Products you may like
+                    </CardsTitle>
+                    <ProductCardsContainer>
+                        <CardContainer as={motion.div} variants={cardVariant} initial="initial" whileInView='animate' custom={.2} viewport={{once:true,margin:'0px 0px -40% 0px'}} >
+                            <ProductCard product={unReviewedProducts[0]} />
+                        </CardContainer>
+                        <CardContainer as={motion.div} variants={cardVariant} initial="initial" whileInView='animate' custom={.3} viewport={{once:true,margin:'0px 0px -40% 0px'}} style={{margin:'20% 0 0 0'}}>
+                            <ProductCard product={unReviewedProducts[1]} />
+                        </CardContainer>
+                    </ProductCardsContainer>
+                </ThirdSectionContent>
             </ThirdSection>
+
+            <FourthSection as={motion.div} ref={forthSectionRef} >
+
+            </FourthSection>
+
         </Container>
     )
 }
