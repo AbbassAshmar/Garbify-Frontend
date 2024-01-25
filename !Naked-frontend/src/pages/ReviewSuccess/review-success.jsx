@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import ManRating from "../../assets/ManRating.png"
 import { CheckCircle, DoneContainer, DoneWord, TextContainer, TitleContainer,Title,SubText,EditReviewButton} from "../ReviewPurchasedProduct/Componenets/can-not-review";
-// import { SliderTitle } from "../../components/StyledComponents/styled-components";
-import SimplifiedProductCard from "../../components/SimplifiedProductCard/simplified-product-card";
 import useUserState from "../../hooks/use-user-state";
 import { useFetchData, useSendRequest } from "../../hooks/use-fetch-data";
 import { PRODUCTS } from "../../components/products-data";
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import SimplifiedReviewProductCard from "../../components/SimplifiedProductCard/simplified-review-product-card";
+import { motion, useAnimation, useInView, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 
 const Container = styled.div`
 overflow:hidden;
@@ -64,9 +63,8 @@ background:yellow;
 
 &:before{
     content:"";
-    background:#00C2FF;
     width:200%;
-    height:102%;
+    height:100%;
     margin:auto;
     border-radius:50%;
     transform:rotate(${({$rotate})=>$rotate})  translateX(-20%) translateY(-5%);
@@ -75,10 +73,9 @@ background:yellow;
     align-items:center;
     position:absolute;
     z-index:0;
+    background: linear-gradient(to bottom, #00C2FF 10%,#86E2FF);
 }
 `
-
-
 const SecondSectionContent = styled.div`
 width:100%;
 display:flex;
@@ -99,21 +96,59 @@ display:flex;
 gap:2rem;
 width:70%;
 align-self:center;
-
 `
-
-
+const CardContainer = styled.div`
+flex:1;
+`
 const ThirdSection = styled.div`
 background:green;
 width:100%;
 height:100vh;
 background:red;
 `
+
+const cardsTitleVariant = {
+    'initial': {
+        x:-100,
+        opacity: 0,
+    },
+    'animate': {
+        x:0,
+        opacity: 1,
+        transition:{
+            duration:.4,
+            delay:.5
+        }
+    }
+};
+
+const cardVariant = {
+    'initial': {
+        y:100,
+        opacity: 0,
+    },
+    'animate': {
+        y:0,
+        opacity: 1,
+        transition:{
+            duration:.5,
+            delay:.5
+        }
+    }
+}
+
 export default function ReviewSuccess({action}){
+    const userContext = useUserState();
+    let unReviewedProductsUri = '/api/users/user/products/unreviewed';
+    const {data:unReviewedProductsData,loading,error} = useFetchData(unReviewedProductsUri,[],userContext);
+    let unReviewedProducts =unReviewedProductsData?.data.products || PRODUCTS;
+
     const [rotationState, setRotationState] = useState("-14deg");
 
     const firstSectionRef = useRef();
     const secondSectionRef = useRef();
+    const card1Ref = useRef();
+    const card2Ref = useRef();
 
     // const {scrollY} = useScroll();
 
@@ -129,15 +164,61 @@ export default function ReviewSuccess({action}){
         offset:['center start','end start']
     })
 
+    const {scrollYProgress:card1ScrollYProgress} = useScroll({
+        target:card1Ref,
+        offset:['start start','end start']
+    })
+
+    const {scrollYProgress:card2ScrollYProgress} = useScroll({
+        target:card2Ref,
+        offset:['start start','end start']
+    })
+
     let firstSectionY = useTransform(scrollYProgress,[0,1],["0%", "100%"]);
     let secondSectionY = useTransform(scrollYProgress,[0,1],["0%", "200%"]);
 
     let backgroundRotation = useTransform(scrollYProgress,[0,1],["-14deg", "0deg"]);
     let secondSectionExit = useTransform(secondSectionScrollYProgress,[0,1],['0deg','30deg']);
 
-    useMotionValueEvent(secondSectionScrollYProgress, "change", (latest) => {
-        console.log(latest)
-    })
+    let card1Y = useTransform(card1ScrollYProgress,[0,1],["0%", "-50%"]);
+    let card2Y = useTransform(card2ScrollYProgress,[0,1],["0%", "-100%"]);
+
+    let card1Opacity = useTransform(card1ScrollYProgress,[0,1],["100%", "0%"]);
+    let card2Opacity = useTransform(card2ScrollYProgress,[0,1],["100%", "0%"]);
+
+    let card1IsInView = useInView(card1Ref, {once:true, margin:"0px 0px -40% 0px"});
+    let card2IsInView = useInView(card2Ref, {once:true, margin:"0px 0px -40% 0px"});
+
+    let card1Animate = useAnimation();
+    let card2Animate = useAnimation();
+
+    const [card1Mounted, setCard1Mounted] = useState(false);
+    const [card2Mounted, setCard2Mounted] = useState(false);
+
+
+    useEffect(()=>{
+        if (card1IsInView){
+            let totalInitialAnimationDuration=(cardVariant['animate'].transition.duration + cardVariant['animate'].transition.delay + .1) * 1000;
+            card1Animate.start('animate');
+
+            setTimeout(() => {
+                setCard1Mounted(true);
+            }, totalInitialAnimationDuration);
+        }
+    } ,[card1IsInView])
+
+    useEffect(()=>{
+        if (card2IsInView){
+            let totalInitialAnimationDuration=(cardVariant['animate'].transition.duration + cardVariant['animate'].transition.delay + .1) * 1000;
+            card2Animate.start('animate')
+
+            setTimeout(() => {
+                setCard2Mounted(true);
+            },totalInitialAnimationDuration); 
+        }
+    } ,[card2IsInView,card2Opacity,card2Animate])
+
+
 
     useMotionValueEvent(backgroundRotation,'change',(latest)=>{
         setRotationState(latest)
@@ -146,21 +227,7 @@ export default function ReviewSuccess({action}){
         setRotationState(latest)
     } )
 
-    // useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    //     console.log(latest)
-    // })
-
-
-
-
-
-
-    const userContext = useUserState();
-
-    let unReviewedProductsUri = '/api/users/user/products/unreviewed';
-    const {data:unReviewedProductsData,loading,error} = useFetchData(unReviewedProductsUri,[],userContext);
-
-    let unReviewedProducts =unReviewedProductsData?.data.products || PRODUCTS;
+    
 
     return (
         <Container>
@@ -187,10 +254,16 @@ export default function ReviewSuccess({action}){
 
             <SecondSection $rotate={rotationState} as={motion.div} ref={secondSectionRef}>
                 <SecondSectionContent>
-                    <CardsTitle as={motion.div}>Products you haven't reviewed yet</CardsTitle>
+                    <CardsTitle variants={cardsTitleVariant} initial="initial" whileInView='animate' viewport={{margin:"0px 0px -40% 0px",once:"true",}} as={motion.div}>
+                        Products you haven't reviewed yet
+                    </CardsTitle>
                     <ProductCardsContainer>
-                        <motion.div style={{flex:'1'}}><SimplifiedProductCard product={unReviewedProducts[0]}/></motion.div>
-                        <motion.div style={{flex:'1',margin:'20% 0 0 0'}}><SimplifiedProductCard product={unReviewedProducts[1]}/></motion.div>
+                        <CardContainer as={motion.div} variants={cardVariant} initial="initial" animate={card1Animate} ref={card1Ref} style={card1Mounted ? {opacity:card1Opacity,y:card1Y} : {}}>
+                            <SimplifiedReviewProductCard product={unReviewedProducts[0]} name_first={true}/>
+                        </CardContainer>
+                        <CardContainer as={motion.div} variants={cardVariant} initial="initial" animate={card2Animate} ref={card2Ref} style={card2Mounted ? {opacity:card2Opacity,y:card2Y,margin:'20% 0 0 0'} : {margin:'20% 0 0 0'}}>
+                            <SimplifiedReviewProductCard product={unReviewedProducts[1]} name_first={true}/>
+                        </CardContainer>
                     </ProductCardsContainer>
                 </SecondSectionContent>
             </SecondSection>

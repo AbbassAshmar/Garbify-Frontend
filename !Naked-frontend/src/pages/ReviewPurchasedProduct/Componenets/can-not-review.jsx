@@ -94,7 +94,6 @@ height:40px;
 border:none;
 color:white;
 outline:none;
-text-decoration:none;
 box-shadow:0px 0px 6px rgba(0,0,0,0.4);
 background: #00C2FF;
 font-weight:600;

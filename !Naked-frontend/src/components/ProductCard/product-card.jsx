@@ -193,14 +193,14 @@ export function ToggleFavoritesButton({style}){
     )
 }
 
-export function ProductCardInfo({product,name_first=false}){
+export function ProductCardInfo({average_ratings,reviews_count,name,type,name_first=false}){
     const renderRatingCont = ()=>{
         return (
             <RatingContainer>
-                <Rating>{product?.reviews_summary.average_ratings}</Rating>
-                <RatingStars rating={product?.reviews_summary.average_ratings} />
+                <Rating>{average_ratings}</Rating>
+                <RatingStars rating={average_ratings} />
                 <ReviewsCount>
-                    ({product?.reviews_summary.reviews_count}
+                    ({reviews_count}
                     <ReviewsWord> reviews</ReviewsWord>)
                 </ReviewsCount>
             </RatingContainer>
@@ -210,10 +210,9 @@ export function ProductCardInfo({product,name_first=false}){
     if (name_first){
         return(
             <>
-                <Name>{product?.name}</Name>
+                <Name>{name}</Name>
                 {renderRatingCont()}
-                <Category>{product?.type}</Category>
-
+                <Category>{type}</Category>
             </>
         )
     }
@@ -221,8 +220,8 @@ export function ProductCardInfo({product,name_first=false}){
     return (
         <>
             {renderRatingCont()}
-            <Name>{product?.name}</Name>
-            <Category>{product?.type}</Category>
+            <Name>{name}</Name>
+            <Category>{type}</Category>
         </>
     )
 }

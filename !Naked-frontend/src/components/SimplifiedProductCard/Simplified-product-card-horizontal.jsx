@@ -30,7 +30,7 @@ export default function SimplifiedProductCardHorizontal({style,product,image_wid
             </div>
  
             <Details>
-                <ProductCardInfo product={product} name_first={true}/>
+                <ProductCardInfo average_ratings={product?.reviews_summary.average_ratings} reviews_count={product?.reviews_summary.reviews_count} name={product.name} type={product.type} product={product} name_first={true}/>
             </Details>
         </ProductCardContainerHorizontal>
         
