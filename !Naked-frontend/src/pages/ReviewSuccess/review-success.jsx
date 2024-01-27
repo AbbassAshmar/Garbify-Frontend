@@ -23,10 +23,7 @@ margin:auto;
 scroll-behavior: smooth;
 position:relative;
 background:white;
-margin:2rem 0 0 0;
-@media screen and (max-width:800px){
-    margin:1rem 0 0 0;
-}
+
 
 `
 
@@ -36,7 +33,7 @@ width:100%;
 position:relative;
 z-index:1;
 gap:1rem;
-padding: 0 2rem 4rem 2rem;
+padding:2rem 2rem 4rem 2rem;
 overscroll-behavior: none;
 
 @media screen and (max-width:800px){
@@ -61,16 +58,19 @@ display:grid;
 grid-template-columns:60% 1fr;
 grid-template-rows: auto; 
 `
+
 const ReviewExampleImgCont = styled.div`
 grid-column: span 1; 
 grid-row: span 2; 
 width:118%;
+transition:transform .1s;
 `
+
 const RatingsIncreaseImgCont = styled.div`
 grid-column: span 1; 
 grid-row: span 1;
 transform:translateY(10px);
-
+transition:transform .1s;
 `
 const ReviewedProductImgCont = styled.div`
 transform:translateY(20px);
@@ -78,7 +78,7 @@ justify-self:end;
 grid-column: span 1;
 grid-row: span 1; 
 width:80%;
-
+transition:transform .1s;
 `
 const Image = styled.img`
 box-shadow:0px 0px 7px rgba(0,0,0,0.6);
@@ -339,6 +339,8 @@ const cardVariant = {
 }
 
 export default function ReviewSuccess({action}){
+    
+
     const userContext = useUserState();
     let unReviewedProductsUri = '/api/users/user/products/unreviewed';
     const {data:unReviewedProductsData,loading,error} = useFetchData(unReviewedProductsUri,[],userContext);
@@ -350,22 +352,48 @@ export default function ReviewSuccess({action}){
     const secondSectionRef = useRef();
     const thirdSectionRef = useRef();
     const forthSectionRef = useRef();
+
     const card1Ref = useRef();
     const card2Ref = useRef();
 
-    const smallScreen = window.innerWidth < 800;
+    const image1Ref=  useRef();
+    const image2Ref = useRef();
+    const image3Ref = useRef();
 
-    // const {scrollY} = useScroll();
+    const [image1CoordinatesOffset,setImage1CoordinatesOffset] = useState({x:0, y:0});
+    const [image1Origin,setImage1Origin] = useState({x:0,y:0});
+
+    const [image2CoordinatesOffset,setImage2CoordinatesOffset] = useState({x:0, y:0});
+    const [image2Origin,setImage2Origin] = useState({x:0,y:0});
+
+    const [image3CoordinatesOffset,setImage3CoordinatesOffset] = useState({x:0, y:0});
+    const [image3Origin,setImage3Origin] = useState({x:0, y:0});
+
+    useEffect(()=>{
+        setImage1Origin({
+            x:image1Ref?.current?.getBoundingClientRect().left + (image1Ref?.current?.getBoundingClientRect().width/2), 
+            y:image1Ref?.current?.getBoundingClientRect().top + (image1Ref?.current?.getBoundingClientRect().height/2)
+        })
+
+        setImage2Origin({
+            x:image2Ref?.current?.getBoundingClientRect().left + (image2Ref?.current?.getBoundingClientRect().width/2), 
+            y:image2Ref?.current?.getBoundingClientRect().top + (image2Ref?.current?.getBoundingClientRect().height/2)
+        })
+
+        setImage3Origin({
+            x:image3Ref?.current?.getBoundingClientRect().left + (image3Ref?.current?.getBoundingClientRect().width/2), 
+            y:image3Ref?.current?.getBoundingClientRect().top + (image3Ref?.current?.getBoundingClientRect().height/2)
+        })
+    },[])
+
+
+    const smallScreen = window.innerWidth < 800;
 
     const {scrollYProgress} = useScroll({
         target:firstSectionRef,
         // start of firstSectionRef meets end of viewport = 0
         offset: [smallScreen? '0.3 start' :"-0.2 start" , "end start"]
     });
-    const {scrollYProgress:ImagesScrollYProgress} = useScroll({
-        target:firstSectionRef,
-        offset: [smallScreen? '-0.2 start' :"-0.2 start" , "end start"]
-    })
 
     const {scrollYProgress:secondSectionScrollYProgress} = useScroll({
         target:secondSectionRef,
@@ -410,6 +438,7 @@ export default function ReviewSuccess({action}){
     const [card1Mounted, setCard1Mounted] = useState(false);
     const [card2Mounted, setCard2Mounted] = useState(false);
 
+    
    
     useEffect(()=>{
         if (card1IsInView){
@@ -440,11 +469,23 @@ export default function ReviewSuccess({action}){
     useMotionValueEvent(backgroundRotation,'change',(latest)=>{
         setRotationState(latest)
     } )
+
     useMotionValueEvent(secondSectionExit,'change',(latest)=>{
         setRotationState(latest)
     } )
 
     
+  
+
+    function handleMouseMoveOverImage(e,imageOrigin,setImageCoordinatesOffset){
+        let XMouserelativeToViewport = e.clientX;
+        let YMouserelativeToViewport = e.clientY;
+        
+        let XMouseRelativeToImage =XMouserelativeToViewport - imageOrigin.x;
+        let YMouseRelativeToImage =YMouserelativeToViewport - imageOrigin.y;
+        
+        setImageCoordinatesOffset({x:Math.max(-30, Math.min(XMouseRelativeToImage, 30)), y:Math.max(-30, Math.min(YMouseRelativeToImage, 30))})
+    }
 
     return (
         <Container>
@@ -464,18 +505,16 @@ export default function ReviewSuccess({action}){
                     <ContinueShoppingBtn>Continue Shopping</ContinueShoppingBtn>
                 </TextContainer>
                 <ImageContainer>
-                    {/* <Image src={ManRating} /> */}
                     <ReviewImagesContainer>
-                        <ReviewExampleImgCont as={motion.div}>
+                        <ReviewExampleImgCont ref={image1Ref} onMouseMove={(e)=>{handleMouseMoveOverImage(e,image1Origin,setImage1CoordinatesOffset)}} as={motion.div} style={{x:image1CoordinatesOffset.x, y:image1CoordinatesOffset.y}}>
                             <Image src={reviewExample} />
                         </ReviewExampleImgCont>
-                        <RatingsIncreaseImgCont>
+                        <RatingsIncreaseImgCont ref={image2Ref} onMouseMove={(e)=>{handleMouseMoveOverImage(e,image2Origin,setImage2CoordinatesOffset)}} as={motion.div} style={{x:image2CoordinatesOffset.x, y:image2CoordinatesOffset.y}}>
                             <Image src={ratingsIncrease} />
                         </RatingsIncreaseImgCont>
-                        <ReviewedProductImgCont>
+                        <ReviewedProductImgCont ref={image3Ref} onMouseMove={(e)=>{handleMouseMoveOverImage(e,image3Origin,setImage3CoordinatesOffset)}} as={motion.div} style={{x:image3CoordinatesOffset.x, y:image3CoordinatesOffset.y}}>
                             <Image src={reviewedProduct} />
                         </ReviewedProductImgCont>
-                        
                     </ReviewImagesContainer>
                     <LightBlueBackground />
                 </ImageContainer>
