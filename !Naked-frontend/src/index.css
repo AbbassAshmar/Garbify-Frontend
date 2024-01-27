@@ -6,6 +6,7 @@
 }
 
 :root {
+    overscroll-behavior: none;
     --heading-1: 61px;
     --heading-1-mobile: 32px;
   

@@ -1,5 +1,8 @@
 import styled from "styled-components";
-import ManRating from "../../assets/ManRating.png"
+import reviewedProduct from "../../assets/reviewedProduct.png";
+import reviewExample from "../../assets/reviewExample.png";
+import ratingsIncrease from "../../assets/ratingsIncrease.png";
+import ManRating from "../../assets/ManRating.png";
 import { CheckCircle, DoneContainer, DoneWord, TextContainer, TitleContainer,Title,SubText,EditReviewButton} from "../ReviewPurchasedProduct/Componenets/can-not-review";
 import useUserState from "../../hooks/use-user-state";
 import { useFetchData, useSendRequest } from "../../hooks/use-fetch-data";
@@ -9,15 +12,21 @@ import SimplifiedReviewProductCard from "../../components/SimplifiedProductCard/
 import { motion, useAnimation, useInView, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import SimplifiedProductCard from "../../components/SimplifiedProductCard/simplified-product-card";
 import ProductCard from "../../components/ProductCard/product-card";
+import cargoLeft from "../../assets/cargoLeft.png";
+import cargoRight from "../../assets/cargoRight.png";
 
 const Container = styled.div`
 overflow:hidden;
 display:flex;
 flex-direction:column;
 margin:auto;
+scroll-behavior: smooth;
 position:relative;
 background:white;
-margin: 2rem 0;
+margin:2rem 0 0 0;
+@media screen and (max-width:800px){
+    margin:1rem 0 0 0;
+}
 
 `
 
@@ -26,11 +35,14 @@ display:flex;
 width:100%;
 position:relative;
 z-index:1;
-background:red;
-min-height:55vh;
+gap:1rem;
+padding: 0 2rem 4rem 2rem;
+overscroll-behavior: none;
+
 @media screen and (max-width:800px){
     flex-direction:column;
     gap:2rem;
+    padding:0 1rem 4rem 1rem;
 }
 `
 const ContinueShoppingBtn  = styled(EditReviewButton)`
@@ -39,21 +51,50 @@ width:230px;
 
 const ImageContainer = styled.div`
 position:relative;
-flex:1;
-margin-right:2rem;
+flex-shrink:0;
+flex:1.3;
 `
 
+const ReviewImagesContainer = styled.div`
+padding-top:3px;
+display:grid;
+grid-template-columns:60% 1fr;
+grid-template-rows: auto; 
+`
+const ReviewExampleImgCont = styled.div`
+grid-column: span 1; 
+grid-row: span 2; 
+width:118%;
+`
+const RatingsIncreaseImgCont = styled.div`
+grid-column: span 1; 
+grid-row: span 1;
+transform:translateY(10px);
+
+`
+const ReviewedProductImgCont = styled.div`
+transform:translateY(20px);
+justify-self:end;
+grid-column: span 1;
+grid-row: span 1; 
+width:80%;
+
+`
 const Image = styled.img`
+box-shadow:0px 0px 7px rgba(0,0,0,0.6);
 width:100%;
+border-radius:3px;
 object-fit:cover;
 `
+
+
 const LightBlueBackground = styled.div`
 position:absolute;
-width:900px;
-height:600px;
+width:290%;
+height:80vh;
 background: #86E2FF;
 border-radius:50%;
-bottom:-140%;
+top:60%;
 right:-50%;
 z-index:-1;
 transform:rotate(-20deg);
@@ -62,14 +103,13 @@ transform:rotate(-20deg);
 const SecondSection = styled.div`
 z-index:2;
 width:100%;
-height:200vh;
+padding: 0 0 10vh 0;
 position:relative;
-background:yellow;
 
 &:before{
     content:"";
     width:200%;
-    height:100%;
+    height:110%;
     margin:auto;
     border-radius:50%;
     transform:rotate(${({$rotate})=>$rotate})  translateX(-20%) translateY(-5%);
@@ -79,6 +119,12 @@ background:yellow;
     position:absolute;
     z-index:0;
     background: linear-gradient(to bottom, #00C2FF 10%,#86E2FF);
+    @media screen and (max-width:800px){
+        transform:none;
+        border-radius:0;
+        left:-50%;
+        top:0;
+    }
 }
 `
 const SecondSectionContent = styled.div`
@@ -90,6 +136,9 @@ padding:20% 0 0 2rem;
 z-index:3;
 position:relative;
 justify-content:center;
+@media screen and (max-width:800px){
+    padding: 20% 1rem;
+}
 `
 const CardsTitle = styled.h4`
 font-size: var(--heading-4);
@@ -101,16 +150,32 @@ display:flex;
 gap:2rem;
 width:70%;
 align-self:center;
+padding-bottom:2rem;
+@media screen and (max-width:1250px){
+    width:100%;
+}
+
+@media screen and (max-width:800px){
+    flex-direction:column;
+}
 `
 const CardContainer = styled.div`
 flex:1;
 transition:transform .1s;
 `
+const CardContainer2 = styled(CardContainer)`
+margin:20% 0 0 0;
+@media screen and (max-width:800px){
+    margin:0;
+}
+`
 const ThirdSection = styled.div`
 width:100%;
-background:red;
-
 z-index:0;
+
+@media screen and (max-width:800px){
+   padding-bottom:2rem;
+}
 `
 
 const ThirdSectionContent = styled.div`
@@ -123,11 +188,125 @@ justify-content:center;
 `
 
 const FourthSection = styled.div`
-height:100vh;
-background:pink;
+width:100%;
+background:#cdbeaa;
 position:relative;
 `
 
+const FourthSectionContent = styled.div`
+width:100%;
+display:flex;
+padding:2rem;
+@media screen and (max-width:900px){
+    padding:1rem;
+    flex-direction:column;
+    gap:2rem;
+}
+`
+const CargoWordContainer = styled.div`
+font-weight:600;
+font-size:var(--heading-1);
+z-index:1;
+align-self:center;
+margin-bottom:25%;
+
+@media screen and (max-width:1200px){
+    font-size:var(--heading-2);
+    margin-bottom:30%;
+
+}
+@media screen and (max-width:900px){
+    align-self:flex-start;
+    margin:0;
+}
+`
+
+const CargoImagesTextContainer = styled.div`
+gap:2rem;
+z-index:0;
+display:flex;
+flex-shrink:0;
+transform:translateX(-7rem);
+width:88%;
+@media screen and (max-width:1200px){
+    width:90%;
+}
+@media screen and (max-width:900px){
+    flex-direction:column;
+    transform:none;
+    width:100%;
+}
+`
+
+const CargoImagesContainer = styled.div`
+gap:2.78%;
+width:53%;
+display:flex;
+flex-shrink:0;
+overflow:hidden;
+padding: 0 0 7% 0;
+@media screen and (max-width:900px){
+    transform:none;
+    width:100%;
+}
+`
+
+const CargoImage = styled.img`
+flex-shrink:0;
+width:50%;
+`
+const CargoTextButtonContainer = styled.div`
+display:flex;
+gap:4rem;
+align-self:center;
+flex-direction:column;
+flex:1;
+
+@media screen and (max-width:900px){
+    align-self:flex-start;
+    gap:2rem;
+}
+`
+const CargoTextContainer = styled.div`
+display:flex;
+gap:2rem;
+flex-direction:column;
+
+@media screen and (max-width:900px){
+    gap:1rem;
+}
+`
+const CollectionWord = styled.h1`
+font-weight:600;
+font-size:var(--heading-1);
+@media screen and (max-width:1200px){
+    font-size:var(--heading-2);
+}
+`
+const CargoText = styled.p`
+font-weight:600;
+margin: 0 0 0 5px;
+max-width:min(80%, 500px);
+@media screen and (max-width:1200px){
+    width:min(100% , 380px);
+}
+`
+const ShopNowButton = styled.button`
+background:black;
+border:none;
+outline:none;
+color:white;
+width:290px;
+height:40px;
+font-weight:600;
+border-radius:3px;
+box-shadow: -2px 4px 7px rgba(0,0,0,0.5);
+cursor:pointer;
+transition:background .2s;
+&:hover{
+    background:#ac9472;
+}
+`
 
 const cardsTitleVariant = {
     'initial': {
@@ -174,14 +353,19 @@ export default function ReviewSuccess({action}){
     const card1Ref = useRef();
     const card2Ref = useRef();
 
+    const smallScreen = window.innerWidth < 800;
+
     // const {scrollY} = useScroll();
 
     const {scrollYProgress} = useScroll({
         target:firstSectionRef,
         // start of firstSectionRef meets end of viewport = 0
-        offset: ["-18vh", "end start"]
-
+        offset: [smallScreen? '0.3 start' :"-0.2 start" , "end start"]
     });
+    const {scrollYProgress:ImagesScrollYProgress} = useScroll({
+        target:firstSectionRef,
+        offset: [smallScreen? '-0.2 start' :"-0.2 start" , "end start"]
+    })
 
     const {scrollYProgress:secondSectionScrollYProgress} = useScroll({
         target:secondSectionRef,
@@ -200,11 +384,11 @@ export default function ReviewSuccess({action}){
 
     const {scrollYProgress:thirdSectionScrollYProgress} = useScroll({
         target:thirdSectionRef,
-        offset:['start start','end start']
+        offset:[smallScreen?'0.7 0' : '0.4 0','end start']
     })
 
-    let firstSectionY = useTransform(scrollYProgress,[0,1],["0%", "100%"]);
-    let secondSectionY = useTransform(scrollYProgress,[0,1],["0%", "200%"]);
+
+    let firstSectionY = useTransform(scrollYProgress,[0,1],["0%", (smallScreen ?"25%":"30%")]);
 
     let backgroundRotation = useTransform(scrollYProgress,[0,1],["-14deg", "0deg"]);
     let secondSectionExit = useTransform(secondSectionScrollYProgress,[0,1],['0deg','30deg']);
@@ -215,7 +399,7 @@ export default function ReviewSuccess({action}){
     let card1Opacity = useTransform(card1ScrollYProgress,[0,1],["100%", "0%"]);
     let card2Opacity = useTransform(card2ScrollYProgress,[0,1],["100%", "0%"]);
 
-    let fourthSectionEntrance = useTransform(thirdSectionScrollYProgress,[0,1],['0%', '100%']);
+    let fourthSectionEntrance = useTransform(thirdSectionScrollYProgress,[0,1],['0%', smallScreen?"15%":'25%']);
 
     let card1IsInView = useInView(card1Ref, {once:true, margin:"0px 0px -40% 0px"});
     let card2IsInView = useInView(card2Ref, {once:true, margin:"0px 0px -40% 0px"});
@@ -226,9 +410,7 @@ export default function ReviewSuccess({action}){
     const [card1Mounted, setCard1Mounted] = useState(false);
     const [card2Mounted, setCard2Mounted] = useState(false);
 
-    useMotionValueEvent(thirdSectionScrollYProgress,'change',(latest)=>{
-        console.log(latest)
-    } )
+   
     useEffect(()=>{
         if (card1IsInView){
             let totalInitialAnimationDuration=.3 * 1000;
@@ -267,22 +449,34 @@ export default function ReviewSuccess({action}){
     return (
         <Container>
             <FirstSection as={motion.div} style={{y:firstSectionY}} ref={firstSectionRef}>
-                <TextContainer style={{paddingLeft:"2rem",flex:'3'}}>
-                    <TitleContainer style={{width:'500px'}}>
+                <TextContainer style={{flex:'1'}}>
+                    <TitleContainer style={{maxWidth:'500px'}}>
                         <DoneContainer>
-                            <CheckCircle size={window.innerWidth<600 ? 40 : 60}/> 
+                            <CheckCircle size={window.innerWidth <= 1140 ?40 : 60}/> 
                             <DoneWord>Success</DoneWord>
                         </DoneContainer>
                         <Title>Your review was {action} successfully</Title>
                     </TitleContainer>
-                    <SubText style={{width:'500px'}}>
+                    <SubText style={{maxWidth:'500px'}}>
                         Thank you for your valuable feedback! Your 
                         opinion matters. Keep sharing your thoughts.
                     </SubText>
                     <ContinueShoppingBtn>Continue Shopping</ContinueShoppingBtn>
                 </TextContainer>
                 <ImageContainer>
-                    <Image src={ManRating} />
+                    {/* <Image src={ManRating} /> */}
+                    <ReviewImagesContainer>
+                        <ReviewExampleImgCont as={motion.div}>
+                            <Image src={reviewExample} />
+                        </ReviewExampleImgCont>
+                        <RatingsIncreaseImgCont>
+                            <Image src={ratingsIncrease} />
+                        </RatingsIncreaseImgCont>
+                        <ReviewedProductImgCont>
+                            <Image src={reviewedProduct} />
+                        </ReviewedProductImgCont>
+                        
+                    </ReviewImagesContainer>
                     <LightBlueBackground />
                 </ImageContainer>
             </FirstSection>
@@ -296,7 +490,7 @@ export default function ReviewSuccess({action}){
                         <CardContainer as={motion.div} variants={cardVariant} initial="initial" animate={card1Animate} ref={card1Ref} style={card1Mounted ? {opacity:card1Opacity,y:card1Y} : {}}>
                             <SimplifiedReviewProductCard product={unReviewedProducts[0]} name_first={true}/>
                         </CardContainer>
-                        <CardContainer as={motion.div} variants={cardVariant} initial="initial" animate={card2Animate} ref={card2Ref} style={card2Mounted ? {opacity:card2Opacity,y:card2Y,margin:'20% 0 0 0'} : {margin:'20% 0 0 0'}}>
+                        <CardContainer as={motion.div} variants={cardVariant} initial="initial" animate={card2Animate} ref={card2Ref} style={card2Mounted ? {opacity:card2Opacity,y:card2Y, margin:`${!smallScreen ? "20% 0 0 0":"0"}`} : {margin:`${!smallScreen ? "20% 0 0 0":"0"}`}}>
                             <SimplifiedReviewProductCard product={unReviewedProducts[1]} name_first={true}/>
                         </CardContainer>
                     </ProductCardsContainer>
@@ -312,15 +506,37 @@ export default function ReviewSuccess({action}){
                         <CardContainer as={motion.div} variants={cardVariant} initial="initial" whileInView='animate' custom={.2} viewport={{once:true,margin:'0px 0px -40% 0px'}} >
                             <ProductCard product={unReviewedProducts[0]} />
                         </CardContainer>
-                        <CardContainer as={motion.div} variants={cardVariant} initial="initial" whileInView='animate' custom={.3} viewport={{once:true,margin:'0px 0px -40% 0px'}} style={{margin:'20% 0 0 0'}}>
+                        <CardContainer2 as={motion.div} variants={cardVariant} initial="initial" whileInView='animate' custom={.3} viewport={{once:true,margin:'0px 0px -40% 0px'}}>
                             <ProductCard product={unReviewedProducts[1]} />
-                        </CardContainer>
+                        </CardContainer2>
                     </ProductCardsContainer>
                 </ThirdSectionContent>
             </ThirdSection>
 
             <FourthSection as={motion.div} ref={forthSectionRef} >
-
+                <FourthSectionContent>
+                    <CargoWordContainer>CARGOS</CargoWordContainer>
+                    <CargoImagesTextContainer>
+                        <CargoImagesContainer>
+                            <CargoImage src={cargoLeft}/>
+                            <CargoImage style={{transform:"translateY(13.4%)"}}  src={cargoRight}/>
+                        </CargoImagesContainer>
+                        <CargoTextButtonContainer>
+                            <CargoTextContainer>
+                                <CollectionWord>COLLECTION</CollectionWord>
+                                <div style={{borderLeft:"8px solid black"}}>
+                                    <CargoText>
+                                        Explore our premium collection of hoodies, crafted 
+                                        with high-quality materials for maximum comfort and style
+                                    </CargoText>
+                                </div>
+                            </CargoTextContainer>
+                            <ShopNowButton>
+                                Shop Now <i style={{color:"white"}} className="fa-solid fa-angle-right"/>
+                            </ShopNowButton>
+                        </CargoTextButtonContainer>
+                    </CargoImagesTextContainer>
+                </FourthSectionContent>
             </FourthSection>
 
         </Container>

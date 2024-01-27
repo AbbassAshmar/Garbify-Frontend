@@ -56,17 +56,29 @@ export const DoneWord  = styled.h2`
 font-weight:600;
 font-size:var(--heading-2);
 color:#00C2FF;
-@media screen and (max-width:600px){
+
+
+@media screen and (max-width:1140px){
+    font-size:var(--heading-4);
+}
+@media screen and (max-width:800px){
     font-size:var(--heading-2-mobile);
 }
+
+
 `
 export const Title = styled.h4 `
 color : black;
 font-weight:600;
 letter-spacing:-0.01em;
-font-size:var(--heading-4);
-@media screen and (max-width:600px){
-    font-size:var(--heading-4-mobile);
+font-size:var(--heading-2);
+
+@media screen and (max-width:1140px){
+    font-size:var(--heading-4);
+}
+
+@media screen and (max-width:800px){
+    font-size:var(--heading-2-mobile);
 }
 `
 export const SubText = styled.h6`
@@ -75,7 +87,12 @@ font-weight:500;
 color:grey;
 line-height:1.3em;
 font-size:var(--heading-6);
-@media screen and (max-width:600px){
+
+@media screen and (max-width:1140px){
+    font-size:var(--body);
+}
+
+@media screen and (max-width:800px){
     font-size:var(--heading-6-mobile);
 }
 `
