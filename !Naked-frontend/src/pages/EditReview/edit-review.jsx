@@ -2,13 +2,10 @@ import { useState } from "react";
 import { REVIEWS_USERS_PRODUCTS } from "../../components/products-data";
 import { useSendRequest } from "../../hooks/use-fetch-data";
 import useUserState from "../../hooks/use-user-state";
-import ReviewForm from "./Componenets/review-form";
 import { useParams } from "react-router-dom";
+import ReviewForm from "../ReviewForm/review-form";
 
-
-
-
-export default function ReviewPurchasedProductEdit(){
+export default function EditReview(){
     const {review_id} = useParams();
     let [review, setReview] = useState(REVIEWS_USERS_PRODUCTS[0]||null);
 
@@ -35,6 +32,6 @@ export default function ReviewPurchasedProductEdit(){
     }
 
     return (
-        <ReviewForm review={review} />
+        <>{review &&  <ReviewForm review={review} />}</>
     )
 }

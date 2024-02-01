@@ -6,6 +6,7 @@ import { useFetchData } from "../../../hooks/use-fetch-data";
 import { PRODUCTS } from "../../../components/products-data";
 import AnimatedCard from "../Components/animated-card";
 import { CardsTitle,ProductCardsContainer,CardContainer,CardContainer2 } from "./third-section";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
 z-index:2;
@@ -49,23 +50,39 @@ justify-content:center;
 `
 
 export default function SecondSection({containerRef,rotationState}){
-    const userContext = useUserState();
-    let unReviewedProductsUri = '/api/users/user/products/unreviewed';
-    const {data:unReviewedProductsData,loading,error} = useFetchData(unReviewedProductsUri,[],userContext);
-    let unReviewedProducts =unReviewedProductsData?.data.products || PRODUCTS;
+    const [triedFetchingSuggested, setTriedFetchingSuggested] = useState(false);
 
-    
+    const userContext = useUserState();
+    let unreviewedProductsUri = '/api/users/user/products/unreviewed';
+    const {data:productsData,loading,error,refetchData} = useFetchData(unreviewedProductsUri,[],userContext);
+    let products =productsData?.data[Object.keys(productsData?.data)[0]] ||PRODUCTS ;
+
+
+    useEffect(() => {
+        // Check if there are no unreviewed products and haven't tried fetching suggested yet
+        if (!loading && !error && products?.length === 0 && !triedFetchingSuggested) {
+            const suggestedProductsUri = '/api/users/user/products/suggested';
+            refetchData(suggestedProductsUri);
+            setTriedFetchingSuggested(true);
+        }
+    }, [loading, error, products, triedFetchingSuggested, refetchData]);
+
     return(
-        <Container $rotate={rotationState} as={motion.div} ref={containerRef}>
-            <Content>
-                <CardsTitle variants={cardsTitleVariant} initial="initial" whileInView='animate' viewport={{margin:"0px 0px -40% 0px",once:"true",}} as={motion.div}>
-                    Products you haven't reviewed yet
-                </CardsTitle>
-                <ProductCardsContainer>
-                    <AnimatedCard Container={CardContainer} product={unReviewedProducts[0]} />
-                    <AnimatedCard Container={CardContainer2} product={unReviewedProducts[1]} />
-                </ProductCardsContainer>
-            </Content>
-        </Container>
+        <>
+        {products && products.length > 0 &&
+            <Container $rotate={rotationState} as={motion.div} ref={containerRef}>
+                <Content>
+                    <CardsTitle variants={cardsTitleVariant} initial="initial" whileInView='animate' viewport={{margin:"0px 0px -40% 0px",once:"true",}} as={motion.div}>
+                        Products you haven't reviewed yet
+                    </CardsTitle>
+                        <ProductCardsContainer>
+                            <AnimatedCard Container={CardContainer} product={products[0]} />
+                            <AnimatedCard Container={CardContainer2} product={products[1]} />
+                        </ProductCardsContainer>
+                </Content>
+            </Container>
+        }
+        </>
+
     )
 }

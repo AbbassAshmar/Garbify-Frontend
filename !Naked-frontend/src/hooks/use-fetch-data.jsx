@@ -96,5 +96,5 @@ export function useFetchData(url,dependency_array=[],userContext=null,init={}){
         fetchData(url , init)
     },dependency_array)
 
-    return {data,setData, error, loading ,reFetchData:fetchData}
+    return {data,setData, error, loading ,refetchData:fetchData}
 }

@@ -56,7 +56,7 @@ export default function ReviewSuccess({action}){
 
     const firstSectionRef = useRef();
     const secondSectionRef = useRef();
-
+        
     const {scrollYProgress:firstSectionScrollYProgress} = useScroll({
         target:firstSectionRef,
         // start of firstSectionRef meets end of viewport = 0
@@ -74,20 +74,17 @@ export default function ReviewSuccess({action}){
 
     useMotionValueEvent(secondSectionEntranceRotation,'change',(latest)=>{
         setRotationState(latest)
-    } )
+    })
 
     useMotionValueEvent(secondSectionExitRotation,'change',(latest)=>{
         setRotationState(latest)
-    } )
+    })
 
     return (
         <Container>
-            <FirstSection action={action} containerRef={firstSectionRef}/>
-
+            <FirstSection secondSectionRef={secondSectionRef} action={action} containerRef={firstSectionRef}/>
             <SecondSection containerRef={secondSectionRef} rotationState={rotationState}/>
-    
             <ThirdSection />
-
             <FourthSection />
         </Container>
     )

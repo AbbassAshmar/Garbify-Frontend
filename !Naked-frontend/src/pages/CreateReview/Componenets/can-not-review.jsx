@@ -174,7 +174,10 @@ export default function CanNotReview({reviewId}){
                         <Title>You have already reviewed this product !</Title>
                     </TitleContainer>
 
-                    <SubText>If you'd like to make changes or add more details, feel free to edit your review below.</SubText>
+                    <SubText>
+                        If you'd like to make changes or add more details, 
+                        feel free to edit your review below.
+                    </SubText>
 
                     <ButtonsContainer>
                         <EditReviewButton onClick={handleEditReviewClick}>Edit review</EditReviewButton>

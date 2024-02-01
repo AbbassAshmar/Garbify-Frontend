@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import empty_star from "../../../assets/empty_star.png";
-import star from "../../../assets/star.png";
+import empty_star from "../../assets/empty_star.png";
+import star from "../../assets/star.png"
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSendRequest } from '../../../hooks/use-fetch-data';
-import useUserState from '../../../hooks/use-user-state';
-import SuccessOrErrorPopUp from '../../../components/SuccessOrErrorPopUp/success-or-error-pop-up';
-import { ratingToStars } from '../../../components/RatingStars/rating-stars';
-import Loading from '../../../components/Loading/loading';
-import ReviewSuccess from '../../ReviewSuccess/review-success';
+import { useSendRequest } from '../../hooks/use-fetch-data';
+import useUserState from '../../hooks/use-user-state';
+import SuccessOrErrorPopUp from '../../components/SuccessOrErrorPopUp/success-or-error-pop-up';
+import Loading from '../../components/Loading/loading';
+import ReviewSuccess from '../ReviewSuccess/review-success';
+import { ratingToStars } from '../../components/RatingStars/rating-stars';
 
 const Container = styled.div`
 padding: min(2rem ,5%);

@@ -5,7 +5,7 @@ import reviewExample from '../../../assets/reviewExample.png';
 import ratingsIncrease from '../../../assets/ratingsIncrease.png';
 import reviewedProduct from '../../../assets/reviewedProduct.png';
 
-import { CheckCircle, DoneContainer, DoneWord, TextContainer, TitleContainer,Title,SubText,EditReviewButton} from "../../ReviewPurchasedProduct/Componenets/can-not-review";
+import { CheckCircle, DoneContainer, DoneWord, TextContainer, TitleContainer,Title,SubText,EditReviewButton} from "../../CreateReview/Componenets/can-not-review";
 
 const Container = styled.div`
 display:flex;
@@ -81,16 +81,20 @@ const ImagesList = [
 ];
 
 
-export default function FirstSection({action,containerRef}){
+export default function FirstSection({action,containerRef,secondSectionRef}){
     const smallScreen = window.innerWidth < 800;
 
-    const {scrollYProgress:firstSectionScrollYProgress} = useScroll({
-        target:containerRef,
-        // start of firstSectionRef meets end of viewport = 0
-        offset: [smallScreen? '0.3 start' :"-0.2 start" , "end start"]
-    });
-
-    let firstSectionY = useTransform(firstSectionScrollYProgress,[0,1],["0%", (smallScreen ?"25%":"30%")]);
+    let firstSectionY = 0;
+    if (secondSectionRef.current){
+        const {scrollYProgress:firstSectionScrollYProgress} = useScroll({
+            target:containerRef,
+            // start of firstSectionRef meets end of viewport = 0
+            offset: [smallScreen? '0.3 start' :"-0.2 start" , "end start"]
+        });
+    
+        firstSectionY = useTransform(firstSectionScrollYProgress,[0,1],["0%", (smallScreen ?"25%":"30%")]);
+    }
+    
 
     return (
         <Container as={motion.div} style={{y:firstSectionY}} ref={containerRef}>

@@ -6,13 +6,13 @@ import Login from "./pages/Login/login"
 import Products from "./pages/Products/products"
 import Product from "./pages/Product/product"
 import Orders from './pages/Orders/orders'
-import ReviewPurchasedProduct from "./pages/ReviewPurchasedProduct/review-purchased-product"
 import Favorites from "./pages/Favorites/favorites"
 import OtherUsersFavorites from "./pages/OtherUsersFavorites/other-users-favorites"
 import User from "./pages/User/user"
 import Reviews from "./pages/Reviews/reviews"
 import OtherUsersFavoritesLists from "./pages/OtherUsersFavoritesLists/other-users-favorites-lists"
-import ReviewPurchasedProductEdit from "./pages/ReviewPurchasedProduct/review-purchased-product-edit"
+import CreateReview from "./pages/CreateReview/create-review"
+import EditReview from "./pages/EditReview/edit-review"
 
 export const router = createBrowserRouter([
     {
@@ -36,12 +36,12 @@ export const router = createBrowserRouter([
                 element:<Orders />
             },
             {
-                path:"/reviews/:product_id",
-                element:<ReviewPurchasedProduct />
+                path:"/products/:product_id/review",
+                element:<CreateReview />
             },
             {
                 path:"/reviews/:review_id/edit",
-                element:<ReviewPurchasedProductEdit />
+                element:<EditReview />
             },
             {
                 path:'/favorites',

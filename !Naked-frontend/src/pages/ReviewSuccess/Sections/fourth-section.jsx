@@ -37,6 +37,7 @@ const Container = styled.div`
 width:100%;
 background:#cdbeaa;
 position:relative;
+z-index:4;
 `
 
 const Content = styled.div`
