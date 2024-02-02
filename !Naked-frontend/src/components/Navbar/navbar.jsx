@@ -16,7 +16,6 @@ import {Categories } from "./navbar-filters"
 const NavContainer = styled.div`
 width :100%;
 height:18vh;
-max-height:110px;
 background:#F1F4F9;
 display:flex;
 justify-content:center;
@@ -24,17 +23,22 @@ align-items:center;
 @media screen and (max-width:1000px){
     height:auto;
 }
+@media screen and (min-height:1000px){
+    height:140px;
+}
 `
 const NavWrapper = styled.div`
 width:100%;
 height:10vh;
-max-height:60px;
 position:relative;
 padding: 0 min(2rem ,4%);
 display:flex;
 align-items:center;
 justify-content:space-between;
 background:white;
+@media screen and (min-height:1000px){
+    height:60px;
+}
 `
 
 const NavPosition = styled.div`
