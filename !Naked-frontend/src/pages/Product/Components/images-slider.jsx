@@ -133,7 +133,7 @@ export default function ImagesSlider({imagesList,ImagesColor}){
                     {ImagesColor && imagesList && (
                         imagesList[ImagesColor].map((image,index)=>{
                             return(
-                                <ImageContainer $index={index} $isCurrent={currentImage===index} style={findInitialStyle(index)}>
+                                <ImageContainer key={index} $index={index} $isCurrent={currentImage===index} style={findInitialStyle(index)}>
                                     <Image  src={image.url} alt={image.image_details}/>
                                 </ImageContainer>
                             )

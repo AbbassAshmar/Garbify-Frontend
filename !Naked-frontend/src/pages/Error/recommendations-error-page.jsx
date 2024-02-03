@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import TwoGirlsWearingHoodies from "../../assets/TwoGirlsWearingHoodies.png";
+import SimplifiedProductCardHorizontal from "../../components/SimplifiedProductCard/Simplified-product-card-horizontal";
+import { PRODUCTS } from "../../components/products-data";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
 width:100%;
@@ -24,6 +27,7 @@ align-items:stretch;
 @media screen and (max-width:800px){
     flex-direction:column-reverse;
     gap:0;
+    margin:0 .5rem 0 .5rem;
 }
 `
 
@@ -35,13 +39,15 @@ display:flex;
 margin:4rem 0 4rem 0;
 background:#F1F4F9;
 align-self:flex-start;
+overflow:hidden;
 flex-direction:column;
 border-radius: 0 22px 22px 0 ;
 box-shadow:0px 0px 22px rgba(0,0,0,0.6);
 @media screen and (max-width:800px){
-    margin:0 .5rem 0 .5rem;
     border-radius: 22px;
     padding: 2rem .5rem 2rem .5rem ;
+    width:100%;
+    margin:0 0 .5rem 0;
 }
 @media screen and (min-width:1200px){
     flex:none;
@@ -49,11 +55,7 @@ box-shadow:0px 0px 22px rgba(0,0,0,0.6);
     margin:4rem 0 10rem 0;
 }
 `
-const Slider = styled.div`
-height:100px;
-width:100%;
-background:grey;
-`
+
 const PrimaryText = styled.h2`
 font-size:var(--heading-2);
 font-weight:600;
@@ -138,7 +140,7 @@ justify-content:center;
 }
 
 @media screen and (max-width:800px){
-    padding-right:1rem;
+    padding-right:.5rem;
 }
 `
 
@@ -185,7 +187,7 @@ text-shadow: 1px 1px black, -1px -1px black;
     font-size:18vw;
     top:0%;
     right:none;
-    left:1rem;
+    left:.5rem;
 }
 
 @supports(-webkit-text-stroke: 1px black){
@@ -235,6 +237,55 @@ z-index:-2;
 
 `
 
+const SliderWindow = styled.div`
+width:100%;
+overflow:hidden;
+`
+
+const SlidesContainer = styled.div`
+display:flex;
+width:100%;
+`
+
+function CardsSlider(){
+    const [currentSlideId,setCurrentSlidId] = useState(0);
+    const [products , setProducts] = useState(PRODUCTS)
+    const [transition,setTransition] = useState(true);
+
+    // function to request hoodies products
+    
+
+    function slideLeft(){
+        setTransition(true)
+        setCurrentSlidId(1);
+        setTimeout(()=>{
+            setTransition(false)
+            setProducts([...products.slice(1), products[0]]);
+            setCurrentSlidId(0);
+        },1000)
+    }
+
+    useEffect(()=>{
+        const intervalId = setInterval(()=>{
+            slideLeft();
+        },4000)
+        return ()=>{clearInterval(intervalId)};
+    },[products])
+
+    return (
+        <SliderWindow>
+            <SlidesContainer style={{transform:`translateX(${-currentSlideId*(100)}%)`,transition:`${transition?'transform .3s':'none'}`}}>
+                {products.map((product,index)=>{
+                    return(
+                        <div key={product.id} style={{minWidth:'100%'}}>
+                            <SimplifiedProductCardHorizontal product={product}/>
+                        </div>
+                    )
+                })}
+            </SlidesContainer>
+        </SliderWindow>
+    )
+}
 export default function RecommendationsErrorPage(){
     const SECONDARY_TEXT = 'Explore our premium collection of hoodies, crafted with high-quality materials for maximum comfort and style';
 
@@ -243,7 +294,7 @@ export default function RecommendationsErrorPage(){
             <HeroSection>
                 <ContentMediaContainer>
                     <ContentContainer>
-                        <Slider></Slider>
+                        <CardsSlider/>
                         <PrimaryText>New Hoodies Collection</PrimaryText>
                         <SecondaryText>{SECONDARY_TEXT}</SecondaryText>
                         <ShopNowButton>Shop Now</ShopNowButton>

@@ -104,7 +104,7 @@ export default function OverlayErrorPortal(){
     const constructionWorkImageWidth = useTransform(scrollYProgress,[0,0.02,0.03,0.04,0.2],['18vw','17vw','15vw','12.6vw','0vw']);
 
     useMotionValueEvent(scrollYProgress,'change',(prev)=>{
-        console.log(prev)
+     
         setCurrent(prev)
     })
 

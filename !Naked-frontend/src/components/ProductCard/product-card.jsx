@@ -16,10 +16,9 @@ border-radius:6px;
 min-height:200px;
 `
 export const ProductLinkImage = styled(Link)`
-`
-export const ProductCardImageContainer = styled.div`
 aspect-ratio:1/1.04;
 position:relative;
+display:block;
 `
 const HighLight =styled.div`
 background:#00C2FF;
@@ -47,7 +46,7 @@ position:relative;
 `
 const RatingContainer = styled.div`
 display:flex;
-gap:10px;
+gap:8px;
 justify-content:center;
 align-items:center;
 `
@@ -245,7 +244,7 @@ export default function ProductCard({product,min_width}){
         if (product?.sale){
             return(
             <PriceContainer>
-                <div style={{display:"flex", gap:".5rem",alignItems:'flex-end'}}>
+                <div style={{display:"flex", gap:"8px",alignItems:'flex-end'}}>
                     <NewPrice>{product?.sale.price_after_sale}$</NewPrice>
                     <OldPrice>{product?.price}$</OldPrice>
                 </div>
@@ -270,7 +269,6 @@ export default function ProductCard({product,min_width}){
         <ProductCardContainer onMouseLeave={handleCloseSizesColorsMenu} $min_width={min_width}>
             <div style={{position:'relative'}}>
                 <ProductLinkImage to={`/product/${product?.name.replaceAll(" ",'-')}/${product?.id}`}>
-                    <ProductCardImageContainer>
                         {product?.sale &&
                             <HighLight>
                                 <SalePercentage>
@@ -279,7 +277,6 @@ export default function ProductCard({product,min_width}){
                             </HighLight>
                         }
                         <ProductCardImage src={product?.thumbnail}/>
-                    </ProductCardImageContainer>
                 </ProductLinkImage>
                 <OverlayColorsSizesMenu 
                 product={product} 
