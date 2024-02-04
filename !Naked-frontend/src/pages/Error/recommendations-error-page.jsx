@@ -2,7 +2,13 @@ import styled from "styled-components";
 import TwoGirlsWearingHoodies from "../../assets/TwoGirlsWearingHoodies.png";
 import SimplifiedProductCardHorizontal from "../../components/SimplifiedProductCard/Simplified-product-card-horizontal";
 import { PRODUCTS } from "../../components/products-data";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import useUserState from "../../hooks/use-user-state";
+import { useFetchData } from "../../hooks/use-fetch-data";
+import ProductsSlider from "../../components/ProductsSlider/products-slider";
+import { useScroll, useTransform,motion, useMotionValueEvent } from "framer-motion";
+import useWindowDimensions from "../../hooks/use-window-dimensions";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
 width:100%;
@@ -10,8 +16,11 @@ position:static; // fixed
 top:8vh;
 z-index:-1;
 overflow:hidden;
+display:flex;
+flex-direction:column;
+gap:6rem;
 `
-const HeroSection = styled.div`
+const HeroSectionContainer = styled.div`
 width:100%;
 `
 const ContentMediaContainer = styled.div`
@@ -247,14 +256,47 @@ display:flex;
 width:100%;
 `
 
+const SliderContainer = styled.div`
+padding:0 2rem;
+@media screen and (max-width:800px){
+padding: 0 1rem;
+}
+`
+
+function HeroSection(){
+    const SECONDARY_TEXT = 'Explore our premium collection of hoodies, crafted with high-quality materials for maximum comfort and style';
+
+    return (
+        <HeroSectionContainer>
+            <ContentMediaContainer>
+                <ContentContainer>
+                    <CardsSlider/>
+                    <PrimaryText>New Hoodies Collection</PrimaryText>
+                    <SecondaryText>{SECONDARY_TEXT}</SecondaryText>
+                    <ShopNowButton>Shop Now</ShopNowButton>
+                </ContentContainer>
+                <MediaContainer>
+                    <BgCircle/>
+                    <HoodiesWord><span style={{opacity:'.47'}}>HO</span><OdiesSpan>ODIES</OdiesSpan></HoodiesWord>
+                    <ImageContainer>
+                        <Image src={TwoGirlsWearingHoodies}/>
+                    </ImageContainer>
+                </MediaContainer>
+            </ContentMediaContainer>
+        </HeroSectionContainer>
+    )
+}
+
 function CardsSlider(){
+    const userContext = useUserState();
+
+    let uri = '/api/products?categories[]=hoodies&limit=10';
+    const {data,setData:setProducts,loading,error} = useFetchData(uri,[],userContext);
+    let products = data || PRODUCTS;
+
     const [currentSlideId,setCurrentSlidId] = useState(0);
-    const [products , setProducts] = useState(PRODUCTS)
     const [transition,setTransition] = useState(true);
-
-    // function to request hoodies products
     
-
     function slideLeft(){
         setTransition(true)
         setCurrentSlidId(1);
@@ -273,6 +315,8 @@ function CardsSlider(){
     },[products])
 
     return (
+        <>
+        {products&&(
         <SliderWindow>
             <SlidesContainer style={{transform:`translateX(${-currentSlideId*(100)}%)`,transition:`${transition?'transform .3s':'none'}`}}>
                 {products.map((product,index)=>{
@@ -284,30 +328,111 @@ function CardsSlider(){
                 })}
             </SlidesContainer>
         </SliderWindow>
+        )}
+        </>
     )
 }
+
+
+const GalleryContainer= styled.div`
+margin: 0 0 4rem 0;
+@media screen and (max-width:800px){
+    padding: 0 1rem;
+}
+`
+
+const Gallery = styled.div`
+height:190vh;
+overflow:hidden;
+padding:0 2rem;
+justify-content:center;
+display:flex;
+gap:2vw;
+`
+const ImagesColumn = styled.div`
+width:${({$width})=>$width};
+// overflow:hidden;
+display:flex;
+flex-direction:column;
+gap:2vw;
+position:relative;
+top:${({$height})=> -$height}px;
+transition:transform .2s;
+`
+const ProductImageContainer = styled(Link)`
+display:block;
+width:100%;
+height:100%;
+border-radius:1vw;
+overflow:hidden;
+transition:transform .3s , box-shadow .3s;
+&:hover{
+    box-shadow:0px 0px 7px #00C2FF;
+    transform:scale(1.1);
+}
+`
+const ProductImage = styled.img`
+width:100%;
+height:100%;
+object-fit:cover;
+`
+
 export default function RecommendationsErrorPage(){
-    const SECONDARY_TEXT = 'Explore our premium collection of hoodies, crafted with high-quality materials for maximum comfort and style';
+    const {height,width} = useWindowDimensions();
+    const GalleryContainerRef = useRef();
+
+    const userContext = useUserState();
+    let uri = '/api/products?limit=10';
+
+    const {data,loading,error} = useFetchData(uri,[],userContext);
+    let products = data || PRODUCTS;
+
+    const columnsCount = width < 600 ? 2 : width < 800 ? 3 : 4;
+    const imagesPerColumn = products.length / columnsCount;
+
+    const {scrollYProgress}  = useScroll({
+        target:GalleryContainerRef,
+        offset:['start end','end start']
+    });
+
+    const columnsArray =Array.from({length:columnsCount},(_,index)=>{
+        let start= (index * columnsCount)-index; //0  //4
+        let end = start + imagesPerColumn; //3 0-1-2 //7 4-5-6
+        return products.slice(start,end);
+    }) 
+   
+    const valuesArray = Array.from({length:columnsCount},(_)=>{
+        let randomNum = Math.random() * (columnsCount) 
+        console.log(randomNum)
+        const y = useTransform(scrollYProgress,[0,1],[0, height*randomNum]);
+
+        return [randomNum*height,y];
+    })
 
     return (
         <Container>
-            <HeroSection>
-                <ContentMediaContainer>
-                    <ContentContainer>
-                        <CardsSlider/>
-                        <PrimaryText>New Hoodies Collection</PrimaryText>
-                        <SecondaryText>{SECONDARY_TEXT}</SecondaryText>
-                        <ShopNowButton>Shop Now</ShopNowButton>
-                    </ContentContainer>
-                    <MediaContainer>
-                        <BgCircle/>
-                        <HoodiesWord><span style={{opacity:'.47'}}>HO</span><OdiesSpan>ODIES</OdiesSpan></HoodiesWord>
-                        <ImageContainer>
-                            <Image src={TwoGirlsWearingHoodies}/>
-                        </ImageContainer>
-                    </MediaContainer>
-                </ContentMediaContainer>
-            </HeroSection>
+            <HeroSection />
+            <SliderContainer>
+                <ProductsSlider title={'You may Like'} url={'/api/products?limit=10'} />
+            </SliderContainer>
+
+            <GalleryContainer ref={GalleryContainerRef}>
+                <Gallery>
+                    {columnsArray.map((array,index)=>{
+                        return (
+                            <ImagesColumn $width={100/columnsCount + "%"} $height={valuesArray[index][0]/2} as={motion.div} key={index} style={{y:valuesArray[index][1]}}>
+                                {array.map((element)=>{
+                                    return (
+                                        <ProductImageContainer to={'/product/'+element.name+"/"+element.id} key={element.id}>
+                                            <ProductImage src={element.thumbnail} />
+                                        </ProductImageContainer>
+                                    )
+                                })}
+                            </ImagesColumn>
+                        )
+                    })}
+                </Gallery>
+            </GalleryContainer>
         </Container>
     )
 }
