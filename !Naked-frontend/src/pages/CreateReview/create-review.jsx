@@ -18,11 +18,15 @@ export default function CreateReview(){
     const userContext = useUserState();
     const {sendRequest, serverError} = useSendRequest(userContext);
 
-    
     const [isReviewed ,setIsReviewed] = useState(true);
     const [reviewId, setReviewId] = useState(null);
     const [error , setError] =  useState(null);
     const [loading, setLoading] = useState(false);
+
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    },[])
 
 
     async function checkIfReviewed(product_id){
@@ -54,8 +58,8 @@ export default function CreateReview(){
 
     if (loading){
         return (
-            <div style={{display:'flex',height:'70vh'}}>
-                <Loading />
+            <div style={{display:'flex',minHeight:'10vh',overflow:'hidden'}}>
+                {/* <Loading /> */}
             </div>
         )
     }

@@ -1,24 +1,25 @@
 import styled from "styled-components";
-import TwoGirlsWearingHoodies from "../../assets/TwoGirlsWearingHoodies.png";
-import SimplifiedProductCardHorizontal from "../../components/SimplifiedProductCard/Simplified-product-card-horizontal";
-import { PRODUCTS } from "../../components/products-data";
+import TwoGirlsWearingHoodies from "../../../../assets/TwoGirlsWearingHoodies.png";
+import SimplifiedProductCardHorizontal from "../../../../components/SimplifiedProductCard/Simplified-product-card-horizontal";
+import { PRODUCTS } from "../../../../components/products-data";
 import { useEffect, useRef, useState } from "react";
-import useUserState from "../../hooks/use-user-state";
-import { useFetchData } from "../../hooks/use-fetch-data";
-import ProductsSlider from "../../components/ProductsSlider/products-slider";
-import { useScroll, useTransform,motion, useMotionValueEvent } from "framer-motion";
-import useWindowDimensions from "../../hooks/use-window-dimensions";
+import useUserState from "../../../../hooks/use-user-state";
+import { useFetchData } from "../../../../hooks/use-fetch-data";
+import ProductsSlider from "../../../../components/ProductsSlider/products-slider";
+import { useScroll, useTransform,motion } from "framer-motion";
+import useWindowDimensions from "../../../../hooks/use-window-dimensions";
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
-width:100%;
-position:static; // fixed
-top:8vh;
-z-index:-1;
-overflow:hidden;
-display:flex;
-flex-direction:column;
+top:17vh;
 gap:6rem;
+width:100%;
+z-index:-1;
+display:flex;
+overflow:hidden;
+flex-direction:column;
+position:${({$position})=>$position}; 
+transition:position .1s .4s , top .3s;
 `
 const HeroSectionContainer = styled.div`
 width:100%;
@@ -39,7 +40,6 @@ align-items:stretch;
     margin:0 .5rem 0 .5rem;
 }
 `
-
 const ContentContainer = styled.div`
 flex:.8;
 gap:2rem;
@@ -147,25 +147,19 @@ justify-content:center;
 @media screen and (max-width:1200px){
     justify-content:flex-end;
 }
-
 @media screen and (max-width:800px){
     padding-right:.5rem;
 }
 `
-
-
 const ImageContainer = styled.div`
 width:70%;
 @media screen and (max-width:1200px){
     width:70%;
 }
-
 @media screen and (max-width:900px){
     width:81%;
-
 }
 `
-
 const Image = styled.img`
 width:100%;
 height:100%;
@@ -204,7 +198,6 @@ text-shadow: 1px 1px black, -1px -1px black;
     -webkit-text-stroke: 3px black;
     text-shadow: none;
 }
-
 `
 const OdiesSpan = styled.span`
 opacity:.9;
@@ -243,14 +236,11 @@ z-index:-2;
     top:-30%;
     right:-30%;
 }
-
 `
-
 const SliderWindow = styled.div`
 width:100%;
 overflow:hidden;
 `
-
 const SlidesContainer = styled.div`
 display:flex;
 width:100%;
@@ -342,12 +332,15 @@ margin: 0 0 4rem 0;
 `
 
 const Gallery = styled.div`
-height:190vh;
+// height:200vh;
 overflow:hidden;
 padding:0 2rem;
 justify-content:center;
 display:flex;
 gap:2vw;
+@media screen and (max-width:800px){
+    padding:0;
+}
 `
 const ImagesColumn = styled.div`
 width:${({$width})=>$width};
@@ -377,7 +370,15 @@ height:100%;
 object-fit:cover;
 `
 
-export default function RecommendationsErrorPage(){
+export default function RecommendationsErrorPage({isTransitioning}){
+    const [containerPosition, setContainerPosition] = useState(isTransitioning ? 'fixed' : 'static');
+
+    useEffect(() => {
+        // if (!isTransitioning) window.scrollTo(0, 0)
+        setContainerPosition(isTransitioning ? 'fixed' : 'static');
+    }, [isTransitioning]);
+
+
     const {height,width} = useWindowDimensions();
     const GalleryContainerRef = useRef();
 
@@ -403,14 +404,12 @@ export default function RecommendationsErrorPage(){
    
     const valuesArray = Array.from({length:columnsCount},(_)=>{
         let randomNum = Math.random() * (columnsCount) 
-        console.log(randomNum)
         const y = useTransform(scrollYProgress,[0,1],[0, height*randomNum]);
-
         return [randomNum*height,y];
     })
 
     return (
-        <Container>
+        <Container $position={containerPosition}>
             <HeroSection />
             <SliderContainer>
                 <ProductsSlider title={'You may Like'} url={'/api/products?limit=10'} />

@@ -130,11 +130,11 @@ export default function Navbar({lockContainerScroll}){
 
     // limit the height of the container in Default component according to side navbar 
     useEffect(()=>{
-        lockContainerScroll((prev_state)=>({...prev_state, side_nav:showSideNavbar}) )
+        lockContainerScroll && lockContainerScroll((prev_state)=>({...prev_state, side_nav:showSideNavbar}) )
     },[showSideNavbar])
 
     useEffect(()=>{
-        lockContainerScroll((prev_state)=>({...prev_state, nav_search:showNavbarSearch}) )
+        lockContainerScroll && lockContainerScroll((prev_state)=>({...prev_state, nav_search:showNavbarSearch}) )
     },[showNavbarSearch])
 
     function handleSearchIconClick(){

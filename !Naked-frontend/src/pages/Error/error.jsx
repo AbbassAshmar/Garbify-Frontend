@@ -1,20 +1,19 @@
-import styled from "styled-components";
-import OverlayErrorPortal from "./overlay-error-portal";
-import RecommendationsErrorPage from "./recommendations-error-page";
-import { useEffect } from "react";
+import useWindowDimensions from "../../hooks/use-window-dimensions";
+import DesktopError from "./DesktopError/desktop-error";
+import MobileError from "./MobileError/mobile-error";
 
-const Container = styled.div`
-// height:300vh;
-`
 export default function Error(){
-    useEffect(()=>{
-        
-    },[])
+    const {width} = useWindowDimensions();
 
     return (
-        <Container>
-            <OverlayErrorPortal />
-            <RecommendationsErrorPage />
-         </Container>
+        <>
+            {width <= 800 &&(
+                <MobileError />
+            )}
+
+            {width > 800 &&(
+                <DesktopError />
+            )}
+        </>         
     )
 }
