@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import crane from "../../../../assets/crane.png";
 import portalWithBg3 from "../../../../assets/portalWithBg3.png";
 import constructionWork from "../../../../assets/constructionWork.png";
 import useWindowDimensions from "../../../../hooks/use-window-dimensions";
 import {motion,useMotionValueEvent,useScroll, useTransform} from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 
 const Container = styled.div`
@@ -136,7 +137,7 @@ position:absolute;
 right:0;
 `
 
-export default function OverlayErrorPortal({isTransitioning,setIsTransitioning,setPageScale}){
+export default function OverlayErrorPortal({isTransitioning,setIsTransitioning,setPageScale,error}){
     const {width} = useWindowDimensions();
     
     const getMaxTranslateX = () => {
@@ -156,22 +157,12 @@ export default function OverlayErrorPortal({isTransitioning,setIsTransitioning,s
     const containerRef = useRef();
     const [current,setCurrent] = useState(0);
 
+    const navigate = useNavigate();
     const {scrollYProgress} = useScroll({offset:['7vh','1']})
 
     const scaleX = useTransform(scrollYProgress, [0,0.45],['1','23']);
     const scaleY = useTransform(scrollYProgress, [0,0.45],['1','10']);
     const translateX = useTransform(scrollYProgress,[0,0.45],['0%', getMaxTranslateX()]);
-
-    // 374% -> 1200px
-    // 400% ->1000px;
-    // 405% ->900px;
-    // 360% -> 800px;
-
-    // 370vw -> 1358px
-    // 436vw -> 1165px
-    // 470vw ->100px
-    // 476vw -> 900px
-
 
     const detailsContainerWidth = useTransform(scrollYProgress,[0.01,0.02,0.03,0.045,0.06,0.069,0.095,0.22,0.26,0.28,0.32],['76%','74.5%','72%','68%','64%','61%','56%','28%','20.5%','15%','0%']);
     const constructionWorkImageWidth = useTransform(scrollYProgress,[0,0.02,0.03,0.04,0.2],['18vw','17vw','15vw','12.6vw','0vw']);
@@ -197,24 +188,26 @@ export default function OverlayErrorPortal({isTransitioning,setIsTransitioning,s
         if(prev === "0%") setIsTransitioning(false);
     })
 
+    function handleGoHomeButtonClick (e){
+        navigate('/products',{replace:true});
+    }
+    
     return (
         <Container style={{display:`${isTransitioning?'sticky':'none'}`}} ref={containerRef}>
             <Wrapper as={motion.div} style={{scale:containerScale,filter:containerBlur}}>
-                {/* <div style={{position:'absolute',top:"20vh", background:"green",zIndex:"12000"}}>{current}</div> */}
                 <Content as={motion.div} style={{background:contentBackground}}>
                     <DetailsContainer as={motion.div} style={{width:detailsContainerWidth}}>
                         <ErrorDetails> 
                             <div>                      
                                 <OopsWord>Oops...</OopsWord>
-                                <StatusCode>404</StatusCode>
+                                <StatusCode>{error.statusCode}</StatusCode>
                             </div> 
 
                             <Message>
-                                Looks like our servers are 
-                                down try again later.
+                                {error.message}
                             </Message>
 
-                            <GoBackButton>Go home</GoBackButton>
+                            <GoBackButton onClick={handleGoHomeButtonClick}>Go home</GoBackButton>
                         </ErrorDetails>
                         <img style={{width:'21vw'}} src={crane}></img>
                     </DetailsContainer>

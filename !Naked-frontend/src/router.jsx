@@ -12,7 +12,8 @@ import User from "./pages/User/user"
 import Reviews from "./pages/Reviews/reviews"
 import OtherUsersFavoritesLists from "./pages/OtherUsersFavoritesLists/other-users-favorites-lists"
 import CreateReview from "./pages/CreateReview/create-review"
-import EditReview from "./pages/EditReview/edit-review"
+import EditReview from "./pages/EditReview/edit-review";
+import Error from "./pages/Error/error";
 
 export const router = createBrowserRouter([
     {
@@ -65,7 +66,7 @@ export const router = createBrowserRouter([
             },
             {
                 path:"*",
-                element : <div>Not Found</div>
+                element :<Error error={{statusCode:404, message:"You could've picked any page, but still chose this ? It Doesn't Exist..."}} />
             },
             {
                 path:"/reviews/success"

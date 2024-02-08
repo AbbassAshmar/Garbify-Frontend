@@ -20,9 +20,14 @@ export default function CreateReview(){
 
     const [isReviewed ,setIsReviewed] = useState(true);
     const [reviewId, setReviewId] = useState(null);
+
     const [error , setError] =  useState(null);
     const [loading, setLoading] = useState(false);
 
+
+    useEffect(()=>{
+        checkIfReviewed(product_id);
+    },[])
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -36,11 +41,11 @@ export default function CreateReview(){
         const {request,response} = await sendRequest(url)
 
         if (!request){
-            setError({code: 500,message:"Oops...Looks like our servers are down !"})
+            setError({statusCode: 500,message:"Oops...Looks like our servers are down !"})
         }
 
         if (request && !request.ok){
-            setError({code:request.status, message:response.error.message})
+            setError({statusCode:request.status, message:response.error.message})
         }
 
         if (request && request.ok){
@@ -52,14 +57,11 @@ export default function CreateReview(){
         setLoading(false)
     }
 
-    useEffect(()=>{
-        checkIfReviewed(product_id);
-    },[])
-
+    
     if (loading){
         return (
             <div style={{display:'flex',minHeight:'10vh',overflow:'hidden'}}>
-                {/* <Loading /> */}
+                <Loading />
             </div>
         )
     }

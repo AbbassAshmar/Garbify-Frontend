@@ -8,7 +8,7 @@ min-height:300vh;
 height:${({$height})=> $height};
 `
 
-export default function DesktopError(){
+export default function DesktopError({error}){
     const [isTransitioning,setIsTransitioning] = useState(true);
     const [pageScale, setPageScale] = useState();
 
@@ -18,7 +18,7 @@ export default function DesktopError(){
 
     return(
         <Container $height={isTransitioning?"300vh" : "auto"}>
-            <OverlayErrorPortal setPageScale={setPageScale} isTransitioning={isTransitioning} setIsTransitioning={setIsTransitioning} />
+            <OverlayErrorPortal error={error} setPageScale={setPageScale} isTransitioning={isTransitioning} setIsTransitioning={setIsTransitioning} />
             <RecommendationsErrorPage pageScale={pageScale} isTransitioning={isTransitioning} />
         </Container>
     )

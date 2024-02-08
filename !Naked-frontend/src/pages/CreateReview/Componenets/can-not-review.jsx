@@ -161,7 +161,6 @@ export default function CanNotReview({reviewId}){
         navigate('/review/'+reviewId+'/edit');
     }
 
-   
     return (
         <Container>
             <MainSection>

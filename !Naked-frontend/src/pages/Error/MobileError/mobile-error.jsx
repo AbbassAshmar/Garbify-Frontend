@@ -4,6 +4,7 @@ import SecondSection from "../../ReviewSuccess/Sections/second-section"
 import { motion,useScroll,useTransform } from "framer-motion"
 import { useRef } from "react"
 import disconnetedWire from "../../../assets/disconnectedWire.png";
+import { useNavigate } from "react-router-dom"
 
 const Container = styled.div`
 width:100%;
@@ -98,26 +99,33 @@ overscroll-behavior:none;
 scroll-behavior:smooth;
 `
 
-export default function MobileError(){
+export default function MobileError({error}){
+    const navigate=  useNavigate();
+
     const firstSectionRef = useRef();
+
     const {scrollYProgress} = useScroll({})
     const firstSectionY = useTransform(scrollYProgress,[0,.5],['0%','-100%'])
+
+    function handleGoHomeButtonClick (e){
+        navigate('/products',{replace:true});
+    }
 
     return (
         <Container>
             <FirstSection as={motion.div} style={{y:firstSectionY}} ref={firstSectionRef}>
                 <FirstSectionContent>
-                    <StatusCode>400</StatusCode>
+                    <StatusCode>{error.statusCode}</StatusCode>
 
                     <div style={{display:'flex', flexDirection:"column", gap:'1rem',alignItems:'center'}}>
                         <OopsWord>Oops...</OopsWord>
                         <Message>
-                            Looks Like our servers are Down.<br/>
+                           {error.message}<br/>
                             but keep scrolling for a surprise treat! Just like in shopping, the best finds are often hidden a little deeper. Happy scrolling!
                         </Message>
                     </div>
                     
-                    <GoHomeButton>Go home</GoHomeButton>
+                    <GoHomeButton onClick={handleGoHomeButtonClick}>Go home</GoHomeButton>
                 </FirstSectionContent>
                 <img style={{position:'absolute',transform:'rotate(90deg)',width:"80%"}} src={disconnetedWire} />
             </FirstSection>

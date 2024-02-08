@@ -333,7 +333,6 @@ margin: 0 0 4rem 0;
 `
 
 const Gallery = styled.div`
-// height:200vh;
 overflow:hidden;
 padding:0 2rem;
 justify-content:center;
@@ -344,14 +343,13 @@ gap:2vw;
 }
 `
 const ImagesColumn = styled.div`
-width:${({$width})=>$width};
-// overflow:hidden;
-display:flex;
-flex-direction:column;
 gap:2vw;
+display:flex;
 position:relative;
-top:${({$height})=> -$height}px;
+flex-direction:column;
 transition:transform .2s;
+width:${({$width})=>$width};
+top:${({$top})=>$top + 'px'};
 `
 const ProductImageContainer = styled(Link)`
 display:block;
@@ -375,7 +373,6 @@ export default function RecommendationsErrorPage({isTransitioning,pageScale}){
     const [containerPosition, setContainerPosition] = useState(isTransitioning ? 'fixed' : 'static');
 
     useEffect(() => {
-        // if (!isTransitioning) window.scrollTo(0, 0)
         setContainerPosition(isTransitioning ? 'fixed' : 'static');
     }, [isTransitioning]);
 
@@ -403,10 +400,14 @@ export default function RecommendationsErrorPage({isTransitioning,pageScale}){
         return products.slice(start,end);
     }) 
    
-    const valuesArray = Array.from({length:columnsCount},(_)=>{
-        let randomNum = Math.random() * (columnsCount) 
-        const y = useTransform(scrollYProgress,[0,1],[0, height*randomNum]);
-        return [randomNum*height,y];
+    const valuesArray = Array.from({length:columnsCount},(_,index)=>{
+        let num = (1 + ((index+1) /10)); 
+        num = (index+1) % 2 == 0 ? (num + 1.5) : (num);
+
+        const y = useTransform(scrollYProgress,[0,1],[0, height*num]);
+        const x =-(num*height) /2.05;        
+        
+        return [x,y];
     })
 
     return (
@@ -420,7 +421,7 @@ export default function RecommendationsErrorPage({isTransitioning,pageScale}){
                 <Gallery>
                     {columnsArray.map((array,index)=>{
                         return (
-                            <ImagesColumn $width={100/columnsCount + "%"} $height={valuesArray[index][0]/2} as={motion.div} key={index} style={{y:valuesArray[index][1]}}>
+                            <ImagesColumn $width={(100/columnsCount) + "%"} $top={valuesArray[index][0]} as={motion.div} key={index} style={{y:valuesArray[index][1]}}>
                                 {array.map((element)=>{
                                     return (
                                         <ProductImageContainer to={'/product/'+element.name+"/"+element.id} key={element.id}>

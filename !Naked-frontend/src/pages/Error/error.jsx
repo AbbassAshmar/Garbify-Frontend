@@ -2,12 +2,12 @@ import useWindowDimensions from "../../hooks/use-window-dimensions";
 import DesktopError from "./DesktopError/desktop-error";
 import MobileError from "./MobileError/mobile-error";
 
-export default function Error(){
+export default function Error({error}){
     const {width,height} = useWindowDimensions();
 
     if ((width <= 900 && height >=650) || width<=800){
-        return <MobileError />;
+        return <MobileError error={error}/>;
     }
 
-    return <DesktopError />;
+    return <DesktopError error={error} />;
 }
