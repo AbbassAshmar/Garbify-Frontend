@@ -3,6 +3,7 @@ import RecommendationsErrorPage from "../DesktopError/Components/recommendations
 import SecondSection from "../../ReviewSuccess/Sections/second-section"
 import { motion,useScroll,useTransform } from "framer-motion"
 import { useRef } from "react"
+import disconnetedWire from "../../../assets/disconnectedWire.png";
 
 const Container = styled.div`
 width:100%;
@@ -23,15 +24,23 @@ height:90vh;
 width:100%;
 `
 const FirstSectionContent = styled.div`
-gap:3rem;
+gap:5rem;
 display:flex;
 margin-bottom:4rem;
 align-items:center;
 flex-direction:column;
 justify-content:center;
+@media screen and (max-width:800px){
+    gap:3rem;
+}
 `
 
+
 const OopsWord = styled.h1`
+font-size:var(--heading-1);
+@media screen and (max-width:800px){
+    font-size:var(--heading-1-mobile);
+}
 `
 
 const StatusCode = styled.h1`
@@ -41,14 +50,18 @@ color:#00C2FF;
 `
 
 const Message = styled.h5`
+font-size:var(--heading-5);
 text-align:center;
-font-size:var(--heading-5-mobile);
 color:grey;
+
+@media screen and (max-width:800px){
+    font-size:var(--heading-5-mobile);
+}
 `
 
 const GoHomeButton = styled.button`
-width:220px;
-height:35px;
+width:300px;
+height:45px;
 border:none;
 color:white;
 outline:none;
@@ -57,13 +70,18 @@ background: #00C2FF;
 font-weight:600;
 border-radius:3px;
 cursor:pointer;
-font-size:var(--body);
+
+font-size:var(--heading-6);
+
 transition:background .3s;
+
 &:hover{
     background: #00C2FF;
 }
 @media screen and (max-width:800px){
     width:50%;
+    font-size:var(--body);
+    height:30px;
 }
 @media screen and (min-width:1440px){
     width:330px;
@@ -93,11 +111,15 @@ export default function MobileError(){
 
                     <div style={{display:'flex', flexDirection:"column", gap:'1rem',alignItems:'center'}}>
                         <OopsWord>Oops...</OopsWord>
-                        <Message>Looks Like our servers are Down, maybe try again later ?</Message>
+                        <Message>
+                            Looks Like our servers are Down.<br/>
+                            but keep scrolling for a surprise treat! Just like in shopping, the best finds are often hidden a little deeper. Happy scrolling!
+                        </Message>
                     </div>
                     
                     <GoHomeButton>Go home</GoHomeButton>
                 </FirstSectionContent>
+                <img style={{position:'absolute',transform:'rotate(90deg)',width:"80%"}} src={disconnetedWire} />
             </FirstSection>
             <SecondSectionContainer>
                 <RecommendationsErrorPage />

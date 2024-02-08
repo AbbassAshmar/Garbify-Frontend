@@ -10,6 +10,7 @@ height:${({$height})=> $height};
 
 export default function DesktopError(){
     const [isTransitioning,setIsTransitioning] = useState(true);
+    const [pageScale, setPageScale] = useState();
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -17,8 +18,8 @@ export default function DesktopError(){
 
     return(
         <Container $height={isTransitioning?"300vh" : "auto"}>
-            <OverlayErrorPortal isTransitioning={isTransitioning} setIsTransitioning={setIsTransitioning} />
-            <RecommendationsErrorPage isTransitioning={isTransitioning} />
+            <OverlayErrorPortal setPageScale={setPageScale} isTransitioning={isTransitioning} setIsTransitioning={setIsTransitioning} />
+            <RecommendationsErrorPage pageScale={pageScale} isTransitioning={isTransitioning} />
         </Container>
     )
 

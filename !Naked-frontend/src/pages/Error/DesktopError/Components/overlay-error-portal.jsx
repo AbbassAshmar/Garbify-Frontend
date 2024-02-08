@@ -14,12 +14,18 @@ background:transparent;
 position:sticky;
 top:0vh;
 z-index:2;
+overflow:hidden;
 `
 
+const Wrapper = styled.div`
+height:100%;
+width:100%;
+
+`
 const Content = styled.div`
 display:flex;
 align-items:center;
-background:rgba(0,0,0,0.3);
+background:rgba(0,0,0,1);
 width:100%;
 height:100%;
 position:relative;
@@ -130,8 +136,23 @@ position:absolute;
 right:0;
 `
 
-export default function OverlayErrorPortal({isTransitioning,setIsTransitioning}){
+export default function OverlayErrorPortal({isTransitioning,setIsTransitioning,setPageScale}){
     const {width} = useWindowDimensions();
+    
+    const getMaxTranslateX = () => {
+        if (width <= 850) {
+            return '370%';
+        } else if (width <= 900) {
+            return '390%';
+        } else if (width <= 1000) {
+            return '395%';
+        } else if (width <= 1200) {
+            return '385%';
+        } else {
+            return '374%';
+        }
+    };
+    
     const containerRef = useRef();
     const [current,setCurrent] = useState(0);
 
@@ -139,7 +160,12 @@ export default function OverlayErrorPortal({isTransitioning,setIsTransitioning})
 
     const scaleX = useTransform(scrollYProgress, [0,0.45],['1','23']);
     const scaleY = useTransform(scrollYProgress, [0,0.45],['1','10']);
-    const translateX = useTransform(scrollYProgress,[0,0.45],['0%', `374%`]);
+    const translateX = useTransform(scrollYProgress,[0,0.45],['0%', getMaxTranslateX()]);
+
+    // 374% -> 1200px
+    // 400% ->1000px;
+    // 405% ->900px;
+    // 360% -> 800px;
 
     // 370vw -> 1358px
     // 436vw -> 1165px
@@ -149,6 +175,19 @@ export default function OverlayErrorPortal({isTransitioning,setIsTransitioning})
 
     const detailsContainerWidth = useTransform(scrollYProgress,[0.01,0.02,0.03,0.045,0.06,0.069,0.095,0.22,0.26,0.28,0.32],['76%','74.5%','72%','68%','64%','61%','56%','28%','20.5%','15%','0%']);
     const constructionWorkImageWidth = useTransform(scrollYProgress,[0,0.02,0.03,0.04,0.2],['18vw','17vw','15vw','12.6vw','0vw']);
+    const contentBackground = useTransform(scrollYProgress,[0,0.1,0.3],['rgba(0,0,0,1)','rgba(0,0,0,0.3)','rgba(0,0,0,0)']);
+    const recommendationsPageScale = useTransform(scrollYProgress,[0,0.3], [.9,1]);
+
+    const containerScale = useTransform(scrollYProgress,[0,0.3],[1,1.2]);
+    const containerBlur = useTransform(scrollYProgress,[0,0.3],['blur(0px)', 'blur(10px)']);
+
+    useMotionValueEvent(recommendationsPageScale,'change',(prev)=>{
+        if (isTransitioning) {
+            setPageScale(prev)
+        }else{
+            setPageScale(null)
+        }
+    })
 
     useMotionValueEvent(scrollYProgress,'change',(prev)=>{
         setCurrent(width)
@@ -160,32 +199,34 @@ export default function OverlayErrorPortal({isTransitioning,setIsTransitioning})
 
     return (
         <Container style={{display:`${isTransitioning?'sticky':'none'}`}} ref={containerRef}>
-            <div style={{position:'absolute',top:"20vh", background:"green",zIndex:"12000"}}>{current}</div>
-            <Content>
-                <DetailsContainer as={motion.div} style={{width:detailsContainerWidth}}>
-                    <ErrorDetails> 
-                        <div>                      
-                            <OopsWord>Oops...</OopsWord>
-                            <StatusCode>404</StatusCode>
-                        </div> 
+            <Wrapper as={motion.div} style={{scale:containerScale,filter:containerBlur}}>
+                {/* <div style={{position:'absolute',top:"20vh", background:"green",zIndex:"12000"}}>{current}</div> */}
+                <Content as={motion.div} style={{background:contentBackground}}>
+                    <DetailsContainer as={motion.div} style={{width:detailsContainerWidth}}>
+                        <ErrorDetails> 
+                            <div>                      
+                                <OopsWord>Oops...</OopsWord>
+                                <StatusCode>404</StatusCode>
+                            </div> 
 
-                        <Message>
-                            Looks like our servers are 
-                            down try again later.
-                        </Message>
+                            <Message>
+                                Looks like our servers are 
+                                down try again later.
+                            </Message>
 
-                        <GoBackButton>Go home</GoBackButton>
-                    </ErrorDetails>
-                    <img style={{width:'21vw'}} src={crane}></img>
-                </DetailsContainer>
-                <ConstructionWorkImageContainer as={motion.div} style={{width:constructionWorkImageWidth}}>
-                    <ConstructionWorkImage src={constructionWork}/>
-                </ConstructionWorkImageContainer>
+                            <GoBackButton>Go home</GoBackButton>
+                        </ErrorDetails>
+                        <img style={{width:'21vw'}} src={crane}></img>
+                    </DetailsContainer>
+                    <ConstructionWorkImageContainer as={motion.div} style={{width:constructionWorkImageWidth}}>
+                        <ConstructionWorkImage src={constructionWork}/>
+                    </ConstructionWorkImageContainer>
 
-                <BgImageContainer>
-                    <BackgroundImage as={motion.img} style={{scaleX,scaleY,translateX}} src={portalWithBg3} />
-                </BgImageContainer>
-            </Content>
+                    <BgImageContainer>
+                        <BackgroundImage as={motion.img} style={{scaleX,scaleY,translateX}} src={portalWithBg3} />
+                    </BgImageContainer>
+                </Content>
+            </Wrapper>
         </Container>
     )
 }

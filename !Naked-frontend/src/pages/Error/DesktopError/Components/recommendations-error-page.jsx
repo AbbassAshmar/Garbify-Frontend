@@ -20,6 +20,7 @@ overflow:hidden;
 flex-direction:column;
 position:${({$position})=>$position}; 
 transition:position .1s .4s , top .3s;
+transform-origin:top;
 `
 const HeroSectionContainer = styled.div`
 width:100%;
@@ -370,7 +371,7 @@ height:100%;
 object-fit:cover;
 `
 
-export default function RecommendationsErrorPage({isTransitioning}){
+export default function RecommendationsErrorPage({isTransitioning,pageScale}){
     const [containerPosition, setContainerPosition] = useState(isTransitioning ? 'fixed' : 'static');
 
     useEffect(() => {
@@ -409,7 +410,7 @@ export default function RecommendationsErrorPage({isTransitioning}){
     })
 
     return (
-        <Container $position={containerPosition}>
+        <Container as={motion.div} style={{scale:pageScale}} $position={containerPosition}>
             <HeroSection />
             <SliderContainer>
                 <ProductsSlider title={'You may Like'} url={'/api/products?limit=10'} />

@@ -3,17 +3,11 @@ import DesktopError from "./DesktopError/desktop-error";
 import MobileError from "./MobileError/mobile-error";
 
 export default function Error(){
-    const {width} = useWindowDimensions();
+    const {width,height} = useWindowDimensions();
 
-    return (
-        <>
-            {width <= 800 &&(
-                <MobileError />
-            )}
+    if ((width <= 900 && height >=650) || width<=800){
+        return <MobileError />;
+    }
 
-            {width > 800 &&(
-                <DesktopError />
-            )}
-        </>         
-    )
+    return <DesktopError />;
 }
