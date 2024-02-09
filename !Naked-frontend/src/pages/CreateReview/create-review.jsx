@@ -58,24 +58,25 @@ export default function CreateReview(){
     }
 
     
-    if (loading){
-        return (
-            <div style={{display:'flex',minHeight:'10vh',overflow:'hidden'}}>
-                <Loading />
-            </div>
-        )
-    }
+    // if (loading){
+    //     return (
+    //         <div style={{display:'flex',minHeight:'10vh',overflow:'hidden'}}>
+    //             <Loading />
+    //         </div>
+    //     )
+    // }
 
-    if (error){
-        return (<Error error={error} />);
-    }
+    // if (error){
+    //     return (<Error error={error} />);
+    // }
     
     return (
         <Container>
-            {isReviewed? 
+            {/* {isReviewed? 
                 <CanNotReview reviewId={reviewId}/>:
                 <ReviewForm />
-            }
+            } */}
+            <ReviewForm />
         </Container>
     )
 }

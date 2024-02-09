@@ -9,6 +9,7 @@ import SuccessOrErrorPopUp from '../../components/SuccessOrErrorPopUp/success-or
 import Loading from '../../components/Loading/loading';
 import ReviewSuccess from '../ReviewSuccess/review-success';
 import { ratingToStars } from '../../components/RatingStars/rating-stars';
+import useRenderInputField, { ErrorMsg } from '../../hooks/user-render-input-field';
 
 const Container = styled.div`
 padding: min(2rem ,5%);
@@ -22,15 +23,13 @@ align-self:center;
 text-align:center;
 `
 const Title =styled.p`
-// color : #00C2FF;
 color : black;
 font-size:1.5em;
 font-weight:600;
 margin: 0 0 .3em 0 ;
 `
 const SubTitle = styled.p`
-// color : #00C2FF;
-color:black;
+color:grey;
 font-size:1em;
 font-weight:600;
 `
@@ -48,14 +47,16 @@ flex-direction: column;
 gap:1rem;
 `
 const Label = styled.label`
-font-size:1em;
+color:${({$color})=>$color};
+font-size:1rem;
 font-weight:600;
 
 `
 const ImageLabel = styled.label`
 width:100px;
 height:100px;
-border:3px dashed black;
+color:${({$color})=>$color};
+border:3px dashed ${({$color})=>$color};
 display:flex;
 align-items:center;
 justify-content:center;
@@ -78,10 +79,9 @@ const ReviewInput= styled.textarea`
 width:100%;
 resize:none;
 height:200px;
-
 border:2px solid #A8AAAE;
 border-radius:3px;
-padding:10px;
+padding:.5rem;
 font-weight:600;
 `
 const StarsContainer = styled.div`
@@ -139,21 +139,15 @@ justify-content:center;
 //FileReader::readAsDataURL() converts Blob objects to base64
 //Blob() represents a file (bites)
 
-function AvailableColors({prefil_color}){
+function AvailableColors({inputErrors,formData,setFormData}){
     let {product_id} = useParams();
-
     const [productColors,setProductColors] = useState();
-    const [chosenColor ,setChosenColor] = useState();
     
     const userContext = useUserState();
     const {sendRequest,serverError} = useSendRequest(userContext);
 
     useEffect(()=>{
         requestColorsOfProduct(product_id)
-
-        if (prefil_color){
-            setChosenColor(prefil_color);
-        }
     },[]);
 
     function requestColorsOfProduct(product_id){
@@ -163,45 +157,40 @@ function AvailableColors({prefil_color}){
         if (request?.status == 200){
             setProductColors(response.data.colors)
         }
-        //test
+
         setProductColors(['red','green','yellow','blue'])
     }
 
     return(
         <FormRow>
-            <Label>
+            <Label $color={inputErrors.fields.includes('colors')?"red":"black"}>
                 what color did you purchase ? (optional)
             </Label>
             <div style={{display:"flex" , flexDirection:"column", gap:"1em"}}>
                 {productColors && productColors.map((color,index)=>{
                     return (
                         <RadioField key={index} style={{display:"flex", gap:"8px"}}>
-                            <RadioInput onChange={()=>setChosenColor(color)} checked={chosenColor === color} type="radio" name="color" value={color} id={color}/>
+                            <RadioInput onChange={()=>setFormData({...formData,colors:color})} checked={formData.colors === color} type="radio" name="color" value={color} id={color}/>
                             <RadioLabel htmlFor={color}>{color}</RadioLabel>
                         </RadioField>
                     )
                 })}
             </div>
+            {inputErrors.message['colors'] && <ErrorMsg>{inputErrors.message['colors']}</ErrorMsg>}
         </FormRow>
     )
 }
 
-function AvailableSizes({prefil_size}){
+function AvailableSizes({inputErrors,formData,setFormData}){
     let {product_id} = useParams();
+    const [productSizes,setProductSizes] = useState();
 
     const userContext = useUserState();
     const {sendRequest,serverError} = useSendRequest(userContext);
 
-    const [chosenSize,setChosenSize] = useState()
-    const [productSizes,setProductSizes] = useState();
 
     useEffect(()=>{
         requestSizesOfProduct(product_id)
-
-        if (prefil_size){
-            setChosenSize(prefil_size);
-        }
-    
     },[])
 
     async function requestSizesOfProduct(product_id){
@@ -218,37 +207,61 @@ function AvailableSizes({prefil_size}){
 
     return (
         <FormRow>
-            <Label>
+            <Label $color={inputErrors.fields.includes('sizes')?"red":"black"}>
                 what size did you purchase ? (optional)
             </Label>
-            <div style={{display:"flex" , flexDirection:"column", gap:"1em"}}>
+            <div style={{display:"flex" , flexDirection:"column", gap:"1rem"}}>
                 {
                     productSizes && productSizes.map((size,index)=>{
                         return (
                             <RadioField key={index} style={{display:"flex", gap:"8px"}}>
-                                <RadioInput onChange={()=>{setChosenSize(size)}} checked={chosenSize === size} type="radio" name="size" value={size} id={size}/>
+                                <RadioInput onChange={()=>setFormData({...formData,sizes:size})} checked={formData.sizes === size} type="radio" name="size" value={size} id={size}/>
                                 <RadioLabel htmlFor={size}>{size}</RadioLabel>
                             </RadioField>
                         )
                     })
                 }
             </div>
+            {inputErrors.message['sizes'] && <ErrorMsg>{inputErrors.message['sizes']}</ErrorMsg>}
         </FormRow>
     )
 }
 
 export default function ReviewForm({review}){
+
+    const TITLE_KEY = 'title';
+    const HEIGHT_KEY = 'example 180cm';
+    const WIEGHT_KEY = 'example 80kg';
+    const REVIEW_KEY = 'What do you think about the product ?';
+
+    const [formData, setFormData] = useState({
+        [TITLE_KEY]: null,
+        [HEIGHT_KEY]: null,
+        [WIEGHT_KEY]: null,
+        [REVIEW_KEY]: null,
+        sizes : null,
+        colors : null,
+    });
+
+    const [inputErrors,setInputErrors] = useState({
+        fields:[], 
+        message:{} 
+    })
+   
+
+    const inputField = useRenderInputField(inputErrors,setFormData,formData);
+
     const [starsOnLastClick,setStarsOnLastClick] = useState(5)
     const [stars,setStars] = useState(5);
     const [starsList, setStarsList ] = useState(["star","star","star","star","star"]);
 
     const [deletedImages, setDeletedImages] = useState([]);
     const [images , setImages]=  useState([]);
-    const {product_id} = useParams();
 
     const [submitLoading,setSubmitLoading] = useState(false);
-    const [actionSuccess, setActionSuccess] = useState(true);
+    const [actionSuccess, setActionSuccess] = useState(null);
 
+    const {product_id} = useParams();
     const userContext = useUserState();
     const {sendRequest,serverError} = useSendRequest(userContext);
 
@@ -271,10 +284,14 @@ export default function ReviewForm({review}){
             setStars(review.rating || 5);
             setStarsOnLastClick(review.rating || 5);
 
-            document.getElementById('title').value = review.title || '';
-            document.getElementById('review').value = review.text || '';
-            document.getElementById('height').value = review.user_height || '';
-            document.getElementById('weight').value = review.user_weight || '';
+            setFormData({
+                [TITLE_KEY] : review.title || "",
+                [REVIEW_KEY] : review.text || "",
+                [HEIGHT_KEY] : review.user_height || "",
+                [WIEGHT_KEY] : review.user_weight || "",
+                sizes:review.size || '',
+                colors: review.color || '',
+            })
             
             setImages(review.images?.map((x) => ({ url: x, file: null ,new:false})) || []);
         }
@@ -296,12 +313,37 @@ export default function ReviewForm({review}){
 
     async function handleReviewFormSubmit (e){
         e.preventDefault();
-        let data=  handleformData(e,stars,product_id,images,deletedImages);
-
+        let data=  handleformData(e,stars,product_id,images,deletedImages,formData);
+      
         setSubmitLoading(true);
         await (review ? updateReview(data) :  createReview(data))
         setSubmitLoading(false);
 
+    }
+
+    function handleResponseKeysNaming(responseObject){
+        const keyMappings = {
+            'user_height': HEIGHT_KEY,
+            'user_weight': WIEGHT_KEY,
+            'title' : TITLE_KEY,
+            'text' : REVIEW_KEY,
+        };
+
+        const updatedObject = {};
+
+        if (Array.isArray(responseObject)) {
+            return responseObject.map(item => {              
+                const updatedItem = keyMappings[item] || item;
+                return updatedItem;
+            });
+        }
+
+        for (const key in responseObject) {
+            const updatedKey = keyMappings[key] || key;
+            updatedObject[updatedKey] = responseObject[key];
+        }
+
+        return updatedObject;
     }
 
     async function createReview(data){
@@ -312,6 +354,17 @@ export default function ReviewForm({review}){
         if (request?.status == 201){
             // review created
             setActionSuccess(true);
+        }
+
+        else if (request?.status === 400){ // error related to user's input
+            let fields = handleResponseKeysNaming(response.metadata.error_fields);
+            let message = handleResponseKeysNaming(response.error.details);
+
+            setInputErrors({fields: fields, message : message})
+        }
+        
+        else {  //error that is not related to user's input
+            setInputErrors({fields:[], message:[]});
         }
         
     }
@@ -327,11 +380,29 @@ export default function ReviewForm({review}){
             setActionSuccess(true)
         }
 
-    }
+        else if (request?.status === 400){ // error related to user's input
+            let fields = handleResponseKeysNaming(response.metadata.error_fields);
+            let message = handleResponseKeysNaming(response.error.details);
 
+            setInputErrors({fields: fields, message : message})
+        }
+        
+        else {  //error that is not related to user's input
+            setInputErrors({fields:[], message:[]});
+        }
+
+    }
     
-    async function handleformData (e,stars,product_id,images,deletedImages){
-        let form_data = new FormData(e.target);
+    async function handleformData (e,stars,product_id,images,deletedImages,formData){
+        let form_data = new FormData();
+
+        form_data.append('title',formData['title']);
+        form_data.append('sizes',formData['sizes']);
+        form_data.append('colors',formData['colors']);
+        form_data.append('text',formData[REVIEW_KEY]);
+        form_data.append('user_height',formData[HEIGHT_KEY]);
+        form_data.append('user_weight',formData[WIEGHT_KEY]);
+
         form_data.append("product_rating" , stars);
         form_data.append("product_id",product_id);
 
@@ -359,7 +430,9 @@ export default function ReviewForm({review}){
            </Text>
            <Content onSubmit={handleReviewFormSubmit}>
                 <FormRow >
-                    <Label htmlFor="title">Rating :</Label>
+                    <Label $color={inputErrors.fields.includes('rating')?"red":"black"}>
+                        Rating :
+                    </Label>
                     <StarsContainer>
                         {
                             starsList.map((value, index)=>{
@@ -372,75 +445,71 @@ export default function ReviewForm({review}){
                             })
                         }
                     </StarsContainer>
-                </FormRow>
-                <FormRow>
-                    <Label htmlFor="title">Add a title : </Label>
-                    <TitleInput 
-                        type="text" 
-                        id="title"
-                        name="title"
-                        placeholder='What is the headline of your review ?'
-                    />
-                </FormRow>
-                <FormRow>
-                    <Label htmlFor="review">Add a review :</Label>
-                    <ReviewInput 
-                        id="review"
-                        name="text"
-                        placeholder='What do you think about the product ?'
-                    />
-                </FormRow>
-                <FormRow>
-                    <Label >Add a photo (optional) :</Label>
-                    <div style={{width:"100%",display:"flex",gap:'5%'}}>
-                        <div>
-                            <ImageLabel htmlFor="image">+</ImageLabel>
-                            <input 
-                                id="image"
-                                accept=".jpg, .jpeg, .png"
-                                type="file" 
-                                style={{visibility:"hidden",width:"1px"}} 
-                                onChange={handleImageUpload}
-                            />
-                        </div>
-                        <div style={{width:"100%",display:"flex",gap:'5%',flexWrap:"wrap"}}>
-                            {
-                                images && images.map((image,index)=>{
-                                    return (
-                                        <div key={index} style={{width:"100px"}} onClick={(e)=>{handleImageDelete(image.url)} }>
-                                            <img src={image.url} style={{width:"100%", height:"auto",cursor:'pointer'}}/>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
-                </FormRow>
-                <FormRow>
-                    <Label htmlFor="height">
-                        what is your height ? (optional)
-                    </Label>
-                    <TitleInput 
-                        type="text" 
-                        id="height"
-                        name="user_height"
-                        placeholder={`example 180cm , 5'6"`}
-                    />
-                </FormRow>
-                <FormRow>
-                    <Label htmlFor="weight">
-                        what is your weight ? (optional)
-                    </Label>
-                    <TitleInput 
-                        type="text" 
-                        id="weight"
-                        name="user_weight"
-                        placeholder={`example 190lbs , 80kg`}
-                    />
+                    {inputErrors.message['rating'] && <ErrorMsg>{inputErrors.message['rating']}</ErrorMsg>}
                 </FormRow>
 
-                <AvailableSizes prefil_size={review?.size}/>
-                <AvailableColors prefil_color={'red'}/>
+                <FormRow>
+                    <Label $color={inputErrors.fields.includes(TITLE_KEY)?"red":"black"}>
+                        Add a title : 
+                    </Label>
+                    {inputField(TITLE_KEY,'text')}
+                </FormRow>
+                
+                <FormRow>
+                    <Label $color={inputErrors.fields.includes(REVIEW_KEY)?"red":"black"}>
+                        Add a review :
+                    </Label>
+                    {inputField(REVIEW_KEY,'textarea')}
+                </FormRow>
+
+                <FormRow>
+                    <Label $color={inputErrors.fields.includes('images')?"red":"black"}>
+                        Add a photo (optional) :
+                    </Label>
+                    <div style={{display:'fex', flexDirection:'column'}}>
+                        <div style={{width:"100%",display:"flex",gap:'5%'}}>
+                            <div>
+                                <ImageLabel $color={inputErrors.fields.includes('images')?"red":"black"} htmlFor="images">+</ImageLabel>
+                                <input 
+                                    id="images"
+                                    accept=".jpg, .jpeg, .png"
+                                    type="file" 
+                                    style={{visibility:"hidden",width:"1px"}} 
+                                    onChange={handleImageUpload}
+                                />
+                            </div>
+                            <div style={{width:"100%",display:"flex",gap:'5%',flexWrap:"wrap"}}>
+                                {
+                                    images && images.map((image,index)=>{
+                                        return (
+                                            <div key={index} style={{width:"100px"}} onClick={(e)=>{handleImageDelete(image.url)} }>
+                                                <img src={image.url} style={{width:"100%", height:"auto",cursor:'pointer'}}/>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        </div>
+                        {inputErrors.message['images'] && <ErrorMsg>{inputErrors.message['images']}</ErrorMsg>}
+                    </div>
+                    
+                </FormRow>
+                <FormRow>
+                    <Label $color={inputErrors.fields.includes(HEIGHT_KEY)?"red":"black"}>
+                        what is your height ? (optional)
+                    </Label>
+                    {inputField(HEIGHT_KEY,'text')}
+                </FormRow>
+
+                <FormRow>
+                    <Label $color={inputErrors.fields.includes(WIEGHT_KEY)?"red":"black"}>
+                        what is your weight ? (optional)
+                    </Label>
+                    {inputField(WIEGHT_KEY,'text')}
+                </FormRow>
+
+                <AvailableSizes inputErrors={inputErrors} formData={formData} setFormData={setFormData}/>
+                <AvailableColors inputErrors={inputErrors} formData={formData} setFormData={setFormData}/>
 
                 <SubmitButton disabled={submitLoading || ""} type="submit" >
                     {submitLoading && <Loading style={{scale:'.3'}}/> }
