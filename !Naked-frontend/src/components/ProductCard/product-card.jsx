@@ -6,7 +6,7 @@ import {useSendRequest} from "../../hooks/use-fetch-data";
 import useUserState from "../../hooks/use-user-state";
 import SuccessOrErrorPopUp from "../SuccessOrErrorPopUp/success-or-error-pop-up";
 import OverlayColorsSizesMenu from "./Components/overlay-colors-sizes-menu";
-import ShoppingButtons, { ButtonsDisplayer } from "./Components/shopping-buttons";
+import ShoppingButtons from "./Components/shopping-buttons";
 import PopUpColorsSizesMenu from "./Components/pop-up-colors-sizes-menu";
 
 export const ProductCardContainer = styled.div`
@@ -122,6 +122,26 @@ transition:transform .3s;
 }
 `
 
+export const ButtonsDisplayer = styled.div`
+height:25px;
+background:#00C2FF;
+padding: 0 8px;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:30px;
+transition:width .3s;
+width:${({$hover})=>$hover?"65px":"25px"};
+@media screen and (max-width:1300px){
+    width: 28px;
+    height: 28px;
+}
+@media screen and (max-width:600px){
+    width: 20px;
+    height: 20px;
+}
+`
 
 const HeartButton = styled(ButtonsDisplayer)`
 background:white;

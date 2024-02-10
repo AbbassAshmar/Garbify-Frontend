@@ -2,28 +2,8 @@ import styled from "styled-components"
 import {motion,AnimatePresence} from "framer-motion";
 import { useState } from "react";
 import { Icon } from "../product-card";
+import { ButtonsDisplayer } from "../product-card";
 
-export const ButtonsDisplayer = styled.div`
-height:25px;
-background:#00C2FF;
-padding: 0 8px;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:30px;
-transition:width .3s;
-width:${({$hover})=>$hover?"65px":"25px"};
-@media screen and (max-width:1300px){
-    width: 28px;
-    height: 28px;
-}
-@media screen and (max-width:600px){
-    width: 20px;
-    height: 20px;
-}
-
-`
 
 const ButtonsContainer = styled.div`
 display: flex;

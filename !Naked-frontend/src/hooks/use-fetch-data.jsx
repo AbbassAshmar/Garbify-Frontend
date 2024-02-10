@@ -11,16 +11,22 @@ export async function refreshAccessToken(userContext){
         }
     };
 
-    const request_access_token = await fetch(access_token_url,accessTokensInit);
-    if (request_access_token.status == 201){
-        const response_access_token = await request_access_token.json();
-        const token =  response_access_token.body.token;
-        userContext.setToken(token)
-        return token;
-    }
+    try {
+        const request_access_token = await fetch(access_token_url,accessTokensInit);
+        if (request_access_token?.status == 201){
+            const response_access_token = await request_access_token.json();
+            const token =  response_access_token.body.token;
+            userContext.setToken(token)
+            return token;
+        }
 
-    userContext.setToken(null);
-    return null;
+        userContext.setToken(null);
+        return null;
+
+    }catch(error){
+        userContext.setToken(null);
+        return null;
+    }
 }
 
 
@@ -45,11 +51,16 @@ export const useSendRequest = (userContext) => {
             let response = await request.json();
 
             // request a new access token 
-            if (request.status === 401 && (new_token = await refreshAccessToken(userContext))) {
-                defaultInit.headers['Authorization'] = 'Bearer ' + new_token;
-                request = await fetch(url, defaultInit);
-                response = await request.json();
+            if (request.status === 401) {
+                let new_token = await refreshAccessToken(userContext);
+
+                if (new_token){
+                    defaultInit.headers['Authorization'] = 'Bearer ' + new_token;
+                    request = await fetch(url, defaultInit);
+                    response = await request.json();
+                }
             }
+      
             return {request, response};
         } catch (error) {
             setIsServerError(true); // set error state to true if there's an error

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import empty_star from "../../assets/empty_star.png";
 import star from "../../assets/star.png"
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSendRequest } from '../../hooks/use-fetch-data';
 import useUserState from '../../hooks/use-user-state';
 import SuccessOrErrorPopUp from '../../components/SuccessOrErrorPopUp/success-or-error-pop-up';
@@ -139,96 +139,56 @@ justify-content:center;
 //FileReader::readAsDataURL() converts Blob objects to base64
 //Blob() represents a file (bites)
 
-function AvailableColors({inputErrors,formData,setFormData}){
-    let {product_id} = useParams();
-    const [productColors,setProductColors] = useState();
-    
+function ProductOptions({inputErrors,formData,setFormData,optionType}) {
+    let { product_id } = useParams();
+    const [productOptions, setProductOptions] = useState();
+  
     const userContext = useUserState();
-    const {sendRequest,serverError} = useSendRequest(userContext);
+    const { sendRequest, serverError } = useSendRequest(userContext);
+  
+    useEffect(() => {
+        requestOptionsOfProduct(product_id);
+    }, [optionType]);
+  
+    async function requestOptionsOfProduct(product_id) {
+        const uri = `/api/products/${product_id}/${optionType}`;
+        const { request, response } = await sendRequest(uri);
 
-    useEffect(()=>{
-        requestColorsOfProduct(product_id)
-    },[]);
-
-    function requestColorsOfProduct(product_id){
-        const uri = "/api/products/"+product_id+"/colors"
-        const {request, response} = sendRequest(uri)
-    
-        if (request?.status == 200){
-            setProductColors(response.data.colors)
+        if (request?.status === 200) {
+            setProductOptions(response.data[optionType]);
         }
-
-        setProductColors(['red','green','yellow','blue'])
     }
-
-    return(
-        <FormRow>
-            <Label $color={inputErrors.fields.includes('colors')?"red":"black"}>
-                what color did you purchase ? (optional)
-            </Label>
-            <div style={{display:"flex" , flexDirection:"column", gap:"1em"}}>
-                {productColors && productColors.map((color,index)=>{
-                    return (
-                        <RadioField key={index} style={{display:"flex", gap:"8px"}}>
-                            <RadioInput onChange={()=>setFormData({...formData,colors:color})} checked={formData.colors === color} type="radio" name="color" value={color} id={color}/>
-                            <RadioLabel htmlFor={color}>{color}</RadioLabel>
-                        </RadioField>
-                    )
-                })}
-            </div>
-            {inputErrors.message['colors'] && <ErrorMsg>{inputErrors.message['colors']}</ErrorMsg>}
-        </FormRow>
-    )
-}
-
-function AvailableSizes({inputErrors,formData,setFormData}){
-    let {product_id} = useParams();
-    const [productSizes,setProductSizes] = useState();
-
-    const userContext = useUserState();
-    const {sendRequest,serverError} = useSendRequest(userContext);
-
-
-    useEffect(()=>{
-        requestSizesOfProduct(product_id)
-    },[])
-
-    async function requestSizesOfProduct(product_id){
-        const uri = "/api/products/"+product_id+"/sizes"
-        const {request, response} = await sendRequest(uri)
-    
-        if (request?.status == 200){
-            setProductSizes(response.data.sizes)
-        }
-
-        // test 
-        setProductSizes(['xl','small','medium']);
-    }
-
+  
     return (
         <FormRow>
-            <Label $color={inputErrors.fields.includes('sizes')?"red":"black"}>
-                what size did you purchase ? (optional)
+            <Label $color={inputErrors.fields.includes(optionType) ? 'red' : 'black'}>
+                {`What ${optionType.slice(0, -1)} did you purchase? (optional)`}
             </Label>
-            <div style={{display:"flex" , flexDirection:"column", gap:"1rem"}}>
-                {
-                    productSizes && productSizes.map((size,index)=>{
-                        return (
-                            <RadioField key={index} style={{display:"flex", gap:"8px"}}>
-                                <RadioInput onChange={()=>setFormData({...formData,sizes:size})} checked={formData.sizes === size} type="radio" name="size" value={size} id={size}/>
-                                <RadioLabel htmlFor={size}>{size}</RadioLabel>
-                            </RadioField>
-                        )
-                    })
-                }
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {productOptions &&
+                productOptions.map((option, index) => (
+                    <RadioField key={index} style={{ display: 'flex', gap: '8px' }}>
+                        <RadioInput
+                            onChange={() => setFormData({ ...formData, [optionType]: option })}
+                            checked={formData[optionType] === option}
+                            type="radio"
+                            name={optionType}
+                            value={option}
+                            id={option}
+                        />
+                        <RadioLabel htmlFor={option}>{option}</RadioLabel>
+                    </RadioField>
+                ))}
             </div>
-            {inputErrors.message['sizes'] && <ErrorMsg>{inputErrors.message['sizes']}</ErrorMsg>}
+            {inputErrors.message[optionType] && (
+                <ErrorMsg>{inputErrors.message[optionType]}</ErrorMsg>
+            )}
         </FormRow>
-    )
+    );
 }
 
+  
 export default function ReviewForm({review}){
-
     const TITLE_KEY = 'title';
     const HEIGHT_KEY = 'example 180cm';
     const WIEGHT_KEY = 'example 80kg';
@@ -247,7 +207,6 @@ export default function ReviewForm({review}){
         fields:[], 
         message:{} 
     })
-   
 
     const inputField = useRenderInputField(inputErrors,setFormData,formData);
 
@@ -264,6 +223,13 @@ export default function ReviewForm({review}){
     const {product_id} = useParams();
     const userContext = useUserState();
     const {sendRequest,serverError} = useSendRequest(userContext);
+
+    const navigate = useNavigate();
+    useEffect(()=>{
+        if(!userContext.token){
+            navigate(-1);
+        }
+    },[])
 
     useEffect(()=>{
         return ()=>{
@@ -311,25 +277,29 @@ export default function ReviewForm({review}){
         }))
     }
 
+    useEffect(()=>{
+        if (submitLoading){
+            const data=  handleformData(stars,product_id,images,deletedImages,formData);
+            const uri = (review ? '/api/reviews/' + review.id : "/api/reviews");
+            const method = (review ? "PATCH" : "POST");
+            const init = {method:method,body:data};
+            createOrUpdateReview(uri, init)
+        }
+    },[submitLoading])
+
     async function handleReviewFormSubmit (e){
         e.preventDefault();
-        let data=  handleformData(e,stars,product_id,images,deletedImages,formData);
-      
         setSubmitLoading(true);
-        await (review ? updateReview(data) :  createReview(data))
-        setSubmitLoading(false);
-
     }
 
     function handleResponseKeysNaming(responseObject){
+        const updatedObject = {};
         const keyMappings = {
             'user_height': HEIGHT_KEY,
             'user_weight': WIEGHT_KEY,
             'title' : TITLE_KEY,
             'text' : REVIEW_KEY,
         };
-
-        const updatedObject = {};
 
         if (Array.isArray(responseObject)) {
             return responseObject.map(item => {              
@@ -346,37 +316,11 @@ export default function ReviewForm({review}){
         return updatedObject;
     }
 
-    async function createReview(data){
-        const uri = '/api/reviews';
-        const init = {method:"POST",body:data};
+    
+    async function createOrUpdateReview(uri,init){
         const {request,response} = await sendRequest(uri,init)
-
-        if (request?.status == 201){
-            // review created
-            setActionSuccess(true);
-        }
-
-        else if (request?.status === 400){ // error related to user's input
-            let fields = handleResponseKeysNaming(response.metadata.error_fields);
-            let message = handleResponseKeysNaming(response.error.details);
-
-            setInputErrors({fields: fields, message : message})
-        }
         
-        else {  //error that is not related to user's input
-            setInputErrors({fields:[], message:[]});
-        }
-        
-    }
-
-    async function updateReview(data){
-        const review_id = review.id;
-        const uri = '/api/reviews/' + review_id;
-        const init = {method:"PATCH",body:data};
-        const {request,response} = await sendRequest(uri,init)
-
         if (request?.status == 200){
-            // review updated
             setActionSuccess(true)
         }
 
@@ -391,9 +335,10 @@ export default function ReviewForm({review}){
             setInputErrors({fields:[], message:[]});
         }
 
+        setSubmitLoading(false);
     }
     
-    async function handleformData (e,stars,product_id,images,deletedImages,formData){
+    async function handleformData (stars,product_id,images,deletedImages,formData){
         let form_data = new FormData();
 
         form_data.append('title',formData['title']);
@@ -479,21 +424,18 @@ export default function ReviewForm({review}){
                                 />
                             </div>
                             <div style={{width:"100%",display:"flex",gap:'5%',flexWrap:"wrap"}}>
-                                {
-                                    images && images.map((image,index)=>{
-                                        return (
-                                            <div key={index} style={{width:"100px"}} onClick={(e)=>{handleImageDelete(image.url)} }>
-                                                <img src={image.url} style={{width:"100%", height:"auto",cursor:'pointer'}}/>
-                                            </div>
-                                        )
-                                    })
-                                }
+                                {images && 
+                                images.map((image,index)=>(
+                                    <div key={index} style={{width:"100px"}} onClick={(e)=>{handleImageDelete(image.url)} }>
+                                        <img src={image.url} style={{width:"100%", height:"auto",cursor:'pointer'}}/>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                         {inputErrors.message['images'] && <ErrorMsg>{inputErrors.message['images']}</ErrorMsg>}
                     </div>
-                    
                 </FormRow>
+                
                 <FormRow>
                     <Label $color={inputErrors.fields.includes(HEIGHT_KEY)?"red":"black"}>
                         what is your height ? (optional)
@@ -508,8 +450,8 @@ export default function ReviewForm({review}){
                     {inputField(WIEGHT_KEY,'text')}
                 </FormRow>
 
-                <AvailableSizes inputErrors={inputErrors} formData={formData} setFormData={setFormData}/>
-                <AvailableColors inputErrors={inputErrors} formData={formData} setFormData={setFormData}/>
+                <ProductOptions inputErrors={inputErrors} formData={formData} setFormData={setFormData} optionType={'sizes'}/>
+                <ProductOptions inputErrors={inputErrors} formData={formData} setFormData={setFormData} optionType={'colors'}/>
 
                 <SubmitButton disabled={submitLoading || ""} type="submit" >
                     {submitLoading && <Loading style={{scale:'.3'}}/> }
