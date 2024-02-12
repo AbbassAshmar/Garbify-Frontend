@@ -105,51 +105,47 @@ width: 30%;
 }
 `
 
-export default function ConfirmationPopUp({show,setShow,uri,cancelButtonRef,title,subTitle,cancelAction,confirmAction}){
-    const [cancelOrderLoading, setCancelOrderLoading ] = useState(false)
-    const [resultPopUp ,setResultPopUp] = useState({show:false,status:'',message:''})
+export default function ConfirmationPopUp({show,setShow,handleAction,cancelButtonRef,title,subTitle,cancelAction,confirmAction}){
+    const [isLoading, setIsLoading ] = useState(false)
+    const cancelConfirmRef = useRef();
 
-    const cancelConfimRef = useRef();
-    const userContext = useUserState();
-    const {sendRequest,serverError} = useSendRequest(userContext);
-
-    const handleClickOutside = useClickOutside([cancelConfimRef,cancelButtonRef],show,()=>{
+    useClickOutside([cancelConfirmRef,cancelButtonRef],show,()=>{
         setShow(false)
     })
 
-    async function requestCancelOrder(e){
-        setCancelOrderLoading(true)
-        let uri = uri;
-        let init = { method :"DELETE" };
-
-        let {request, response} = await sendRequest(uri,init);
-        if (request?.ok ){
-            setResultPopUp({show:true,status:"Success",message:response.metadata.message})
+    useEffect(()=>{
+        if (isLoading) {
+            handleSendRequest();
         }
-        if (!request?.ok){
-            setResultPopUp({show:true,status:"Error",message:response.error.message})
-        }
+    },[isLoading])
 
+
+    async function handleSendRequest(){
+        await handleAction();
+        
         setShow(false) // close the Confirm Cancel Order menu
-        setCancelOrderLoading(false) // stop the loading of Cancel button
+        setIsLoading(false) // stop the loading of Cancel button
+    }
+
+    function handleConfirmClick(e){
+        setIsLoading(true)
     }
 
     return(
         <>
-            <SuccessOrErrorPopUp settings={resultPopUp} setSettings={setResultPopUp} serverError={serverError}/>
             {ReactDOM.createPortal(
                 <AnimatePresence>
                     {show && (
                         <Container as={motion.div} initial={{opacity: 0 }} animate={{  opacity: 1 }} exit={{ opacity: 0 }}>
-                            <Content ref={cancelConfimRef} as={motion.div} initial={{ x: 30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 30, opacity: 0 }}>
+                            <Content ref={cancelConfirmRef} as={motion.div} initial={{ x: 30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 30, opacity: 0 }}>
                                 <TextContainer>
                                     <Title>{title}</Title>
                                     <Text>{subTitle}</Text>
                                 </TextContainer>
                                 <ButtonsContainer>
                                     <CancelAction onClick={(e)=>setShow(false)}>{cancelAction}</CancelAction>
-                                    <Confirm disabled={cancelOrderLoading} onClick={requestCancelOrder}>
-                                        {cancelOrderLoading ? 
+                                    <Confirm disabled={isLoading} onClick={handleConfirmClick}>
+                                        {isLoading ? 
                                         <Loading style={{transform:"scale(.2)"}}/>:
                                         confirmAction
                                         }

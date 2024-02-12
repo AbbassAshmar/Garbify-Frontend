@@ -22,21 +22,14 @@ export default function CreateReview(){
     const [reviewId, setReviewId] = useState(null);
 
     const [error , setError] =  useState(null);
-    const [loading, setLoading] = useState(false);
-
-
-    useEffect(()=>{
-        checkIfReviewed(product_id);
-    },[])
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        window.scrollTo(0, 0)
-    },[])
-
+        window.scrollTo(0, 0);
+        checkIfReviewed(product_id);
+    }, [product_id]);
 
     async function checkIfReviewed(product_id){
-        setLoading(true)
-
         let url = "/api/products/"+product_id+"/users/user/is_reviewed";
         const {request,response} = await sendRequest(url)
 
@@ -58,25 +51,24 @@ export default function CreateReview(){
     }
 
     
-    // if (loading){
-    //     return (
-    //         <div style={{display:'flex',minHeight:'10vh',overflow:'hidden'}}>
-    //             <Loading />
-    //         </div>
-    //     )
-    // }
+    if (loading){
+        return (
+            <div style={{display:'flex',minHeight:'10vh',overflow:'hidden'}}>
+                <Loading />
+            </div>
+        )
+    }
 
-    // if (error){
-    //     return (<Error error={error} />);
-    // }
+    if (error){
+        return (<Error error={error} />);
+    }
     
     return (
         <Container>
-            {/* {isReviewed? 
+            {isReviewed? 
                 <CanNotReview reviewId={reviewId}/>:
                 <ReviewForm />
-            } */}
-            <ReviewForm />
+            }
         </Container>
     )
 }

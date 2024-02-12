@@ -23,7 +23,7 @@ export default function UserReviewsContainer(){
     const [searchParams,setSearchParams] = useSearchParams();
     
     const URI = 'users/user/reviews'
-    let {data,loading,error} = useFetchData(URI,[searchParams],userContext);
+    let {data,loading,error,setData} = useFetchData(URI,[searchParams],userContext);
     let reviews = data?.reviews || REVIEWS_USERS_PRODUCTS;
     let TotalPagesCount =data?.metadata?.pages_count || 30;
     
@@ -33,14 +33,19 @@ export default function UserReviewsContainer(){
 
     return (
         <ReviewsSection>
-            <ReviewsContainer>
-                {reviews && (
-                    reviews.map((review)=>{
-                        return <UserReviewCard review={review}/>
-                    })
-                )}
-            </ReviewsContainer>
-            <Pagination TotalPagesCount={TotalPagesCount}/>
+            {reviews && (
+                <>
+                    <ReviewsContainer>
+                            {reviews.map((review)=>{
+                                return <UserReviewCard setReviews={setData} key={review.id} review={review}/>
+                            })}
+                    </ReviewsContainer>
+                    <Pagination TotalPagesCount={TotalPagesCount}/>
+                </>
+            )}
+            {!reviews && (
+                <p>You haven't reviewed any products yet !</p>
+            )}
         </ReviewsSection>
     )
 }

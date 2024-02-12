@@ -158,7 +158,7 @@ export default function CanNotReview({reviewId}){
     }
 
     function handleEditReviewClick(e){
-        navigate('/review/'+reviewId+'/edit');
+        navigate('/reviews/'+reviewId+'/edit');
     }
 
     return (

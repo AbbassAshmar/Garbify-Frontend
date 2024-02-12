@@ -202,10 +202,10 @@ export default function ReviewCard({review,user}){
 
     const hasUser = !!user;
 
-    // useEffect(()=>{
-    //     setHelpfulCount(review.helpful_count)
-    //     setIsLiked(review.liked)
-    // },[props])
+    useEffect(()=>{
+        setHelpfulCount(review.helpful_count)
+        setIsLiked(review.liked)
+    },[review])
 
     async function handleHelpfulButtonClick(){
         const uri = "/api/reviews/"+review.id+"/like";
@@ -215,21 +215,6 @@ export default function ReviewCard({review,user}){
             setIsLiked(response.data.liked)
         }
     }
-
-    // async function requestDelete(){
-    //     const uri ="/api/reviews/"+review.id
-    //     return await sendRequest(uri,{method:"DELETE"})
-    // }
-    
-    // async function handleDeleteButtonClick(e){
-    //     e.preventDefault();
-    //     const {request,response} = await requestDelete();
-
-    //     if (request?.status== 200){
-    //         // remove the review from the state
-    //         review.setReviews(reviews=>reviews.filter((review) => review.id != review.id))
-    //     }
-    // }
 
     const renderUserSection = ()=>{
         return(
@@ -288,7 +273,6 @@ export default function ReviewCard({review,user}){
                 {hasUser && <>{renderRating()} </>}
             </ReviewCardHeader>
 
-
             <CommentContainer>
                 <Title>{review.title}</Title>
                 <Comment>{review.text}</Comment>
@@ -298,7 +282,7 @@ export default function ReviewCard({review,user}){
                 {review.images && review.images.length>0 &&
                     <ImagesContainer>
                         {review.images && (
-                            review.images.map((image)=> <Image src={image}/>)   
+                            review.images.map((image)=> <Image key={image} src={image}/>)   
                         )}
                     </ImagesContainer>
                 }

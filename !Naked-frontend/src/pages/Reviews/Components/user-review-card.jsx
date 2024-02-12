@@ -8,6 +8,7 @@ import ConfirmationPopUp from "../../../components/ConfirmationPopUp/confirmatio
 import useUserState from "../../../hooks/use-user-state";
 import { useSendRequest } from "../../../hooks/use-fetch-data";
 import { useNavigate } from "react-router-dom";
+import SuccessOrErrorPopUp from "../../../components/SuccessOrErrorPopUp/success-or-error-pop-up";
 
 const Container = styled.div`
 box-shadow:0px 0px 10px rgba(0,0,0,0.6);
@@ -95,10 +96,11 @@ function DeleteReviewConfirmationPopUp({review}){
 }
 
 
-export default function UserReviewCard({review}){
+export default function UserReviewCard({review,setReviews}){
     const [showDropDownOptions,setShowDropDownOptions] = useState(false);
     const [showDeleteConfirmation,setShowDeleteConfirmation] = useState(false);
     const [showArchiveConfirmation , setShowArchiveConfirmation] = useState(false);
+    const [resultPopUp ,setResultPopUp] = useState({show:false,status:'',message:''})
 
     let navigate = useNavigate();
     const userContext = useUserState();
@@ -108,7 +110,7 @@ export default function UserReviewCard({review}){
     const archiveButtonRef = useRef();
     const deleteButtonRef = useRef();
 
-    const handleClickOutside = useClickOutside([DropDownOptionsRef],showDropDownOptions,()=>{
+    useClickOutside([DropDownOptionsRef],showDropDownOptions,()=>{
         setShowDropDownOptions(false);
     })
 
@@ -117,8 +119,7 @@ export default function UserReviewCard({review}){
     }
 
     function handleEditReviewClick(){
-        let state = review;
-        navigate('review/')
+        navigate('/reviews/' + review.id + '/edit');
     }
 
     function handleArchiveReviewClick(){
@@ -129,8 +130,40 @@ export default function UserReviewCard({review}){
         setShowDeleteConfirmation(true)
     }
 
+    async function handleDeleteReview(e){
+        let url = '/api/reviews/' + review.id;
+        let init = { method :"DELETE" };
+        let {request, response} = await sendRequest(url,init);
+
+        if (request?.ok){
+            setResultPopUp({show:true,status:"Success",message:response.metadata.message})
+            setReviews((prev)=> (prev.filter((rev)=> review.id != rev.id )))
+
+        }
+
+        if (request && !request.ok){
+            setResultPopUp({show:true,status:"Error",message:response.error.message})
+        }
+    }
+
+    async function handleArchiveReview(e){
+        let url = '/api/reviews/'+review.id+'/archive';
+        let init = { method :"DELETE" };
+        let {request, response} = await sendRequest(url,init);
+
+        if (request?.ok){
+            setResultPopUp({show:true,status:"Success",message:response.metadata.message})
+        }
+
+        if (request && !request.ok){
+            setResultPopUp({show:true,status:"Error",message:response.error.message})
+        }
+    }
+    
+
     return(
         <Container>
+            <SuccessOrErrorPopUp settings={resultPopUp} setSettings={setResultPopUp} serverError={serverError}/>
             <Header>
                 <DropDownContainer ref={DropDownOptionsRef}>
                     <OptionsIcon onClick={handleOptionsIconClick}  className="fa-solid fa-ellipsis"/>
@@ -140,13 +173,14 @@ export default function UserReviewCard({review}){
                                 <Icon className="fa-solid fa-pen"/> 
                                 <div style={{lineHeight:"1"}}>Edit review</div> 
                             </Option>
+
                             <div>
                                 <Option onClick={handleArchiveReviewClick} ref={archiveButtonRef}>
                                     <Icon className="fa-solid fa-trash"/> 
                                     <div style={{lineHeight:"1"}}>Archive review</div> 
                                 </Option>
                                 <ConfirmationPopUp 
-                                uri = {'api/reviews/'+review.id+'/archive'}
+                                handleAction = {handleArchiveReview}
                                 show={showArchiveConfirmation}  
                                 setShow={setShowArchiveConfirmation}
                                 cancelButtonRef={archiveButtonRef}
@@ -162,7 +196,7 @@ export default function UserReviewCard({review}){
                                     <div  style={{lineHeight:"1"}}>Delete review</div>
                                 </Option>
                                 <ConfirmationPopUp 
-                                uri = {'api/reviews/' + review.id}
+                                handleAction = {handleDeleteReview}
                                 show={showDeleteConfirmation}  
                                 setShow={setShowDeleteConfirmation}
                                 cancelButtonRef={deleteButtonRef}
@@ -171,7 +205,6 @@ export default function UserReviewCard({review}){
                                 cancelAction={'keep Review'}
                                 confirmAction={'Delete Review'}/>
                             </div>
-                            
                         </OptionsContainer>
                     </DropDownOptions>
                 </DropDownContainer>

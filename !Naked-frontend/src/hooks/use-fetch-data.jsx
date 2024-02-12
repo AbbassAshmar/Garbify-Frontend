@@ -90,7 +90,7 @@ export function useFetchData(url,dependency_array=[],userContext=null,init={}){
         let {request,response} =  await sendRequest(url, init);
 
         if (!request){
-            setError('Oops...Looks like our servers are down !');
+            setError({error:{code:500,message:'Looks like our servers are down !'}});
             setData(null);
         }else if (request.ok){
             setError(null);
