@@ -1,7 +1,5 @@
-
-
 import styled from "styled-components";
-import {ToggleFavoritesButton } from "../ProductCard/product-card";
+import {ToggleFavoritesButton, getPrice } from "../ProductCard/product-card";
 import RatingStars from "../RatingStars/rating-stars";
 import Discount from "../../assets/Discount.png";
 import { Link } from "react-router-dom";
@@ -100,46 +98,16 @@ color:grey;
     font-size:var(--small-2-mobile);
 }
 `
-const NewPrice =styled.h6`
-margin:0;
-font-weight:600;
-font-size:var(--heading-6);
-@media screen and (max-width:600px){
-    font-size:var(--heading-6-mobile);
+export const productNameAndType =(name,type)=>{
+    return (
+        <Name>
+            <span style={{marginRight:'8px'}}>{name}</span> 
+            <Type>{type}</Type>
+        </Name>
+    )
 }
-`
-const OldPrice =styled.p`
-margin:0;
-color:grey;
-font-weight:600;
-text-decoration:line-through;
-font-size:var(--body);
-@media screen and (max-width:600px){
-    font-size:var(--small-1-mobile);
-}
-`
 
-const Price = styled.div`
-display:flex;
-align-items:flex-end;
-gap:8px;
-`
-
-
-
-export default function SimplifiedProductCardHorizontal({style,product,image_width}){
-    const getPrice = ()=>{
-        if (product?.sale){
-            return(
-                <>
-                    <NewPrice>{product?.sale.price_after_sale}$</NewPrice>
-                    <OldPrice>{product?.price}$</OldPrice>
-                </>
-            )
-        }
-        return <NewPrice>{product?.price}$</NewPrice>
-    }
-
+export default function SimpleProductCardHorizontal({style,product,image_width}){
     return (
         <ProductCardContainerHorizontal>
             <ProductLinkImage to={`/product/${product?.name.replaceAll(" ",'-')}/${product?.id}`}>
@@ -153,15 +121,12 @@ export default function SimplifiedProductCardHorizontal({style,product,image_wid
             </ProductLinkImage>  
             <DetailsContainer>
                 <Details>
-                    <Name>
-                        <spane style={{marginRight:'8px'}}>{product.name}</spane> 
-                        <Type>{product.type}</Type>
-                    </Name>
+                    {productNameAndType(product.name,product.type)}
                     <Reviews>
                         <RatingStars rating={product.rating} />
                         <ReviewsCount>({product.reviews_summary.reviews_count} reviews)</ReviewsCount>
                     </Reviews>
-                    <Price>{getPrice()}</Price>
+                    {getPrice(product.price,product.sale)}
                 </Details>
                 <ToggleFavoritesButton />
             </DetailsContainer>

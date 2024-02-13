@@ -1,24 +1,24 @@
 import styled from "styled-components";
-import UserReviewCard from "./user-review-card";
 import Loading from "../../../components/Loading/loading";
 import { useSearchParams } from "react-router-dom";
 import useUserState from "../../../hooks/use-user-state";
 import { useFetchData } from "../../../hooks/use-fetch-data";
 import { REVIEWS_USERS_PRODUCTS } from "../../../components/products-data";
 import Pagination from "../../../components/Pagination/pagination";
+import ProductReviewCard from "../../../components/ProductReviewCard/product-review-card";
 
 const ReviewsSection = styled.div`
 display:flex;
 flex-direction:column;
 gap:3rem;
 `
-const ReviewsContainer = styled.div`
+const ReviewsWrapper = styled.div`
 display:flex;
 flex-direction:column;
 gap:3rem;
 `
 
-export default function UserReviewsContainer(){
+export default function ReviewsContainer(){
     const userContext = useUserState();
     const [searchParams,setSearchParams] = useSearchParams();
     
@@ -35,11 +35,11 @@ export default function UserReviewsContainer(){
         <ReviewsSection>
             {reviews && (
                 <>
-                    <ReviewsContainer>
+                    <ReviewsWrapper>
                             {reviews.map((review)=>{
-                                return <UserReviewCard setReviews={setData} key={review.id} review={review}/>
+                                return <ProductReviewCard setReviews={setData} key={review.id} review={review}/>
                             })}
-                    </ReviewsContainer>
+                    </ReviewsWrapper>
                     <Pagination TotalPagesCount={TotalPagesCount}/>
                 </>
             )}

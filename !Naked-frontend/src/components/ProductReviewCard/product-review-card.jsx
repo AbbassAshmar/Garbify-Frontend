@@ -1,17 +1,17 @@
 import styled from "styled-components";
-import ReviewCard from "../../../components/ReviewCard/review-card";
-import SimplifiedProductCard from "../../../components/SimplifiedProductCard/simplified-product-card";
-import SimplifiedProductCardHorizontal from "../../../components/SimplifiedProductCard/Simplified-product-card-horizontal";
-import { useEffect, useRef, useState } from "react";
-import useClickOutside from "../../../hooks/use-click-outside";
-import ConfirmationPopUp from "../../../components/ConfirmationPopUp/confirmation-pop-up";
-import useUserState from "../../../hooks/use-user-state";
-import { useSendRequest } from "../../../hooks/use-fetch-data";
+import {useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SuccessOrErrorPopUp from "../../../components/SuccessOrErrorPopUp/success-or-error-pop-up";
+import useUserState from "../../hooks/use-user-state";
+import useClickOutside from "../../hooks/use-click-outside";
+import { useSendRequest } from "../../hooks/use-fetch-data";
+import ReviewCard from "../ReviewCard/review-card";
+import ConfirmationPopUp from "../ConfirmationPopUp/confirmation-pop-up";
+import SuccessOrErrorPopUp from "../SuccessOrErrorPopUp/success-or-error-pop-up";
+import SimpleProductCard from "../SimpleProductCard/simple-product-card";
+import SimpleProductCardHorizontal from "../SimpleProductCardHorizontal/Simple-product-card-horizontal";
 
 const Container = styled.div`
-box-shadow:0px 0px 10px rgba(0,0,0,0.6);
+box-shadow:0px 0px 15px rgba(0,0,0,0.4);
 padding:1rem;
 @media screen and (max-width:800px){
     padding: 0 15px 15px 15px;
@@ -83,20 +83,7 @@ cursor:pointer;
 }
 `
 
-const DeleteReviewPopUpContainer = styled.div`
-position:fixed;
-`
-
-function DeleteReviewConfirmationPopUp({review}){
-    return (
-        <DeleteReviewPopUpContainer>
-
-        </DeleteReviewPopUpContainer>
-    )
-}
-
-
-export default function UserReviewCard({review,setReviews}){
+export default function ProductReviewCard({review,setReviews}){
     const [showDropDownOptions,setShowDropDownOptions] = useState(false);
     const [showDeleteConfirmation,setShowDeleteConfirmation] = useState(false);
     const [showArchiveConfirmation , setShowArchiveConfirmation] = useState(false);
@@ -123,43 +110,50 @@ export default function UserReviewCard({review,setReviews}){
     }
 
     function handleArchiveReviewClick(){
+        setShowDropDownOptions(false);
         setShowArchiveConfirmation(true)
     }
     
     function handleDeleteReviewClick(){
+        setShowDropDownOptions(false);
         setShowDeleteConfirmation(true)
     }
 
-    async function handleDeleteReview(e){
-        let url = '/api/reviews/' + review.id;
-        let init = { method :"DELETE" };
-        let {request, response} = await sendRequest(url,init);
-
-        if (request?.ok){
-            setResultPopUp({show:true,status:"Success",message:response.metadata.message})
-            setReviews((prev)=> (prev.filter((rev)=> review.id != rev.id )))
-
+    async function performReviewAction(actionType) {
+        let url = `/api/reviews/${review.id}`;
+        let init = { method: 'DELETE' };
+      
+        if (actionType === 'archive') {
+          url += '/archive';
         }
-
-        if (request && !request.ok){
-            setResultPopUp({show:true,status:"Error",message:response.error.message})
+      
+        let { request, response } = await sendRequest(url, init);
+      
+        if (request?.ok) {
+            setResultPopUp({
+                show: true,
+                status: 'Success',
+                message: response.metadata.message,
+            });
+            setReviews((prev) => prev.filter((rev) => review.id !== rev.id));
         }
-    }
-
-    async function handleArchiveReview(e){
-        let url = '/api/reviews/'+review.id+'/archive';
-        let init = { method :"DELETE" };
-        let {request, response} = await sendRequest(url,init);
-
-        if (request?.ok){
-            setResultPopUp({show:true,status:"Success",message:response.metadata.message})
-        }
-
-        if (request && !request.ok){
-            setResultPopUp({show:true,status:"Error",message:response.error.message})
+      
+        if (request && !request.ok) {
+            setResultPopUp({
+                show: true,
+                status: 'Error',
+                message: response.error.message,
+            });
         }
     }
-    
+      
+    async function performDeleteReview(e) {
+        await performReviewAction('delete');
+    }
+      
+    async function performArchiveReview(e) {
+        await performReviewAction('archive');
+    }
 
     return(
         <Container>
@@ -176,11 +170,11 @@ export default function UserReviewCard({review,setReviews}){
 
                             <div>
                                 <Option onClick={handleArchiveReviewClick} ref={archiveButtonRef}>
-                                    <Icon className="fa-solid fa-trash"/> 
+                                    <Icon className="fa-solid fa-box-archive"/>
                                     <div style={{lineHeight:"1"}}>Archive review</div> 
                                 </Option>
                                 <ConfirmationPopUp 
-                                handleAction = {handleArchiveReview}
+                                handleAction = {performArchiveReview}
                                 show={showArchiveConfirmation}  
                                 setShow={setShowArchiveConfirmation}
                                 cancelButtonRef={archiveButtonRef}
@@ -192,11 +186,11 @@ export default function UserReviewCard({review,setReviews}){
                             
                             <div>
                                 <Option onClick={handleDeleteReviewClick} ref={deleteButtonRef} style={{border:"none"}}>
-                                    <Icon className="fa-solid fa-box-archive"/>
+                                    <Icon className="fa-solid fa-trash"/> 
                                     <div  style={{lineHeight:"1"}}>Delete review</div>
                                 </Option>
                                 <ConfirmationPopUp 
-                                handleAction = {handleDeleteReview}
+                                handleAction = {performDeleteReview}
                                 show={showDeleteConfirmation}  
                                 setShow={setShowDeleteConfirmation}
                                 cancelButtonRef={deleteButtonRef}
@@ -210,10 +204,10 @@ export default function UserReviewCard({review,setReviews}){
                 </DropDownContainer>
             </Header>
             <Content>
-                {window.innerWidth > 800 && <SimplifiedProductCard style={{width:"35%",minWidth:"220px"}} product={review.product}/>}
+                {window.innerWidth > 800 && <SimpleProductCard style={{width:"35%",minWidth:"220px"}} product={review.product}/>}
                 {window.innerWidth <= 800 &&(
                     <div style={{borderBottom:'2px solid #C0C3C7',padding:'1rem'}} >
-                        <SimplifiedProductCardHorizontal image_width={'80px'} style={{minHeight:'0'}} product={review.product}/>
+                        <SimpleProductCardHorizontal image_width={'80px'} style={{minHeight:'0'}} product={review.product}/>
                     </div>
                 )}
                 <ReviewCardContainer>

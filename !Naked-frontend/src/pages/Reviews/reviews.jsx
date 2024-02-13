@@ -2,10 +2,7 @@ import styled from "styled-components";
 import { Content } from "../../components/StyledComponents/styled-components";
 import { Title } from "../Orders/orders";
 import SortByButton from "../../components/SortByButton/sort-by-button";
-import UserReviewCard from "./Components/user-review-card";
-import { useFetchData } from "../../hooks/use-fetch-data";
-import Loading from "../../components/Loading/loading";
-import UserReviewsContainer from "./Components/user-reviews-container";
+import ReviewsContainer from "./Components/reviews-container";
 
 const Container = styled.div`
 
@@ -42,7 +39,7 @@ export default function Reviews(){
                     <Title>Your Reviews</Title>
                     <SortByButton style={SortByButtonStyle} sortOptions={sortOptions}/>
                 </Header>
-                <UserReviewsContainer />
+                <ReviewsContainer />
             </Content>
         </Container>
     )

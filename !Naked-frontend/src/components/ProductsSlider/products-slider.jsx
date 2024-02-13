@@ -1,6 +1,6 @@
 import { styled } from "styled-components"
-import ProductCard from "../ProductCard/product-card"
-import { useEffect, useRef } from "react"
+import SimpleProductCard from "../SimpleProductCard/simple-product-card";
+import { useRef } from "react"
 import { useFetchData } from "../../hooks/use-fetch-data"
 import useUserState from "../../hooks/use-user-state"
 import Loading from "../Loading/loading"
@@ -75,17 +75,13 @@ export default function ProductsSlider({title ,url}){
                     <ArrowIcon className="fa-solid fa-arrow-right"/>
                 </SlideButton>
                 <Slider ref={sliderRef}>
-                    {
-                        products.map((product)=>{
-                            return(
-                                <ProductCard 
-                                    key={product.id}
-                                    min_width={"max(200px ,28%)"}
-                                    product={product}
-                                />
-                            )
-                        })
-                    }
+                    {products.map((product)=>(
+                        <SimpleProductCard 
+                            min_width={"max(200px ,28%)"}
+                            key={product.id}
+                            product={product}
+                        />
+                    ))}
                 </Slider>
             </SliderContainer>
         </Container> 

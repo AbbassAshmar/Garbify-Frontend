@@ -43,21 +43,39 @@ display:flex;
 flex-direction:column;
 gap:2rem;
 width:45%;
+@media screen and (max-width:1200px){
+    width:70%;
+}
+@media screen and (max-width:800px){
+    width:90%;
+}
 `
+
 const TextContainer = styled.div`
 width:100%;
 display:flex;
 flex-direction:column;
 align-items:flex-start;
-gap:.7rem;
+gap:1rem;
+@media screen and (max-width:800px){
+    text-align:center;
+}
 `
 const Title = styled.p`
-font-weight:700;
-font-size:clamp(.8rem , 2.3vw ,1.1rem);
+width:100%;
+font-weight:600;
+font-size:var(--heading-6);
+@media screen and (max-width:600px){
+    font-size:var(--heading-6-mobile);
+}
 `
 const Text = styled.p`
 font-weight:600;
-font-size:clamp(.7rem,2vw,.9rem);
+font-size:var(--small-1);
+color:grey;
+@media screen and (max-width:600px){
+    font-size:var(--small-1-mobile);
+}
 `
 
 const ButtonsContainer = styled.div`
@@ -65,7 +83,11 @@ display:flex;
 width:100%;
 gap:1rem;
 justify-content:flex-end;
+@media screen and (max-width:800px){
+    justify-content:center;
+}
 `
+
 const CancelAction = styled.button`
 border-radius:4px;
 border:2px dashed black;
@@ -80,6 +102,9 @@ height: 35px;
 width: 30%;
 &:hover{
     border:2px solid black;
+}
+@media screen and (max-width:800px){
+    flex:1;
 }
 `
 const Confirm = styled.button`
@@ -100,8 +125,10 @@ width: 30%;
     background:	rgba(190,0,0,1);
 }
 &:disabled{
-
     background:#ff8d8d;
+}
+@media screen and (max-width:800px){
+    flex:1;
 }
 `
 

@@ -45,23 +45,12 @@ export default function FavoriteProductsGrid({url}){
             {favorites && favorites.length > 0 ?
             <><Pagination TotalPagesCount={TotalPagesCount}/>
             <FavoriteProductsContainer>
-                {
-                    favorites.map((favorite)=>{
-                        return (
-                            <ProductCard
-                                key={favorite.id}
-                                id ={favorite.id}
-                                name={favorite.name} 
-                                price={favorite.price} 
-                                quantity={favorite.quantity}
-                                colors={favorite.colors}
-                                type={favorite.type}
-                                thumbnail={favorite.thumbnail}
-                                sale={favorite.sale}
-                            />
-                        )
-                    })
-                }
+                {favorites.map((favorite)=>(
+                    <ProductCard
+                        key={favorite.id}
+                        product={favorite}
+                    />
+                ))}
             </FavoriteProductsContainer>
             <Pagination TotalPagesCount={TotalPagesCount}/></>:
             <>

@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import TwoGirlsWearingHoodies from "../../../../assets/TwoGirlsWearingHoodies.png";
-import SimplifiedProductCardHorizontal from "../../../../components/SimplifiedProductCard/Simplified-product-card-horizontal";
-import { PRODUCTS } from "../../../../components/products-data";
+import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import useUserState from "../../../../hooks/use-user-state";
-import { useFetchData } from "../../../../hooks/use-fetch-data";
-import ProductsSlider from "../../../../components/ProductsSlider/products-slider";
 import { useScroll, useTransform,motion } from "framer-motion";
+import { PRODUCTS } from "../../../../components/products-data";
+import { useFetchData } from "../../../../hooks/use-fetch-data";
 import useWindowDimensions from "../../../../hooks/use-window-dimensions";
-import { Link } from "react-router-dom";
+import TwoGirlsWearingHoodies from "../../../../assets/TwoGirlsWearingHoodies.png";
+import ProductsSlider from "../../../../components/ProductsSlider/products-slider";
+import SimpleProductCardHorizontal from "../../../../components/SimpleProductCardHorizontal/Simple-product-card-horizontal";
 
 const Container = styled.div`
 top:17vh;
@@ -313,7 +313,7 @@ function CardsSlider(){
                 {products.map((product,index)=>{
                     return(
                         <div key={product.id} style={{minWidth:'100%'}}>
-                            <SimplifiedProductCardHorizontal product={product}/>
+                            <SimpleProductCardHorizontal product={product}/>
                         </div>
                     )
                 })}

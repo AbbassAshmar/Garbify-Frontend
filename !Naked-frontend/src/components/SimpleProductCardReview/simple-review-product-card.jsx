@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { ProductCardContainer, ProductCardDetailsContainer, ProductCardImage, ProductCardInfo, ProductLinkImage, ToggleFavoritesButton } from "../ProductCard/product-card";
+import { ProductCardContainer, ProductCardDetailsContainer, ProductCardImage, ProductLinkImage, ToggleFavoritesButton, renderHighLight, renderRatingCont } from "../ProductCard/product-card";
+import { productNameAndType } from "../SimpleProductCardHorizontal/Simple-product-card-horizontal";
 
 const ReviewProductButton = styled.button`
 width:100%;
@@ -20,18 +21,19 @@ transition:background .3s;
 }
 
 `
-export default function SimplifiedReviewProductCard({product,style}){
+export default function SimpleProductCardReview({product,style}){
     return (
         <ProductCardContainer style={style}>
             <div style={{position:"relative"}}>
                 <ProductLinkImage to={`/product/${product?.name.replaceAll(" ",'-')}/${product?.id}`}>
+                    {renderHighLight(product.sale)}
                     <ProductCardImage src={product?.thumbnail}/>
                 </ProductLinkImage>  
                 <ToggleFavoritesButton style={{position:'absolute',top:'2.9%',right:'3%'}} />
             </div>
- 
             <ProductCardDetailsContainer style={{background:"transparent"}}>
-                <ProductCardInfo average_ratings={product?.reviews_summary.average_ratings} reviews_count={product?.reviews_summary.reviews_count} name={product.name} name_first={true}/>
+                {productNameAndType(product.name,product.type)}
+                {renderRatingCont(product.reviews_summary.average_ratings,product.reviews_summary.reviews_count)}
                 <ReviewProductButton>Review product</ReviewProductButton>
             </ProductCardDetailsContainer>
         </ProductCardContainer>

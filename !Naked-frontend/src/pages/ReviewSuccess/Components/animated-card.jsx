@@ -1,7 +1,7 @@
 import { useEffect,useState,useRef } from "react";
 import { cardVariant } from "../review-success";
-import SimplifiedReviewProductCard from "../../../components/SimplifiedProductCard/simplified-review-product-card";
 import { motion, useScroll,useTransform,useAnimation,useInView} from "framer-motion";
+import SimpleProductCardReview from "../../../components/SimpleProductCardReview/simple-review-product-card";
 
 export default function AnimatedCard({product ,Container}){
     const [cardMounted , setCardMounted] = useState(false);
@@ -30,7 +30,7 @@ export default function AnimatedCard({product ,Container}){
 
     return (
         <Container ref={cardRef} as={motion.div} variants={cardVariant} initial="initial" animate={cardAnimate} style={cardMounted ? {opacity:cardOpacity,y:cardY} :{}}>
-            <SimplifiedReviewProductCard product={product} name_first={true}/>
+            <SimpleProductCardReview product={product} name_first={true}/>
         </Container>
     )
 }

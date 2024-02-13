@@ -11,6 +11,7 @@ justify-content:center;
 @media screen and (max-width:800px){
     display:${({$removeUnder800px})=> $removeUnder800px?'none':'flex'};
 }
+z-index:10;
 `
 
 const Button = styled.button`   
@@ -41,7 +42,7 @@ font-size:inherit;
 const SortList =styled.div`
 position:absolute;
 background:white;
-box-shadow:0px 0px 4px rgba(0,0,0,0.8);
+box-shadow:0px 0px 10px rgba(0,0,0,0.5);
 top:125%;
 right:0;
 max-height:${({$height})=>$height};
@@ -58,6 +59,7 @@ transition:all .3s;
 const Options= styled.div`
 display:flex;
 flex-direction:column;
+
 `
 const Option = styled.div`
 cursor:pointer;
@@ -69,6 +71,10 @@ border-bottom: 2px solid #C0C3C7;
 &:hover{
     background:#C0C3C7;
 }
+
+&:last-child {
+    border: none !important;
+}
 `
 
 export default function SortByButton({style,removeUnder800px,sortOptions}){
@@ -76,7 +82,7 @@ export default function SortByButton({style,removeUnder800px,sortOptions}){
     const [urlSearchParams,setUrlSearchParams] = useSearchParams()
     const list =useRef(null)
 
-    const handleClickOutside = useClickOutside([list],showList,()=>{
+    useClickOutside([list],showList,()=>{
         setShowList(false)
     })
   
@@ -107,7 +113,7 @@ export default function SortByButton({style,removeUnder800px,sortOptions}){
                 <Options>
                     {
                         Object.keys(sortOptions).map((key,index)=>{
-                            return  <Option key={index} onClick={(e)=>handleOptionClick(key)}>{sortOptions[key]}</Option>
+                            return <Option key={index} onClick={(e)=>handleOptionClick(key)}>{sortOptions[key]}</Option>
                         })
                     }
                 </Options>

@@ -4,6 +4,8 @@ import Logo from "../Logo"
 import { useEffect, useState } from "react"
 import {PRODUCTS} from "../products-data"
 import ProductCard from "../ProductCard/product-card"
+import SimpleProductCard from "../SimpleProductCard/simple-product-card"
+import { useSendRequest } from "../../hooks/use-fetch-data"
 // Parent z-index : 200
 
 
@@ -133,33 +135,38 @@ export default function NavbarSearch({show,setShow}){
     const [suggestions, setSuggestions] = useState([])
     const [searchInput, setSearchInput] = useState()
 
+    const {sendRequest,serverError} = useSendRequest();
+
     useEffect(()=>{
-        //set initial products in search suggestions
-        // getPopularProducts()
-        setSuggestions(popularSuggestions)
+        getPopularProducts()
     },[])
 
-    function getPopularProducts(){
-        // let endpoint_url = "http://127.0.0.1:8000/api/products/popular";
-        // let url = endpoint_url + "?limit=5"
-        // let products = requestData(url);
-        // setPopularSuggestions(products['data']);
+    async function getPopularProducts(){
+        let url = "/api/products/popular?limit=5";
+        let {request,response} = await sendRequest(url);
+
+        if (request?.ok){
+            setSuggestions(response['data']['products']);
+            setPopularSuggestions(response['data']['products']); 
+        }
     }
 
-    function handleSearchInputChange(e){
+    async function handleSearchInputChange(e){
         e.preventDefault();
+
+        let url = "/api/products";
         let input = e.currentTarget.value;
         setSearchInput(input);
-        let endpoint_url = "http://127.0.0.1:8000/api/products";
 
-        if (input.length == 0 ){
-            setSuggestions(popularSuggestions)
-        }
-        
         if (input.length>1){
-            let url = endpoint_url +  "?q=" + e.currentTarget.value+ "&limit=5"
-            let products = requestData(url);
-            setSuggestions(products['data']);
+            url = url +  "?q=" + input + "&limit=5"
+            let {request,response} = await sendRequest(url);
+
+            if (request?.ok){
+                setSuggestions(response['data']['products']);
+            }
+        }else{
+            setSuggestions(popularSuggestions)
         }
     }
 
@@ -187,23 +194,13 @@ export default function NavbarSearch({show,setShow}){
                         </p>
                         <SuggestionsContainer>
                         <Suggestions>
-                            {
-                                suggestions && suggestions.length >0 && 
-                                suggestions.map((product)=>{
-                                    return (
-                                        <ProductCard
-                                            key={product.id}
-                                            id ={product.id}
-                                            name={product.name} 
-                                            price={product.price} 
-                                            quantity={product.quantity}
-                                            type={product.type}
-                                            thumbnail={product.thumbnail}
-                                            sale={product.sale}
-                                        />
-                                    )
-                                })
-                            }
+                            {suggestions && suggestions.length >0 && 
+                            suggestions.map((product)=>(
+                                <SimpleProductCard
+                                    key={product.id}
+                                    product={product}
+                                />
+                            ))}
                         </Suggestions>
                         </SuggestionsContainer>
                     </SuggestionsSection>

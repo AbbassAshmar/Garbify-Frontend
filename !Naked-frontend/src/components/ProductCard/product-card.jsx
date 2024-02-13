@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import RatingStars from "../RatingStars/rating-stars";
 import {useState } from "react";
 import {useSendRequest} from "../../hooks/use-fetch-data";
@@ -60,7 +60,7 @@ font-weight:600;
 font-size:clamp(.7rem,2vw,.9rem);
 color:grey;
 `
-const Name =styled(Link)`
+export const ProductName =styled(Link)`
 text-decoration:none;
 color:black;
 margin:0;
@@ -79,7 +79,7 @@ display:flex;
 gap:.5rem;
 align-items:flex-end;
 flex-wrap:wrap;
-width:100%;
+// width:100%;
 `
 const NewPrice =styled.p`
 margin:0;
@@ -183,17 +183,24 @@ export function ToggleFavoritesButton({style}){
     const [isInFavorites,setIsInFavorites] = useState(false);
     const [isLoading,setIsLoading] = useState(false);
 
+    const navigate = useNavigate();
+
     async function handleHeartClick(e){
         setIsLoading(true)
-        const uri = "/favorites"
+        const uri = "/api/favorites"
         const init = {method:"POST"};
 
         let {request , response} = await sendRequest(uri, init)
         if (request?.status == 201){
             setIsInFavorites(true)
         }
+
         if (request?.status == 200){
             setIsInFavorites(false)
+        }
+
+        if (request?.status === 401){
+            navigate('/login')
         }
 
         setIsLoading(false)
@@ -212,35 +219,42 @@ export function ToggleFavoritesButton({style}){
     )
 }
 
-export function ProductCardInfo({average_ratings,reviews_count,name,type,name_first=false}){
-    const renderRatingCont = ()=>{
-        return (
-            <RatingContainer>
-                <Rating>{average_ratings}</Rating>
-                <RatingStars rating={average_ratings} />
-                <ReviewsCount>
-                    ({reviews_count}
-                    <ReviewsWord> reviews</ReviewsWord>)
-                </ReviewsCount>
-            </RatingContainer>
-        )
-    }
+export const renderRatingCont = (average_ratings,reviews_count)=>{
+    return (
+        <RatingContainer>
+            <Rating>{average_ratings}</Rating>
+            <RatingStars rating={average_ratings} />
+            <ReviewsCount>
+                ({reviews_count}
+                <ReviewsWord> reviews</ReviewsWord>)
+            </ReviewsCount>
+        </RatingContainer>
+    )
+}
 
-    if (name_first){
+export const getPrice = (price,sale)=>{
+    if (sale){
         return(
-            <>
-                <Name>{name}</Name>
-                {renderRatingCont()}
-                <Category>{type}</Category>
-            </>
-        )
+        <PriceContainer>
+            <div style={{display:"flex", gap:"8px",alignItems:'flex-end'}}>
+                <NewPrice>{sale.price_after_sale}$</NewPrice>
+                <OldPrice>{price}$</OldPrice>
+            </div>
+        </PriceContainer>)
     }
-    
+    return <NewPrice>{price}$</NewPrice>
+}
+
+export const renderHighLight = (sale)=>{
     return (
         <>
-            {renderRatingCont()}
-            <Name>{name}</Name>
-            <Category>{type}</Category>
+            {sale &&
+                <HighLight>
+                    <SalePercentage>
+                        {sale.percentage} % Off
+                    </SalePercentage>
+                </HighLight>
+            }
         </>
     )
 }
@@ -252,25 +266,11 @@ export default function ProductCard({product,min_width}){
     const [actionLoading,setActionLoading] = useState(false);
 
     function handleCloseSizesColorsMenu(e){
-        if (actionLoading)
-            return null;
+        if (actionLoading) return null;
         
         setSizePicked(null);
         setColorPicked(null);
         setShowColorsSizesMenu("");
-    }
-
-    const getPrice = ()=>{
-        if (product?.sale){
-            return(
-            <PriceContainer>
-                <div style={{display:"flex", gap:"8px",alignItems:'flex-end'}}>
-                    <NewPrice>{product?.sale.price_after_sale}$</NewPrice>
-                    <OldPrice>{product?.price}$</OldPrice>
-                </div>
-            </PriceContainer>)
-        }
-        return <NewPrice>{product?.price}$</NewPrice>
     }
 
     return(
@@ -289,14 +289,8 @@ export default function ProductCard({product,min_width}){
         <ProductCardContainer onMouseLeave={handleCloseSizesColorsMenu} $min_width={min_width}>
             <div style={{position:'relative'}}>
                 <ProductLinkImage to={`/product/${product?.name.replaceAll(" ",'-')}/${product?.id}`}>
-                        {product?.sale &&
-                            <HighLight>
-                                <SalePercentage>
-                                    {product?.sale.percentage} % Off
-                                </SalePercentage>
-                            </HighLight>
-                        }
-                        <ProductCardImage src={product?.thumbnail}/>
+                    {renderHighLight(product?.sale)}
+                    <ProductCardImage src={product?.thumbnail}/>
                 </ProductLinkImage>
                 <OverlayColorsSizesMenu 
                 product={product} 
@@ -309,9 +303,11 @@ export default function ProductCard({product,min_width}){
                 setActionLoading={setActionLoading}/>
             </div>
             <ProductCardDetailsContainer>
-                <ProductCardInfo average_ratings={product?.reviews_summary.average_ratings} reviews_count={product?.reviews_summary.reviews_count} name={product?.name} type={product?.type}/>
+                <ProductName>{product?.name}</ProductName>
+                {renderRatingCont(product?.reviews_summary?.average_ratings,product?.reviews_summary?.reviews_count)}
+                <Category>{product?.type}</Category>
                 <PriceButtonsContainer>
-                    {getPrice()}
+                    {getPrice(product?.price,product?.sale)}
                     <ButtonsContainer>
                         <ShoppingButtons actionLoading={actionLoading} setShowColorsSizes={setShowColorsSizesMenu}/>
                         <ToggleFavoritesButton />
