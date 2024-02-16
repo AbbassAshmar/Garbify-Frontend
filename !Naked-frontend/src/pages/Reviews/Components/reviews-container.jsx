@@ -36,9 +36,9 @@ export default function ReviewsContainer(){
             {reviews && (
                 <>
                     <ReviewsWrapper>
-                            {reviews.map((review)=>{
-                                return <ProductReviewCard setReviews={setData} key={review.id} review={review}/>
-                            })}
+                        {reviews.map((review)=>{
+                            return <ProductReviewCard setReviews={setData} key={review.id} review={review}/>
+                        })}
                     </ReviewsWrapper>
                     <Pagination TotalPagesCount={TotalPagesCount}/>
                 </>

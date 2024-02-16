@@ -28,8 +28,6 @@ padding:"4px 14px 4px 16px",
 borderRadius:'3px',
 }
 
-
-
 export default function Reviews(){
 
     return(
