@@ -8,6 +8,10 @@
 :root {
     --main-color:#00C2FF;
     overscroll-behavior: none;
+
+    --big-1 :95px;
+    --big-2: 76px;
+    
     --heading-1: 61px;
     --heading-1-mobile: 32px;
   
