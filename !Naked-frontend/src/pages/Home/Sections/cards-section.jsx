@@ -1,4 +1,4 @@
-import BestSelling from "./best-selling";
+import BestSelling from "../Components/best-selling";
 import BlackHoody from "../../../assets/BlackHoody.jpg"
 import White from "../../../assets/White.jpg"
 import SkinColorHoody from "../../../assets/SkinColorHoody.jpg"

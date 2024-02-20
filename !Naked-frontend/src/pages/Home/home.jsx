@@ -1,19 +1,16 @@
 
 import styled from "styled-components"
-import Model from "../../assets/ModelBg.jpg"
-import ModelCropped from "../../assets/ModelCropped.jpg"
-import CategorySection from "./Components/category-section"
-import FeaturedSection from "./Components/featured-section"
-import WhyUsSection from "./Components/why-us-section"
-import ImageSection from "./Components/image-section"
-import SuitsSection from "./Components/suits-section"
-import CardsSection from "./Components/cards-section"
-import FormSection from "./Components/form-section"
+import CategorySection from "./Sections/category-section"
+import FeaturedSection from "./Sections/featured-section"
+import WhyUsSection from "./Sections/why-us-section"
+import ImagesSection from "./Sections/images-section"
+import SuitsSection from "./Sections/suits-section"
+import CardsSection from "./Sections/cards-section";
+import FormSection from "./Sections/form-section";
 import HeroSection from "./Sections/hero-section";
 
 const Container = styled.div`
 background:white;
-overflow:hidden;
 `
 
 
@@ -26,7 +23,7 @@ export default function Home(){
             <CategorySection />
             <FeaturedSection />
             <WhyUsSection />
-            <ImageSection />
+            <ImagesSection />
             <SuitsSection />
             <CardsSection />
             <FormSection />

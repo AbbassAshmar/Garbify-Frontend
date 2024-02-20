@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import CatgegoryCard from "./category-card"
+import CatgegoryCard from "../Components/category-card"
 import woman from "../../../assets/woman.jpg"
 import man from "../../../assets/man.jpg"
 import kid from "../../../assets/kid.jpg"

@@ -1,6 +1,6 @@
 import styled from "styled-components"
-import WhyUsBox1 from "./why-us-box1"
-import WhyUsBox2 from "./why-us-box2"
+import WhyUsBox1 from "../Components/why-us-box1"
+import WhyUsBox2 from "../Components/why-us-box2"
 import airplane from "../../../assets/airplane.png"
 import clothes from "../../../assets/clothes.png"
 import { SectionContainer } from "./featured-section"

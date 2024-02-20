@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import FeaturedBox from "./featured-box"
+import FeaturedBox from "../Components/featured-box"
 import hoody from "../../../assets/Hoody.jpg"
 import hoody2 from "../../../assets/Hoody2.jpg"
 import { SectionContent } from "./category-section"

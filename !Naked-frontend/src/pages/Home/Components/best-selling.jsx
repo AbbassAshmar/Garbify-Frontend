@@ -1,7 +1,7 @@
 import styled from "styled-components"
-import { Title } from "./featured-section"
-import { SectionContent } from "./category-section"
-import { SectionContainer } from "./featured-section"
+import { Title } from "../Sections/featured-section"
+import { SectionContent } from "../Sections/category-section"
+import { SectionContainer } from "../Sections/featured-section"
 
 const Container = styled(SectionContainer)`
 display:flex;
