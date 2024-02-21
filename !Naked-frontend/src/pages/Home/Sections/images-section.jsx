@@ -127,10 +127,12 @@ color:grey;
 const ExploreJacketsButton = styled.button`
 background:var(--main-color);
 font-size:var(--heading-5);
+overflow:hidden;
 font-weight:600;
 border-radius:3px;
 outline:none;
 border:none;
+text-wrap:nowrap;
 width:fit-content;
 padding: .5rem 2.5rem;
 color:white;
@@ -184,24 +186,24 @@ z-index:0;
 display:flex;
 flex-direction:column;
 align-items:flex-start;
+overflow:hidden;
 `
 const JacketsFeatureTitle = styled.h4`
 font-size:var(--heading-3);
 color:black;
 font-weight:bold;
+display:inline-block;
 position:relative;
-display:inline;
-
-&:before{
-    content:"";
-    width:100%;
-    background:var(--main-color);
-    height:14px;
-    position:absolute;
-    bottom:0;
-    left:0;
-    z-index:-1;
-}
+// &:before{
+//     content:"";
+//     width:100%;
+//     background:var(--main-color);
+//     height:14px;
+//     position:absolute;
+//     bottom:0;
+//     left:0;
+//     z-index:-1;
+// }
 @media screen and (max-width:1400px){
     font-size:var(--heading-4);
 }
@@ -298,27 +300,41 @@ export default function ImagesSection(){
                     <JacketsSection>
                         <JacketsSectionWrapper>
                             <MainInfoContainer>
-                                {showDetails && (
-                                    <>
-                                        <div style={{display:'flex',flexDirection:"column",gap:'4rem'}}>
-                                            <div style={{display:'flex',flexDirection:"column",gap:'2rem'}}>
-                                                <JacketsTitle>
-                                                    <ColoredLetter>J</ColoredLetter>ackets <br/> 
-                                                    <ColoredLetter>C</ColoredLetter>ollection
-                                                </JacketsTitle>
-                                                <JacketText>
-                                                    new unique collection 
-                                                    of cool flawless jackets 
-                                                    available now
-                                                </JacketText>
+                                <AnimatePresence>
+                                    {showDetails && (
+                                        <>
+                                            <div style={{display:'flex',flexDirection:"column",gap:'4rem'}}>
+                                                <div style={{display:'flex',flexDirection:"column",gap:'2rem'}}>
+                                                    <JacketsTitle>
+                                                        <ColoredLetter>J</ColoredLetter>ackets <br/> 
+                                                        <ColoredLetter>C</ColoredLetter>ollection
+                                                    </JacketsTitle>
+                                                    <JacketText>
+                                                        new unique collection 
+                                                        of cool flawless jackets 
+                                                        available now
+                                                    </JacketText>
+                                                </div>
+                                                <ExploreJacketsButton  
+                                                as={motion.button} 
+                                                transition={{duration:.3}}
+                                                initial={{width:"0px",padding:".5rem 0rem"}} animate={{width:"50%",padding:".5rem 2.5rem"}}>
+                                                    Explore Jackets
+                                                </ExploreJacketsButton>
                                             </div>
-                                            <ExploreJacketsButton>
-                                                Explore Jackets
-                                            </ExploreJacketsButton>
-                                        </div>
-                                        <CurvedArrow1 src={curvedArrow1} alt="curved arrow pointing to image"/>
-                                    </>
-                                )}
+                                            <CurvedArrow1 
+                                            key={'arrow1'}
+                                            as={motion.img}
+                                            initial={{x:-30,opacity:0}} 
+                                            animate={{x:0,opacity:1}} 
+                                            transition={{duration:.3}}
+                                            exit={{x:-30,opacity:0}}
+                                            src={curvedArrow1} 
+                                            alt="curved arrow pointing to image"
+                                            />
+                                        </>
+                                    )}
+                                </AnimatePresence>
                             </MainInfoContainer>
                             <ImageContainer>
                                 <JacketImageContainer>
@@ -327,25 +343,103 @@ export default function ImagesSection(){
                             </ImageContainer>
                             <SecondaryInfoContainer>
                                 <AnimatePresence>
-                                {showDetails && (
-                                    <>
-                                        <CurvedArrow2 as={motion.img} initial={{y:-30,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.3}} exit={{y:-30,opacity:0}} src={curvedArrow2} alt="curved arrow pointing to details"/>
-                                        <JacketsFeaturesContainer>
-                                            {JACKETS_FEATURES.map((feature)=>(
-                                                <JacketsFeature>
-                                                    <JacketsFeatureTitle>
-                                                        {feature.title}
-                                                    </JacketsFeatureTitle>
-                                                    <JacketsFeatureSubTitleCont>
-                                                        <JacketsFeatureSubTitle>
-                                                            {feature.subTitle}
-                                                        </JacketsFeatureSubTitle>
-                                                    </JacketsFeatureSubTitleCont>
-                                                </JacketsFeature>
-                                            ))}
-                                        </JacketsFeaturesContainer>
-                                    </>
-                                )}
+                                    {showDetails ? (
+                                        <motion.div>
+                                            <CurvedArrow2 
+                                            key={'arrow2'}
+                                            as={motion.img} 
+                                            initial={{y:-30,opacity:0}} 
+                                            animate={{y:0,opacity:1}} 
+                                            transition={{duration:.3}}
+                                            exit={{y:-30,opacity:0}} 
+                                            src={curvedArrow2} 
+                                            alt="curved arrow pointing to details"/>
+                                            <JacketsFeaturesContainer as={motion.div}>
+                                                {JACKETS_FEATURES.map((feature,index)=>(
+                                                    <JacketsFeature as={motion.div} key={index}>
+                                                        <div style={{position:"relative",width:'fit-content', overflow:"hidden"}}>
+                                                            <JacketsFeatureTitle 
+                                                            key={'title'+index}
+                                                            as={motion.h4}
+                                                            initial={{opacity:0,y:'100%'}}
+                                                            animate={{opacity:1,y:'0%'}}
+                                                            exit={{
+                                                                width:'0px',
+                                                                transition:{delay:0,duration:.2}
+                                                            }}
+                                                            transition={{delay:.3,duration:.3}} 
+                                                            >
+                                                                {feature.title}
+                                                            </JacketsFeatureTitle>
+                                                            <motion.div 
+                                                            key={'titleCover'+index}
+                                                            initial={{width:"0%"}}
+                                                            animate={{width:"100%"}}
+                                                            exit={{width:'0%'}}
+                                                            transition={{duration:0.3}} 
+                                                            style={{
+                                                                position:"absolute",
+                                                                bottom:"0",
+                                                                left:"0",
+                                                                background:"var(--main-color)",
+                                                                width:'100%',
+                                                                height:'60%',
+                                                                zIndex:"-1",
+                                                            }}/>
+                                                        </div>
+                                                        <motion.div
+                                                        key={'subTitleContainer'+ index} 
+                                                        initial={{left:"100%"}}
+                                                        animate={{left:'0%'}}
+                                                        transition={{duration:.3}}
+                                                        exit={{
+                                                            left:"100%",
+                                                            transition:{delay:.35,duration:.3}
+                                                        }}
+                                                        style={{
+                                                            position:"relative",
+                                                            width:'100%', 
+                                                            left:"0",
+                                                            overflow:"hidden"
+                                                        }}>
+                                                            <JacketsFeatureSubTitleCont>
+                                                                <JacketsFeatureSubTitle 
+                                                                key={'subTitle' + index}
+                                                                as={motion.h6} 
+                                                                initial={{y:10,opacity:0}}
+                                                                animate={{y:0,opacity:1}} 
+                                                                exit={{
+                                                                    opacity:0,
+                                                                    transition: {delay:.3, duration: .05 } 
+                                                                }}
+                                                                transition={{delay:.6,duration:.3}}>
+                                                                    {feature.subTitle}
+                                                                </JacketsFeatureSubTitle>
+                                                            </JacketsFeatureSubTitleCont>
+                                                            <motion.div
+                                                            key={'subTitleCover' + index}
+                                                            initial={{right:"0%"}} 
+                                                            animate={{right:"100%"}}
+                                                            transition={{delay:0.3,duration:0.3}} 
+                                                            exit={{
+                                                                right:"0%",
+                                                                transition: { duration: .35 } 
+                                                            }}
+                                                            style={{
+                                                                right:"0%",
+                                                                position:"absolute",
+                                                                bottom:"0",
+                                                                background:"var(--main-color)",
+                                                                width:'100%',
+                                                                height:'100%',
+                                                                zIndex:"2",
+                                                            }}/>
+                                                        </motion.div>
+                                                    </JacketsFeature>
+                                                ))}
+                                            </JacketsFeaturesContainer>
+                                        </motion.div>
+                                    ):null}
                                 </AnimatePresence>
                             </SecondaryInfoContainer>
                         </JacketsSectionWrapper>
