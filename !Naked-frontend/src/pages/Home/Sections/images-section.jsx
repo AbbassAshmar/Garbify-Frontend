@@ -11,17 +11,27 @@ import curvedArrow1 from "../../../assets/curvedArrow1.png";
 import curvedArrow2 from "../../../assets/curvedArrow2.png";
 import { useMotionValueEvent, useScroll, useTransform,motion, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
+import useWindowDimensions from "../../../hooks/use-window-dimensions";
 
 const Container = styled.div`
 height:200vh;
 margin: 20rem 0;
 position:relative;
+
+@media screen and (max-width:1024px){
+    height:350vh;
+}
 `
 const ImagesStickyWrapper = styled.div`
 position:sticky;
 top:10vh;
 min-height:91vh;
 overflow:hidden;
+
+@media screen and (max-width:1024px){
+    min-height:160vh;
+    top:4vh;
+}
 `
 const ScalableImageContainer = styled.div`
 position:relative;
@@ -37,13 +47,13 @@ align-items:center;
 justify-content:center;
 
 &:nth-child(1) ${ScalableImageContainer}{
-    top:-50%;
+    top:-55%;
     left:89%;
     width:60%;
 
 }
 &:nth-child(2) ${ScalableImageContainer}{
-    top:80%;
+    bottom:-90%;
     left:90%;
     width:60%;
 }
@@ -62,9 +72,32 @@ justify-content:center;
     left:0%;
     width:70%;
 }
+@media (max-height: 1300px) {
+    &:nth-child(1) ${ScalableImageContainer} {
+        top:-90%;
+        width:50%;
+    }
+
+    &:nth-child(2) ${ScalableImageContainer} {
+        bottom:-60%;
+        width:50%;
+    }
+
+    &:nth-child(3) ${ScalableImageContainer} {
+        width:70%;
+        top:110%;
+    }
+
+    &:nth-child(4) ${ScalableImageContainer} {
+    }
+
+    &:nth-child(5) ${ScalableImageContainer} {
+        width:60%;
+        top:-110%;
+    }
+  }
+
 `
-
-
 
 const ScalableImage = styled.img`
 object-fit:cover;
@@ -78,6 +111,10 @@ height:90.5vh;
 width:100%;
 background: #F1F4F9;
 overflow:hidden;
+
+@media screen and (max-width:1024px){
+    height:auto;
+}
 `
 const JacketsSectionWrapper = styled.div`
 background:red;
@@ -85,6 +122,10 @@ display:flex;
 background: #F1F4F9;
 height:100%;
 width:100%;
+
+@media screen and (max-width:1024px){
+    flex-direction:column;
+}
 `
 const MainInfoContainer = styled.div`
 flex:4;
@@ -99,8 +140,13 @@ max-height:950px;
 @media screen and (max-width:1300px){
     max-height:850px
 }
+@media screen and (max-width:1024px){
+    flex: 1; 
+    min-height: 30vh; 
+}
 `
 const JacketsTitle = styled.span`
+display:inline-block;
 font-size:var(--big-1);
 font-weight:bold;
 line-height:100px;
@@ -110,6 +156,7 @@ line-height:100px;
 }
 `
 const ColoredLetter = styled.span`
+display:inline-block;
 color:var(--main-color);
 `
 const JacketText = styled.h5`
@@ -142,6 +189,10 @@ color:white;
 `
 const CurvedArrow1 = styled.img`
 width:90%;
+
+@media screen and (max-width:1024px){
+    display:none;
+}
 `
 const ImageContainer = styled.div`
 flex:5;
@@ -149,9 +200,13 @@ display:flex;
 align-items:center;
 `
 const JacketImageContainer = styled.div`
-transform:translateX(-3.5rem);
-width:95%;
+width:90%;
 z-index:1;
+
+@media screen and (max-width:1024px){
+    width:100%;
+    transform:none;
+}
 `
 const JacketImage = styled.img`
 width:100%;
@@ -167,12 +222,20 @@ max-height:900px;
 @media screen and (max-width:1300px){
     max-height:800px
 }
+@media screen and (max-width:1024px){
+    flex: 1; 
+    min-height: 30vh; 
+}
 `
 const CurvedArrow2 = styled.img`
 width:45%;
 transform:translateX(-2rem);
 @media screen and (max-height:750px){
     width:35%;
+}
+
+@media screen and (max-width:1024px){
+    display:none;
 }
 `
 const JacketsFeaturesContainer = styled.div`
@@ -194,16 +257,6 @@ color:black;
 font-weight:bold;
 display:inline-block;
 position:relative;
-// &:before{
-//     content:"";
-//     width:100%;
-//     background:var(--main-color);
-//     height:14px;
-//     position:absolute;
-//     bottom:0;
-//     left:0;
-//     z-index:-1;
-// }
 @media screen and (max-width:1400px){
     font-size:var(--heading-4);
 }
@@ -246,16 +299,15 @@ const JACKETS_FEATURES = [
 
 export default function ImagesSection(){
     const [showDetails,setShowDetails] = useState(false);
+    const {height, width} = useWindowDimensions();
 
     const sectionRef = useRef();
     const {scrollYProgress} = useScroll({
         target:sectionRef,
-        offset:['start start', 'end end']
+        offset:['start start', '80% end']
     });
 
-    
-
-    const imagesWrapperScale = useTransform(scrollYProgress,[0,1],[0.3,1]);
+    const imagesWrapperScale = useTransform(scrollYProgress,[0,1],[0.25,1]);
     const IMAGES = [
         {
             src:jacket1,
@@ -280,10 +332,8 @@ export default function ImagesSection(){
     ]
 
     useMotionValueEvent(imagesWrapperScale,'change',(prev)=>{
-        if (prev > 0.9)
-            setShowDetails(true);
-        else 
-            setShowDetails(false);
+        if (prev > 0.9) setShowDetails(true);
+        else  setShowDetails(false);
     })
     
     return (
@@ -306,19 +356,60 @@ export default function ImagesSection(){
                                             <div style={{display:'flex',flexDirection:"column",gap:'4rem'}}>
                                                 <div style={{display:'flex',flexDirection:"column",gap:'2rem'}}>
                                                     <JacketsTitle>
-                                                        <ColoredLetter>J</ColoredLetter>ackets <br/> 
-                                                        <ColoredLetter>C</ColoredLetter>ollection
+                                                    <div style={{overflow:'visible' , textWrap:"nowrap"}}>
+                                                            <ColoredLetter 
+                                                            key={'coloredLetter1'}
+                                                            as={motion.span} 
+                                                            initial={{opacity:0,x:"-10px"}} 
+                                                            animate={{opacity:1,x:"0px"}} 
+                                                            exit={{opacity:0,x:"-10px"}}
+                                                            transition={{duration:.3}}>J</ColoredLetter>
+                                                            <motion.span
+                                                            style={{display:"inline-block"}}
+                                                            key={'ackets'}
+                                                            initial={{opacity:0,y:"20px"}} 
+                                                            animate={{opacity:1,y:"0px"}}
+                                                            exit={{opacity:0, y:"20px"}} 
+                                                            transition={{duration:.3}}
+                                                            >ackets</motion.span> 
+                                                        </div>
+                                                        <div style={{overflow:'visible' , textWrap:"nowrap"}}>
+                                                            <ColoredLetter
+                                                            key={'coloredLetter2'}
+                                                            as={motion.span} 
+                                                            initial={{opacity:0,x:"-20px"}} 
+                                                            animate={{opacity:1,x:"0px"}} 
+                                                            exit={{opacity:0,x:"-20px"}}
+                                                            transition={{duration:.3}}>C</ColoredLetter>
+                                                            <motion.span
+                                                            style={{display:"inline-block"}}
+                                                            key={'ollection'}
+                                                            initial={{opacity:0,y:"20px"}} 
+                                                            animate={{opacity:1,y:"0px"}} 
+                                                            exit={{opacity:"0", y:"20px"}}
+                                                            transition={{duration:.3}}>ollection</motion.span>
+                                                        </div> 
                                                     </JacketsTitle>
-                                                    <JacketText>
+                                                    <JacketText 
+                                                    key={"jacketText"}
+                                                    as={motion.h5} 
+                                                    initial={{opacity:0,y:"20px"}} 
+                                                    animate={{opacity:1,y:"0px"}} 
+                                                    transition={{duration:.3}}
+                                                    exit={{opacity:"0",y:"20px" ,transition:{duration:.3}}}
+                                                    >
                                                         new unique collection 
                                                         of cool flawless jackets 
                                                         available now
                                                     </JacketText>
                                                 </div>
                                                 <ExploreJacketsButton  
+                                                key={"exploreJacketsButton"}
                                                 as={motion.button} 
-                                                transition={{duration:.3}}
-                                                initial={{width:"0px",padding:".5rem 0rem"}} animate={{width:"50%",padding:".5rem 2.5rem"}}>
+                                                transition={{delay:.3,duration:.3}}
+                                                initial={{opacity:0,x:"-30px"}} 
+                                                animate={{opacity:1,x:"0px"}}
+                                                exit={{opacity:0,x:"-20px",transition:{delay:0}}}>
                                                     Explore Jackets
                                                 </ExploreJacketsButton>
                                             </div>
