@@ -14,12 +14,13 @@ import { useRef, useState } from "react";
 import useWindowDimensions from "../../../hooks/use-window-dimensions";
 
 const Container = styled.div`
-height:200vh;
+height:300vh;
 margin: 20rem 0;
 position:relative;
 
 @media screen and (max-width:1024px){
     height:350vh;
+    margin: 0 0;
 }
 `
 const ImagesStickyWrapper = styled.div`
@@ -30,9 +31,14 @@ overflow:hidden;
 
 @media screen and (max-width:1024px){
     min-height:160vh;
-    top:4vh;
+    top:0;
+}
+
+@media screen and (max-width:600px){
+    min-height:166vh;
 }
 `
+
 const ScalableImageContainer = styled.div`
 position:relative;
 `
@@ -50,7 +56,6 @@ justify-content:center;
     top:-55%;
     left:89%;
     width:60%;
-
 }
 &:nth-child(2) ${ScalableImageContainer}{
     bottom:-90%;
@@ -72,31 +77,94 @@ justify-content:center;
     left:0%;
     width:70%;
 }
-@media (max-height: 1300px) {
+@media (max-height: 1400px) {
     &:nth-child(1) ${ScalableImageContainer} {
         top:-90%;
+        left:70%;
         width:50%;
     }
 
     &:nth-child(2) ${ScalableImageContainer} {
-        bottom:-60%;
+        bottom:-75%;
         width:50%;
     }
 
     &:nth-child(3) ${ScalableImageContainer} {
         width:70%;
-        top:110%;
+        top:100%;
     }
-
-    &:nth-child(4) ${ScalableImageContainer} {
+    &:nth-child(4) ${ScalableImageContainer}{
+        left:-93%;
     }
-
     &:nth-child(5) ${ScalableImageContainer} {
         width:60%;
         top:-110%;
     }
-  }
+}
 
+@media (max-width: 1024px) {
+    align-items:flex-start;
+
+    &:nth-child(1) ${ScalableImageContainer} {
+        top:-60%;
+        width:100%;
+    }
+
+    &:nth-child(2) ${ScalableImageContainer} {
+        top:20%;
+        left:100%;
+        width:90%;
+    }
+
+    &:nth-child(3) ${ScalableImageContainer} {
+        width:100%;
+        top:-27%;
+        left:-60%;
+    }
+
+    &:nth-child(4) ${ScalableImageContainer} {
+        width:85%;
+        top:20%;
+        left:-100%;
+    }
+
+    &:nth-child(5) ${ScalableImageContainer} {
+        width:110%;
+        top:-80%;
+        left: -80%;
+    }
+}
+
+@media (max-width: 724px) {
+    &:nth-child(1) ${ScalableImageContainer} {
+        top:-60%;
+        width:100%;
+    }
+
+    &:nth-child(2) ${ScalableImageContainer} {
+        top:-10%;
+        left:100%;
+        width:90%;
+    }
+
+    &:nth-child(3) ${ScalableImageContainer} {
+        width:110%;
+        top:-15%;
+        left:-60%;
+    }
+
+    &:nth-child(4) ${ScalableImageContainer} {
+        width:80%;
+        top:20%;
+        left:-100%;
+    }
+
+    &:nth-child(5) ${ScalableImageContainer} {
+        width:100%;
+        top:-50%;
+        left: -80%;
+    }
+}
 `
 
 const ScalableImage = styled.img`
@@ -115,6 +183,10 @@ overflow:hidden;
 @media screen and (max-width:1024px){
     height:auto;
 }
+@media screen and (max-width:600px){
+    padding:0 1rem;
+    padding-top:1rem;
+}
 `
 const JacketsSectionWrapper = styled.div`
 background:red;
@@ -125,6 +197,9 @@ width:100%;
 
 @media screen and (max-width:1024px){
     flex-direction:column;
+}
+@media screen and (max-width:600px){
+    gap:2rem;
 }
 `
 const MainInfoContainer = styled.div`
@@ -137,12 +212,39 @@ flex-direction:column;
 position:relative;
 justify-content:space-around;
 max-height:950px;
+
 @media screen and (max-width:1300px){
+    min-height: 30vh; 
     max-height:850px
 }
-@media screen and (max-width:1024px){
-    flex: 1; 
+
+@media screen and (max-width:1024px) and (max-height:1200px){
     min-height: 30vh; 
+}
+
+@media screen and (max-width:1024px) and (max-height:800px){
+    min-height: 55vh; 
+}
+
+@media screen and (max-width:600px) and (max-height:800px){
+    min-height: 30vh; 
+}
+`
+const MainInfoContent = styled.div`
+display:flex;
+flex-direction:column;
+gap:4rem;
+@media screen and (max-width:600px){
+    gap:2rem;
+}
+`
+
+const JacketsTitleText = styled.div`
+display:flex;
+flex-direction:column;
+gap:2rem;
+@media screen and (max-width:600px){
+    gap:1rem;
 }
 `
 const JacketsTitle = styled.span`
@@ -153,6 +255,10 @@ line-height:100px;
 @media screen and (max-width:1400px){
     font-size:var(--big-2);
     line-height:83px;
+}
+@media screen and (max-width:600px){
+    line-height:35.2px;
+    font-size:var(--heading-1-mobile)
 }
 `
 const ColoredLetter = styled.span`
@@ -170,6 +276,10 @@ color:grey;
 @media screen and (max-width:1400px){
     font-size:var(--heading-6);
 }
+@media screen and (max-width:600px){
+    font-size:var(--heading-5-mobile);
+    max-width:400px;
+}
 `
 const ExploreJacketsButton = styled.button`
 background:var(--main-color);
@@ -179,10 +289,16 @@ font-weight:600;
 border-radius:3px;
 outline:none;
 border:none;
+color:white;
+cursor:pointer;
 text-wrap:nowrap;
 width:fit-content;
 padding: .5rem 2.5rem;
-color:white;
+transition:background .3s;
+box-shadow:10px 9px 12px -3px rgba(0,0,0,0.4) ;
+&:hover{
+    background:#009BCC;
+}
 @media screen and (max-width:1400px){
     font-size:var(--body);
 }
@@ -263,11 +379,17 @@ position:relative;
 @media screen and (max-width:1230px), (max-height:750px){
     font-size: var(--heading-4-mobile);
 }
+
+@media screen and (max-width:600px){
+    font-size:var(--heading-4-mobile);
+}
 `
 const JacketsFeatureSubTitleCont = styled.div`
 background:white;
 padding:8px 8px 8px 12px;
 border-left:4px solid var(--main-color);
+
+
 `
 const JacketsFeatureSubTitle = styled.h6`
 color:grey;
@@ -278,6 +400,9 @@ font-size:var(--heading-5);
 }
 @media screen and (max-width:1230px),(max-height:750px){
     font-size: var(--heading-6-mobile);
+}
+@media screen and (max-width:600px){
+    font-size:var(--body);
 }
 `
 
@@ -311,23 +436,23 @@ export default function ImagesSection(){
     const IMAGES = [
         {
             src:jacket1,
-            scale:useTransform(scrollYProgress,[0,1],[0.3,1.1])
+            scale:useTransform(scrollYProgress,[0,1],[0.3,1.9])
         },
         {
             src:jacket2,
-            scale:useTransform(scrollYProgress,[0,1],[0.3,1.3])
+            scale:useTransform(scrollYProgress,[0,1],[0.3,1.7])
         },
         {
             src:jacket3,
-            scale:useTransform(scrollYProgress,[0,1],[0.3,1.2])
+            scale:useTransform(scrollYProgress,[0,1],[0.3,1.6])
         },
         {
             src:jacket4,
-            scale:useTransform(scrollYProgress,[0,1],[0.3,1.4])
+            scale:useTransform(scrollYProgress,[0,1],[0.3,1.8])
         },
         {
             src:jacket5,
-            scale:useTransform(scrollYProgress,[0,1],[0.3,1.5])
+            scale:useTransform(scrollYProgress,[0,1],[0.3,1.9])
         },
     ]
 
@@ -353,8 +478,8 @@ export default function ImagesSection(){
                                 <AnimatePresence>
                                     {showDetails && (
                                         <>
-                                            <div style={{display:'flex',flexDirection:"column",gap:'4rem'}}>
-                                                <div style={{display:'flex',flexDirection:"column",gap:'2rem'}}>
+                                            <MainInfoContent>
+                                                <JacketsTitleText>
                                                     <JacketsTitle>
                                                     <div style={{overflow:'visible' , textWrap:"nowrap"}}>
                                                             <ColoredLetter 
@@ -402,7 +527,7 @@ export default function ImagesSection(){
                                                         of cool flawless jackets 
                                                         available now
                                                     </JacketText>
-                                                </div>
+                                                </JacketsTitleText>
                                                 <ExploreJacketsButton  
                                                 key={"exploreJacketsButton"}
                                                 as={motion.button} 
@@ -412,7 +537,7 @@ export default function ImagesSection(){
                                                 exit={{opacity:0,x:"-20px",transition:{delay:0}}}>
                                                     Explore Jackets
                                                 </ExploreJacketsButton>
-                                            </div>
+                                            </MainInfoContent>
                                             <CurvedArrow1 
                                             key={'arrow1'}
                                             as={motion.img}
