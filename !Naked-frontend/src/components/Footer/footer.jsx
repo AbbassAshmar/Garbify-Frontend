@@ -4,10 +4,10 @@ import LinkedInLogo from "../../assets/LinkedInLogo.png"
 import GithubLogo from "../../assets/GithubLogo.png"
 import InstagramLogo from "../../assets/InstagramLogo.png"
 import {Link} from "react-router-dom"
-const Container = styled.div`
+
+const Container = styled.footer`
 background :black;
 width:100%;
-
 display:flex;
 justify-content:center;
 aling-items:center;
