@@ -7,7 +7,11 @@ import manInHoodyUnderlay from "../../../assets/manInHoodyUnderlay.png";
 
 const Container = styled.section`
 width:100%;
-padding:2rem;
+padding: 0 2rem;
+@media screen and (max-width:600px){
+    padding: 0 1rem;
+}
+
 `
 const Content = styled.div`
 gap:2rem;
@@ -16,6 +20,18 @@ display:grid;
 grid-template-columns:1.06fr 1fr 1fr;
 grid-template-rows:.3fr .6fr 1fr;
 align-items:start;
+
+@media screen and (max-width:1024px){
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:.2fr 1fr 1fr;
+}
+
+@media screen and (max-width:600px){
+    gap:4rem;
+    grid-template-columns:1fr;
+    grid-template-rows:.2fr .8fr .8fr 2fr;
+}
+
 `
 const WhyUsTitle = styled.div`
 border-radius:10px;
@@ -31,12 +47,20 @@ grid-column: 1 / span 1;
 grid-row: 1 / span 1;
 text-shadow:4px 6px 6px rgba(0,0,0,0.5);
 background: linear-gradient(to right, #f1f4f9, #dddddb, #f1f4f9);
+
+@media screen and (max-width:800px){
+    font-size:var(--heading-1-mobile);
+}
 `
 const BlackHoodyImageContainer = styled.div`
 transform:translateX(-2rem);
 grid-column: 1 / span 1;
 grid-row: 2 / span 2;
 width:calc(100% + 2rem);
+
+@media screen and (max-width:1024px){
+    display:none;
+}
 `
 const BlackHoodyImage = styled.img`
 width:100%;
@@ -54,6 +78,10 @@ line-height:52px;
     font-size:var(--heading-3);
     line-height:42px;
 }
+@media screen and (max-width:800px){
+    font-size:var(--heading-3-mobile);
+    line-height:27.5px;
+}
 `
 const BoxSubtitle = styled.h5`
 font-size:var(--heading-5);
@@ -63,6 +91,9 @@ width:90%;
 @media screen and (max-width:1400px){
     font-size:var(--heading-6);
 }
+@media screen and (max-width:800px){
+    font-size:var(--heading-6-mobile);
+}
 `
 
 const FastDeliveryBox = styled.div`
@@ -71,13 +102,21 @@ height:100%;
 padding:3rem 1rem;
 background:url(${blueDeliveryGirl});
 background-size:cover;
-background-position:center;
+background-position:top;
 border-radius:10px;
 grid-column: 2 / span 1;
 grid-row: 1 / span 2;
 display:flex;
 gap:2rem;
 flex-direction:column;
+@media screen and (max-width:1024px){
+    grid-column: 1 / span 1;
+    grid-row: 2 / span 1;
+}
+@media screen and (max-width:600px){
+    grid-column: 1 / span 1;
+    grid-row: 2 / span 1;
+}
 `
 const QuickExchangeBox = styled.div`
 width:100%;
@@ -86,12 +125,21 @@ height:100%;
 border-radius:10px;
 background:url(${modelGirlInBlack});
 background-size:cover;
-background-position:center;
+background-position:top;
+
 grid-column: 3 / span 1;
 grid-row: 1 / span 2;
 display:flex;
 flex-direction:column;
 gap:2rem;
+@media screen and (max-width:1024px){
+    grid-column: 2 / span 1;
+    grid-row: 2 / span 1;
+}
+@media screen and (max-width:600px){
+    grid-column: 1 / span 1;
+    grid-row: 3 / span 1;
+}
 `
 const MaterialQualityContainer = styled.div`
 display:flex;
@@ -100,6 +148,18 @@ grid-column: 2 / span 2;
 grid-row: 3 / span 1;
 border-radius:10px;
 background: linear-gradient(to right, #F1F2F9, #F1F4F9, #DDDDDB);
+@media screen and (max-width:1024px){
+    grid-column: 1 / span 2;
+    grid-row: 3 / span 1;
+}
+@media screen and (max-width:600px){
+    grid-column: 1 / span 1;
+    grid-row: 4 / span 1;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2rem;
+}
 `
 
 const MaterialQualityContent = styled.div`
@@ -109,6 +169,10 @@ gap:2rem;
 padding:1.5rem;
 flex:2;
 position:relative;
+@media screen and (max-width:600px){
+    padding:1rem;
+    padding-bottom:0;
+}
 `
 const MaterialQualityLine = styled.div`
 height:100%;
@@ -119,6 +183,9 @@ right:-5.5%;
 top:-10%;
 height:120%;
 transform:rotate(22deg);
+@media screen and (max-width:600px){
+    display:none;
+}
 `
 const MaterialQualityTitle = styled.h2`
 font-weight:bold;
@@ -126,16 +193,36 @@ color:black;
 font-size: var(--heading-2);
 line-height:52px;
 text-wrap:nowrap;
+
 @media screen and (max-width:1400px){
     line-height:42px;
     font-size: var(--heading-3);
 }
+@media screen and (max-width:800px){
+    font-size:var(--heading-3-mobile);
+    line-height:27.5px;
+}
+@media screen and (max-width:600px){
+    text-wrap:wrap;
+}
+
+@media screen and (max-width:350px){
+    font-size:var(--heading-4-mobile);
+}
+
 `
 const MaterialQualitySubtitle = styled.h4`
 font-weight:600;
 color:grey;
 font-size: var(--heading-6);
 line-height:26px;
+
+@media screen and (max-width:800px){
+    font-size:var(--heading-6-mobile);
+}
+@media screen and (max-width:600px){
+    font-size:var(--body);
+}
 `
 const ExploreNowButton = styled.button`
 width:50%;
@@ -155,11 +242,10 @@ box-shadow:10px 9px 12px -3px rgba(0,0,0,0.4) ;
     font-size:var(--body);
     height:40px;
 }
-
 @media screen and (max-width:800px){
-    width:45%;
+    width:55%;
     min-width:164px;
-    height:40px;
+    height:36px;
     max-width:none;
 }
 @media screen and (max-width:600px){
@@ -192,7 +278,7 @@ export default function WhyUseSection(){
                 </FastDeliveryBox>
                 <QuickExchangeBox>
                     <BoxTitle>Quick<br/><span style={{color:"var(--main-color)"}}>Exchange</span></BoxTitle>
-                    <BoxSubtitle>Hassle-free returns or exchange it it doesn’t fit !</BoxSubtitle>
+                    <BoxSubtitle>Hassle-free returns or exchange it it doesn’t fit you !</BoxSubtitle>
                 </QuickExchangeBox>
                 <BlackHoodyImageContainer>
                     <BlackHoodyImage src={manInHoodyUnderlay} alt="guy in black hoody with deep sky blue underlay" />
@@ -212,7 +298,6 @@ export default function WhyUseSection(){
                         <ExploreNowButton>Explore now</ExploreNowButton>
                         <MaterialQualityLine />
                     </MaterialQualityContent>
-
                     <MaterialQualityImageContainer>
                         <MaterialQualityImage src={modelGirlGrey} alt="model girl holding bag" />
                     </MaterialQualityImageContainer>
