@@ -14,6 +14,7 @@ background:white;
 display:flex;
 flex-direction:column;
 gap:6rem;
+scroll-behavior:smooth;
 `
 
 

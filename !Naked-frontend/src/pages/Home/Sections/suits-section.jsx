@@ -9,14 +9,13 @@ import { useRef } from "react";
 
 const Container = styled(SectionContainer)`
 position:relative;
-border:1px solid black;
-padding-top:20%;
-height:160vh;
+padding-top:50vh;
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:space-between;
 margin: 0 0 8rem 0;
+height:90vh;
 `
 const MainColorBlur1 = styled.div`
 background:var(--main-color);
@@ -26,7 +25,6 @@ border-radius:50%;
 position:absolute;
 filter:blur(120px);
 opacity:60%;
-
 right:0;
 top:0;
 `
@@ -48,33 +46,33 @@ display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:space-between;
-height:100%;
-gap:50vh;
+gap:6rem;
 `
 const TextContainer = styled.div`
-background:red;
 display:flex;
 flex-direction:column;
 align-items:flex-start;
-gap:4rem;
-width:55.5%;
+gap:1rem;
 @media screen and (max-width:1400px){
     width:43%;
 }
 `
-const Title =styled.h2`
+const Title =styled.div`
 font-size:14rem;
 color:black;
-background:blue;
+font-weight:bold;
+display:flex;
+align-items:flex-end;
+gap:10px;
 @media screen and (max-width:1400px){
-    font-size:10rem;
+    font-size:var(--big-2);
 }
 `
 const SubTitle = styled.h3`
 font-size:var(--heading-3);
 color:var(--main-color);
 @media screen and (max-width:1400px){
-    font-size:var(--heading-4);
+    font-size:var(--heading-6);
 }
 `
 
@@ -82,8 +80,7 @@ const ImagesContainer = styled.div`
 display:flex;
 align-items:flex-end;
 justify-content:center;
-border:2px solid blue;
-width:80%;
+width:50%;
 `
 const FirstImageContainer = styled.div`
 flex:2;
@@ -117,13 +114,18 @@ export default function SuitsSection(){
     const containerRef = useRef();
     const {scrollYProgress} = useScroll({
         target:containerRef,
-        offset:['-10vh' , 'end start']
+        offset:['start end' , 'end start']
     })
 
-    const textY = useTransform(scrollYProgress, [0,.3], ['0%','-50%']);
-    const imagesContainerY = useTransform(scrollYProgress, [0,1], ['-15%','-155%']);
-    const firstImageY = useTransform(scrollYProgress, [.2,1], ['10%','-80%']);
-    const secondImageY = useTransform(scrollYProgress, [.2,.7], ['-50%','10%']);
+    const textY = useTransform(scrollYProgress, [0,.6], ['-20%','50vh']);
+    // const imagesContainerY = useTransform(scrollYProgress, [0,1], ['-15%','-155%']);
+    const imagesContainerY = useTransform(scrollYProgress, [0,.7], ['0vh','-70vh']);
+    const titleLetterScale = useTransform(scrollYProgress,[0,.4], [.4,1]);
+
+    const textOpacity = useTransform(scrollYProgress,[0.3,0.6] , [1,0]);
+    const firstImageY = useTransform(scrollYProgress, [.2,1], ['30%','-100%']);
+    const secondImageY = useTransform(scrollYProgress, [.2,.9], ['100%','-50%']);
+
 
     useMotionValueEvent(scrollYProgress,'change',(prev)=>{
         console.log(prev)
@@ -133,15 +135,22 @@ export default function SuitsSection(){
             <MainColorBlur1 />
             <MainColorBlur2 />
             <MainColorBlur3 />
-            <Content>
-                <TextContainer as={motion.div} style={{y:textY}}>
-                    <Title>Suits?</Title>
+            <Content as={motion.div} style={{y:imagesContainerY}}> 
+                <TextContainer>
+                    <Title>
+                        <motion.span style={{color:"var(--main-color)",display:'inline-block'}}>S</motion.span>
+                        <motion.span style={{color:"black",display:"flex",alignItems:"flex-end",lineHeight:"1em"}}>u</motion.span>
+                        <motion.span style={{color:"var(--main-color)",display:'inline-block'}}>i</motion.span>
+                        <motion.span style={{color:"black",display:'inline-block',lineHeight:"1em"}}>t</motion.span>
+                        <motion.span style={{color:"var(--main-color)",display:'inline-block'}}>s</motion.span>
+                        <motion.span style={{color:"black",display:'inline-block',lineHeight:"1em"}}>?</motion.span>
+                    </Title>
                     <SubTitle>
                         Step into Style: Your Suit Journey Begins Here.
                         Find timeless suits for every occasion.
                     </SubTitle>
                 </TextContainer>
-                <ImagesContainer as={motion.div} style={{y:imagesContainerY}}>
+                <ImagesContainer>
                     <FirstImageContainer as={motion.div} style={{y:firstImageY,x:"15%"}}>
                         <FirstImage src={manInBlackSuit} />
                     </FirstImageContainer>
