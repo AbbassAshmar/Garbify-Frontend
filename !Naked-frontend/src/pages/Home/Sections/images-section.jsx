@@ -15,7 +15,6 @@ import useWindowDimensions from "../../../hooks/use-window-dimensions";
 
 const Container = styled.div`
 height:300vh;
-margin: 20rem 0;
 position:relative;
 
 @media screen and (max-width:1024px){

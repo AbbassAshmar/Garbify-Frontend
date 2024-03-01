@@ -209,7 +209,6 @@ text-wrap:nowrap;
 @media screen and (max-width:350px){
     font-size:var(--heading-4-mobile);
 }
-
 `
 const MaterialQualitySubtitle = styled.h4`
 font-weight:600;
