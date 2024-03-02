@@ -68,14 +68,33 @@ gap:10px;
     font-size:var(--big-2);
 }
 `
-const SubTitle = styled.h3`
+const SubTitle = styled.div`
+display:flex;
+flex-direction:column;
+gap:1rem;
+`
+const SubTitleLine = styled.h3`
 font-size:var(--heading-3);
-color:var(--main-color);
+color:#3CD1FF;
+position:relative;
+text-shadow:0px 0px 4px rgba(0,0,0,0.8);
+display:inline-block;
+width:fit-content;
+&:before{
+    content:"";
+    position:absolute;
+    background:black;
+    height:15px;
+    width:100%;
+    z-index:-1;
+    top:10px
+}
+
 @media screen and (max-width:1400px){
     font-size:var(--heading-6);
 }
-`
 
+`
 const ImagesContainer = styled.div`
 display:flex;
 align-items:flex-end;
@@ -111,25 +130,18 @@ object-fit:cover;
 `
 
 export default function SuitsSection(){
+    const suitsWord = "Suits?";
+
     const containerRef = useRef();
     const {scrollYProgress} = useScroll({
         target:containerRef,
         offset:['start end' , 'end start']
     })
 
-    const textY = useTransform(scrollYProgress, [0,.6], ['-20%','50vh']);
-    // const imagesContainerY = useTransform(scrollYProgress, [0,1], ['-15%','-155%']);
     const imagesContainerY = useTransform(scrollYProgress, [0,.7], ['0vh','-70vh']);
-    const titleLetterScale = useTransform(scrollYProgress,[0,.4], [.4,1]);
-
-    const textOpacity = useTransform(scrollYProgress,[0.3,0.6] , [1,0]);
     const firstImageY = useTransform(scrollYProgress, [.2,1], ['30%','-100%']);
     const secondImageY = useTransform(scrollYProgress, [.2,.9], ['100%','-50%']);
-
-
-    useMotionValueEvent(scrollYProgress,'change',(prev)=>{
-        console.log(prev)
-    })
+    
     return(
         <Container ref={containerRef}>
             <MainColorBlur1 />
@@ -138,16 +150,22 @@ export default function SuitsSection(){
             <Content as={motion.div} style={{y:imagesContainerY}}> 
                 <TextContainer>
                     <Title>
-                        <motion.span style={{color:"var(--main-color)",display:'inline-block'}}>S</motion.span>
-                        <motion.span style={{color:"black",display:"flex",alignItems:"flex-end",lineHeight:"1em"}}>u</motion.span>
-                        <motion.span style={{color:"var(--main-color)",display:'inline-block'}}>i</motion.span>
-                        <motion.span style={{color:"black",display:'inline-block',lineHeight:"1em"}}>t</motion.span>
-                        <motion.span style={{color:"var(--main-color)",display:'inline-block'}}>s</motion.span>
-                        <motion.span style={{color:"black",display:'inline-block',lineHeight:"1em"}}>?</motion.span>
+                        {
+                            suitsWord.split("").map((letter,index)=>{
+                                const rd = Math.floor(Math.random()*-75) -25;
+                                const y = useTransform(scrollYProgress,[0,1],[0,rd])
+                                const color = index % 2 == 0 ? "var(--main-color)" : "black";
+                                return <motion.span style={{color:color,y:y,display:'inline-block'}}>{letter}</motion.span>
+                            })
+                        }
                     </Title>
                     <SubTitle>
-                        Step into Style: Your Suit Journey Begins Here.
-                        Find timeless suits for every occasion.
+                        <SubTitleLine>
+                            Step into Style: Your Suit Journey Begins Here.
+                        </SubTitleLine>
+                        <SubTitleLine>
+                            Find timeless suits for every occasion.
+                        </SubTitleLine>
                     </SubTitle>
                 </TextContainer>
                 <ImagesContainer>

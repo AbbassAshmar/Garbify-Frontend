@@ -5,7 +5,7 @@ import FeaturedSection from "./Sections/featured-section"
 import WhyUsSection from "./Sections/why-us-section-ver2";
 import ImagesSection from "./Sections/images-section"
 import SuitsSection from "./Sections/suits-section"
-import CardsSection from "./Sections/cards-section";
+import BestSellingSection from "./Sections/best-selling-section";
 import FormSection from "./Sections/form-section";
 import HeroSection from "./Sections/hero-section";
 
@@ -29,7 +29,7 @@ export default function Home(){
             <WhyUsSection />
             <ImagesSection />
             <SuitsSection />
-            <CardsSection />
+            <BestSellingSection />
             <FormSection />
         </Container>
     )
