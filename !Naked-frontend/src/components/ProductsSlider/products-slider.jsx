@@ -12,6 +12,7 @@ const Container = styled.div`
 display:flex;
 flex-direction:column;
 gap:2rem;
+overscroll-behavior: auto;
 `
 
 const SliderContainer = styled.div`

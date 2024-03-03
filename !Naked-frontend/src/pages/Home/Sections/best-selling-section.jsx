@@ -136,17 +136,14 @@ export default function BestSellingSection(){
     const imageScale = useTransform(scrollYProgress, [0,1], [1.3,1]);
     const textY = useTransform(scrollYProgress, [0,1], ['0vw',  `${width<=600 ? '0vw' : '50vw'}`]);
 
-
+    
     const image1Y = useTransform(scrollYProgress, [0,1], [100, -100]);
-    const imageContaine1Y = useTransform(scrollYProgress, [0,1], [0, 300]);
+    const imageContainer1Y = useTransform(scrollYProgress, [0,1], [0, 300]);
 
     const image2Y = useTransform(scrollYProgress, [0,1], height>700 ? [-100 , 250]:[-100,140]);
-    const imageContaine2Y = useTransform(scrollYProgress, [0,1], [0, -300]);
+    const imageContainer2Y = useTransform(scrollYProgress, [0,1], [0, -300]);
 
-    useMotionValueEvent(scrollYProgress,'change',(prev)=>{
-        console.log(prev)
-    })
-
+  
     return  (
         <Container as={motion.div} style={{y:containerY}} ref={containerRef}>
             <TextContainer as={motion.div} style={{y:textY}}>
@@ -155,10 +152,10 @@ export default function BestSellingSection(){
                     New Experience
                 </Text>
             </TextContainer>
-            <ImageContainer as={motion.div} style={{y:imageContaine1Y}}>
+            <ImageContainer as={motion.div} style={{y:imageContainer1Y}}>
                 <Image as={motion.img} style={{scale:imageScale,y:image1Y}} src={SkinColorHoody} alt="girl in a red hoody"/>
             </ImageContainer>
-            <ImageContainer2 as={motion.div} style={{x:width>1024?"20%":"0",y:imageContaine2Y}}>
+            <ImageContainer2 as={motion.div} style={{x:width>1024?"20%":"0",y:imageContainer2Y}}>
                 <Image as={motion.img} style={{scale:imageScale,y:image2Y}} src={White} alt="girl in a red hoody"/>
             </ImageContainer2>
         </Container>

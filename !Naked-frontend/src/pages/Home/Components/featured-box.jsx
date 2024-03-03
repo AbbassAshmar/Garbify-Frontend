@@ -48,7 +48,6 @@ font-weight:600;
 font-size:16px;
 @media screen and (max-width:475px){
     font-size:14px;
-
 }
 @media screen and (max-width:385px){
     font-size:12px;

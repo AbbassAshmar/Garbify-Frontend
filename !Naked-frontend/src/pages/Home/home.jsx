@@ -8,6 +8,7 @@ import SuitsSection from "./Sections/suits-section"
 import BestSellingSection from "./Sections/best-selling-section";
 import FormSection from "./Sections/form-section";
 import HeroSection from "./Sections/hero-section";
+import ProductsGallery from "./Sections/products-gallery";
 
 const Container = styled.div`
 background:white;
@@ -28,6 +29,7 @@ export default function Home(){
             <FeaturedSection />
             <WhyUsSection />
             <ImagesSection />
+            <ProductsGallery />
             <SuitsSection />
             <BestSellingSection />
             <FormSection />
