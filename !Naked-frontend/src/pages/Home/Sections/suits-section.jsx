@@ -9,7 +9,7 @@ import { useRef } from "react";
 
 const Container = styled(SectionContainer)`
 position:relative;
-padding-top:50vh;
+padding-top:20vh;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -99,7 +99,7 @@ const ImagesContainer = styled.div`
 display:flex;
 align-items:flex-end;
 justify-content:center;
-width:50%;
+width:70%;
 `
 const FirstImageContainer = styled.div`
 flex:2;

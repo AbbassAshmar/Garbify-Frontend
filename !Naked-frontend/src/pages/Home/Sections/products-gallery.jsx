@@ -7,37 +7,108 @@ import Hoody from "../../../assets/Hoody.jpg";
 import threeModelsInSuits from "../../../assets/threeModelsInSuits.jpg";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-
+import useWindowDimensions from "../../../hooks/use-window-dimensions";
 
 const Container = styled.section`
 min-height:300vh;
 display:flex;
 flex-direction:column;
+margin-top:10rem;
 `
 const TextContainer = styled.div`
 width:100%;
 padding:0 2rem;
-margin-bottom:10rem;
+margin-bottom:30vh;
+@media screen and (max-width:800px){
+    margin-bottom:6rem;
+}
 `
 
-const Text = styled.h1`
+const Text = styled.span`
 font-size:var(--heading-2);
-font-weight:bold;
-width:43%;
+font-weight:400;
+width:49%;
+color:var(--main-color);
+@media screen and (max-width:1024px){
+    font-size:var(--heading-4);
+}
+@media screen and (max-width:800px){
+    width:100%;
+}
 `
+
+const ProductCardContainer =styled.div`
+position:relative;
+
+&:nth-child(1){
+    grid-column:1 / span 4;
+}
+
+&:nth-child(2){
+    bottom:0%;
+    grid-column: 9 / span 4;
+}
+
+&:nth-child(3){
+    grid-column: 1 / span 4;
+    margin-top:40%;
+    bottom:-30%;
+}
+
+&:nth-child(4){
+    grid-column: 9 / span 4;
+    top:-10%;
+}
+
+&:nth-child(5){
+    grid-column: 9 / span 4;
+    bottom:-20%;
+}
+
+@media (max-width: 2300px) {
+    &:nth-child(2){
+        bottom:30%;
+    }
+}
+
+@media (max-width: 1500px) {
+    &:nth-child(2){
+        bottom:55%;
+    }
+}
+
+
+@media (max-width: 800px) {
+    grid-column:1 / span 4 !important;
+    position:static;
+    &:last-child{
+        grid-column:3 / span 2  !important;
+    }
+    &:nth-child(3){
+        margin-top:0%;
+    }
+}
+`
+
 const CardsContainer = styled.div`
 display:grid;
 grid-template-columns: repeat(12, 1fr);
 padding:0 2rem;
 align-items:start;
+
+
+@media (max-width: 800px) {
+    grid-template-columns: repeat(4, 1fr);
+    padding:0 1rem;
+
+}
 `
-const ProductCardContainer =styled.div`
-grid-column:9 / span 4;
-`
+
 const BigImageContainer = styled.div`
 overflow:hidden;
 margin:auto;
 `
+
 const BigImage = styled.img`
 height:100%;
 width:100%;
@@ -47,46 +118,86 @@ scale:1.3;
 
 const text= "Discover Timeless Style: Elevate Your Wardrobe with Exclusive Collections. Scroll down to explore the latest fashion trends curated just for you."
 export default function ProductsGallery(){
+    const {height, width} = useWindowDimensions();
+
     const containerRef = useRef();
     const {scrollYProgress} = useScroll({
         target:containerRef,
-        offset:['start end' , 'end start']
+        offset:['start end' , 'center start']
     })
 
-    const textY = useTransform(scrollYProgress, [0,0.4], [280, -200 ]);
+    const textY = useTransform(scrollYProgress, [0,0.4], [`${width<=800 ? 0 : 280}`, -600 ]);
 
     // ------------------------------------------------------
     const bigImageRef = useRef();
     const {scrollYProgress:scrollYProgressBigImage} = useScroll({
         target:containerRef,
-        offset:['start start' , 'end start']
+        offset:[`${width<=800 ? 'center start' : 'start start'}`,  'end start']
     })
 
+
+    const calculateBigImageYTrans = (width) => {
+        if (width <= 500) {
+            return [-100, 100];
+        } else if (width <= 800) {
+            return [-400, 200];
+        } else if (width <= 1024) {
+            return [-600, 400];
+        } else {
+            return [-700, 300];
+        }
+    };
+      
+
+    const bigImageY = useTransform(scrollYProgressBigImage, [0,1],calculateBigImageYTrans(width));
     const bigImageScale = useTransform(scrollYProgressBigImage, [0,1], [1.3, 1]);
-    const bigImageY = useTransform(scrollYProgressBigImage, [0,1], [-700, 300]);
 
     const bigImageContY = useTransform(scrollYProgress,[0,1], [0,-200]);
-    const bigImageContScale = useTransform(scrollYProgressBigImage, [0,0.7], ["30%", "100%"]);
+    const bigImageContScale = useTransform(scrollYProgressBigImage, [0,`${width<=500 ? 0.50 : 0.65}`], ["30%", "100%"]);
+
+    const textVariants = {
+        initial : {
+            opacity:0,
+            bottom:-20,
+        },
+        animate : {
+            bottom:20,
+            opacity:1,
+            transition:{
+                color:{
+                    duration:.3,
+                    delay:1,
+                },
+                staggerChildren:.04
+            }
+        }
+    }
 
     return(
         <Container ref={containerRef}>
             <TextContainer as={motion.div} style={{y:textY}}>
-                <Text>{text}</Text>
+                <Text as={motion.h1} variants={textVariants} whileInView="animate"   viewport={{ once: true }} initial="initial">
+                    {text.split("").map((letter)=> (
+                        <motion.span style={{position:"relative",display:'inline'}} variants={textVariants}>
+                            {letter}
+                        </motion.span>
+                    ))}
+                </Text>
             </TextContainer>
             <CardsContainer>
-                <ProductCardContainer style={{gridColumn:"1 / span 4"}}>
+                <ProductCardContainer>
                     <ProductCardAnimated product={{name:"djklajdf SKLdjf",thumbnail:Hoody}}/>
                 </ProductCardContainer>
-                <ProductCardContainer style={{gridColumn:"9 / span 4",position:"relative",bottom:"65%"}}>
+                <ProductCardContainer>
                     <ProductCardAnimated product={{name:"djklajdf SKLdjf",thumbnail:Hoody}}/>
                 </ProductCardContainer>
-                <ProductCardContainer style={{gridColumn:"1 / span 4",marginTop:"40%",position:"relative",bottom:'-30%'}}>
+                <ProductCardContainer>
                     <ProductCardAnimated product={{name:"djklajdf SKLdjf",thumbnail:Hoody}}/>
                 </ProductCardContainer>
-                <ProductCardContainer style={{gridColumn:"9 / span 4",position:"relative",top:"-10%"}}>
+                <ProductCardContainer>
                     <ProductCardAnimated product={{name:"djklajdf SKLdjf",thumbnail:Hoody}}/>
                 </ProductCardContainer>
-                <ProductCardContainer style={{gridColumn:"9 / span 4",position:"relative",bottom:"-20%",zIndex:"4"}}>
+                <ProductCardContainer style={{zIndex:"4"}}>
                     <ProductCardAnimated product={{name:"djklajdf SKLdjf",thumbnail:Hoody}}/>
                 </ProductCardContainer>
             </CardsContainer>

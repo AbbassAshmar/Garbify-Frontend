@@ -9,6 +9,9 @@ import BestSellingSection from "./Sections/best-selling-section";
 import FormSection from "./Sections/form-section";
 import HeroSection from "./Sections/hero-section";
 import ProductsGallery from "./Sections/products-gallery";
+import { useEffect } from "react";
+
+import Lenis from '@studio-freight/lenis';
 
 const Container = styled.div`
 background:white;
@@ -21,6 +24,16 @@ scroll-behavior:smooth;
 
 
 export default function Home(){
+    
+    // useEffect(()=>{
+    //     const lenis = new Lenis()
+
+    //     function raf(time) {
+    //         lenis.raf(time)
+    //         requestAnimationFrame(raf)
+    //     }
+    //     requestAnimationFrame(raf)
+    // })
 
     return (
         <Container>
