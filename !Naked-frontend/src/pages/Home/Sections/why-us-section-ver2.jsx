@@ -280,7 +280,7 @@ export default function WhyUseSection(){
                     <BoxSubtitle>Hassle-free returns or exchange it it doesn’t fit you !</BoxSubtitle>
                 </QuickExchangeBox>
                 <BlackHoodyImageContainer>
-                    <BlackHoodyImage src={manInHoodyUnderlay} alt="guy in black hoody with deep sky blue underlay" />
+                    <BlackHoodyImage loading="lazy" src={manInHoodyUnderlay} alt="guy in black hoody with deep sky blue underlay" />
                 </BlackHoodyImageContainer>
                 <MaterialQualityContainer>
                     <MaterialQualityContent>
@@ -298,7 +298,7 @@ export default function WhyUseSection(){
                         <MaterialQualityLine />
                     </MaterialQualityContent>
                     <MaterialQualityImageContainer>
-                        <MaterialQualityImage src={modelGirlGrey} alt="model girl holding bag" />
+                        <MaterialQualityImage loading="lazy" src={modelGirlGrey} alt="model girl holding bag" />
                     </MaterialQualityImageContainer>
                 </MaterialQualityContainer>
             </Content>

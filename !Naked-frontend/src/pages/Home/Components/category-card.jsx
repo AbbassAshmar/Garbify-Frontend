@@ -2,10 +2,10 @@ import { styled } from "styled-components"
 import { Link } from "react-router-dom"
 
 const CardContainer =styled.div`
-width:280px;
+width:400px;
 overflow:hidden;
 position:relative;
-aspect-ratio: 1/1.6;
+aspect-ratio:1/1.6;
 &:hover .background-photo{
     transform:scale(1.1);
 }
@@ -14,11 +14,21 @@ aspect-ratio: 1/1.6;
     width:100%;
 }
 `
-const Background = styled.img`
+const ImageContainer = styled.div`
+width :100%;
+position:relative;
+aspect-ratio: 1/1.6;
+
+`
+const Image = styled.img`
 width:100%;
 height:100%;
 cursor:pointer;
 transition:all .3s;
+object-fit:cover;
+-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+filter: grayscale(100%);
+
 `
 const Border =styled.div`
 top:3.5%;
@@ -31,8 +41,6 @@ position:absolute;
 display:flex;
 align-items:flex-end;
 justify-content:center;
-
-
 `
 const Button =styled.button`
 background:${({$color})=>$color};
@@ -56,12 +64,13 @@ export default function CatgegoryCard({image,color,text}){
     return (
         <CardContainer >
             <Link to="/home" style={{textDecoration:"none"}}>
-            <Background src={image} className="background-photo" />
-            <Border $color={color}>
+                <ImageContainer>
+                    <Border $color={'grey'} />
+                    <Image src={image}/>
+                </ImageContainer>
                 <Button $color={color}>
                     {text}
                 </Button>
-            </Border>
             </Link>
         </CardContainer>
     )

@@ -464,7 +464,7 @@ export default function ImagesSection(){
         <Container ref={sectionRef}>
             <ImagesStickyWrapper>
                 {IMAGES.map((image)=>(
-                    <ImagesAbsoluteWrapper as={motion.div} style={{scale:image.scale}}>
+                    <ImagesAbsoluteWrapper key={image.src} as={motion.div} style={{scale:image.scale}}>
                         <ScalableImageContainer>
                             <ScalableImage src={image.src}/>
                         </ScalableImageContainer>
@@ -490,7 +490,7 @@ export default function ImagesSection(){
                                                             transition={{duration:.3}}>J</ColoredLetter>
                                                             <motion.span
                                                             style={{display:"inline-block"}}
-                                                            key={'ackets'}
+                                                            key={'jackets'}
                                                             initial={{opacity:0,y:"20px"}} 
                                                             animate={{opacity:1,y:"0px"}}
                                                             exit={{opacity:0, y:"20px"}} 
@@ -604,15 +604,14 @@ export default function ImagesSection(){
                                                         </div>
                                                         <motion.div
                                                         key={'subTitleContainer'+ index} 
-                                                        initial={{left:"100%"}}
-                                                        animate={{left:'0%'}}
+                                                        initial={{x:"100%"}}
+                                                        animate={{x:'0%'}}
                                                         transition={{duration:.3}}
                                                         exit={{
-                                                            left:"100%",
+                                                            x:"100%",
                                                             transition:{delay:.35,duration:.3}
                                                         }}
                                                         style={{
-                                                            position:"relative",
                                                             width:'100%', 
                                                             left:"0",
                                                             overflow:"hidden"
@@ -633,15 +632,15 @@ export default function ImagesSection(){
                                                             </JacketsFeatureSubTitleCont>
                                                             <motion.div
                                                             key={'subTitleCover' + index}
-                                                            initial={{right:"0%"}} 
-                                                            animate={{right:"100%"}}
+                                                            initial={{x:"0%"}} 
+                                                            animate={{x:"-100%"}}
                                                             transition={{delay:0.3,duration:0.3}} 
                                                             exit={{
-                                                                right:"0%",
+                                                                x:"0%",
                                                                 transition: { duration: .35 } 
                                                             }}
                                                             style={{
-                                                                right:"0%",
+                                                                x:"0%",
                                                                 position:"absolute",
                                                                 bottom:"0",
                                                                 background:"var(--main-color)",

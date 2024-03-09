@@ -1,7 +1,5 @@
-import BlackHoody from "../../../assets/BlackHoody.jpg"
-import White from "../../../assets/White.jpg"
-import SkinColorHoody from "../../../assets/SkinColorHoody.jpg"
-import RedHoody from "../../../assets/RedHoody.jpg"
+import girlInWhiteHoody from "../../../assets/girlInWhiteHoody.jpg"
+import guyInHoody from "../../../assets/guyInHoody.jpg"
 import styled from "styled-components";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
@@ -120,9 +118,9 @@ width:40vw;
 const Image = styled.img`
 width:100%;
 height:100%;
-scale:1.3;
 object-fit:cover;
 transform-origin:center;
+will-change:transform;
 `
 export default function BestSellingSection(){
     const {width,height} = useWindowDimensions();
@@ -133,10 +131,9 @@ export default function BestSellingSection(){
     })
 
     const containerY = useTransform(scrollYProgress,[0,1],[0,0]);
-    const imageScale = useTransform(scrollYProgress, [0,1], [1.3,1]);
+    const imageScale = useTransform(scrollYProgress, [0,1], [1.2,1]);
     const textY = useTransform(scrollYProgress, [0,1], ['0vw',  `${width<=600 ? '0vw' : '50vw'}`]);
 
-    
     const image1Y = useTransform(scrollYProgress, [0,1], [100, -100]);
     const imageContainer1Y = useTransform(scrollYProgress, [0,1], [0, 300]);
 
@@ -153,10 +150,10 @@ export default function BestSellingSection(){
                 </Text>
             </TextContainer>
             <ImageContainer as={motion.div} style={{y:imageContainer1Y}}>
-                <Image as={motion.img} style={{scale:imageScale,y:image1Y}} src={SkinColorHoody} alt="girl in a red hoody"/>
+                <Image loading="lazy" as={motion.img} style={{scale:imageScale,y:image1Y}} src={guyInHoody} alt="guy in a hoody"/>
             </ImageContainer>
             <ImageContainer2 as={motion.div} style={{x:width>1024?"20%":"0",y:imageContainer2Y}}>
-                <Image as={motion.img} style={{scale:imageScale,y:image2Y}} src={White} alt="girl in a red hoody"/>
+                <Image loading="lazy" as={motion.img} style={{scale:imageScale,y:image2Y}} src={girlInWhiteHoody} alt="girl in a white hoody"/>
             </ImageContainer2>
         </Container>
     )

@@ -1,8 +1,8 @@
 import styled from "styled-components"
 import CatgegoryCard from "../Components/category-card"
-import woman from "../../../assets/woman.jpg"
-import man from "../../../assets/man.jpg"
-import kid from "../../../assets/kid.jpg"
+import kid from "../../../assets/kid.jpg";
+import guyInCoat from "../../../assets/guyInCoat.jpg";
+import girlInCoat from "../../../assets/girlInCoat.jpg"
 import { SectionContainer } from "./featured-section"
 
 export const SectionContent =styled.div`
@@ -26,10 +26,10 @@ width:100%;
 display:flex;
 justify-content:space-between;
 align-items:center;
-gap:25px;
+
 @media screen and (max-width:600px){
     flex-direction:column;
-    gap:10px;
+    gap:3rem;
 }
 `
 
@@ -42,8 +42,8 @@ export default function CategorySection(){
                         Shop Now <span style={{color:"#00C2FF"}}>Online</span>  And Put Some Clothes On
                     </Section2Title>
                     <CategoryCardsContainer>
-                        <CatgegoryCard color="blue" text="men" image={man} />
-                        <CatgegoryCard color="pink" text="women" image={woman} />
+                        <CatgegoryCard color="blue" text="men" image={guyInCoat} />
+                        <CatgegoryCard color="pink" text="women" image={girlInCoat} />
                         <CatgegoryCard color="purple" text="kids" image={kid} />
                     </CategoryCardsContainer>
                 </SectionContent>

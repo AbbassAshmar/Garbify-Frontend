@@ -217,7 +217,7 @@ export default function HeroSection(){
                 <ImageSection>
                     <ImageSectionBackground/>
                     <ImageContainer>
-                        <Image src={HeroSectionGirl} alt="stylish girl"/>
+                        <Image loading="eager" src={HeroSectionGirl} alt="stylish girl"/>
                     </ImageContainer>
                 </ImageSection>
                 <div style={{flex:'1'}}></div>

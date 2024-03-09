@@ -42,9 +42,9 @@ export default function RatingStars({style,rating,width='15px',width_600='15px'}
     return (
         <Stars style={style}>
             {ratingToStars(rating).map((value,i)=>{
-                if (value === "star") return <Star key={i} $width={width} $width_600={width_600} src={star} />
-                if (value=== "half") return <Star key={i} $width={width} $width_600={width_600} src={half_star} />
-                if (value=== "empty") return <Star key={i} $width={width} $width_600={width_600} src={empty_star} /> 
+                if (value === "star") return <Star loading="lazy" alt="full star" key={i} $width={width} $width_600={width_600} src={star} />
+                if (value=== "half") return <Star  loading="lazy" alt="half star" key={i} $width={width} $width_600={width_600} src={half_star} />
+                if (value=== "empty") return <Star loading="lazy" alt="empty star"  key={i} $width={width} $width_600={width_600} src={empty_star} /> 
             })}
         </Stars>
     )

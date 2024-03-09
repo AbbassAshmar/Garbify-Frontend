@@ -25,6 +25,7 @@ margin-bottom:30vh;
 `
 
 const Text = styled.span`
+display:inline-block;
 font-size:var(--heading-2);
 font-weight:400;
 width:49%;
@@ -105,18 +106,36 @@ align-items:start;
 `
 
 const BigImageContainer = styled.div`
+will-change: transform;
 overflow:hidden;
 margin:auto;
 `
 
 const BigImage = styled.img`
+will-change: transform;
 height:100%;
 width:100%;
 object-fit:cover;
-scale:1.3;
 `
-
+const textVariants = {
+    initial : {
+        opacity:0,
+        bottom:-20,
+    },
+    animate : {
+        bottom:20,
+        opacity:1,
+        transition:{
+            color:{
+                duration:.3,
+                delay:1,
+            },
+            staggerChildren:.02
+        }
+    }
+}
 const text= "Discover Timeless Style: Elevate Your Wardrobe with Exclusive Collections. Scroll down to explore the latest fashion trends curated just for you."
+
 export default function ProductsGallery(){
     const {height, width} = useWindowDimensions();
 
@@ -144,41 +163,18 @@ export default function ProductsGallery(){
         } else if (width <= 1024) {
             return [-600, 400];
         } else {
-            return [-700, 300];
+            return [-800, 200];
         }
     };
-      
 
     const bigImageY = useTransform(scrollYProgressBigImage, [0,1],calculateBigImageYTrans(width));
-    const bigImageScale = useTransform(scrollYProgressBigImage, [0,1], [1.3, 1]);
-
-    const bigImageContY = useTransform(scrollYProgress,[0,1], [0,-200]);
-    const bigImageContScale = useTransform(scrollYProgressBigImage, [0,`${width<=500 ? 0.50 : 0.65}`], ["30%", "100%"]);
-
-    const textVariants = {
-        initial : {
-            opacity:0,
-            bottom:-20,
-        },
-        animate : {
-            bottom:20,
-            opacity:1,
-            transition:{
-                color:{
-                    duration:.3,
-                    delay:1,
-                },
-                staggerChildren:.04
-            }
-        }
-    }
-
+    const bigImageScale = useTransform(scrollYProgressBigImage, [.5,.65,1], [.7, 1,1.1]);
     return(
         <Container ref={containerRef}>
             <TextContainer as={motion.div} style={{y:textY}}>
-                <Text as={motion.h1} variants={textVariants} whileInView="animate"   viewport={{ once: true }} initial="initial">
-                    {text.split("").map((letter)=> (
-                        <motion.span style={{position:"relative",display:'inline'}} variants={textVariants}>
+                <Text as={motion.span} variants={textVariants} whileInView="animate" viewport={{ once: true }} initial="initial">
+                    {text.split("").map((letter,index)=> (
+                        <motion.span key={index} style={{position:"relative",display:'inline'}} variants={textVariants}>
                             {letter}
                         </motion.span>
                     ))}
@@ -201,8 +197,8 @@ export default function ProductsGallery(){
                     <ProductCardAnimated product={{name:"djklajdf SKLdjf",thumbnail:Hoody}}/>
                 </ProductCardContainer>
             </CardsContainer>
-            <BigImageContainer as={motion.div} style={{width:bigImageContScale,y:bigImageContY}}>
-                <BigImage ref={bigImageRef} as={motion.img} style={{scale:bigImageScale,y:bigImageY}} src={threeModelsInSuits} />
+            <BigImageContainer as={motion.div}>
+                <BigImage loading="lazy" ref={bigImageRef} as={motion.img} style={{y:bigImageY,scale:bigImageScale}} src={threeModelsInSuits} alt="three models in suits"/>
             </BigImageContainer>
         </Container>
     )
@@ -210,6 +206,7 @@ export default function ProductsGallery(){
 }
 
 const CardContainer = styled(Link)`
+will-change: transform;
 position:relative;
 height:fit-content;
 transition:box-shadow .3s ,scale .3s;
@@ -225,7 +222,6 @@ overflow:hidden;
 width:100%;
 aspect-ratio:1/1.34;
 z-index:0;
-
 &::before{
     content:"";
     background:rgba(0,0,0,0.3);
@@ -238,12 +234,13 @@ z-index:0;
 }
 `
 const CardImage = styled.img`
+will-change:transform;
 height:100%;
 width:100%;
 object-fit:cover;
 position:relative;
 display:block;
-scale:1.2;
+scale:1.1;
 `
 
 const RatingTypeContainer = styled.div`
@@ -276,6 +273,7 @@ color:var(--main-color);
 font-weight:600;
 text-shadow : 0 0 4px rgba(0,0,0,0.6);
 letter-spacing:2px;
+text-align:center;
 `
 function ProductCardAnimated(){
     const cardContainerRef = useRef();
@@ -284,14 +282,14 @@ function ProductCardAnimated(){
         offset:['start end' , 'end start']
     })
 
-    const cardContainerY = useTransform(scrollYProgress,[0,1], [0,-300]);
-    const cardImageY = useTransform(scrollYProgress,[0,1], [-100,200]);
+    const cardContainerY = useTransform(scrollYProgress,[0,1], [40,-40]);
+    const cardImageY = useTransform(scrollYProgress,[0,1], [-100,100]);
     const cardImageScale = useTransform(scrollYProgress,[0,0.5,1], [1.1,1.03,1]);
 
     return (
         <CardContainer ref={cardContainerRef} as={motion.div} style={{y:cardContainerY}}>
             <CardImageContainer>
-                <CardImage as={motion.img} style={{y:cardImageY,scale:cardImageScale}} src={woman} />
+                <CardImage loading="lazy" as={motion.img} style={{y:cardImageY}} src={woman} alt="product image"/>
             </CardImageContainer>
             <RatingTypeContainer>
                 <RatingStars rating={5}/>
