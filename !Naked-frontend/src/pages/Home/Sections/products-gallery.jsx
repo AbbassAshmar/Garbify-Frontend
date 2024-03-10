@@ -15,26 +15,25 @@ display:flex;
 flex-direction:column;
 margin-top:10rem;
 `
-const TextContainer = styled.div`
-width:100%;
-padding:0 2rem;
-margin-bottom:30vh;
-@media screen and (max-width:800px){
-    margin-bottom:6rem;
-}
-`
 
-const Text = styled.span`
-display:inline-block;
+
+
+const Text = styled.div`
 font-size:var(--heading-2);
 font-weight:400;
-width:49%;
 color:var(--main-color);
+
+padding:0 2rem;
+margin-bottom:30vh;
+display:flex;
+flex-direction:column;
+
 @media screen and (max-width:1024px){
     font-size:var(--heading-4);
 }
 @media screen and (max-width:800px){
     width:100%;
+    margin-bottom:6rem;
 }
 `
 
@@ -97,7 +96,6 @@ grid-template-columns: repeat(12, 1fr);
 padding:0 2rem;
 align-items:start;
 
-
 @media (max-width: 800px) {
     grid-template-columns: repeat(4, 1fr);
     padding:0 1rem;
@@ -120,21 +118,25 @@ object-fit:cover;
 const textVariants = {
     initial : {
         opacity:0,
-        bottom:-20,
+        y:-20,
     },
     animate : {
-        bottom:20,
+        y:20,
         opacity:1,
         transition:{
-            color:{
-                duration:.3,
-                delay:1,
-            },
             staggerChildren:.02
         }
     }
 }
-const text= "Discover Timeless Style: Elevate Your Wardrobe with Exclusive Collections. Scroll down to explore the latest fashion trends curated just for you."
+
+const text = [
+    "Discover Timeless Style:",
+    "Elevate Your Wardrobe",
+    "with Exclusive Collections",
+    "Scroll down to explore the",
+    "latest fashion trends created",
+    "just for you.",
+];
 
 export default function ProductsGallery(){
     const {height, width} = useWindowDimensions();
@@ -171,15 +173,17 @@ export default function ProductsGallery(){
     const bigImageScale = useTransform(scrollYProgressBigImage, [.5,.65,1], [.7, 1,1.1]);
     return(
         <Container ref={containerRef}>
-            <TextContainer as={motion.div} style={{y:textY}}>
-                <Text as={motion.span} variants={textVariants} whileInView="animate" viewport={{ once: true }} initial="initial">
-                    {text.split("").map((letter,index)=> (
-                        <motion.span key={index} style={{position:"relative",display:'inline'}} variants={textVariants}>
-                            {letter}
-                        </motion.span>
-                    ))}
-                </Text>
-            </TextContainer>
+            <Text as={motion.div} style={{y:textY}} variants={textVariants} whileInView="animate" viewport={{ once: true }} initial="initial">
+                {text.map((line, lineIndex) => (
+                    <div key={lineIndex}>
+                        {line.split("").map((word, wordIndex) => (
+                            <motion.span key={wordIndex} style={{display: 'inline-block'}} variants={textVariants}>
+                                {word ==" " ? '\u00A0' : word}
+                            </motion.span>
+                        ))}
+                    </div>
+                ))}
+            </Text>
             <CardsContainer>
                 <ProductCardContainer>
                     <ProductCardAnimated product={{name:"djklajdf SKLdjf",thumbnail:Hoody}}/>

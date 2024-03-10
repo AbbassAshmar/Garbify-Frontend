@@ -1,24 +1,12 @@
-import { styled } from "styled-components"
-import { Link } from "react-router-dom"
+import {styled} from "styled-components";
+import {Link} from "react-router-dom";
+import {motion} from "framer-motion";
 
-const CardContainer =styled.div`
-width:400px;
-overflow:hidden;
-position:relative;
-aspect-ratio:1/1.6;
-&:hover .background-photo{
-    transform:scale(1.1);
-}
-@media screen and (max-width:600px){
-    aspect-ratio: 1/1.6;
-    width:100%;
-}
-`
+
 const ImageContainer = styled.div`
 width :100%;
 position:relative;
-aspect-ratio: 1/1.6;
-
+overflow:hidden;
 `
 const Image = styled.img`
 width:100%;
@@ -28,49 +16,93 @@ transition:all .3s;
 object-fit:cover;
 -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
 filter: grayscale(100%);
-
 `
+
 const Border =styled.div`
+transition:border .3s;
 top:3.5%;
 left:5%;
 z-index:2;
 height:93%;
 width:90%;
-border:5px solid ${({$color})=>$color};
+border:5px solid black;
 position:absolute;
 display:flex;
 align-items:flex-end;
 justify-content:center;
 `
-const Button =styled.button`
-background:${({$color})=>$color};
-border-radius:30px;
-padding:.2rem 1rem;
+const Title =styled.h6`
+transition:color .3s;
 color:black;
-opacity:.8;
-margin-bottom:4rem;
-border:none;
 cursor:pointer;
-font-weight:600;
-font-size:1rem;
+font-weight:bold;
+font-size:var(--heading-1);
 
+position:absolute;
+top:60%;
+left:50%;
+transform:translate(-50%,-50%);
 @media screen and (max-width:800px){
     font-size:.8rem;
     margin-bottom:2rem;
 }
 `
-export default function CatgegoryCard({image,color,text}){
 
+const CardContainer =styled.div`
+// width:400px;
+overflow:hidden;
+position:relative;
+display:block;
+&:hover ${Image}{
+    transform:scale(1.1);
+    -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(0%);
+}
+&:hover ${Border}{
+    border:5px solid var(--main-color);
+
+}
+&:hover ${Title}{
+    color:var(--main-color);
+
+}
+@media screen and (max-width:600px){
+    aspect-ratio: 1/1.6;
+    width:100%;
+}
+`
+const cardVariant = { 
+    initial: {
+        y : 80,
+        opacity:0
+    },
+    animate:{
+        y:0,
+        opacity:1,
+        transition:{
+            delay:.5,
+            opacity : { 
+                duration:.2,
+            },
+            y:{
+                duration:.8,
+            },
+            
+        }
+    }
+}
+export default function CatgegoryCard({image,color,text}){
+    
     return (
-        <CardContainer >
+        <CardContainer as={motion.div} variants={cardVariant} whileInView='animate' initial="initial" viewport={{once:"true"}}>
             <Link to="/home" style={{textDecoration:"none"}}>
                 <ImageContainer>
-                    <Border $color={'grey'} />
+                    <Border $color={'black'} />
                     <Image src={image}/>
                 </ImageContainer>
-                <Button $color={color}>
+                <Title $color={color}>
                     {text}
-                </Button>
+                </Title>
             </Link>
         </CardContainer>
     )

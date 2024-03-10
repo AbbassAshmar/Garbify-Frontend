@@ -11,13 +11,11 @@ import HeroSection from "./Sections/hero-section";
 import ProductsGallery from "./Sections/products-gallery";
 import { useEffect } from "react";
 
-import Lenis from '@studio-freight/lenis';
-
 const Container = styled.div`
 background:white;
 display:flex;
 flex-direction:column;
-gap:6rem;
+gap:8rem;
 scroll-behavior:smooth;
 `
 
@@ -25,16 +23,6 @@ scroll-behavior:smooth;
 
 export default function Home(){
     
-    // useEffect(()=>{
-    //     const lenis = new Lenis()
-
-    //     function raf(time) {
-    //         lenis.raf(time)
-    //         requestAnimationFrame(raf)
-    //     }
-    //     requestAnimationFrame(raf)
-    // })
-
     return (
         <Container>
             <HeroSection />
