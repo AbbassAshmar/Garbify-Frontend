@@ -1,13 +1,11 @@
-import styled from "styled-components"
-import { SectionContainer } from "./featured-section";
-import {motion, useMotionValueEvent, useScroll, useTransform} from "framer-motion";
-
+import { useRef } from "react";
+import styled from "styled-components";
+import {motion,  useScroll, useTransform} from "framer-motion";
 import manInGreySuit from "../../../assets/manInGreySuit.jpg";
 import girlInBlackSuit from "../../../assets/girlInBlackSuit.jpg";
 import manInBlackSuit from "../../../assets/manInBlackSuit.jpg";
-import { useRef } from "react";
 
-const Container = styled(SectionContainer)`
+const Container =styled.div`
 position:relative;
 display:flex;
 flex-direction:column;

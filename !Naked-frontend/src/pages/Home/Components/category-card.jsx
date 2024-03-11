@@ -37,7 +37,6 @@ color:black;
 cursor:pointer;
 font-weight:bold;
 font-size:var(--heading-1);
-
 position:absolute;
 top:60%;
 left:50%;
@@ -49,10 +48,11 @@ transform:translate(-50%,-50%);
 `
 
 const CardContainer =styled.div`
-// width:400px;
 overflow:hidden;
 position:relative;
 display:block;
+width:100%;
+
 &:hover ${Image}{
     transform:scale(1.1);
     -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
@@ -60,7 +60,6 @@ display:block;
 }
 &:hover ${Border}{
     border:5px solid var(--main-color);
-
 }
 &:hover ${Title}{
     color:var(--main-color);
@@ -95,15 +94,11 @@ export default function CatgegoryCard({image,color,text}){
     
     return (
         <CardContainer as={motion.div} variants={cardVariant} whileInView='animate' initial="initial" viewport={{once:"true"}}>
-            <Link to="/home" style={{textDecoration:"none"}}>
-                <ImageContainer>
-                    <Border $color={'black'} />
-                    <Image src={image}/>
-                </ImageContainer>
-                <Title $color={color}>
-                    {text}
-                </Title>
-            </Link>
+            <Border $color={'black'} />
+            <Image src={image}/>
+            <Title $color={color}>
+                {text}
+            </Title>
         </CardContainer>
     )
 }

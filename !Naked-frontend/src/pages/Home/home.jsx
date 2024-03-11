@@ -9,7 +9,7 @@ import BestSellingSection from "./Sections/best-selling-section";
 import FormSection from "./Sections/form-section";
 import HeroSection from "./Sections/hero-section";
 import ProductsGallery from "./Sections/products-gallery";
-import { useEffect } from "react";
+
 
 const Container = styled.div`
 background:white;
@@ -17,6 +17,7 @@ display:flex;
 flex-direction:column;
 gap:8rem;
 scroll-behavior:smooth;
+// overflow-X:hidden;
 `
 
 

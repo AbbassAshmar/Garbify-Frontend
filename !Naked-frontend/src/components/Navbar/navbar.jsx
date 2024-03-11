@@ -19,6 +19,7 @@ height:18vh;
 background:#F1F4F9;
 display:flex;
 justify-content:center;
+overflow:hidden;
 align-items:center;
 @media screen and (max-width:1000px){
     height:auto;

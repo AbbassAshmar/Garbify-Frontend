@@ -15,9 +15,6 @@ display:flex;
 flex-direction:column;
 margin-top:10rem;
 `
-
-
-
 const Text = styled.div`
 font-size:var(--heading-2);
 font-weight:400;
@@ -99,7 +96,6 @@ align-items:start;
 @media (max-width: 800px) {
     grid-template-columns: repeat(4, 1fr);
     padding:0 1rem;
-
 }
 `
 

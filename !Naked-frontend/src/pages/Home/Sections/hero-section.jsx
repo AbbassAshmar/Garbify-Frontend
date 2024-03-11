@@ -201,6 +201,7 @@ box-shadow:10px 9px 12px -3px rgba(0,0,0,0.4) ;
     height:40px;
     max-width:none;
 }
+
 @media screen and (max-width:600px){
     height:35px;
 }
