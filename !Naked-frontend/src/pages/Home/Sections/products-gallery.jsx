@@ -14,6 +14,8 @@ min-height:300vh;
 display:flex;
 flex-direction:column;
 margin-top:10rem;
+margin-bottom:8rem;
+
 `
 const Text = styled.div`
 font-size:var(--heading-2);

@@ -4,7 +4,7 @@ import HeroSectionGirl from "../../../assets/HeroSectionGirl.png";
 const Container = styled.section`
 background:white;
 width:100%;
-
+margin-bottom:8rem;
 @media screen and (max-width:1024px){
     height:auto;
 }

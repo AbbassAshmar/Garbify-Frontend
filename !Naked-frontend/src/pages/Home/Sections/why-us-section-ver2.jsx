@@ -8,10 +8,11 @@ import manInHoodyUnderlay from "../../../assets/manInHoodyUnderlay.png";
 const Container = styled.section`
 width:100%;
 padding: 0 2rem;
+margin-bottom:8rem;
+
 @media screen and (max-width:600px){
     padding: 0 1rem;
 }
-
 `
 const Content = styled.div`
 gap:2rem;
@@ -79,7 +80,7 @@ line-height:52px;
     line-height:42px;
 }
 @media screen and (max-width:800px){
-    font-size:var(--heading-3-mobile);
+    font-size:var(--heading-1-mobile);
     line-height:27.5px;
 }
 `

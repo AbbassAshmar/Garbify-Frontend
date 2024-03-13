@@ -24,10 +24,16 @@ cursor:pointer;
     z-index:1;
 }
 
-@media screen and (max-width:670px){
+@media screen and (max-width:1024px){
+    aspect-ratio:1/1.1;
+}
+
+@media screen and (max-width:800px){
     width:100%;
+    aspect-ratio:1/.8;
 }
 `
+
 const Image = styled.img`
 width: 100%;
 height: 100%;
@@ -39,7 +45,7 @@ scale:1.05;
 const Content = styled.div`
 width:100%;
 margin:30% 0 0 0;
-padding: 0 0 0 2rem;
+padding: 0 2rem;
 position:absolute;
 z-index:2;
 display:flex;
@@ -58,6 +64,9 @@ const Heading = styled.h4`
 color:white;
 font-weight:800;
 font-size:var(--heading-4);
+@media screen and (max-width:600px){
+    font-size:var(--heading-1-mobile);
+}
 `
 
 const SubTitle = styled.p`

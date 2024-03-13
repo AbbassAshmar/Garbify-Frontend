@@ -3,11 +3,6 @@ import {Link} from "react-router-dom";
 import {motion} from "framer-motion";
 
 
-const ImageContainer = styled.div`
-width :100%;
-position:relative;
-overflow:hidden;
-`
 const Image = styled.img`
 width:100%;
 height:100%;
@@ -16,6 +11,11 @@ transition:all .3s;
 object-fit:cover;
 -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
 filter: grayscale(100%);
+
+@media screen and (max-width:600px){
+    -webkit-filter: unset; /* Safari 6.0 - 9.0 */
+    filter: unset;
+}
 `
 
 const Border =styled.div`
@@ -30,8 +30,12 @@ position:absolute;
 display:flex;
 align-items:flex-end;
 justify-content:center;
+
+@media screen and (max-width:600px){
+    border:5px solid var(--main-color);
+}
 `
-const Title =styled.h6`
+const Title =styled.h1`
 transition:color .3s;
 color:black;
 cursor:pointer;
@@ -41,9 +45,17 @@ position:absolute;
 top:60%;
 left:50%;
 transform:translate(-50%,-50%);
+
+@media screen and (max-width:1024px){
+    font-size:var(--heading-3);
+}
+
 @media screen and (max-width:800px){
-    font-size:.8rem;
+    font-size:var(--heading-4);
     margin-bottom:2rem;
+}
+@media screen and (max-width:600px){
+    color:var(--main-color);
 }
 `
 
@@ -52,7 +64,7 @@ overflow:hidden;
 position:relative;
 display:block;
 width:100%;
-
+cursor:pointer;
 &:hover ${Image}{
     transform:scale(1.1);
     -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
@@ -63,10 +75,9 @@ width:100%;
 }
 &:hover ${Title}{
     color:var(--main-color);
-
 }
+
 @media screen and (max-width:600px){
-    aspect-ratio: 1/1.6;
     width:100%;
 }
 `

@@ -15,9 +15,7 @@ const Container = styled.div`
 background:white;
 display:flex;
 flex-direction:column;
-gap:8rem;
 scroll-behavior:smooth;
-// overflow-X:hidden;
 `
 
 

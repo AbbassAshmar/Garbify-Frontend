@@ -9,6 +9,11 @@ const Container = styled.section`
 width:100%;
 padding: 0 2rem;
 overflow:hidden;
+margin-bottom:8rem;
+
+@media screen and (max-width:800px){
+    padding : 0 1rem;
+}
 `
 
 const Content =styled.div`
@@ -46,12 +51,19 @@ width:fit-content;
     top:40%;
     z-index:-1;
 }
+@media screen and (max-width:600px){
+    font-size:var(--heading-1-mobile);
+}
 `
 const SubTitle = styled.h6`
 font-size:var(--heading-6);
 font-weight:600;
 color:grey;
+@media screen and (max-width:600px){
+    font-size:var(--heading-6-mobile);
+}
 `
+
 
 const Boxes = styled.div`
 width:100%;
@@ -60,9 +72,10 @@ align-items:center;
 justify-content:space-between;
 gap:11px;
 overflow:hidden;
-@media screen and (max-width:670px){
+
+@media screen and (max-width:800px){
     flex-direction:column;
-    gap:10px;
+    gap:2rem;
 }
 `
 

@@ -4,9 +4,14 @@ import CatgegoryCard from "../Components/category-card";
 import littleGirl from "../../../assets/littleGirl.jpg";
 import guyInCoat from "../../../assets/guyInCoat.jpg";
 import girlInCoat from "../../../assets/girlInCoat.jpg";
+import useWindowDimensions from "../../../hooks/use-window-dimensions";
 
 const Container = styled.section`
 padding: 0 2rem;
+margin-bottom:8rem;
+@media screen and (max-width:800px){
+    padding : 0 1rem;
+}
 `
 
 const Content =styled.div`
@@ -15,16 +20,29 @@ overflow:hidden;
 display:flex;
 flex-direction:column;
 align-items:center;
-gap:4rem;
+gap:3rem;
 `
 
-const Title = styled.h4`
+const Title = styled.span`
+font-size:var(--heading-2);
 font-weight:800;
-text-align:center;
-display:inline-block;
-font-size:var(--heading-4);
-color:var(--main-color);
-display:inline-block;
+color:black;
+position:relative;
+z-index:2;
+width:fit-content;
+&::before{
+    content:"";
+    width:100%;
+    background:var(--main-color);
+    opacity:.7;
+    height:20px;
+    position:absolute;
+    top:40%;
+    z-index:-1;
+}
+@media screen and (max-width:600px){
+    font-size:var(--heading-1-mobile);
+}
 `
 
 const CategoryCardsContainer = styled.div`
@@ -36,7 +54,6 @@ gap:2rem;
 
 @media screen and (max-width:600px){
     flex-direction:column;
-    gap:3rem;
 }
 `
 
@@ -53,9 +70,11 @@ const titleVariant ={
         },
     }
 }
-const title = "Shop Now Online And Put Some Clothes On";
 
 export default function CategorySection(){
+    const {width} = useWindowDimensions();
+
+    const title = width > 800 ? "Elevate Every Wardrobe Now": "Style Boost";
 
     return (
         <Container>

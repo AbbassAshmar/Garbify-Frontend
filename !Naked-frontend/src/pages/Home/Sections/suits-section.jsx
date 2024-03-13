@@ -11,7 +11,7 @@ display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:space-between;
-margin: 0 0 8rem 0;
+margin: 0 0 12rem 0;
 `
 const MainColorBlur1 = styled.div`
 background:var(--main-color);
@@ -23,15 +23,29 @@ filter:blur(120px);
 opacity:60%;
 right:0;
 top:0;
+
+@media screen and (max-width:800px){
+    width:180px;
+    height:180px;
+    filter:blur(70px);
+
+}
 `
 const MainColorBlur2 = styled(MainColorBlur1)`
 left:0;
 top:40%;
+
+@media screen and (max-width:800px){
+    top:80%;
+}
 `
 const MainColorBlur3 = styled(MainColorBlur1)`
 right:0;
 bottom:0%;
 top:unset;
+@media screen and (max-width:800px){
+    display:none;
+}
 `
 const Content = styled.div`
 will-change:transform;
@@ -44,61 +58,69 @@ flex-direction:column;
 align-items:center;
 justify-content:space-between;
 gap:6rem;
+
+@media screen and (max-width:800px){
+    padding:0 1rem;
+}
 `
 const TextContainer = styled.div`
 display:flex;
 flex-direction:column;
-align-items:flex-start;
+align-items:center;
+text-align:center;
 gap:3rem;
 @media screen and (max-width:1400px){
     width:43%;
 }
+@media screen and (max-width:600px){
+    width:100%;
+  
+}
 `
 const Title =styled.div`
 will-change:transform;
-font-size:14rem;
-color:black;
-font-weight:bold;
 display:flex;
-align-items:flex-end;
-gap:10px;
-@media screen and (max-width:1400px){
-    font-size:var(--big-2);
+font-size:var(--heading-2);
+font-weight:800;
+color:black;
+position:relative;
+z-index:2;
+width:fit-content;
+&::before{
+    content:"";
+    width:100%;
+    background:var(--main-color);
+    opacity:.7;
+    height:20px;
+    position:absolute;
+    top:70%;
+    z-index:-1;
+}
+@media screen and (max-width:600px){
+    font-size:var(--heading-1-mobile);
 }
 `
 const SubTitle = styled.div`
-display:flex;
-flex-direction:column;
-gap:1rem;
 will-change:transform;
-`
-const SubTitleLine = styled.h3`
+color:grey;
+font-weight:600;
 font-size:var(--heading-3);
-color:black;
-position:relative;
-// text-shadow:0px 0px 4px rgba(0,0,0,0.8);
-display:inline-block;
-width:fit-content;
-&:before{
-    content:"";
-    position:absolute;
-    background:#3CD1FF;
-    height:15px;
-    width:100%;
-    z-index:-1;
-    top:10px
-}
-
 @media screen and (max-width:1400px){
     font-size:var(--heading-6);
 }
-
+@media screen and (max-width:600px){
+    font-size:var(--body);
+}
 `
+
 const ImagesContainer = styled.div`
 display:flex;
 align-items:flex-end;
 justify-content:center;
 width:70%;
+@media screen and (max-width:800px){
+    width:100%;
+}
 `
 const FirstImageContainer = styled.div`
 flex:2;
@@ -127,23 +149,22 @@ height:100%;
 object-fit:cover;
 `
 
-const textVariants = {
+const titleVariant = {
     initial : {
         opacity:0,
-        y:-20,
+        y:20,
     },
     animate : {
-        y:20,
+        y:0,
         opacity:1,
         transition:{
-            delayChildren: .4,
-            staggerChildren:.09,
-            ease: "linear"
-        }
+            staggerChildren:.04,
+        },
     }
 }
+
 export default function SuitsSection(){
-    const suitsWord = "Suits?";
+    const suitsWord = "Suits Refined";
 
     const containerRef = useRef();
     const {scrollYProgress} = useScroll({
@@ -162,20 +183,16 @@ export default function SuitsSection(){
             <MainColorBlur3 />
             <Content as={motion.div}> 
                 <TextContainer>
-                    <Title as={motion.div} variants={textVariants} whileInView="animate" viewport={{ once: true }} initial="initial">
+                    <Title as={motion.div} variants={titleVariant} whileInView="animate" viewport={{ once: true }} initial="initial">
                         {suitsWord.split("").map((letter,index)=> (
-                            <motion.span key={index} style={{color:"var(--main-color)",display:'inline-block'}} variants={textVariants}>
-                                {letter}
+                            <motion.span key={index} style={{display:'inline-block'}} variants={titleVariant}>
+                               {letter === ' ' ? '\u00A0' : letter}
                             </motion.span>
                         ))}
                     </Title>
                     <SubTitle>
-                        <SubTitleLine>
-                            Step into Style: Your Suit Journey Begins Here.
-                        </SubTitleLine>
-                        <SubTitleLine>
-                            Find timeless suits for every occasion.
-                        </SubTitleLine>
+                        Step into Style: Your Suit Journey Begins Here.
+                        Find timeless suits for every occasion.
                     </SubTitle>
                 </TextContainer>
                 <ImagesContainer>
